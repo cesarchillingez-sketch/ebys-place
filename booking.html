@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment | Eby's Place</title>
+    
+    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
+                    },
+                    fontFamily: {
+                        body: ['Lexend', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FCFBF8;
+            color: #2A1A12;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Dynamic Shifting Background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-shifting {
+            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        /* Cursor Glow Tracking */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: background 0.1s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FCFBF8; }
+        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+
+        /* Tech-Luxury Geometric Pattern */
+        .swirl-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+
+        /* Glassmorphism */
+        .glass-nav {
+            background: rgba(252, 251, 248, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
+            color: #2A1A12;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(194, 163, 120, 0.2);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+
+        /* Animated SVG Text Pattern (Footer) */
+        .text-pattern {
+            background-color: #2A1A12;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 100px;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: patternShift 20s linear infinite;
+        }
+        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
+
+        /* Mobile Menu Animations */
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
+        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
+        .menu-open .delay-1 { transition-delay: 0.1s; }
+        .menu-open .delay-2 { transition-delay: 0.2s; }
+        .menu-open .delay-3 { transition-delay: 0.3s; }
+        .menu-open .delay-4 { transition-delay: 0.4s; }
+        .menu-open .delay-5 { transition-delay: 0.5s; }
+        
+        /* Category Row Hover Animation */
+        .category-row:hover .cat-title { transform: translateX(10px); color: #C2A378; }
+        .category-row:hover .cat-arrow { transform: translateX(5px); opacity: 1; }
+        .cat-title { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .cat-arrow { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
+    </style>
+</head>
+<body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
+
+    <div class="cursor-glow"></div>
+    <div class="swirl-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 glass-nav py-2 transition-all">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-list text-3xl text-eby-dark"></i>
+            </button>
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4">
+                Eby's Place
+            </a>
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Home</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Shop</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Services</a>
+                <a href="#" class="text-eby-gold-dark transition-colors">Booking</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+            </div>
+            <div class="flex items-center space-x-6 text-eby-dark">
+                <a href="#" class="hidden sm:block text-[10px] font-sans uppercase tracking-widest font-medium hover:text-eby-gold-dark transition-colors">My Account</a>
+                <!-- Cart icon linked out (No bug/slideout panel here) -->
+                <a href="#" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
+                    <i class="ph ph-shopping-bag text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="#" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="#" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="#" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="#" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
+            <a href="#" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Header -->
+    <header class="relative pt-40 pb-16 overflow-hidden border-b border-eby-gold-dark/10 bg-eby-surface">
+        <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center items-center gap-3 mb-4 reveal">
+                <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
+                <h1 class="font-sans font-bold text-[10px] uppercase tracking-mega text-eby-gold-dark">
+                    Step Into Luxury
+                </h1>
+            </div>
+            <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Book Your Pain-Free Appointment</h2>
+            <p class="text-eby-brown-light max-w-xl mx-auto reveal reveal-delay-2 font-light text-sm md:text-base leading-relaxed">
+                Secure your slot with a £15 non-refundable deposit. We can’t wait to style you!
+            </p>
+        </div>
+    </header>
+
+    <!-- Split-Screen Booking Portal -->
+    <main class="max-w-[1400px] mx-auto px-6 py-16 md:py-24 flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
+        
+        <!-- Left Side: Service Selection Area -->
+        <section class="lg:w-1/2 flex flex-col reveal">
+            <div class="mb-12">
+                <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-gold-dark mb-2 border-l-2 border-eby-gold-dark pl-3">Service Selection</h3>
+                <p class="text-eby-dark text-2xl font-display">Please select a service for which you want to schedule an appointment.</p>
+            </div>
+
+            <!-- Categories List -->
+            <div class="flex flex-col border-t border-eby-gold-dark/20">
+                
+                <!-- Braids -->
+                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                    <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Braids</span>
+                    <div class="flex items-center gap-6">
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">10 Services</span>
+                        <i class="ph ph-arrow-right text-eby-gold-dark text-xl cat-arrow"></i>
+                    </div>
+                </button>
+
+                <!-- Twists -->
+                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                    <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Twists</span>
+                    <div class="flex items-center gap-6">
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
+                        <i class="ph ph-arrow-right text-eby-gold-dark text-xl cat-arrow"></i>
+                    </div>
+                </button>
+
+                <!-- Locs -->
+                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                    <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Locs</span>
+                    <div class="flex items-center gap-6">
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">3 Services</span>
+                        <i class="ph ph-arrow-right text-eby-gold-dark text-xl cat-arrow"></i>
+                    </div>
+                </button>
+
+                <!-- Kids Styles -->
+                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                    <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Kids Styles</span>
+                    <div class="flex items-center gap-6">
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
+                        <i class="ph ph-arrow-right text-eby-gold-dark text-xl cat-arrow"></i>
+                    </div>
+                </button>
+
+                <!-- Add-Ons -->
+                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                    <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Add-Ons</span>
+                    <div class="flex items-center gap-6">
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">4 Services</span>
+                        <i class="ph ph-arrow-right text-eby-gold-dark text-xl cat-arrow"></i>
+                    </div>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- Right Side: Cinematic Map Block -->
+        <section class="lg:w-1/2 lg:sticky lg:top-32 h-max reveal reveal-delay-1 relative">
+            
+            <!-- Support / Concierge Float Box -->
+            <div class="glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px]">
+                <h4 class="font-display text-xl text-eby-dark mb-2">Questions?</h4>
+                <p class="text-eby-brown-light text-xs leading-relaxed mb-4">Our studio concierge is available to assist with your booking.</p>
+                <a href="tel:+18589393746" class="flex items-center gap-2 font-sans font-bold text-[10px] tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors">
+                    <i class="ph ph-phone-call text-lg"></i> (858) 939-3746
+                </a>
+            </div>
+
+            <!-- London Eye Map with Grayscale Filter -->
+            <div class="w-full h-[500px] lg:h-[650px] rounded-sm overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.288961634382!2d-0.12209488422954133!3d51.5031897184853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon%20Eye!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0; filter: grayscale(100%) contrast(1.1) opacity(0.9);" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <!-- Protective overlay to make the map feel embedded rather than pasted -->
+                <div class="absolute inset-0 border border-black/5 pointer-events-none"></div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
+                    <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">
+                        Premium African hair braiding services in Somerset, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.
+                    </p>
+                    
+                    <div class="mt-8 space-y-2 text-sm text-eby-dark font-medium">
+                        <p class="flex items-center gap-2"><i class="ph ph-phone text-eby-gold-dark"></i> +44 7864 585110</p>
+                        <p class="flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> Mon- Sat: 9am – 7pm</p>
+                        <p class="flex items-center gap-2"><i class="ph ph-calendar text-eby-gold-dark"></i> Sun: By Appointment</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Giant Footer Text & Copyright -->
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
+                <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
+                    <p>© 2026 Eby’s Place. All Rights Reserved.</p>
+                    <div class="flex space-x-6 text-eby-dark">
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-tiktok-logo text-lg"></i> Tiktok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-dark text-eby-surface rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-gold-dark transition-colors group">
+        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
+    </button>
+
+    <!-- Scripts for Logic & Interactivity -->
+    <script>
+        // Mobile Menu Dropdown Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('-translate-y-full')) {
+                menu.classList.remove('-translate-y-full');
+                menu.classList.add('translate-y-0', 'menu-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-y-0', 'menu-open');
+                menu.classList.add('-translate-y-full');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Tech-Spirit Background Glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.cursor-glow');
+            if(glow) {
+                glow.style.setProperty('--x', e.clientX + 'px');
+                glow.style.setProperty('--y', e.clientY + 'px');
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+    </script>
+</body>
+</html>
