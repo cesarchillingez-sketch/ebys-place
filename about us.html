@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Manifesto | About Eby's Place</title>
+    
+    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
+                    },
+                    fontFamily: {
+                        body: ['Lexend', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FCFBF8;
+            color: #2A1A12;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Dynamic Shifting Background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-shifting {
+            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        /* Cursor Glow Tracking */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: background 0.1s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FCFBF8; }
+        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+
+        /* Tech-Luxury Geometric Pattern */
+        .swirl-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+
+        /* Luxury Button */
+        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+        .btn-luxury::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.7s ease;
+        }
+        .btn-luxury:hover::after { left: 100%; }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(194, 163, 120, 0.2);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05);
+        }
+
+        /* Dynamic Navbar Colors */
+        .nav-transparent {
+            background: transparent;
+            color: #FFFFFF;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-transparent .nav-link, .nav-transparent .nav-icon { color: #FFFFFF; }
+        .nav-scrolled {
+            background: rgba(252, 251, 248, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
+            color: #2A1A12;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        .nav-scrolled .nav-link, .nav-scrolled .nav-icon { color: #2A1A12; }
+        .nav-scrolled .nav-link-gold { color: #C2A378; }
+
+        /* Animated SVG Text Pattern (Footer) */
+        .text-pattern {
+            background-color: #2A1A12;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 100px;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: patternShift 20s linear infinite;
+        }
+        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
+
+        /* Mobile Menu Animations */
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
+        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
+        .menu-open .delay-1 { transition-delay: 0.1s; }
+        .menu-open .delay-2 { transition-delay: 0.2s; }
+        .menu-open .delay-3 { transition-delay: 0.3s; }
+        .menu-open .delay-4 { transition-delay: 0.4s; }
+        .menu-open .delay-5 { transition-delay: 0.5s; }
+    </style>
+</head>
+<body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
+
+    <div class="cursor-glow"></div>
+    <div class="swirl-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 nav-transparent py-3 transition-all duration-500">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+            <button onclick="toggleMobileMenu()" class="lg:hidden nav-icon hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-list text-3xl"></i>
+            </button>
+
+            <!-- Corporate/Sophisticated Logo -->
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase nav-link transition-colors lg:ml-0 ml-4">
+                Eby's Place
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium">
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Home</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Shop</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Services</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Booking</a>
+                <a href="#" class="nav-link nav-link-gold text-eby-gold-dark hover:opacity-70 transition-opacity">About Us</a>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity hidden sm:block">
+                    <span class="text-[10px] font-sans uppercase tracking-widest font-medium">My Account</span>
+                </a>
+                <!-- Cart icon removed/linked out to avoid bug panel -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="#" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="#" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="#" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="#" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
+            <a href="#" class="mobile-link delay-5 font-display text-4xl text-eby-gold-dark italic block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE MANIFESTO: BEAUTY WITHOUT SACRIFICE (Hero) -->
+    <header class="relative h-[80vh] min-h-[600px] flex flex-col justify-end pb-24 overflow-hidden bg-eby-dark">
+        <!-- Background Image with sophisticated overlay -->
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600334129128-685c5582fd35?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center object-cover opacity-40 mix-blend-luminosity"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/60 to-transparent"></div>
+        
+        <div class="relative z-10 max-w-[1200px] mx-auto px-6 w-full reveal">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
+                <h2 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">
+                    The New Standard in Hair Artistry
+                </h2>
+            </div>
+            
+            <h1 class="font-display text-5xl md:text-7xl lg:text-[6rem] text-white mb-6 leading-[1.05] tracking-tight max-w-4xl">
+                Beauty Without Sacrifice.
+            </h1>
+            <p class="font-display italic text-2xl md:text-3xl text-eby-gold-dark font-normal">The Manifesto.</p>
+        </div>
+    </header>
+
+    <!-- OUR PHILOSOPHY: THE ART OF THE PAINLESS AESTHETIC -->
+    <section class="py-32 bg-eby-bg relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2 reveal">
+                <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark mb-4 block border-l-2 border-eby-gold-dark pl-3">Our Philosophy</span>
+                <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-8 leading-tight">The Art of the Painless Aesthetic.</h2>
+                
+                <div class="space-y-6 text-eby-brown-light leading-relaxed font-light text-[15px]">
+                    <p>
+                        Welcome to Eby’s Place. We are a Somerset-based sanctuary dedicated to the high-performance engineering of African hair braiding. In a world where beauty is often synonymous with discomfort, we have redefined the ritual. 
+                    </p>
+                    <p class="font-medium text-eby-dark text-lg py-2">
+                        Here, luxury is not just an aesthetic—it is the absence of pain.
+                    </p>
+                    <p>
+                        With over a decade of elite mastery, Eby’s Place operates at the intersection of heritage techniques and modern scalp health. Our studio is a private, high-end environment designed for the woman who demands both precision and peace. We don’t just install braids; we curate protective architectures that respect the integrity of your natural hair.
+                    </p>
+                </div>
+            </div>
+            <div class="md:w-1/2 relative h-[600px] w-full reveal reveal-delay-1">
+                <div class="absolute inset-0 border border-eby-gold-dark/20 translate-x-4 translate-y-4"></div>
+                <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Studio Aesthetic" class="absolute inset-0 w-full h-full object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+            </div>
+        </div>
+    </section>
+
+    <!-- THE CORE DIFFERENTIATORS -->
+    <section class="py-32 bg-eby-surface border-y border-eby-gold-dark/10 relative z-10">
+        <div class="max-w-[1400px] mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+                <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-6">The Core Differentiators</h2>
+                <div class="w-12 h-[1px] bg-eby-gold-dark mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 items-stretch">
+                <!-- Differentiator 1 -->
+                <div class="glass-card p-10 md:p-12 reveal flex flex-col border-t-4 border-t-transparent hover:border-t-eby-gold-dark transition-all">
+                    <div class="w-16 h-16 rounded-full bg-eby-gold/30 flex items-center justify-center mb-8 border border-eby-gold-dark/20">
+                        <i class="ph ph-bezier-curve text-2xl text-eby-gold-dark"></i>
+                    </div>
+                    <h3 class="font-display text-2xl text-eby-dark mb-4">Engineered Comfort</h3>
+                    <p class="font-body text-eby-brown-light text-sm leading-relaxed font-light flex-grow">
+                        We utilize proprietary, tension-free braiding methods that eliminate scalp trauma. By integrating premium, pre-stretched fibers, we ensure every style is ultra-lightweight, high-lustre, and structurally sound.
+                    </p>
+                </div>
+
+                <!-- Differentiator 2 -->
+                <div class="glass-card p-10 md:p-12 reveal reveal-delay-1 flex flex-col border-t-4 border-t-transparent hover:border-t-eby-gold-dark transition-all">
+                    <div class="w-16 h-16 rounded-full bg-eby-gold/30 flex items-center justify-center mb-8 border border-eby-gold-dark/20">
+                        <i class="ph ph-house-line text-2xl text-eby-gold-dark"></i>
+                    </div>
+                    <h3 class="font-display text-2xl text-eby-dark mb-4">The Private Studio</h3>
+                    <p class="font-body text-eby-brown-light text-sm leading-relaxed font-light flex-grow">
+                        Moving away from the friction of high-traffic salons, our Somerset studio offers a bespoke, home-based atmosphere. It is a space of "Intense Softness"—private, family-friendly, and meticulously professional.
+                    </p>
+                </div>
+
+                <!-- Differentiator 3 -->
+                <div class="glass-card p-10 md:p-12 reveal reveal-delay-2 flex flex-col border-t-4 border-t-transparent hover:border-t-eby-gold-dark transition-all">
+                    <div class="w-16 h-16 rounded-full bg-eby-gold/30 flex items-center justify-center mb-8 border border-eby-gold-dark/20">
+                        <i class="ph ph-coffee text-2xl text-eby-gold-dark"></i>
+                    </div>
+                    <h3 class="font-display text-2xl text-eby-dark mb-4">The Culinary Touch</h3>
+                    <p class="font-body text-eby-brown-light text-sm leading-relaxed font-light flex-grow">
+                        Luxury is found in the details. To elevate your transition, clients are invited to enjoy curated refreshments from Eby’s Kitchen, turning a standard appointment into a holistic sensory experience.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR STORY: FROM PASSION TO POWER -->
+    <section class="py-32 bg-eby-bg relative z-10 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row-reverse items-center gap-16">
+            <div class="md:w-1/2 reveal">
+                <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark mb-4 block border-l-2 border-eby-gold-dark pl-3">Our Story</span>
+                <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-8 leading-tight">From Passion to Power.</h2>
+                
+                <div class="space-y-6 text-eby-brown-light leading-relaxed font-light text-[15px]">
+                    <p>
+                        Eby’s Place was founded on a singular conviction: <strong class="text-eby-dark font-medium">Hair is identity.</strong>
+                    </p>
+                    <p>
+                        What began as a passion for the intricate geometry of braiding has evolved into a trusted institution for professional hair care in the UK. We understand that your hair is your crown, and our mission is to ensure that crown never feels heavy. 
+                    </p>
+                    <p>
+                        We take the time to consult, to understand your lifestyle, and to engineer a look that reflects your personal brand power.
+                    </p>
+                </div>
+            </div>
+            <div class="md:w-1/2 relative h-[600px] w-full reveal reveal-delay-1">
+                <!-- Abstract geometric styling for imagery -->
+                <div class="absolute inset-0 bg-eby-gold-dark/10 rounded-full blur-3xl translate-x-10 translate-y-10"></div>
+                <img src="https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Founder Story" class="absolute inset-4 w-[90%] h-[90%] object-cover object-top shadow-lg mix-blend-multiply opacity-80">
+            </div>
+        </div>
+    </section>
+
+    <!-- THE REPERTOIRE (SERVICES OVERVIEW) -->
+    <section class="py-32 bg-eby-dark text-eby-surface relative z-10">
+        <!-- Abstract overlay -->
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1615802107412-259163d76e2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-5 mix-blend-luminosity pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto px-6 relative z-10 text-center">
+            <h2 class="font-display text-4xl md:text-5xl mb-6">The Repertoire</h2>
+            <p class="text-eby-gold/60 font-light max-w-2xl mx-auto mb-16">
+                Our portfolio is a testament to global authority in braiding. We specialize in high-definition execution across all protective disciplines.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+                <!-- Repertoire Items -->
+                <div class="border-b border-eby-surface/10 pb-6 reveal">
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-gold-dark mb-2">Knotless Architecture</h4>
+                    <p class="font-body text-eby-surface/70 text-sm font-light">The gold standard in seamless, ultra-lightweight transitions.</p>
+                </div>
+                <div class="border-b border-eby-surface/10 pb-6 reveal reveal-delay-1">
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-gold-dark mb-2">Stitch & Linear Precision</h4>
+                    <p class="font-body text-eby-surface/70 text-sm font-light">For those who demand absolute geometric perfection.</p>
+                </div>
+                <div class="border-b border-eby-surface/10 pb-6 reveal">
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-gold-dark mb-2">Goddess & Boho Curation</h4>
+                    <p class="font-body text-eby-surface/70 text-sm font-light">Engineered for texture, volume, and ethereal movement.</p>
+                </div>
+                <div class="border-b border-eby-surface/10 pb-6 reveal reveal-delay-1">
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-gold-dark mb-2">Heritage Braiding</h4>
+                    <p class="font-body text-eby-surface/70 text-sm font-light">Mastery of classical Fulani, Box, and Tribal architectures.</p>
+                </div>
+                <div class="border-b border-eby-surface/10 pb-6 reveal md:col-span-2 text-center md:text-left">
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-gold-dark mb-2">Juvenile Artistry (Kids)</h4>
+                    <p class="font-body text-eby-surface/70 text-sm font-light">Specialized, gentle care and styling for the next generation.</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 reveal">
+                <a href="#" class="inline-block border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-[0.2em] pb-1 hover:text-white hover:border-white transition-colors">View Complete Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE CALL TO SOVEREIGNTY -->
+    <section class="py-32 bg-eby-gold/30 border-t border-eby-gold-dark/20 text-center relative z-10">
+        <div class="max-w-3xl mx-auto px-6 reveal">
+            <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark/50 mb-6 block">The Call To Sovereignty</span>
+            <h2 class="font-display text-4xl md:text-5xl mb-6 text-eby-dark">Experience Luxury In Person.</h2>
+            <p class="text-eby-brown-light text-lg mb-10 leading-relaxed font-light">
+                If you are seeking professional braiding that lasts, styles that command respect, and a process that prioritizes your well-being, your seat is ready.
+            </p>
+            <a href="booking.html" class="btn-luxury inline-block bg-eby-dark text-eby-surface px-12 py-5 font-sans font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-eby-brown-light">
+                [ VISIT US ]
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
+                    <p class="font-body text-eby-brown-light text-sm max-w-sm leading-relaxed font-light">
+                        Experience the art of the painless aesthetic. Premium African hair braiding services engineered entirely for longevity and scalp health.
+                    </p>
+                    
+                    <!-- THE RESIDUALS (Updated Footer Details) -->
+                    <div class="mt-8 space-y-3 text-[10px] font-sans font-bold tracking-widest uppercase text-eby-dark">
+                        <p class="flex items-center gap-3"><i class="ph ph-map-pin text-eby-gold-dark text-sm"></i> Location: Somerset, UK</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-phone text-eby-gold-dark text-sm"></i> Inquiries: +44 7864 585110</p>
+                        <div class="flex items-start gap-3">
+                            <i class="ph ph-clock text-eby-gold-dark text-sm mt-0.5"></i> 
+                            <div>
+                                <p>Availability: Mon–Sat: 09:00 – 19:00</p>
+                                <p class="text-eby-brown-light mt-1">Sunday: By Appointment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="#" class="text-eby-dark transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Giant Footer Text & Copyright -->
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
+                <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
+                    <p>© 2026 EBY’S PLACE. ALL RIGHTS RESERVED.</p>
+                    <div class="flex space-x-6 text-eby-dark">
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-tiktok-logo text-lg"></i> Tiktok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-dark text-eby-surface rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-gold-dark transition-colors group">
+        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
+    </button>
+
+    <!-- Scripts for Logic & Interactivity -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+                navbar.classList.replace('py-3', 'py-1');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.replace('py-1', 'py-3');
+            }
+        });
+
+        // Mobile Menu Dropdown Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('-translate-y-full')) {
+                menu.classList.remove('-translate-y-full');
+                menu.classList.add('translate-y-0', 'menu-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-y-0', 'menu-open');
+                menu.classList.add('-translate-y-full');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Tech-Spirit Background Glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.cursor-glow');
+            if(glow) {
+                glow.style.setProperty('--x', e.clientX + 'px');
+                glow.style.setProperty('--y', e.clientY + 'px');
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+    </script>
+</body>
+</html>
