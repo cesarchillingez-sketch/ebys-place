@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Protocol | Eby's Place Policies</title>
+    
+    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
+                    },
+                    fontFamily: {
+                        body: ['Lexend', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FCFBF8;
+            color: #2A1A12;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Dynamic Shifting Background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-shifting {
+            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        /* Cursor Glow Tracking */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: background 0.1s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FCFBF8; }
+        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+
+        /* Tech-Luxury Geometric Pattern */
+        .swirl-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+
+        /* Luxury Button */
+        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+        .btn-luxury::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.7s ease;
+        }
+        .btn-luxury:hover::after { left: 100%; }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(194, 163, 120, 0.2);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+
+        /* Dynamic Navbar Colors */
+        .nav-transparent {
+            background: transparent;
+            color: #FFFFFF;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-transparent .nav-link, .nav-transparent .nav-icon { color: #FFFFFF; }
+        .nav-scrolled {
+            background: rgba(252, 251, 248, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
+            color: #2A1A12;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        .nav-scrolled .nav-link, .nav-scrolled .nav-icon { color: #2A1A12; }
+        .nav-scrolled .nav-link-gold { color: #C2A378; }
+
+        /* Animated SVG Text Pattern (Footer) */
+        .text-pattern {
+            background-color: #2A1A12;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 100px;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: patternShift 20s linear infinite;
+        }
+        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
+
+        /* Mobile Menu Animations */
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
+        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
+        .menu-open .delay-1 { transition-delay: 0.1s; }
+        .menu-open .delay-2 { transition-delay: 0.2s; }
+        .menu-open .delay-3 { transition-delay: 0.3s; }
+        .menu-open .delay-4 { transition-delay: 0.4s; }
+        .menu-open .delay-5 { transition-delay: 0.5s; }
+
+        /* Editorial Sidebar Active State */
+        .policy-nav-link { transition: all 0.3s ease; }
+        .policy-nav-link.active {
+            color: #C2A378;
+            padding-left: 0.5rem;
+            border-left: 2px solid #C2A378;
+        }
+        
+        /* Smooth Scroll Padding for Sticky Header */
+        .scroll-mt-32 { scroll-margin-top: 8rem; }
+    </style>
+</head>
+<body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
+
+    <div class="cursor-glow"></div>
+    <div class="swirl-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 nav-transparent py-3 transition-all duration-500">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+            <button onclick="toggleMobileMenu()" class="lg:hidden nav-icon hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-list text-3xl"></i>
+            </button>
+
+            <!-- Corporate/Sophisticated Logo -->
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase nav-link transition-colors lg:ml-0 ml-4">
+                Eby's Place
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium">
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Home</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Shop</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Services</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">Booking</a>
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity">About Us</a>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <a href="#" class="nav-link hover:opacity-70 transition-opacity hidden sm:block">
+                    <span class="text-[10px] font-sans uppercase tracking-widest font-medium">My Account</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="#" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="#" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="#" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="#" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
+            <a href="#" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER: THE PROTOCOL -->
+    <header class="relative h-[55vh] min-h-[450px] flex flex-col justify-center overflow-hidden bg-eby-dark">
+        <!-- Background Overlay -->
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center object-cover opacity-20 mix-blend-luminosity"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/60 to-transparent"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 w-full reveal text-center pt-24">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
+                <h2 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">
+                    Rules of Engagement
+                </h2>
+            </div>
+            
+            <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-white mb-6 leading-[1.05] tracking-tight">
+                The Protocol.
+            </h1>
+            <p class="font-body text-eby-gold/80 text-base md:text-lg max-w-2xl mx-auto font-light">
+                Please read our policies carefully before booking. These ensure a consistently luxurious and efficient experience for everyone.
+            </p>
+        </div>
+    </header>
+
+    <!-- EDITORIAL CONTENT SECTION -->
+    <main class="max-w-[1400px] mx-auto px-6 py-20 md:py-32 flex flex-col lg:flex-row gap-16 relative z-10">
+        
+        <!-- Left Sidebar: Table of Contents -->
+        <aside class="lg:w-1/4 hidden lg:block flex-shrink-0">
+            <div class="sticky top-32 glass-card p-8">
+                <h3 class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Contents</h3>
+                <nav class="space-y-6 flex flex-col font-sans text-[10px] uppercase tracking-widest font-medium text-eby-brown-light">
+                    <a href="#booking" class="policy-nav-link hover:text-eby-gold-dark active">Booking Policy</a>
+                    <a href="#cancellations" class="policy-nav-link hover:text-eby-gold-dark">Cancellations & Arrivals</a>
+                    <a href="#hygiene" class="policy-nav-link hover:text-eby-gold-dark">Hygiene & Hair Prep</a>
+                    <a href="#shipping" class="policy-nav-link hover:text-eby-gold-dark">Shipping Policy</a>
+                    <a href="#returns" class="policy-nav-link hover:text-eby-gold-dark">Returns & Refunds</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Right Side: Policy Details -->
+        <article class="lg:w-3/4 space-y-24">
+            
+            <!-- Booking Policy -->
+            <section id="booking" class="scroll-mt-32 reveal policy-section">
+                <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Booking Policy</h2>
+                <div class="space-y-8 pl-4 md:pl-6 border-l border-eby-gold-dark/30">
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Deposit Requirement</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">A non-refundable deposit of £15 is required to secure your appointment. This deposit will be deducted from your total service cost.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Confirmation</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Your booking is only confirmed once the deposit is received. You will receive a confirmation email with all the details and location instructions.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Rescheduling</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">You may reschedule your appointment up to 48 hours before your scheduled time without losing your deposit. Rescheduling within 48 hours may result in deposit forfeiture.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cancellations & Late Arrival -->
+            <section id="cancellations" class="scroll-mt-32 reveal policy-section">
+                <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Cancellations & Late Arrivals</h2>
+                <div class="space-y-8 pl-4 md:pl-6 border-l border-eby-gold-dark/30">
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Cancellations</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">If you need to cancel your appointment, please notify us at least 48 hours in advance via WhatsApp. The deposit is strictly non-refundable for all cancellations.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">No-Shows</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Failure to attend your appointment without prior notice will result in the immediate loss of your deposit and may affect your future booking privileges with the studio.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Late Arrivals</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Please arrive on time. If you are more than 15 minutes late, we may need to reschedule your appointment or adjust the scope of the service to fit the remaining time slot, ensuring subsequent clients are not delayed.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hygiene & Hair Prep -->
+            <section id="hygiene" class="scroll-mt-32 reveal policy-section">
+                <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Hygiene & Hair Prep</h2>
+                <div class="space-y-8 pl-4 md:pl-6 border-l border-eby-gold-dark/30">
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Clean Hair</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Please arrive with freshly washed, fully dried, and completely detangled hair. This ensures the best possible results and allows us to start styling immediately without friction.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Hair Prep Service</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">If you’re unable to prep your hair prior to arrival, we offer a professional Hair Wash & Prep add-on service for £20. Please ensure you book this in advance to allocate proper timing.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Scalp Conditions</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Please discreetly inform us of any scalp conditions, sensitivities, or allergies before your appointment so we can curate our products and techniques to accommodate your needs.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Tools & Sanitation</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Your health is paramount. All our tools, chairs, and equipment are thoroughly and medically sanitized between each client to ensure a pristine and safe environment.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shipping Policy -->
+            <section id="shipping" class="scroll-mt-32 reveal policy-section">
+                <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Shipping Policy</h2>
+                <div class="space-y-8 pl-4 md:pl-6 border-l border-eby-gold-dark/30">
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">UK Shipping</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Standard UK delivery takes 3-5 business days. We are pleased to offer complimentary shipping on all orders over £30.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Click & Collect</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Free Click & Collect is available exclusively from our Somerset location. Orders are typically prepared and ready for collection within 24 hours.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Processing Time</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Orders are processed within 1-2 business days. You will receive a tracking number via email the moment your order has been dispatched.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Returns & Refunds Policy -->
+            <section id="returns" class="scroll-mt-32 reveal policy-section">
+                <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Returns & Refunds</h2>
+                <div class="space-y-8 pl-4 md:pl-6 border-l border-eby-gold-dark/30">
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Products</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">Unopened and untampered products may be returned within 14 days of purchase for a full refund. Products must remain in their original packaging.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Hair Attachments</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">For strict hygiene and sanitation reasons, opened hair attachments cannot be returned under any circumstances unless deemed faulty by our team.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Faulty Items</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">If you receive a faulty or visibly damaged item, please contact our concierge within 48 hours with photographic evidence, and we will promptly arrange a replacement or refund.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-sans font-bold text-xs tracking-widest uppercase text-eby-dark mb-2">Booking Deposits</h4>
+                        <p class="font-body text-sm text-eby-brown-light leading-relaxed font-light">As stated in the Booking Policy, the £15 booking deposit compensates for reserved time and is non-refundable under all circumstances.</p>
+                    </div>
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <!-- CALL TO ACTION (QUESTIONS) -->
+    <section class="py-24 bg-eby-dark border-t border-eby-gold-dark/20 text-center relative z-10">
+        <div class="max-w-4xl mx-auto px-6 reveal">
+            <h2 class="font-display text-4xl md:text-5xl mb-6 text-eby-surface">Have questions about our protocol?</h2>
+            <p class="text-eby-gold/70 text-base mb-12 max-w-2xl mx-auto font-light">
+                Our studio concierge is available to provide clarity on any of our policies or assist with specialized booking requests.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <!-- WhatsApp Button -->
+                <a href="https://wa.me/+447849263765" target="_blank" rel="noopener noreferrer" class="btn-luxury w-full sm:w-auto bg-[#25D366] text-white px-10 py-5 font-sans uppercase tracking-[0.15em] text-[10px] font-bold shadow-lg hover:shadow-xl flex justify-center items-center gap-3">
+                    <i class="ph-fill ph-whatsapp-logo text-xl"></i> Contact via WhatsApp
+                </a>
+                <!-- Booking Button -->
+                <a href="booking.html" class="btn-luxury w-full sm:w-auto bg-transparent border border-eby-gold-dark text-eby-gold-dark px-10 py-5 font-sans uppercase tracking-[0.15em] text-[10px] font-bold hover:bg-eby-gold-dark hover:text-eby-dark text-center transition-colors">
+                    Book an Appointment
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 bg-eby-surface border-t border-white/10 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
+                    <p class="font-body text-eby-brown-light text-sm max-w-sm leading-relaxed font-light">
+                        Experience the art of the painless aesthetic. Premium African hair braiding services engineered entirely for longevity and scalp health.
+                    </p>
+                    
+                    <div class="mt-8 space-y-2 text-[10px] font-sans font-bold tracking-widest uppercase text-eby-dark">
+                        <p class="flex items-center gap-3"><i class="ph ph-map-pin text-eby-gold-dark text-sm"></i> Location: Somerset, UK</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-phone text-eby-gold-dark text-sm"></i> Inquiries: +44 7864 585110</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="#cancellations" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="#hygiene" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="#shipping" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Giant Footer Text & Copyright -->
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
+                <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
+                    <p>© 2026 EBY’S PLACE. ALL RIGHTS RESERVED.</p>
+                    <div class="flex space-x-6 text-eby-dark">
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-tiktok-logo text-lg"></i> Tiktok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-gold-dark text-eby-dark rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-surface transition-colors group">
+        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
+    </button>
+
+    <!-- Scripts for Logic & Interactivity -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+                navbar.classList.replace('py-3', 'py-1');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.replace('py-1', 'py-3');
+            }
+        });
+
+        // Mobile Menu Dropdown Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('-translate-y-full')) {
+                menu.classList.remove('-translate-y-full');
+                menu.classList.add('translate-y-0', 'menu-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-y-0', 'menu-open');
+                menu.classList.add('-translate-y-full');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Active State logic for Policy Navigation (Scrollspy)
+        const sections = document.querySelectorAll('.policy-section');
+        const navLinks = document.querySelectorAll('.policy-nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Tech-Spirit Background Glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.cursor-glow');
+            if(glow) {
+                glow.style.setProperty('--x', e.clientX + 'px');
+                glow.style.setProperty('--y', e.clientY + 'px');
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+    </script>
+</body>
+</html>
