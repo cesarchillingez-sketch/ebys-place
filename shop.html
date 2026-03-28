@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Collection | Eby's Place</title>
+    
+    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
+                    },
+                    fontFamily: {
+                        body: ['Lexend', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FCFBF8;
+            color: #2A1A12;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Dynamic Shifting Background (Technological Spirit) */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-shifting {
+            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        /* Cursor Glow Tracking */
+        .cursor-glow {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
+            z-index: 1;
+            mix-blend-mode: multiply;
+            transition: background 0.1s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FCFBF8; }
+        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+
+        /* Tech-Luxury Geometric Pattern */
+        .swirl-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* Light Glassmorphism */
+        .glass-nav {
+            background: rgba(252, 251, 248, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
+            color: #2A1A12;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(194, 163, 120, 0.2);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05);
+        }
+
+        /* Animated SVG Text Pattern (Footer) */
+        .text-pattern {
+            background-color: #2A1A12;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 100px;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: patternShift 20s linear infinite;
+        }
+        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
+
+        /* Mobile Menu Animations */
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
+        
+        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
+        .menu-open .delay-1 { transition-delay: 0.1s; }
+        .menu-open .delay-2 { transition-delay: 0.2s; }
+        .menu-open .delay-3 { transition-delay: 0.3s; }
+        .menu-open .delay-4 { transition-delay: 0.4s; }
+        .menu-open .delay-5 { transition-delay: 0.5s; }
+
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #2A1A12;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #2A1A12;
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+    </style>
+</head>
+<body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
+
+    <div class="cursor-glow"></div>
+    <div class="swirl-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-list text-3xl text-eby-dark"></i>
+            </button>
+            <a href="#" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4">
+                Eby's Place
+            </a>
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Home</a>
+                <a href="#" class="text-eby-gold-dark transition-colors">Shop</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Services</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">Booking</a>
+                <a href="#" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+            </div>
+            <div class="flex items-center space-x-6 text-eby-dark">
+                <a href="#" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
+                    <i class="ph ph-shopping-bag text-2xl"></i>
+                    <span class="absolute top-1 right-0 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="#" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="#" class="mobile-link delay-2 font-display text-4xl text-eby-gold-dark italic block">Shop.</a>
+            <a href="#" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="#" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
+            <a href="#" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Mini-Hero -->
+    <header class="relative pt-40 pb-20 bg-eby-dark overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-eby-dark to-transparent"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+            <div class="flex justify-center items-center gap-3 mb-4 reveal">
+                <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
+                <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">
+                    Eby's Place
+                </h1>
+            </div>
+            <h2 class="font-display text-5xl md:text-6xl text-eby-surface mb-6 reveal reveal-delay-1">The Collection</h2>
+            <p class="text-eby-gold/80 max-w-xl mx-auto reveal reveal-delay-2 font-light">
+                Curated scalp-safe extensions and premium aftercare. Because what happens between appointments matters most.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Shop Container -->
+    <main class="max-w-[1400px] mx-auto px-6 py-20 flex flex-col lg:flex-row gap-12 relative z-10">
+        
+        <!-- Sidebar Filters -->
+        <aside class="lg:w-1/4 flex-shrink-0">
+            <div class="sticky top-32">
+                <h3 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-8 border-b border-eby-gold-dark/20 pb-4">Categories</h3>
+                
+                <ul class="space-y-4 mb-10 font-sans text-xs tracking-widest uppercase">
+                    <li>
+                        <a href="#" class="flex justify-between items-center text-eby-brown-light hover:text-eby-dark transition-colors group">
+                            <span class="group-hover:translate-x-1 transition-transform">Accessories</span>
+                            <span class="text-[10px] text-eby-gold-dark/70">(0)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex justify-between items-center text-eby-brown-light hover:text-eby-dark transition-colors group">
+                            <span class="group-hover:translate-x-1 transition-transform">Aftercare</span>
+                            <span class="text-[10px] text-eby-gold-dark/70">(0)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex justify-between items-center text-eby-dark font-medium group">
+                            <span class="translate-x-1 transition-transform text-eby-gold-dark">Hair Attachments</span>
+                            <span class="text-[10px] text-eby-gold-dark">(3)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex justify-between items-center text-eby-brown-light hover:text-eby-dark transition-colors group">
+                            <span class="group-hover:translate-x-1 transition-transform">Kids</span>
+                            <span class="text-[10px] text-eby-gold-dark/70">(0)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex justify-between items-center text-eby-brown-light hover:text-eby-dark transition-colors group">
+                            <span class="group-hover:translate-x-1 transition-transform">Uncategorized</span>
+                            <span class="text-[10px] text-eby-gold-dark/70">(22)</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Sale Toggle -->
+                <div class="flex items-center justify-between border-t border-eby-gold-dark/20 pt-8">
+                    <span class="font-sans text-[10px] uppercase tracking-widest font-semibold text-eby-dark">Show products on sale</span>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-eby-brown-light/30 appearance-none cursor-pointer z-10 top-0 left-0 transition-all duration-300"/>
+                        <label for="toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-eby-gold/50 cursor-pointer transition-colors duration-300"></label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid Area -->
+        <div class="lg:w-3/4">
+            
+            <!-- Top Action Bar -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-10 pb-6 border-b border-eby-gold-dark/10 gap-4">
+                <p class="text-xs text-eby-brown-light font-sans uppercase tracking-widest">Showing 1–3 of 3 results</p>
+                
+                <!-- Custom Elegant Dropdown -->
+                <div class="relative">
+                    <select class="appearance-none bg-transparent border-none text-xs font-sans uppercase tracking-widest font-semibold text-eby-dark pr-8 py-2 cursor-pointer focus:outline-none focus:ring-0">
+                        <option value="default">Default sorting</option>
+                        <option value="popularity">Sort by popularity</option>
+                        <option value="rating">Sort by average rating</option>
+                        <option value="latest">Sort by latest</option>
+                        <option value="price-low">Sort by price: low to high</option>
+                        <option value="price-high">Sort by price: high to low</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-eby-gold-dark">
+                        <i class="ph ph-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Grid -->
+            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                
+                <!-- Product 1 (Deep Wave - Sold Out) -->
+                <div class="glass-card group flex flex-col reveal">
+                    <div class="relative h-[280px] bg-eby-gold/30 flex items-center justify-center p-8 overflow-hidden">
+                        <span class="font-sans absolute top-4 left-4 border border-eby-dark/10 text-eby-brown-light text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-semibold bg-eby-surface">Sold Out</span>
+                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark/30 group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface">
+                            <i class="ph ph-waves text-4xl text-eby-gold-dark"></i>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg mb-2 text-eby-dark leading-snug">32 Inch Deep Wave Bulk Crochet Hair</h3>
+                            <p class="text-eby-brown-light text-xs mb-6 line-clamp-3 leading-relaxed">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids | Tangle-Free & No Shedding.</p>
+                        </div>
+                        <button class="font-sans font-semibold w-full py-4 border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed hover:bg-eby-bg transition-colors">Notify Me</button>
+                    </div>
+                </div>
+
+                <!-- Product 2 (Pre Stretched - Sold Out) -->
+                <div class="glass-card group flex flex-col reveal reveal-delay-1">
+                    <div class="relative h-[280px] bg-eby-gold/30 flex items-center justify-center p-8 overflow-hidden">
+                        <span class="font-sans absolute top-4 left-4 border border-eby-dark/10 text-eby-brown-light text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-semibold bg-eby-surface">Sold Out</span>
+                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark/30 group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface">
+                            <i class="ph ph-package text-4xl text-eby-gold-dark"></i>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display text-lg mb-2 text-eby-dark leading-snug">4X Pre Stretched Braiding Hair 38"</h3>
+                            <p class="text-eby-brown-light text-xs mb-6 line-clamp-3 leading-relaxed">X-Pression Kanekalon African Braid Hair | Colours 1B, 27, 33.</p>
+                        </div>
+                        <button class="font-sans font-semibold w-full py-4 border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed hover:bg-eby-bg transition-colors">Notify Me</button>
+                    </div>
+                </div>
+
+                <!-- Product 3 (Silky French Curl - New) -->
+                <div class="glass-card group flex flex-col reveal reveal-delay-2 border-eby-gold-dark/40 shadow-sm relative z-20">
+                    <div class="relative h-[280px] bg-eby-gold flex items-center justify-center p-8 overflow-hidden">
+                        <span class="font-sans absolute top-4 left-4 bg-eby-dark text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-bold">New</span>
+                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface shadow-lg">
+                            <i class="ph ph-sparkle text-4xl text-eby-gold-dark"></i>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="flex flex-col mb-4">
+                                <h3 class="font-display text-xl text-eby-dark mb-1">Silky French Curl</h3>
+                                <span class="font-sans font-bold text-eby-gold-dark text-xs tracking-widest">£10.00</span>
+                            </div>
+                            <p class="text-eby-brown-light text-xs mb-6 leading-relaxed">Premium 24 Inch Silky French Curl Braiding Hair. Immensely lightweight, minimal shedding.</p>
+                        </div>
+                        <button class="font-sans w-full py-4 bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Location / Map Section -->
+    <section class="py-24 bg-eby-bg relative z-10 border-t border-eby-gold-dark/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12 items-center glass-card p-6 md:p-10">
+                <!-- Text Details -->
+                <div class="lg:w-1/3 reveal">
+                    <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-4">Visit The Studio</h2>
+                    <p class="text-eby-brown-light text-sm mb-10 leading-relaxed">
+                        Experience our luxury, pain-free braiding in a serene, controlled environment designed entirely for your comfort.
+                    </p>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Location</h4>
+                            <p class="text-eby-dark text-sm leading-relaxed">Somerset, United Kingdom<br><span class="text-eby-brown-light text-xs">(Full address provided upon booking confirmation)</span></p>
+                        </div>
+                        <div>
+                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Operating Hours</h4>
+                            <p class="text-eby-dark text-sm leading-relaxed">Mon - Sat: 9:00 AM - 7:00 PM<br>Sun: By Appointment</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Map iframe with Luxury Grayscale Filter -->
+                <div class="lg:w-2/3 w-full h-[450px] rounded-sm overflow-hidden reveal reveal-delay-1 border border-eby-gold-dark/30 bg-eby-gold/20">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d160490.5735623048!2d-3.2384795293235305!3d51.09675270912165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486df5b9e078f8eb%3A0xc3df3c9cbfbb7b!2sSomerset%2C%20UK!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; filter: grayscale(100%) contrast(1.1) opacity(0.9);" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 mt-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
+                    <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">
+                        Premium African hair braiding services in Somerset, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.
+                    </p>
+                    
+                    <div class="mt-8 space-y-2 text-sm text-eby-dark font-medium">
+                        <p class="flex items-center gap-2"><i class="ph ph-phone text-eby-gold-dark"></i> +44 7864 585110</p>
+                        <p class="flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> Mon- Sat: 9am – 7pm</p>
+                        <p class="flex items-center gap-2"><i class="ph ph-calendar text-eby-gold-dark"></i> Sun: By Appointment</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Giant Footer Text & Copyright -->
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
+                <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
+                    <p>© 2026 Eby’s Place. All Rights Reserved.</p>
+                    <div class="flex space-x-6 text-eby-dark">
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
+                        <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-tiktok-logo text-lg"></i> Tiktok</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Floating Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-dark text-eby-surface rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-gold-dark transition-colors group">
+        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
+    </button>
+
+    <!-- Scripts for Logic & Interactivity -->
+    <script>
+        // Mobile Menu Dropdown Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('-translate-y-full')) {
+                menu.classList.remove('-translate-y-full');
+                menu.classList.add('translate-y-0', 'menu-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-y-0', 'menu-open');
+                menu.classList.add('-translate-y-full');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Tech-Spirit Background Glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.cursor-glow');
+            if(glow) {
+                glow.style.setProperty('--x', e.clientX + 'px');
+                glow.style.setProperty('--y', e.clientY + 'px');
+            }
+        });
+
+        // Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+    </script>
+</body>
+</html>
