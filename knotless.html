@@ -30,128 +30,36 @@
                         sans: ['Montserrat', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
                     },
-                    letterSpacing: {
-                        widest: '.2em',
-                        mega: '.3em',
-                    }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #FCFBF8;
-            color: #2A1A12;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .bg-shifting {
-            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-
-        .cursor-glow {
-            pointer-events: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
-            z-index: 1;
-            mix-blend-mode: multiply;
-            transition: background 0.1s ease;
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #FCFBF8; }
-        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
-
-        .swirl-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            opacity: 0.6;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-
+        body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
+        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
+        .swirl-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: 0.15s; }
-
         .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
-        .btn-luxury::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.7s ease;
-        }
+        .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(194, 163, 120, 0.2);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
         .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
-
-        .nav-scrolled {
-            background: rgba(252, 251, 248, 0.95);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
-            color: #2A1A12;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .variant-btn {
-            border: 1px solid rgba(194, 163, 120, 0.3);
-            color: #6B5749;
-            transition: all 0.3s ease;
-        }
-        .variant-btn.selected {
-            background-color: #2A1A12;
-            color: #FFFFFF;
-            border-color: #2A1A12;
-        }
-
+        .nav-scrolled { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
+        .variant-btn { border: 1px solid rgba(194, 163, 120, 0.3); color: #6B5749; transition: all 0.3s ease; }
+        .variant-btn.selected { background-color: #2A1A12; color: #FFFFFF; border-color: #2A1A12; }
         .color-swatch { transition: all 0.3s ease; }
         .color-swatch.selected { outline: 2px solid #C2A378; outline-offset: 2px; }
-
-        .text-pattern {
-            background-color: #2A1A12;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 100px;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: patternShift 20s linear infinite;
-        }
-        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
-
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1rem; font-size: 0.875rem; color: #2A1A12; transition: all 0.3s ease; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
+        .text-pattern { background-color: #2A1A12; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite; }
         #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #cart-sidebar.open { transform: translateX(0); }
         #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
         #cart-overlay.open { opacity: 1; pointer-events: auto; }
-
-        .luxury-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(194, 163, 120, 0.3);
-            padding: 1rem;
-            font-size: 0.875rem;
-            color: #2A1A12;
-            transition: all 0.3s ease;
-        }
-        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
@@ -159,7 +67,6 @@
     <div class="cursor-glow"></div>
     <div class="swirl-bg"></div>
 
-    <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-scrolled py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
             <button class="lg:hidden p-2 -ml-2"><i class="ph ph-list text-3xl text-eby-dark"></i></button>
@@ -171,8 +78,8 @@
                 <a href="booking.html">Booking</a>
                 <a href="about.html">About Us</a>
             </div>
-            <div class="flex items-center space-x-6">
-                <button onclick="toggleCart()" class="relative group transition-opacity">
+            <div class="flex items-center space-x-6 text-eby-dark">
+                <button onclick="toggleCart()" class="relative group">
                     <i class="ph ph-shopping-bag text-2xl"></i>
                     <span id="cart-badge" class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
@@ -180,16 +87,15 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="w-full min-h-screen pt-24 pb-0 flex flex-col lg:flex-row relative">
-        <!-- Gallery -->
         <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen flex flex-col p-6 lg:p-12 lg:pr-6 pb-0">
-            <div class="w-full h-full relative rounded-sm overflow-hidden flex flex-col">
+            <div class="w-full h-full relative rounded-sm overflow-hidden flex flex-col group">
                 <div class="flex-grow relative overflow-hidden bg-eby-surface/50">
                     <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
+                    <div class="absolute inset-0 bg-eby-dark/10 pointer-events-none mix-blend-overlay"></div>
                 </div>
                 <div class="h-24 w-full mt-4 flex gap-4">
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 relative outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden">
                         <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80">
                     </button>
                     <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
@@ -202,13 +108,12 @@
             </div>
         </section>
 
-        <!-- Configurator -->
         <section class="lg:w-1/2 p-6 lg:p-12 lg:pl-16 pt-12 lg:pt-24 pb-32">
             <div class="max-w-xl mx-auto lg:mx-0">
                 <div class="mb-10 reveal active">
                     <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface">Signature Service</span>
                     <h1 class="font-display text-4xl md:text-5xl text-eby-dark mt-4 mb-4 leading-tight">Signature Knotless<br><span class="italic text-eby-brown-light">Box Braids</span></h1>
-                    <p class="text-eby-brown-light">Engineered for zero root tension and fluid, natural movement.</p>
+                    <p class="text-eby-brown-light">Experience our master-crafted knotless braids, meticulously priced by size and length.</p>
                 </div>
 
                 <div class="space-y-10 reveal active">
@@ -217,23 +122,21 @@
                             <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Parting Size</h3>
                             <span class="text-xs text-eby-brown-light" id="size-indicator">Medium</span>
                         </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            <button onclick="updateVariant(this, 'size', 'large', -20, -1)" class="variant-btn py-4 text-xs uppercase">Large</button>
-                            <button onclick="updateVariant(this, 'size', 'medium', 0, 0)" class="variant-btn selected py-4 text-xs uppercase">Medium</button>
-                            <button onclick="updateVariant(this, 'size', 'smedium', 40, 2)" class="variant-btn py-4 text-xs uppercase">Smedium</button>
+                        <div class="grid grid-cols-3 md:grid-cols-5 gap-2">
+                            <button onclick="selectSize('jumbo', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">Jumbo</button>
+                            <button onclick="selectSize('large', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">Large</button>
+                            <button onclick="selectSize('medium', this)" class="variant-btn selected py-3 text-[9px] uppercase tracking-tighter">Medium</button>
+                            <button onclick="selectSize('smedium', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">S/Medium</button>
+                            <button onclick="selectSize('xsmall', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">XSmall</button>
                         </div>
                     </div>
 
                     <div>
                         <div class="flex justify-between items-end mb-4">
-                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Length</h3>
+                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Available Lengths</h3>
                             <span class="text-xs text-eby-brown-light" id="length-indicator">Mid-Back</span>
                         </div>
-                        <div class="flex flex-col gap-3">
-                            <button onclick="updateVariant(this, 'length', 'mid-back', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between uppercase"><span>Mid-Back</span> <span>+£0</span></button>
-                            <button onclick="updateVariant(this, 'length', 'waist', 30, 1.5)" class="variant-btn py-5 px-6 flex justify-between uppercase"><span>Waist Length</span> <span>+£30</span></button>
-                            <button onclick="updateVariant(this, 'length', 'bum', 60, 3)" class="variant-btn py-5 px-6 flex justify-between uppercase"><span>Bum Length</span> <span>+£60</span></button>
-                        </div>
+                        <div id="length-options-container" class="flex flex-col gap-3"></div>
                     </div>
 
                     <div>
@@ -253,10 +156,7 @@
                     <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 bg-eby-surface/95">
                         <div class="text-center sm:text-left">
                             <p class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-bold mb-1">Total Estimate</p>
-                            <div class="flex items-baseline gap-3">
-                                <span class="font-display text-3xl" id="total-price">£120.00</span>
-                                <span class="text-sm text-eby-brown-light" id="total-time">5 hrs</span>
-                            </div>
+                            <span class="font-display text-3xl" id="total-price">£90.00</span>
                         </div>
                         <button onclick="addToBooking(this)" class="btn-luxury w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 uppercase text-[10px] font-bold tracking-widest">
                             Reserve Appointment
@@ -267,13 +167,80 @@
         </section>
     </main>
 
-    <!-- Content Sections (Technique, Footer, etc.) -->
-    <section class="py-32 bg-eby-dark text-eby-surface text-center">
-        <h2 class="font-display text-4xl mb-6">Engineering Comfort.</h2>
-        <p class="text-eby-gold/80 max-w-2xl mx-auto px-6 font-light">Eliminating tension through biological hair mapping.</p>
+    <!-- Technique Breakdown -->
+    <section class="py-32 bg-eby-dark text-eby-surface relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center bg-fixed opacity-10 mix-blend-overlay"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal active">
+                <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Technique</span>
+                <h2 class="font-display text-4xl md:text-5xl mb-6">Engineering Comfort.</h2>
+                <p class="text-eby-gold/80 text-lg font-light leading-relaxed">Why Eby's Knotless Braids are the gold standard. We don't force hair; we work with its natural bio-mechanics to eliminate tension entirely.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-12 text-center">
+                <div class="reveal flex flex-col items-center active">
+                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6"><i class="ph ph-bounding-box text-3xl text-eby-gold-dark"></i></div>
+                    <h3 class="font-display text-2xl mb-3">Architectural Parting</h3>
+                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">Precision brick-lay parting ensures equal weight distribution.</p>
+                </div>
+                <div class="reveal flex flex-col items-center active">
+                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6"><i class="ph ph-feather text-3xl text-eby-gold-dark"></i></div>
+                    <h3 class="font-display text-2xl mb-3">Weightless Feeding</h3>
+                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">Extensions integrated progressively for zero tension.</p>
+                </div>
+                <div class="reveal flex flex-col items-center active">
+                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6"><i class="ph ph-shield-check text-3xl text-eby-gold-dark"></i></div>
+                    <h3 class="font-display text-2xl mb-3">Edge Isolation</h3>
+                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">Mapped protection for your most delicate hairline zones.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Maintenance Upsells -->
+    <section class="py-24 bg-eby-bg border-y border-eby-gold-dark/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-3xl text-eby-dark mb-12 reveal active">Maintain The Perfection</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card flex flex-col p-6 reveal active">
+                    <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
+                        <i class="ph ph-drop text-4xl text-white relative z-10"></i>
+                    </div>
+                    <h3 class="font-display text-lg text-eby-dark">Soothing Scalp Mist</h3>
+                    <p class="text-xs text-eby-brown-light mb-4">Relieves tension, hydrates follicles.</p>
+                    <div class="flex justify-between items-center mt-auto">
+                        <span class="text-xs font-bold text-eby-dark">£18.00</span>
+                        <button onclick="addItemToCart('Soothing Scalp Mist', 'Relieves tension, hydrates follicles', 18, 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                    </div>
+                </div>
+                <div class="glass-card flex flex-col p-6 reveal active">
+                    <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
+                        <i class="ph ph-sparkle text-4xl text-white relative z-10"></i>
+                    </div>
+                    <h3 class="font-display text-lg text-eby-dark">Silky Styling Mousse</h3>
+                    <p class="text-xs text-eby-brown-light mb-4">Lays flyaways, intense shine.</p>
+                    <div class="flex justify-between items-center mt-auto">
+                        <span class="text-xs font-bold text-eby-dark">£15.00</span>
+                        <button onclick="addItemToCart('Silky Styling Mousse', 'Lays flyaways, intense shine', 15, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                    </div>
+                </div>
+                <div class="glass-card flex flex-col p-6 reveal active">
+                    <div class="relative h-48 bg-eby-dark flex items-center justify-center mb-6 overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
+                        <i class="ph ph-moon-stars text-4xl text-eby-gold-dark relative z-10"></i>
+                    </div>
+                    <h3 class="font-display text-lg text-eby-dark">Luxury Silk Bonnet</h3>
+                    <p class="text-xs text-eby-brown-light mb-4">Frictionless overnight protection.</p>
+                    <div class="flex justify-between items-center mt-auto">
+                        <span class="text-xs font-bold text-eby-dark">£25.00</span>
+                        <button onclick="addItemToCart('Luxury Silk Bonnet', 'Frictionless overnight protection', 25, 'https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10">
         <div class="max-w-7xl mx-auto px-6 text-center">
             <h2 class="font-display font-bold text-[8vw] uppercase text-pattern mb-12">BEAUTY IN EVERY STRAND</h2>
@@ -284,30 +251,20 @@
     <!-- Sidebar Cart -->
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
-        
-        <!-- Sidebar Header -->
         <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
             <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
             <button onclick="toggleCart()" class="text-eby-brown-light hover:text-eby-dark"><i class="ph ph-x text-2xl"></i></button>
         </div>
         
-        <!-- Main Sidebar Content (Scrollable Container) -->
         <div class="flex-grow overflow-y-auto">
-            
-            <!-- Empty State -->
             <div id="cart-empty-state" class="p-12 flex flex-col items-center justify-center text-center">
                 <i class="ph ph-bag text-5xl text-eby-gold-dark/50 mb-4"></i>
                 <p class="text-eby-brown-light text-sm mb-6">Your bag is empty.</p>
                 <button onclick="toggleCart()" class="text-[10px] font-bold uppercase tracking-widest border-b border-eby-gold-dark pb-1">Continue Browsing</button>
             </div>
 
-            <!-- Active State (Now fully scrollable with button at the end) -->
             <div id="cart-active-state" class="hidden flex-col">
-                <div id="cart-items-container" class="p-6 space-y-6">
-                    <!-- Items dynamically injected here -->
-                </div>
-                
-                <!-- PRIMARY ACTION AREA (Moved inside scroll) -->
+                <div id="cart-items-container" class="p-6 space-y-6"></div>
                 <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg/30">
                     <div class="flex justify-between items-center mb-6 font-display text-lg">
                         <span class="text-eby-brown-light">Subtotal</span>
@@ -316,11 +273,9 @@
                     <button onclick="proceedToCheckout()" class="w-full bg-eby-dark text-eby-surface py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all shadow-xl">
                         Secure Checkout →
                     </button>
-                    <p class="mt-4 text-[9px] text-center text-eby-brown-light uppercase tracking-widest">Taxes calculated at checkout</p>
                 </div>
             </div>
 
-            <!-- Checkout Form State -->
             <div id="checkout-form-state" class="hidden flex-col p-6 space-y-8 bg-eby-bg/50">
                 <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-6">
                     <div>
@@ -331,69 +286,155 @@
                         <label class="text-[8px] uppercase tracking-widest font-bold text-eby-brown-light mb-2 block">Appointment Date</label>
                         <input type="date" id="cust-date" required class="luxury-input">
                     </div>
-                    
                     <div class="pt-6 border-t border-eby-gold-dark/20">
                         <h3 class="font-display text-lg mb-4">Payment</h3>
                         <div id="card-element" class="p-4 bg-white border border-eby-gold-dark/30 rounded-sm"></div>
                         <div id="card-errors" class="text-red-500 text-xs mt-2"></div>
                     </div>
-
-                    <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-eby-surface py-5 font-sans uppercase text-[10px] font-bold tracking-widest shadow-lg">
-                        Confirm Booking
-                    </button>
-                    <button type="button" onclick="backToCart()" class="w-full text-center text-[9px] font-bold uppercase tracking-widest text-eby-brown-light mt-4">← Back to Items</button>
+                    <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-eby-surface py-5 uppercase text-[10px] font-bold tracking-widest shadow-lg">Confirm Booking</button>
+                    <button type="button" onclick="backToCart()" class="w-full text-center text-[9px] font-bold uppercase tracking-widest text-eby-brown-light mt-4">← Back to Bag</button>
                 </form>
             </div>
-            
-            <!-- Success Screen -->
+
             <div id="checkout-success-state" class="hidden flex-col items-center justify-center p-12 text-center h-full">
                 <div class="w-20 h-20 rounded-full bg-eby-gold flex items-center justify-center mb-6"><i class="ph ph-check text-3xl text-eby-gold-dark"></i></div>
                 <h2 class="font-display text-2xl mb-4">Request Received</h2>
-                <p class="text-sm opacity-70 mb-8">Dispatched to <span id="success-email-display" class="font-bold">your email</span>.</p>
-                <button onclick="toggleCart()" class="text-[10px] uppercase font-bold border-b border-eby-dark pb-1">Return to Site</button>
+                <p class="text-sm opacity-70 mb-8">Confirmed for <span id="success-email-display" class="font-bold">your email</span>.</p>
+                <button onclick="location.reload()" class="text-[10px] uppercase font-bold border-b border-eby-dark pb-1">Return to Site</button>
             </div>
         </div>
     </div>
 
     <script>
-        const basePrice = 120;
-        let state = { sizePriceMod: 0, lengthPriceMod: 0, color: '1B' };
-        let cartTotal = 0;
-        let cartItemsData = [];
+        const pricingMatrix = {
+            'jumbo': { 'Waist': 80 },
+            'large': { 'Bum Length': 100, 'Thigh Length': 120 },
+            'medium': { 'Bob Length': 70, 'Mid-Back': 90, 'Waist Length': 120, 'Bum Length': 130, 'Thigh Length': 170 },
+            'smedium': { 'Bob Length': 80, 'Mid-Back': 100, 'Waist Length': 135, 'Bum Length': 150, 'Thigh Length': 175 },
+            'xsmall': { 'Bob Length': 120, 'Mid-Back': 150, 'Waist Length': 200 }
+        };
 
-        // STRIPE
+        let currentSize = 'medium';
+        let currentLength = 'Mid-Back';
+        let cart = [];
+        let cartTotal = 0;
+
         const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
         const elements = stripe.elements();
         const cardElement = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12' } } });
 
-        document.addEventListener('DOMContentLoaded', () => cardElement.mount('#card-element'));
+        document.addEventListener('DOMContentLoaded', () => {
+            cardElement.mount('#card-element');
+            renderLengths();
+        });
 
         function formatCurrency(amount) { return `£${amount.toFixed(2)}`; }
 
-        function updatePriceAndTime() {
-            const total = basePrice + state.sizePriceMod + state.lengthPriceMod;
-            document.getElementById('total-price').innerText = formatCurrency(total);
+        function selectSize(size, btn) {
+            btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            currentSize = size;
+            document.getElementById('size-indicator').innerText = btn.innerText;
+            renderLengths();
         }
 
-        function updateVariant(btn, type, value, price, time) {
-            btn.parentNode.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            if(type === 'size') { state.sizePriceMod = price; document.getElementById('size-indicator').innerText = value; }
-            else { state.lengthPriceMod = price; document.getElementById('length-indicator').innerText = value; }
-            updatePriceAndTime();
+        function renderLengths() {
+            const container = document.getElementById('length-options-container');
+            container.innerHTML = '';
+            const lengths = pricingMatrix[currentSize];
+            currentLength = Object.keys(lengths)[0];
+            document.getElementById('length-indicator').innerText = currentLength;
+
+            for (const [name, price] of Object.entries(lengths)) {
+                const isSelected = name === currentLength;
+                const btn = document.createElement('button');
+                btn.className = `variant-btn py-5 px-6 flex justify-between uppercase ${isSelected ? 'selected' : 'bg-eby-surface'}`;
+                btn.innerHTML = `<span>${name}</span> <span>${formatCurrency(price)}</span>`;
+                btn.onclick = () => {
+                    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    currentLength = name;
+                    document.getElementById('length-indicator').innerText = name;
+                    document.getElementById('total-price').innerText = formatCurrency(price);
+                };
+                container.appendChild(btn);
+            }
+            document.getElementById('total-price').innerText = formatCurrency(lengths[currentLength]);
         }
 
         function updateColor(code, btn) {
             document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
             btn.classList.add('selected');
-            state.color = code;
             document.getElementById('color-indicator').innerText = btn.title;
         }
 
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const badge = document.getElementById('cart-badge');
+            container.innerHTML = '';
+            cartTotal = 0;
+
+            if (cart.length === 0) {
+                document.getElementById('cart-empty-state').classList.remove('hidden');
+                document.getElementById('cart-active-state').classList.add('hidden');
+                badge.innerText = '0';
+                return;
+            }
+
+            document.getElementById('cart-empty-state').classList.add('hidden');
+            document.getElementById('cart-active-state').classList.remove('hidden');
+
+            cart.forEach((item, index) => {
+                cartTotal += item.price;
+                const html = `
+                    <div class="flex gap-4 items-center border-b border-eby-gold-dark/10 pb-6 group">
+                        <div class="w-16 h-20 bg-eby-gold/10 overflow-hidden rounded-sm"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between">
+                                <h4 class="text-sm font-bold text-eby-dark">${item.name}</h4>
+                                <button onclick="removeFromCart(${index})" class="text-red-800 opacity-40 hover:opacity-100 transition-opacity"><i class="ph ph-trash text-lg"></i></button>
+                            </div>
+                            <p class="text-[10px] opacity-60 text-eby-brown-light mb-2">${item.details}</p>
+                            <span class="text-xs font-bold text-eby-dark">${formatCurrency(item.price)}</span>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            subtotalEl.innerText = formatCurrency(cartTotal);
+            badge.innerText = cart.length;
+        }
+
+        function addToBooking(btn) {
+            const sizeLabel = document.getElementById('size-indicator').innerText;
+            const price = pricingMatrix[currentSize][currentLength];
+            cart.push({
+                name: "Knotless Braids",
+                details: `${sizeLabel} | ${currentLength} | ${document.getElementById('color-indicator').innerText}`,
+                price: price,
+                img: document.getElementById('main-gallery-img').src
+            });
+            renderCart();
+            toggleCart();
+        }
+
+        function addItemToCart(name, details, price, img) {
+            cart.push({ name, details, price, img });
+            renderCart();
+            setTimeout(() => toggleCart(), 400);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
         function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('open');
-            document.getElementById('cart-overlay').classList.toggle('open');
-            if(!document.getElementById('cart-sidebar').classList.contains('open')) backToCart();
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
         }
 
         function proceedToCheckout() {
@@ -408,60 +449,19 @@
             document.getElementById('cart-title').innerText = "Your Bag";
         }
 
-        function addItemToCartHTML(title, desc, price, imgSrc) {
-            const container = document.getElementById('cart-items-container');
-            const html = `
-                <div class="flex gap-4 items-center border-b border-eby-gold-dark/10 pb-6">
-                    <div class="w-16 h-20 bg-eby-gold/10 overflow-hidden"><img src="${imgSrc}" class="w-full h-full object-cover"></div>
-                    <div class="flex-grow">
-                        <h4 class="text-sm font-bold">${title}</h4>
-                        <p class="text-[10px] opacity-60 mb-2">${desc}</p>
-                        <span class="text-xs font-bold">${price}</span>
-                    </div>
-                </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            cartItemsData.push({ item: title, details: desc, price: price });
-        }
-
-        function addToBooking(btn) {
-            // FIXED STATE RESET: Clear previous braid booking to prevent double-entries
-            document.getElementById('cart-items-container').innerHTML = '';
-            cartItemsData = [];
-            cartTotal = 0;
-
-            const priceText = document.getElementById('total-price').innerText;
-            addItemToCartHTML("Knotless Box Braids", `${document.getElementById('size-indicator').innerText} | ${document.getElementById('length-indicator').innerText}`, priceText, document.getElementById('main-gallery-img').src);
-            
-            cartTotal = parseFloat(priceText.replace('£', ''));
-            document.getElementById('cart-subtotal').innerText = formatCurrency(cartTotal);
-            document.getElementById('cart-badge').innerText = "1";
-            
-            document.getElementById('cart-empty-state').classList.add('hidden');
-            document.getElementById('cart-active-state').classList.remove('hidden');
-            toggleCart();
-        }
-
         async function submitBooking(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-booking-btn');
             btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
-            
             const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
-            if (error) {
-                document.getElementById('card-errors').textContent = error.message;
-                btn.innerText = "Confirm Booking";
-                return;
-            }
-
-            const payload = { email: document.getElementById('cust-email').value, date: document.getElementById('cust-date').value, items: cartItemsData, total: cartTotal, stripeId: paymentMethod.id };
-            
+            if (error) { document.getElementById('card-errors').textContent = error.message; btn.innerText = "Confirm Booking"; return; }
+            const payload = { email: document.getElementById('cust-email').value, date: document.getElementById('cust-date').value, items: cart, total: cartTotal, stripeId: paymentMethod.id };
             await fetch('https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec', {
                 method: 'POST', mode: 'no-cors', body: JSON.stringify(payload)
             });
-
             document.getElementById('checkout-form-state').classList.add('hidden');
             document.getElementById('checkout-success-state').classList.remove('hidden');
-            document.getElementById('cart-title').innerText = "Confirmed";
+            document.getElementById('success-email-display').innerText = payload.email;
         }
 
         function changeImage(src, btn) {
@@ -474,6 +474,11 @@
             const glow = document.querySelector('.cursor-glow');
             if(glow) { glow.style.setProperty('--x', e.clientX + 'px'); glow.style.setProperty('--y', e.clientY + 'px'); }
         });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach((e) => observer.observe(e));
     </script>
 </body>
 </html>
