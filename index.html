@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eby's Place | Luxury Pain-Free Braiding</title>
     
-    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        // Somerset "Quiet Luxury" Palette
-                        'eby-bg': '#FCFBF8',          // Crisp Ivory / Off-white
-                        'eby-surface': '#FFFFFF',     // Pure White
-                        'eby-dark': '#2A1A12',        // Deep Espresso (Primary Text)
-                        'eby-brown-light': '#6B5749', // Muted Taupe/Brown (Body Text)
-                        'eby-gold': '#F4EFE6',        // Pale Yellow / Champagne Backgrounds
-                        'eby-gold-dark': '#C2A378',   // Deep Champagne / Gold Accents
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
                         'whatsapp-green': '#25D366',
                     },
                     fontFamily: {
@@ -35,489 +35,182 @@
                         sans: ['Montserrat', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
                     },
-                    letterSpacing: {
-                        widest: '.2em',
-                        mega: '.3em',
-                    }
+                    letterSpacing: { widest: '.2em', mega: '.3em' }
                 }
             }
         }
     </script>
 
     <style>
-        /* Base Reset */
-        body {
-            background-color: #FCFBF8;
-            color: #2A1A12;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+        body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        /* Dynamic Shifting Background (Technological Spirit) */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .bg-shifting {
-            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
 
-        /* Cursor Glow Tracking */
-        .cursor-glow {
-            pointer-events: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
-            z-index: 1;
-            mix-blend-mode: multiply;
-            transition: background 0.1s ease;
-        }
+        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FCFBF8; }
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
 
-        /* Tech-Luxury Geometric Pattern */
-        .swirl-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            opacity: 0.6;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
+        .swirl-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
 
-        /* Scroll Animations */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: 0.15s; }
-        .reveal-delay-2 { transition-delay: 0.3s; }
-        .reveal-delay-3 { transition-delay: 0.45s; }
 
-        /* Luxury Button Hover Effects */
-        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; }
-        .btn-luxury::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.7s ease;
-        }
+        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+        .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
 
-        /* Light Glassmorphism */
-        .glass-nav {
-            background: rgba(252, 251, 248, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
-        }
-
+        /* HIGH-LEVEL GLASSMORPHISM & ROUNDING */
         .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(194, 163, 120, 0.2);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(194, 163, 120, 0.25);
+            border-radius: 32px;
+            box-shadow: 0 15px 35px rgba(42, 26, 18, 0.04);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05);
-        }
+        .glass-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(42, 26, 18, 0.1); }
 
-        /* Left-Aligned Hero Gradient Overlay */
-        .hero-gradient { 
-            background: linear-gradient(to right, #FCFBF8 0%, #FCFBF8 35%, rgba(252,251,248,0.8) 55%, transparent 100%); 
-        }
+        .nav-scrolled { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
 
-        /* Mobile Hero Gradient */
-        @media (max-width: 768px) {
-            .hero-gradient {
-                background: linear-gradient(to top, #FCFBF8 0%, #FCFBF8 50%, rgba(252,251,248,0.6) 100%); 
-            }
-        }
-
-        .img-hover-zoom { overflow: hidden; }
-        .img-hover-zoom img { transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .img-hover-zoom:hover img { transform: scale(1.05); }
-
-        /* Dynamic Navbar Colors */
-        .nav-transparent {
-            background: transparent;
-            color: #FFFFFF;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .nav-transparent .nav-link, .nav-transparent .nav-icon {
-            color: #FFFFFF;
-        }
-        .nav-scrolled {
-            background: rgba(252, 251, 248, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
-            color: #2A1A12;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-        }
-        .nav-scrolled .nav-link, .nav-scrolled .nav-icon {
-            color: #2A1A12;
-        }
-        .nav-scrolled .nav-link-gold {
-            color: #C2A378;
-        }
-
-        /* Animated SVG Text Pattern */
         .text-pattern {
             background-color: #2A1A12;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 100px;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: patternShift 20s linear infinite;
-        }
-        @keyframes patternShift {
-            0% { background-position: 0px 0px; }
-            100% { background-position: 200px 200px; }
+            background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite;
         }
 
-        /* Cart Sidebar Styles */
-        #cart-sidebar {
-            transform: translateX(100%);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        #cart-sidebar.open {
-            transform: translateX(0);
-        }
-        #cart-overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
-        #cart-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        #service-slider { position: fixed; bottom: 0; left: 0; width: 100%; height: 96vh; background: #FFFFFF; z-index: 100; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-radius: 32px 32px 0 0; box-shadow: 0 -20px 50px rgba(0,0,0,0.1); overflow: hidden; }
+        #service-slider.active { transform: translateY(0); }
+        #service-slider-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(42, 26, 18, 0.4); backdrop-filter: blur(8px); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        #service-slider-overlay.active { opacity: 1; pointer-events: auto; }
 
-        /* WhatsApp Floating Icon */
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 60px;
-            z-index: 50;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .whatsapp-btn:hover {
-            transform: scale(1.1);
-        }
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; transition: all 0.3s ease; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
 
-        /* Service Slider Portal Styles */
-        #service-slider {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 96vh; /* Increased from 90vh to ensure the checkout button is fully visible */
-            background: #FFFFFF;
-            z-index: 100;
-            transform: translateY(100%);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 -20px 50px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        #service-slider.active {
-            transform: translateY(0);
-        }
-        #service-slider-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(42, 26, 18, 0.4);
-            backdrop-filter: blur(8px);
-            z-index: 90;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        #service-slider-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        #cart-sidebar.open { transform: translateX(0); }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #cart-overlay.open { opacity: 1; pointer-events: auto; }
 
-        /* Mobile Menu Animations */
-        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
-        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
-        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
-        .menu-open .delay-1 { transition-delay: 0.1s; }
-        .menu-open .delay-2 { transition-delay: 0.2s; }
-        .menu-open .delay-3 { transition-delay: 0.3s; }
-        .menu-open .delay-4 { transition-delay: 0.4s; }
-        .menu-open .delay-5 { transition-delay: 0.5s; }
+        .img-hover-zoom { overflow: hidden; border-radius: 32px; }
+        .img-hover-zoom img { transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .img-hover-zoom:hover img { transform: scale(1.05); }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting">
 
-    <!-- WhatsApp Floating Icon -->
-    <a href="https://wa.me/+447849263765" target="_blank" class="whatsapp-btn flex items-center justify-center w-14 h-14 bg-whatsapp-green text-white rounded-full shadow-2xl">
+    <!-- WhatsApp -->
+    <a href="https://wa.me/+447849263765" target="_blank" class="whatsapp-btn fixed bottom-8 right-8 z-50 flex items-center justify-center w-16 h-16 bg-whatsapp-green text-white rounded-full shadow-2xl hover:scale-110 transition-transform">
         <i class="ph-fill ph-whatsapp-logo text-3xl"></i>
     </a>
 
-    <!-- Service Slider Portal -->
+    <!-- Service Slider -->
     <div id="service-slider-overlay" onclick="closeServiceSlider()"></div>
     <div id="service-slider">
-        <div class="p-4 border-b border-eby-gold-dark/10 flex justify-between items-center bg-white sticky top-0 z-10">
+        <div class="p-6 border-b border-eby-gold-dark/10 flex justify-between items-center bg-white sticky top-0 z-10">
             <div class="flex items-center gap-3">
                 <span class="w-2 h-2 rounded-full bg-eby-gold-dark animate-pulse"></span>
                 <h3 id="slider-header-title" class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark">Luxury Portal</h3>
             </div>
-            <button onclick="closeServiceSlider()" class="w-10 h-10 flex items-center justify-center rounded-full bg-eby-bg hover:bg-eby-gold-dark hover:text-white transition-all">
-                <i class="ph ph-x text-xl"></i>
-            </button>
+            <button onclick="closeServiceSlider()" class="w-10 h-10 flex items-center justify-center rounded-full bg-eby-bg hover:bg-eby-dark hover:text-white transition-all"><i class="ph ph-x text-xl"></i></button>
         </div>
         <div class="w-full h-full relative">
             <div id="slider-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-eby-bg z-0">
                 <i class="ph ph-circle-notch animate-spin text-3xl text-eby-gold-dark mb-4"></i>
                 <span class="font-display italic text-eby-brown-light">Loading experience...</span>
             </div>
-            <iframe id="service-iframe" src="" class="w-full h-full border-none relative z-10" loading="lazy"></iframe>
+            <iframe id="service-iframe" src="" class="w-full h-full border-none relative z-10"></iframe>
         </div>
     </div>
 
-    <!-- Cursor Glow (Tech Spirit) -->
     <div class="cursor-glow"></div>
-
-    <!-- Global Background Pattern -->
     <div class="swirl-bg"></div>
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-transparent transition-all duration-500 py-3">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button onclick="toggleMobileMenu()" class="lg:hidden nav-icon hover:opacity-70 transition-opacity">
-                <i class="ph ph-list text-2xl"></i>
-            </button>
-
-            <!-- Corporate/Sophisticated Logo -->
-            <a href="#" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase nav-link transition-colors">
-                Eby's Place
-            </a>
-
-            <!-- Desktop Links -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 -ml-2"><i class="ph ph-list text-2xl"></i></button>
+            <a href="#" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase transition-colors">Eby's Place</a>
             <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium">
-                <a href="index.html" class="nav-link hover:opacity-70 transition-opacity">Home</a>
-                <a href="shop.html" class="nav-link hover:opacity-70 transition-opacity">Shop</a>
-                <a href="services.html" class="nav-link hover:opacity-70 transition-opacity">Services</a>
-                <a href="booking.html" class="nav-link nav-link-gold hover:opacity-70 transition-opacity text-eby-gold-dark">Booking</a>
-                <a href="#gallery" class="nav-link hover:opacity-70 transition-opacity">Gallery</a>
-                <a href="about us.html" class="nav-link hover:opacity-70 transition-opacity">About Us</a>
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="services.html">Services</a>
+                <a href="#booking" class="text-eby-gold-dark">Booking</a>
+                <a href="#gallery">Gallery</a>
+                <a href="about.html">About Us</a>
             </div>
-
             <div class="flex items-center space-x-6">
-                <a href="#" class="nav-link hover:opacity-70 transition-opacity hidden sm:block">
-                    <span class="text-[10px] font-sans uppercase tracking-widest font-medium">My Account</span>
-                </a>
-                <button onclick="toggleCart()" class="relative nav-icon hover:opacity-70 transition-opacity group">
+                <button onclick="toggleCart()" class="relative group">
                     <i class="ph ph-shopping-bag text-2xl"></i>
-                    <span class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">1</span>
+                    <span id="cart-badge" class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Full-Screen Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
-        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
-            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
-                <i class="ph ph-x text-3xl text-eby-dark"></i>
-            </button>
-            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
-            <div class="w-10"></div>
-        </div>
-        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
-            <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
-            <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
-            <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
-            <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
-            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-gold-dark italic block">About Us.</a>
-        </div>
-        <div class="px-10 pb-12">
-            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
-            <div class="flex justify-between items-center text-eby-dark">
-                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
-                <div class="flex space-x-4">
-                    <i class="ph ph-instagram-logo text-xl"></i>
-                    <i class="ph ph-tiktok-logo text-xl"></i>
-                </div>
-            </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg slide-panel -translate-y-full transition-transform duration-500 flex flex-col p-10">
+        <button onclick="toggleMobileMenu()" class="self-end text-3xl mb-20"><i class="ph ph-x"></i></button>
+        <div class="flex flex-col space-y-10">
+            <a href="index.html" class="font-display text-4xl">Home.</a>
+            <a href="shop.html" class="font-display text-4xl">Shop.</a>
+            <a href="services.html" class="font-display text-4xl">Services.</a>
+            <a href="#booking" class="font-display text-4xl">Booking.</a>
         </div>
     </div>
 
-    <!-- Slide-Out Checkout Cart -->
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
-        <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center">
-            <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Cart</h2>
-            <button onclick="toggleCart()" class="text-eby-brown-light hover:text-eby-dark"><i class="ph ph-x text-2xl"></i></button>
-        </div>
-        
-        <!-- Cart Items View -->
-        <div id="cart-items-view" class="flex-grow flex flex-col">
-            <div class="p-6 flex-grow overflow-y-auto">
-                <div class="flex gap-4 items-center mb-6">
-                    <div class="w-20 h-24 bg-eby-gold/50 flex items-center justify-center border border-eby-gold-dark/20">
-                        <i class="ph ph-sparkle text-2xl text-eby-gold-dark"></i>
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="font-display text-sm text-eby-dark font-semibold">Silky French Curl</h4>
-                        <p class="text-xs text-eby-brown-light mb-2">Colour: 1B</p>
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center border border-eby-gold-dark/30 px-2 py-1 gap-3">
-                                <button class="text-eby-brown-light hover:text-eby-dark">-</button>
-                                <span class="text-xs font-sans">1</span>
-                                <button class="text-eby-brown-light hover:text-eby-dark">+</button>
-                            </div>
-                            <span class="font-sans font-medium text-xs text-eby-dark">£10.00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg">
-                <div class="flex justify-between items-center mb-6 font-display text-lg">
-                    <span class="text-eby-brown-light">Subtotal</span>
-                    <span class="text-eby-dark font-semibold">£10.00</span>
-                </div>
-                <p class="text-xs text-eby-brown-light text-center mb-4">Taxes and shipping calculated at checkout.</p>
-                <button onclick="proceedToCheckout()" class="w-full btn-luxury bg-eby-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-colors">
-                    Secure Checkout →
-                </button>
-            </div>
-        </div>
-
-        <!-- Checkout Form View -->
-        <div id="checkout-form-view" class="hidden flex-grow flex-col">
-            <div class="p-6 flex-grow overflow-y-auto">
-                <div class="flex items-center justify-between mb-6">
-                    <span class="font-sans text-[10px] uppercase tracking-widest text-eby-gold-dark font-bold">Express Checkout</span>
-                    <i class="ph ph-lock-key text-eby-dark"></i>
-                </div>
-                <form onsubmit="processPayment(event)" class="space-y-4">
-                    <input type="email" placeholder="Email Address" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                    <h3 class="font-display text-lg text-eby-dark mt-6 mb-2">Shipping Details</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="First Name" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                        <input type="text" placeholder="Last Name" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                    </div>
-                    <input type="text" placeholder="Address" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                    <h3 class="font-display text-lg text-eby-dark mt-6 mb-2">Payment Info</h3>
-                    <div class="border border-eby-gold-dark/20 p-4 bg-eby-bg flex items-center gap-3">
-                        <i class="ph ph-credit-card text-eby-brown-light text-xl"></i>
-                        <input type="text" placeholder="Card Number" required class="w-full bg-transparent text-sm focus:outline-none text-eby-dark">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="MM / YY" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                        <input type="text" placeholder="CVC" required class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark transition-colors text-eby-dark">
-                    </div>
-                    <button type="submit" id="pay-btn" class="w-full btn-luxury bg-eby-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-colors mt-6 flex justify-center items-center">
-                        Pay £10.00
-                    </button>
-                    <button type="button" onclick="backToCart()" class="w-full text-center text-[10px] uppercase tracking-widest text-eby-brown-light hover:text-eby-dark font-sans font-bold mt-4">
-                        ← Back to Cart
-                    </button>
-                </form>
-            </div>
-            <!-- Success State -->
-            <div id="payment-success" class="hidden absolute inset-0 bg-eby-surface flex-col items-center justify-center p-8 text-center z-10">
-                <div class="w-20 h-20 rounded-full bg-eby-gold/50 flex items-center justify-center mb-6 border border-eby-gold-dark/30">
-                    <i class="ph ph-check-circle text-4xl text-eby-gold-dark"></i>
-                </div>
-                <h2 class="font-display text-3xl text-eby-dark mb-4">Payment Successful</h2>
-                <p class="text-eby-brown-light text-sm mb-8">Your luxury experience is secured. We've sent the details to your email.</p>
-                <button onclick="toggleCart()" class="btn-luxury border border-eby-dark text-eby-dark px-8 py-3 font-sans uppercase tracking-widest text-[10px] font-bold">
-                    Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Ultra-Modern Minimal Hero Section -->
+    <!-- Hero Section -->
     <section class="relative h-screen w-full flex items-end overflow-hidden pb-12 md:pb-20">
         <video id="heroVideo" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="https://res.cloudinary.com/dfbweqelf/video/upload/v1774527976/Ebys_Place_Header_Video_lueve9.mp4" type="video/mp4">
         </video>
         <div class="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10 pointer-events-none"></div>
-
         <div class="relative z-20 w-full max-w-[1400px] mx-auto px-6 flex flex-col justify-end h-full">
-            <div class="max-w-2xl reveal">
+            <div class="max-w-2xl reveal active">
                 <div class="flex items-center gap-3 mb-6">
                     <span class="w-2 h-2 rounded-full bg-eby-gold-dark animate-pulse shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
-                    <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">
-                        Luxury Braiding
-                    </h1>
+                    <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">Luxury Braiding</h1>
                 </div>
-                <p class="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-white mb-8 leading-[1.05] tracking-tight drop-shadow-md">
-                    Zero pain.<br>Zero trauma.<br>
-                    <span class="italic text-eby-gold-dark font-normal">Just perfection.</span>
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto">
-                    <a href="#booking" class="btn-luxury backdrop-blur-md bg-white/10 border border-white/30 text-white px-8 md:px-10 py-5 uppercase tracking-[0.2em] font-sans text-[10px] font-bold w-full sm:w-max text-center hover:bg-white hover:text-eby-dark transition-colors flex justify-center items-center gap-4 group">
-                        Book Your Pain-Free Appointment <i class="ph ph-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
-                    </a>
-                </div>
+                <p class="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-white mb-8 leading-[1.05] tracking-tight drop-shadow-md">Zero pain.<br>Zero trauma.<br><span class="italic text-eby-gold-dark font-normal">Just perfection.</span></p>
+                <a href="#booking" class="btn-luxury backdrop-blur-md bg-white/10 border border-white/30 text-white px-10 py-5 uppercase tracking-[0.2em] font-sans text-[10px] font-bold w-max text-center hover:bg-white hover:text-eby-dark transition-colors flex items-center gap-4 group">Book Your Pain-Free Appointment <i class="ph ph-arrow-right group-hover:translate-x-2 transition-transform"></i></a>
             </div>
         </div>
     </section>
 
-    <!-- The Problem (Parallax Hook) -->
-    <section class="relative py-32 overflow-hidden bg-eby-dark">
+    <!-- The Problem (Full Detailed Copy Restored) -->
+    <section class="relative py-32 bg-eby-dark overflow-hidden">
         <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center bg-fixed opacity-30"></div>
         <div class="absolute inset-0 bg-eby-dark/90 backdrop-blur-sm z-0"></div>
-
         <div class="max-w-[1000px] mx-auto px-6 text-center relative z-10">
             <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-6 block reveal">The truth no one says</span>
-            <h2 class="font-display text-4xl md:text-6xl text-eby-surface mb-12 leading-tight reveal drop-shadow-lg">
-                You don't fear bad braids.<br>
-                <span class="italic text-eby-gold font-normal">You fear the pain after.</span>
-            </h2>
+            <h2 class="font-display text-4xl md:text-6xl text-eby-surface mb-12 leading-tight reveal">You don't fear bad braids.<br><span class="italic text-eby-gold font-normal">You fear the pain after.</span></h2>
             <div class="grid md:grid-cols-2 gap-16 text-left items-center mt-20">
-                <div class="reveal glass-card p-10 bg-eby-surface/5 border-eby-surface/10 text-eby-surface backdrop-blur-md">
-                    <p class="text-eby-gold text-lg leading-relaxed mb-6">
-                        The headaches. The tight edges. The constant mirror-checking. The quiet worry that your hairline is thinning with every appointment.
-                    </p>
-                    <p class="font-medium text-lg leading-relaxed mb-6">
-                        For years, the industry has sold us one continuous lie: <br>
-                        <span class="font-display italic text-2xl text-eby-gold-dark font-normal">"Beauty requires pain."</span>
-                    </p>
-                    <p class="text-eby-gold/80 text-sm leading-relaxed">
-                        Most salons focus entirely on how the style looks when you leave the chair. Almost none focus on how your scalp feels when you get home.
-                    </p>
+                <div class="reveal glass-card p-10 bg-eby-surface/5 border-eby-surface/10 text-eby-surface">
+                    <p class="text-eby-gold text-lg leading-relaxed mb-6">The headaches. The tight edges. The constant mirror-checking. The quiet worry that your hairline is thinning with every appointment.</p>
+                    <p class="font-medium text-lg leading-relaxed mb-6">For years, the industry has sold us one continuous lie: <br><span class="font-display italic text-2xl text-eby-gold-dark font-normal">"Beauty requires pain."</span></p>
+                    <p class="text-eby-gold/80 text-sm leading-relaxed">Most salons focus entirely on how the style looks when you leave the chair. Almost none focus on how your scalp feels when you get home.</p>
                 </div>
-                <div class="p-10 reveal reveal-delay-1 border-l-4 border-l-eby-gold-dark glass-card bg-eby-surface shadow-2xl transform md:translate-y-12 backdrop-blur-xl">
+                <div class="p-10 reveal reveal-delay-1 border-l-4 border-l-eby-gold-dark glass-card bg-eby-surface shadow-2xl transform md:translate-y-12">
                     <h3 class="font-display text-2xl mb-4 text-eby-dark">We built Eby's Place to end that cycle.</h3>
-                    <p class="text-eby-brown-light leading-relaxed mb-4">
-                        At Eby’s Place, every single technique is engineered around one core philosophy: <strong class="font-medium text-eby-dark">Zero tension. Maximum longevity. Total comfort.</strong>
-                    </p>
-                    <p class="text-eby-brown-light leading-relaxed text-sm">
-                        No scalp strain. No edge damage. Just perfectly clean parts, a flawless finish, and a scalp that feels completely undisturbed.
-                    </p>
+                    <p class="text-eby-brown-light leading-relaxed mb-4">At Eby’s Place, every single technique is engineered around one core philosophy: <strong class="font-medium text-eby-dark">Zero tension. Maximum longevity. Total comfort.</strong></p>
+                    <p class="text-eby-brown-light leading-relaxed text-sm">No scalp strain. No edge damage. Just perfectly clean parts, a flawless finish, and a scalp that feels completely undisturbed.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Authority (Data Simplified) -->
+    <!-- Authority (Restored) -->
     <section class="py-24 border-y border-eby-gold-dark/20 bg-eby-gold">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col lg:flex-row items-center gap-20">
                 <div class="lg:w-1/2 reveal">
                     <h2 class="font-display text-8xl text-eby-gold-dark mb-2">1 in 3</h2>
                     <h3 class="font-display text-2xl md:text-3xl mb-6 text-eby-dark">women experience tension-related hair loss.</h3>
-                    <p class="text-eby-brown-light leading-relaxed mb-8">
-                        And most don’t realize it until it’s already happening. Tight braids don’t just hurt. They slowly weaken follicles, traumatize edges, and in severe cases—cause permanent loss.
-                    </p>
+                    <p class="text-eby-brown-light leading-relaxed mb-8">And most don’t realize it until it’s already happening. Tight braids don’t just hurt. They slowly weaken follicles, traumatize edges, and in severe cases—cause permanent loss.</p>
                     <p class="font-sans font-semibold text-eby-dark uppercase tracking-widest text-[10px]">We don't ignore that. We build our method around it.</p>
                 </div>
                 <div class="lg:w-1/2 grid grid-cols-2 gap-6 reveal reveal-delay-1">
@@ -546,92 +239,61 @@
         </div>
     </section>
 
-    <!-- Services / Popular Styles -->
+    <!-- Services Grid (Restored Detailed Copy) -->
     <section id="services" class="py-32 bg-eby-bg">
         <div class="max-w-[1400px] mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
-                <div>
-                    <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Our Popular Styles</span>
-                    <h2 class="font-display text-4xl md:text-5xl text-eby-dark">Curated Perfection.</h2>
-                </div>
-                <a href="#" class="font-sans font-medium text-[10px] uppercase tracking-widest text-eby-brown-light hover:text-eby-dark transition-colors mt-6 md:mt-0 flex items-center gap-2">
-                    View All Services <i class="ph ph-arrow-right text-sm"></i>
-                </a>
+            <div class="mb-16 reveal">
+                <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Our Popular Styles</span>
+                <h2 class="font-display text-4xl md:text-5xl text-eby-dark">Curated Perfection.</h2>
             </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Knotless Braids Slider -->
-                <div onclick="openServiceSlider('knotless.html', 'Knotless Braids')" class="group cursor-pointer block img-hover-zoom relative h-[500px] glass-card flex flex-col justify-end p-8 reveal overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" alt="Luxury Knotless Braids" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Knotless -->
+                <div onclick="openServiceSlider('knotless.html', 'Knotless Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
-                        <span class="font-sans border border-eby-surface text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-semibold">Popular</span>
-                        <h3 class="font-display text-2xl mb-2 text-eby-surface">Knotless Braids</h3>
-                        <p class="text-sm text-eby-surface/80 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-                            Lightweight, natural-looking braids with no knots at the base. Zero tension on your scalp.
-                        </p>
-                        <div class="flex justify-between items-center border-t border-eby-surface/20 pt-4 mt-2 font-sans font-medium text-[10px] uppercase tracking-widest">
-                            <span class="text-eby-surface/80 flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> 4-6 hrs</span>
-                            <span class="text-eby-gold-dark">from £120</span>
-                        </div>
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block">Popular</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Knotless Braids</h3>
+                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Lightweight, natural-looking braids with no knots. Zero tension on your scalp.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>4-6 hrs</span><span class="text-eby-gold-dark">from £120</span></div>
                     </div>
                 </div>
-
-                <!-- Box Braids Slider -->
-                <div onclick="openServiceSlider('https://boxbraids.oneapp.dev/', 'Box Braids')" class="group cursor-pointer block img-hover-zoom relative h-[500px] glass-card flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" alt="Box Braids" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                <!-- Box -->
+                <div onclick="openServiceSlider('https://boxbraids.oneapp.dev/', 'Box Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
-                        <span class="font-sans border border-eby-surface text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-semibold">Classic</span>
-                        <h3 class="font-display text-2xl mb-2 text-eby-surface">Box Braids</h3>
-                        <p class="text-sm text-eby-surface/80 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-                            The classic protective style with sectioned square parts. Versatile, elegant, and long-lasting.
-                        </p>
-                        <div class="flex justify-between items-center border-t border-eby-surface/20 pt-4 mt-2 font-sans font-medium text-[10px] uppercase tracking-widest">
-                            <span class="text-eby-surface/80 flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> 5-7 hrs</span>
-                            <span class="text-eby-gold-dark">from £100</span>
-                        </div>
+                        <h3 class="font-display text-2xl text-white mb-2">Box Braids</h3>
+                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">The classic protective style with sectioned square parts. Versatile and elegant.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £100</span></div>
                     </div>
                 </div>
-
-                <!-- Lemonade Braids Slider -->
-                <div onclick="openServiceSlider('https://lemonbraids.oneapp.dev/', 'Lemon Braids')" class="group cursor-pointer block img-hover-zoom relative h-[500px] glass-card flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" alt="Lemon Braids" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                <!-- Lemonade -->
+                <div onclick="openServiceSlider('https://lemonbraids.oneapp.dev/', 'Lemon Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
-                        <span class="font-sans border border-eby-surface text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-semibold">Signature</span>
-                        <h3 class="font-display text-2xl mb-2 text-eby-surface">Lemonade Braids</h3>
-                        <p class="text-sm text-eby-surface/80 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-                            Side-swept cornrows featuring immaculate parting. Stunning, stylish, and flawlessly executed.
-                        </p>
-                        <div class="flex justify-between items-center border-t border-eby-surface/20 pt-4 mt-2 font-sans font-medium text-[10px] uppercase tracking-widest">
-                            <span class="text-eby-surface/80 flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> 3-5 hrs</span>
-                            <span class="text-eby-gold-dark">from £90</span>
-                        </div>
+                        <h3 class="font-display text-2xl text-white mb-2">Lemonade Braids</h3>
+                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Side-swept cornrows featuring immaculate parting. Stunning and flawless.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>3-5 hrs</span><span class="text-eby-gold-dark">from £90</span></div>
                     </div>
                 </div>
-
-                <!-- Boho Braids Slider -->
-                <div onclick="openServiceSlider('https://bohobraids.oneapp.dev/', 'Boho Braids')" class="group cursor-pointer block img-hover-zoom relative h-[500px] glass-card flex flex-col justify-end p-8 reveal reveal-delay-3 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" alt="Boho Braids" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                <!-- Boho -->
+                <div onclick="openServiceSlider('https://bohobraids.oneapp.dev/', 'Boho Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-3 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
-                        <span class="font-sans bg-eby-gold-dark text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Trending</span>
-                        <h3 class="font-display text-2xl mb-2 text-eby-surface">Boho Braids</h3>
-                        <p class="text-sm text-eby-surface/80 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-4 group-hover:translate-y-0">
-                            Knotless braids infused with loose, human-hair curly ends for a free-spirited luxury look.
-                        </p>
-                        <div class="flex justify-between items-center border-t border-eby-surface/20 pt-4 mt-2 font-sans font-medium text-[10px] uppercase tracking-widest">
-                            <span class="text-eby-surface/80 flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> 5-7 hrs</span>
-                            <span class="text-eby-gold-dark">from £150</span>
-                        </div>
+                        <span class="font-sans bg-eby-gold-dark text-white text-[8px] uppercase font-bold px-3 py-1 mb-4 inline-block">Trending</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Boho Braids</h3>
+                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Knotless braids with loose, curly ends for a free-spirited luxury look.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £150</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Experience / Differentiation -->
+    <!-- The Experience (Restored) -->
     <section class="py-32 bg-eby-surface relative border-y border-eby-gold-dark/10">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-20 items-center">
@@ -639,326 +301,312 @@
                     <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-6 block">The Experience</span>
                     <h2 class="font-display text-4xl md:text-5xl mb-6 text-eby-dark">This isn't an appointment.</h2>
                     <p class="font-display italic text-3xl md:text-4xl text-eby-brown-light mb-8">It's a reset.</p>
-                    <p class="text-eby-brown-light text-lg mb-12 leading-relaxed">
-                        You’re not just sitting in a chair. You’re stepping into a controlled, calm, and intentional environment completely designed around your comfort. No chaotic waiting. No overbooking. No rushed work.
-                    </p>
+                    <p class="text-eby-brown-light text-lg mb-12 leading-relaxed">You’re not just sitting in a chair. You’re stepping into a controlled, calm, and intentional environment completely designed around your comfort.</p>
                     <ul class="space-y-8">
-                        <li class="flex items-start gap-6">
-                            <div class="mt-1 text-eby-gold-dark"><i class="ph ph-clock-countdown text-2xl"></i></div>
-                            <div>
-                                <h4 class="font-display text-xl mb-1 text-eby-dark">Structured Scheduling</h4>
-                                <p class="text-eby-brown-light text-sm">No delays. No guesswork. Your time is deeply respected.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-6">
-                            <div class="mt-1 text-eby-gold-dark"><i class="ph ph-wind text-2xl"></i></div>
-                            <div>
-                                <h4 class="font-display text-xl mb-1 text-eby-dark">Sensory Environment</h4>
-                                <p class="text-eby-brown-light text-sm">Soft aromas, meticulously clean space, and delicate refreshments.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-6">
-                            <div class="mt-1 text-eby-gold-dark"><i class="ph ph-laptop text-2xl"></i></div>
-                            <div>
-                                <h4 class="font-display text-xl mb-1 text-eby-dark">Executive Workspace</h4>
-                                <p class="text-eby-brown-light text-sm">High-speed Wi-Fi and space to completely relax or work uninterrupted.</p>
-                            </div>
-                        </li>
+                        <li class="flex items-start gap-6"><i class="ph ph-clock-countdown text-2xl text-eby-gold-dark mt-1"></i><div><h4 class="font-display text-xl text-eby-dark">Structured Scheduling</h4><p class="text-sm text-eby-brown-light">No delays. No guesswork. Your time is deeply respected.</p></div></li>
+                        <li class="flex items-start gap-6"><i class="ph ph-wind text-2xl text-eby-gold-dark mt-1"></i><div><h4 class="font-display text-xl text-eby-dark">Sensory Environment</h4><p class="text-sm text-eby-brown-light">Soft aromas, clean space, and delicate refreshments.</p></div></li>
+                        <li class="flex items-start gap-6"><i class="ph ph-laptop text-2xl text-eby-gold-dark mt-1"></i><div><h4 class="font-display text-xl text-eby-dark">Executive Workspace</h4><p class="text-sm text-eby-brown-light">High-speed Wi-Fi to relax or work uninterrupted.</p></div></li>
                     </ul>
                 </div>
-                <div class="relative h-[600px] reveal reveal-delay-1">
-                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Luxury Salon Experience" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute -inset-4 border border-eby-gold-dark/30 hidden md:block pointer-events-none"></div>
-                    <div class="absolute -bottom-10 -left-10 glass-card p-10 max-w-sm hidden md:block">
-                        <h4 class="font-display text-xl mb-2 text-eby-dark">The EBP Method™</h4>
-                        <p class="text-eby-brown-light text-sm">Our signature bio-responsive approach adapts to your scalp sensitivity, entirely eliminating the root cause of pain.</p>
-                    </div>
+                <div class="relative h-[600px] reveal reveal-delay-1 img-hover-zoom">
+                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute -inset-4 border border-eby-gold-dark/30 hidden md:block"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Ecommerce / Shop -->
+    <!-- Shop Collection (Full Restored) -->
     <section id="shop" class="py-32 bg-eby-bg">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center max-w-3xl mx-auto mb-20 reveal">
                 <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Collection</span>
-                <h2 class="font-display text-3xl md:text-5xl mb-6 text-eby-dark">What you use between appointments matters more.</h2>
-                <p class="text-eby-brown-light text-lg">Most damage doesn’t happen in the chair. It happens in the 6 weeks after. We strictly stock tested, scalp-conscious extensions and care systems.</p>
+                <h2 class="font-display text-4xl text-eby-dark">What you use between appointments matters more.</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Product 1 -->
-                <div class="glass-card group flex flex-col reveal">
-                    <div class="relative h-[300px] bg-eby-gold/30 flex items-center justify-center p-8 overflow-hidden">
-                        <span class="font-sans absolute top-4 left-4 border border-eby-dark/10 text-eby-brown-light text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-semibold bg-eby-surface">Sold Out</span>
-                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark/30 group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface">
-                            <i class="ph ph-package text-4xl text-eby-gold-dark"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-display text-xl mb-2 text-eby-dark">4X Pre Stretched Hair 38"</h3>
-                            <p class="text-eby-brown-light text-sm mb-6 line-clamp-2">X-Pression Kanekalon African Braid Hair | Colours 1B, 27, 33.</p>
-                        </div>
-                        <button class="font-sans font-semibold w-full py-4 border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed">Notify Me</button>
+                <div class="glass-card flex flex-col p-8 reveal opacity-60 grayscale">
+                    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8"><i class="ph ph-package text-4xl"></i><span class="absolute top-4 left-4 bg-white text-[8px] font-bold px-3 py-1 rounded-full">Sold Out</span></div>
+                    <div class="pt-8 flex-grow flex flex-col justify-between">
+                        <div><h3 class="font-display text-xl text-eby-dark mb-2">4X Pre Stretched Hair 38"</h3><p class="text-eby-brown-light text-sm line-clamp-2">X-Pression Kanekalon African Braid Hair | Colours 1B, 27, 33.</p></div>
+                        <button disabled class="mt-6 w-full py-4 border border-eby-dark/10 rounded-2xl uppercase text-[9px] font-bold cursor-not-allowed">Notify Me</button>
                     </div>
                 </div>
-                <!-- Product 2 -->
-                <div class="glass-card group flex flex-col reveal reveal-delay-1 border-eby-gold-dark/40 shadow-sm">
-                    <div class="relative h-[300px] bg-eby-gold flex items-center justify-center p-8 overflow-hidden">
-                        <span class="font-sans absolute top-4 left-4 bg-eby-dark text-eby-surface text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-bold">New Arrival</span>
-                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface shadow-lg">
-                            <i class="ph ph-sparkle text-4xl text-eby-gold-dark"></i>
-                        </div>
+                <!-- Product 2 (Active) -->
+                <div class="glass-card flex flex-col p-8 reveal reveal-delay-1 border-eby-gold-dark/40 shadow-xl">
+                    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
+                        <span class="absolute top-4 left-4 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">New Arrival</span>
+                        <i class="ph ph-sparkle text-6xl text-eby-gold-dark group-hover:scale-110 transition-transform duration-700"></i>
                     </div>
-                    <div class="p-8 flex-grow flex flex-col justify-between">
+                    <div class="pt-8 flex-grow flex flex-col justify-between">
                         <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-display text-xl text-eby-dark">Silky French Curl</h3>
-                                <span class="font-sans font-medium text-eby-dark text-sm tracking-widest">£10.00</span>
-                            </div>
-                            <p class="text-eby-brown-light text-sm mb-6 line-clamp-2">Premium 24 Inch Silky French Curl Braiding Hair. Immensely lightweight, minimal shedding.</p>
+                            <div class="flex justify-between mb-2"><h3 class="font-display text-xl">Silky French Curl</h3><span class="font-bold">£10.00</span></div>
+                            <p class="text-eby-brown-light text-sm mb-6">Premium 24 Inch Silky French Curl Braiding Hair. Lightweight and minimal shedding.</p>
                         </div>
-                        <button onclick="toggleCart()" class="font-sans w-full py-4 bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Add to Cart</button>
+                        <button onclick="addItemToCart('Silky French Curl', 'Premium 24 Inch Hair', 10, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Add to Bag</button>
                     </div>
                 </div>
                 <!-- Product 3 -->
-                <div class="glass-card group flex flex-col reveal reveal-delay-2">
-                    <div class="relative h-[300px] bg-eby-gold/30 flex items-center justify-center p-8 overflow-hidden">
-                        <span class="font-sans absolute top-4 left-4 border border-eby-dark/10 text-eby-brown-light text-[8px] uppercase tracking-widest px-3 py-1 z-10 font-semibold bg-eby-surface">Sold Out</span>
-                        <div class="w-32 h-32 rounded-full border border-eby-gold-dark/30 group-hover:scale-110 transition-transform duration-1000 flex items-center justify-center relative bg-eby-surface">
-                            <i class="ph ph-waves text-4xl text-eby-gold-dark"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-display text-xl mb-2 text-eby-dark">32" Deep Wave Bulk</h3>
-                            <p class="text-eby-brown-light text-sm mb-6 line-clamp-2">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids | Flawlessly Tangle-Free.</p>
-                        </div>
-                        <button class="font-sans font-semibold w-full py-4 border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed">Notify Me</button>
+                <div class="glass-card flex flex-col p-8 reveal reveal-delay-2 opacity-60 grayscale">
+                    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8"><i class="ph ph-waves text-4xl"></i><span class="absolute top-4 left-4 bg-white text-[8px] font-bold px-3 py-1 rounded-full">Sold Out</span></div>
+                    <div class="pt-8 flex-grow flex flex-col justify-between">
+                        <div><h3 class="font-display text-xl text-eby-dark mb-2">32" Deep Wave Bulk</h3><p class="text-eby-brown-light text-sm line-clamp-2">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids.</p></div>
+                        <button disabled class="mt-6 w-full py-4 border border-eby-dark/10 rounded-2xl uppercase text-[9px] font-bold cursor-not-allowed">Notify Me</button>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-16 reveal reveal-delay-3">
-                <a href="#" class="font-sans font-semibold inline-block border-b border-eby-gold-dark text-eby-dark uppercase tracking-widest text-[10px] pb-1 hover:text-eby-gold-dark transition-colors">View Complete Collection</a>
             </div>
         </div>
     </section>
 
-    <!-- Guarantee -->
+    <!-- Guarantee (Restored) -->
     <section class="py-24 bg-eby-surface border-y border-eby-gold-dark/10 text-center relative overflow-hidden">
         <div class="max-w-3xl mx-auto px-6 relative z-10 reveal">
             <i class="ph ph-shield-star text-4xl text-eby-gold-dark mb-6 block"></i>
             <h2 class="font-display text-3xl md:text-5xl mb-6 text-eby-dark">The Pain-Free Guarantee</h2>
-            <p class="text-eby-brown-light text-lg mb-10 leading-relaxed">
-                If your braids feel excessively tight within 48 hours, we’ll fix it—free. No arguments. No stress. Because physical pain should never be part of your beauty ritual.
-            </p>
-            <a href="#booking" class="btn-luxury inline-block bg-eby-dark text-eby-surface px-12 py-5 uppercase tracking-[0.15em] font-sans text-[10px] font-bold hover:bg-eby-brown-light">
-                Book With Absolute Confidence
-            </a>
+            <p class="text-eby-brown-light text-lg mb-10 leading-relaxed">If your braids feel excessively tight within 48 hours, we’ll fix it—free. No arguments. No stress.</p>
+            <a href="#booking" class="btn-luxury inline-block bg-eby-dark text-white px-12 py-5 uppercase tracking-widest font-sans text-[10px] font-bold rounded-2xl">Book With Absolute Confidence</a>
         </div>
     </section>
 
-    <!-- Social Proof -->
+    <!-- Social Proof Marquee (Restored reviews) -->
     <section class="py-32 overflow-hidden bg-eby-bg">
-        <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal">
+        <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal active">
             <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Inner Circle</span>
             <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">What Our Clients Say</h2>
-            <p class="font-display italic text-2xl text-eby-brown-light">We change how you experience it.</p>
         </div>
         <div class="relative w-full flex overflow-x-hidden group">
-            <div class="flex animate-[marquee_40s_linear_infinite] whitespace-nowrap py-4 group-hover:[animation-play-state:paused]">
+            <div class="flex animate-[marquee_40s_linear_infinite] py-4 whitespace-nowrap group-hover:[animation-play-state:paused]">
+                <!-- Reviews -->
                 <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
-                    <div class="flex text-eby-gold-dark mb-6 text-sm gap-1">
-                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                    </div>
-                    <p class="text-eby-brown-light leading-relaxed mb-6 italic">"I didn’t feel pain for the first time in years. They didn't just do my hair... they changed how I experience braiding entirely."</p>
-                    <p class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark">- Camille Magnolia</p>
+                    <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                    <p class="text-eby-brown-light italic mb-6">"I didn’t feel pain for the first time in years. They changed how I experience braiding entirely."</p>
+                    <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Camille Magnolia</p>
                 </div>
                 <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
-                    <div class="flex text-eby-gold-dark mb-6 text-sm gap-1">
-                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                    </div>
-                    <p class="text-eby-brown-light leading-relaxed mb-6 italic">"For the first time ever, I slept the exact same night I got braids. My edges finally feel safe. An absolute masterpiece of a salon."</p>
-                    <p class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark">- Sabrina Murray</p>
+                    <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                    <p class="text-eby-brown-light italic mb-6">"For the first time ever, I slept the exact same night I got braids. My edges finally feel safe."</p>
+                    <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Sabrina Murray</p>
                 </div>
                 <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
-                    <div class="flex text-eby-gold-dark mb-6 text-sm gap-1">
-                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
-                    </div>
-                    <p class="text-eby-brown-light leading-relaxed mb-6 italic">"I actually enjoyed the entire appointment. I genuinely didn't realize how much pain I had normalized until I experienced this."</p>
-                    <p class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark">- Matthew</p>
+                    <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                    <p class="text-eby-brown-light italic mb-6">"I actually enjoyed the entire appointment. I genuinely didn't realize how much pain I had normalized."</p>
+                    <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Matthew</p>
                 </div>
             </div>
             <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
         </div>
     </section>
 
-    <!-- Final Close / Booking -->
-    <section id="booking" class="py-32 bg-eby-gold/40 border-t border-eby-gold-dark/20 text-center relative">
-        <div class="max-w-4xl mx-auto px-6 reveal">
-            <h2 class="font-display text-4xl md:text-5xl mb-6 text-eby-dark">You don't have to choose between beauty and comfort.</h2>
-            <p class="text-eby-brown-light text-lg mb-12 max-w-2xl mx-auto">
-                You can have braids that look exceptional without sacrificing your scalp, your time, or your peace of mind.
-            </p>
-            <div class="glass-card p-10 md:p-16 max-w-2xl mx-auto border-t-2 border-t-eby-dark bg-eby-surface">
-                <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Secure Your Spot</span>
-                <p class="text-eby-brown-light text-sm mb-8">Booking Policy: A non-refundable deposit of £15 is required to secure your appointment.</p>
-                <form class="space-y-4" onsubmit="event.preventDefault();">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="First Name" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark text-eby-dark">
-                        <input type="text" placeholder="Last Name" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark text-eby-dark">
+    <!-- Booking Lead Form (Hardwired to GAS) -->
+    <section id="booking" class="py-32 bg-eby-gold/30">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark">
+                <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Reservation</span>
+                <h2 class="font-display text-4xl mb-8 text-eby-dark">Secure Your Experience.</h2>
+                <form id="footer-booking-form" onsubmit="handleFooterBooking(event)" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" id="fb-first" placeholder="First Name" required class="luxury-input">
+                        <input type="text" id="fb-last" placeholder="Last Name" required class="luxury-input">
                     </div>
-                    <div class="relative">
-                        <select class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none focus:border-eby-dark text-eby-dark appearance-none cursor-pointer">
-                            <option value="" disabled selected>Select Luxury Service</option>
-                            <option value="knotless">Knotless Braids</option>
-                            <option value="box">Box Braids</option>
-                            <option value="lemonade">Lemonade Braids</option>
-                            <option value="boho">Boho Braids</option>
-                        </select>
-                        <i class="ph ph-caret-down absolute right-5 top-1/2 -translate-y-1/2 text-eby-brown-light pointer-events-none"></i>
-                    </div>
-                    <button class="w-full btn-luxury bg-eby-dark text-eby-surface py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold mt-4">Proceed to Availability</button>
+                    <input type="email" id="fb-email" placeholder="Email Address" required class="luxury-input">
+                    <select id="fb-service" required class="luxury-input appearance-none">
+                        <option value="" disabled selected>Select Luxury Service</option>
+                        <option value="Knotless Braids">Knotless Braids</option>
+                        <option value="Box Braids">Box Braids</option>
+                        <option value="Boho Braids">Boho Braids</option>
+                    </select>
+                    <button type="submit" id="fb-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Initialize Booking Request</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer newsletter and navigation -->
     <footer class="pt-24 pb-12 border-t border-eby-gold-dark/20 bg-eby-surface">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal">
-                <div class="md:w-1/2 mb-8 md:mb-0">
-                    <h3 class="font-display text-2xl mb-2 text-eby-dark">Join The Inner Circle</h3>
-                    <p class="text-eby-brown-light text-sm">Get early booking access, scalp care insights, and exclusive offers.</p>
-                </div>
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal active">
+                <div class="md:w-1/2 mb-8 md:mb-0"><h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3><p class="text-eby-brown-light text-sm">Early booking access and scalp care insights.</p></div>
                 <div class="md:w-1/2 w-full flex">
-                    <input type="email" placeholder="Enter your email address" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 text-sm focus:outline-none text-eby-dark">
-                    <button class="bg-eby-dark text-eby-surface px-8 font-sans uppercase tracking-widest text-[9px] font-bold hover:bg-eby-brown-light">Join</button>
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-2xl focus:outline-none"><button onclick="handleNewsletter()" class="bg-eby-dark text-white px-8 rounded-r-2xl font-bold text-[9px] uppercase tracking-widest">Join</button>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal reveal-delay-1">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal active">
                 <div class="col-span-1 md:col-span-2">
-                    <a href="#" class="font-display font-semibold text-3xl text-eby-dark uppercase block mb-6">Eby's Place</a>
-                    <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">Premium African hair braiding services in Somerset, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.</p>
+                    <a href="#" class="font-display font-semibold text-3xl uppercase text-eby-dark mb-6 block">Eby's Place</a>
+                    <p class="text-eby-brown-light text-sm max-w-sm">Premium African hair braiding services in Somerset, UK. Experience beauty engineered for scalp health.</p>
                 </div>
-                <div>
-                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light">
-                        <li><a href="services.html">Our Services</a></li>
-                        <li><a href="booking.html">Book Now</a></li>
-                        <li><a href="shop.html">Shop</a></li>
-                        <li><a href="#">Gallery</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light">
-                        <li><a href="booking.html">Booking Policy</a></li>
-                        <li><a href="policies.html">Returns Policy</a></li>
-                    </ul>
-                </div>
+                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Explore</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="services.html">Our Services</a></li><li><a href="shop.html">Shop</a></li><li><a href="booking.html">Booking</a></li></ul></div>
+                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Policies</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="booking.html">Booking Policy</a></li><li><a href="policies.html">Returns Policy</a></li></ul></div>
             </div>
-            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center reveal reveal-delay-2">
-                <h2 class="font-display font-bold text-[6vw] mb-12 text-pattern uppercase">BEAUTY IN EVERY STRAND</h2>
-                <div class="w-full flex flex-col md:flex-row justify-between items-center text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
-                    <p>© 2026 Eby’s Place. Powered by 15D Group. All Rights Reserved.</p>
-                </div>
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none text-pattern mb-12 uppercase">BEAUTY IN EVERY STRAND</h2>
+                <p class="text-[9px] uppercase tracking-widest text-eby-brown-light">© 2026 Eby’s Place. Powered by 15D Group. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Sidebar Cart & Stripe Engine -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
+        <div class="p-8 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
+            <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
+            <button onclick="toggleCart()"><i class="ph ph-x text-2xl"></i></button>
+        </div>
+        
+        <div class="flex-grow overflow-y-auto">
+            <!-- Empty -->
+            <div id="cart-empty-state" class="p-12 flex flex-col items-center justify-center text-center">
+                <i class="ph ph-bag text-5xl text-eby-gold-dark/30 mb-4"></i><p class="text-eby-brown-light text-sm mb-6">Your bag is empty.</p>
+                <button onclick="toggleCart()" class="text-[10px] font-bold uppercase border-b border-eby-gold-dark pb-1">Browse Gallery</button>
+            </div>
+            <!-- Cumulative Items -->
+            <div id="cart-active-state" class="hidden flex-col">
+                <div id="cart-items-container" class="p-8 space-y-8"></div>
+                <div class="p-8 border-t border-eby-gold-dark/10 bg-eby-bg/30">
+                    <div class="flex justify-between items-center mb-6 font-display text-lg"><span>Subtotal</span><span id="cart-subtotal">£0.00</span></div>
+                    <button onclick="proceedToCheckout()" class="w-full bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Checkout →</button>
+                </div>
+            </div>
+            <!-- Stripe Form -->
+            <div id="checkout-form-state" class="hidden flex-col p-8 space-y-8 bg-eby-bg/50">
+                <form id="booking-form" onsubmit="submitFinalBooking(event)" class="space-y-6">
+                    <input type="email" id="cust-email" required class="luxury-input" placeholder="Email Address">
+                    <div class="pt-6 border-t border-eby-gold-dark/20">
+                        <h3 class="font-display text-lg mb-4 text-eby-dark">Payment Details</h3>
+                        <div id="card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
+                        <div id="card-errors" class="text-red-500 text-[10px] mt-2"></div>
+                    </div>
+                    <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-white py-5 rounded-2xl font-bold uppercase text-[10px] tracking-widest">Confirm & Pay</button>
+                    <button type="button" onclick="backToCart()" class="w-full text-center text-[10px] font-bold text-eby-brown-light">← Back to Bag</button>
+                </form>
+            </div>
+            <!-- Success -->
+            <div id="checkout-success-state" class="hidden flex-col items-center justify-center p-12 text-center h-full">
+                <div class="w-20 h-20 rounded-full bg-eby-gold flex items-center justify-center mb-6"><i class="ph ph-check text-3xl text-eby-gold-dark"></i></div>
+                <h2 class="font-display text-2xl mb-4">Request Received</h2>
+                <p class="text-sm opacity-70 mb-8">Confirmed for <span id="success-email-display" class="font-bold">your email</span>.</p>
+                <button onclick="location.reload()" class="text-[10px] uppercase font-bold border-b border-eby-dark">Return to Site</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Force Video Autoplay
-        document.addEventListener("DOMContentLoaded", () => {
-            const heroVideo = document.getElementById("heroVideo");
-            if (heroVideo) heroVideo.play().catch(e => console.log(e));
-        });
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('nav-scrolled');
-                navbar.classList.remove('nav-transparent');
-            } else {
-                navbar.classList.add('nav-transparent');
-                navbar.classList.remove('nav-scrolled');
+        let cart = [];
+        let cartTotal = 0;
+
+        document.addEventListener('DOMContentLoaded', () => cardElement.mount('#card-element'));
+
+        async function handleFooterBooking(e) {
+            e.preventDefault();
+            const btn = document.getElementById('fb-btn');
+            const data = {
+                firstName: document.getElementById('fb-first').value,
+                lastName: document.getElementById('fb-last').value,
+                email: document.getElementById('fb-email').value,
+                serviceName: document.getElementById('fb-service').value,
+                totalPrice: "Lead Reservation"
+            };
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
+            await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+            btn.innerHTML = "Booking Lead Captured";
+            btn.classList.replace('bg-eby-dark', 'bg-whatsapp-green');
+        }
+
+        async function handleNewsletter() {
+            const email = document.getElementById('newsletter-email').value;
+            if(!email) return;
+            await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ email: email, type: "Newsletter Signup" }) });
+            alert("Welcome to the Inner Circle.");
+        }
+
+        function addItemToCart(name, details, price, img) {
+            cart.push({ name, details, price, img });
+            renderCart();
+            toggleCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            cartTotal = 0;
+            if (cart.length === 0) {
+                document.getElementById('cart-empty-state').classList.remove('hidden');
+                document.getElementById('cart-active-state').classList.add('hidden');
+                document.getElementById('cart-badge').innerText = '0';
+                return;
             }
+            document.getElementById('cart-empty-state').classList.add('hidden');
+            document.getElementById('cart-active-state').classList.remove('hidden');
+            cart.forEach((item, i) => {
+                cartTotal += item.price;
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="flex gap-4 items-center border-b border-eby-gold-dark/10 pb-6">
+                        <div class="w-16 h-20 bg-eby-gold rounded-2xl overflow-hidden"><img src="${item.img}" class="w-full h-full object-cover"></div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start"><h4 class="text-sm font-bold text-eby-dark">${item.name}</h4><button onclick="removeFromCart(${i})" class="text-red-800 opacity-40 hover:opacity-100 transition-opacity"><i class="ph ph-trash"></i></button></div>
+                            <p class="text-[10px] opacity-60 mb-2">${item.details}</p><span class="text-xs font-bold text-eby-dark">£${item.price.toFixed(2)}</span>
+                        </div>
+                    </div>`);
+            });
+            document.getElementById('cart-subtotal').innerText = `£${cartTotal.toFixed(2)}`;
+            document.getElementById('cart-badge').innerText = cart.length;
+        }
+
+        function removeFromCart(i) { cart.splice(i, 1); renderCart(); }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); document.getElementById('cart-overlay').classList.toggle('open'); }
+        function proceedToCheckout() { document.getElementById('cart-active-state').classList.add('hidden'); document.getElementById('checkout-form-state').classList.remove('hidden'); }
+        function backToCart() { document.getElementById('checkout-form-state').classList.add('hidden'); document.getElementById('cart-active-state').classList.remove('hidden'); }
+
+        async function submitFinalBooking(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submit-booking-btn');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
+            if (error) { document.getElementById('card-errors').textContent = error.message; btn.innerText = "Confirm & Pay"; return; }
+            const payload = { email: document.getElementById('cust-email').value, items: cart, total: cartTotal, stripeId: paymentMethod.id };
+            await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+            document.getElementById('checkout-form-state').classList.add('hidden');
+            document.getElementById('checkout-success-state').classList.remove('hidden');
+            document.getElementById('success-email-display').innerText = payload.email;
+        }
+
+        // Global Effects
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            window.scrollY > 50 ? nav.classList.add('nav-scrolled') : nav.classList.remove('nav-scrolled');
         });
 
-        // Reveal animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
-        }, { threshold: 0.15 });
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Mobile Menu Dropdown Logic
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            if(menu.classList.contains('-translate-y-full')) {
-                menu.classList.remove('-translate-y-full');
-                menu.classList.add('translate-y-0', 'menu-open');
-                document.body.style.overflow = 'hidden';
-            } else {
-                menu.classList.remove('translate-y-0', 'menu-open');
-                menu.classList.add('-translate-y-full');
-                document.body.style.overflow = '';
-            }
-        }
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.cursor-glow');
+            if(glow) { glow.style.setProperty('--x', e.clientX + 'px'); glow.style.setProperty('--y', e.clientY + 'px'); }
+        });
 
-        // Cart Logic (Verbatim from v1.5.2)
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('open');
-            document.getElementById('cart-overlay').classList.toggle('open');
-            document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
-        }
-
-        // Service Slider Controller
-        function openServiceSlider(url, serviceName) {
+        function openServiceSlider(url, name) {
             const slider = document.getElementById('service-slider');
-            const overlay = document.getElementById('service-slider-overlay');
-            const iframe = document.getElementById('service-iframe');
-            const header = document.getElementById('slider-header-title');
-            const loader = document.getElementById('slider-loader');
-
-            header.innerText = `Luxury Portal: ${serviceName}`;
-            loader.style.display = 'flex';
-            iframe.src = url;
-            
+            document.getElementById('slider-header-title').innerText = `Luxury Portal: ${name}`;
+            document.getElementById('service-iframe').src = url;
             slider.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            iframe.onload = () => {
-                loader.style.display = 'none';
-            };
+            document.getElementById('service-slider-overlay').classList.add('active');
+            document.getElementById('service-iframe').onload = () => document.getElementById('slider-loader').style.display = 'none';
         }
 
         function closeServiceSlider() {
-            const slider = document.getElementById('service-slider');
-            const overlay = document.getElementById('service-slider-overlay');
-            const iframe = document.getElementById('service-iframe');
-
-            slider.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-            
-            // Clear iframe to stop playback/interactions
-            setTimeout(() => { iframe.src = ''; }, 600);
+            document.getElementById('service-slider').classList.remove('active');
+            document.getElementById('service-slider-overlay').classList.remove('active');
+            setTimeout(() => { document.getElementById('service-iframe').src = ''; document.getElementById('slider-loader').style.display = 'flex'; }, 600);
         }
 
-        // Mouse Tracker
-        document.addEventListener('mousemove', (e) => {
-            const glow = document.querySelector('.cursor-glow');
-            if(glow) {
-                glow.style.setProperty('--x', e.clientX + 'px');
-                glow.style.setProperty('--y', e.clientY + 'px');
-            }
-        });
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('-translate-y-full');
+        }
     </script>
 </body>
 </html>
