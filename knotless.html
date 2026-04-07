@@ -465,24 +465,19 @@
         </div>
 
         <div id="cart-active-state" class="hidden flex-col h-full">
-    <!-- Items List -->
-    <div class="p-6 flex-grow overflow-y-auto" id="cart-items-container">
-        <!-- Items dynamically injected here -->
-    </div>
-
-    <!-- Checkout Area -->
-    <div class="checkout-container">
-        <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg">
-            <div class="flex justify-between items-center mb-6 font-display text-lg">
-                <span class="text-eby-brown-light">Subtotal</span>
-                <span class="text-eby-dark font-semibold" id="cart-subtotal">£0.00</span>
+            <div class="p-6 flex-grow overflow-y-auto" id="cart-items-container">
+                </div>
+            <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg">
+                <div class="flex justify-between items-center mb-6 font-display text-lg">
+                    <span class="text-eby-brown-light">Subtotal</span>
+                    <span class="text-eby-dark font-semibold" id="cart-subtotal">£0.00</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="w-full block text-center bg-eby-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-colors">
+                    Secure Checkout →
+                </button>
             </div>
-            <button onclick="proceedToCheckout()" class="w-full block text-center bg-eby-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-li">
-                Secure Checkout →
-            </button>
         </div>
-    </div>
-</div>
+
         <div id="checkout-form-state" class="hidden flex-col h-full bg-eby-bg">
             <div class="p-6 flex-grow overflow-y-auto">
                 <div class="flex items-center gap-3 mb-6">
@@ -717,24 +712,7 @@
                 }, 2000);
             }, 800);
         }
-        function updateCartLayout() {
-    const cart = document.getElementById('cart-active-state');
-    const checkoutContainer = cart.querySelector('.checkout-container');
-    const itemsContainer = document.getElementById('cart-items-container');
 
-    // Ensure the checkout is always positioned after the last item
-    if (itemsContainer.scrollHeight < cart.clientHeight) {
-        checkoutContainer.style.position = 'relative';
-    } else {
-        checkoutContainer.style.position = 'sticky';
-    }
-}
-
-// Hook this to cart changes
-function addItemToCartHTML(...) {
-    ...
-    updateCartLayout(); // Call layout update after changes
-}
         function addUpsellToCart(btn, itemName, price, imgSrc) {
             const ogText = btn.innerText;
             btn.innerText = "Added";
