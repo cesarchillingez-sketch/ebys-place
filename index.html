@@ -219,7 +219,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 90vh;
+            height: 96vh; /* Increased from 90vh to ensure the checkout button is fully visible */
             background: #FFFFFF;
             z-index: 100;
             transform: translateY(100%);
@@ -248,6 +248,16 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        /* Mobile Menu Animations */
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
+        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
+        .menu-open .delay-1 { transition-delay: 0.1s; }
+        .menu-open .delay-2 { transition-delay: 0.2s; }
+        .menu-open .delay-3 { transition-delay: 0.3s; }
+        .menu-open .delay-4 { transition-delay: 0.4s; }
+        .menu-open .delay-5 { transition-delay: 0.5s; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting">
@@ -287,7 +297,7 @@
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-transparent transition-all duration-500 py-3">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button class="lg:hidden nav-icon hover:opacity-70 transition-opacity">
+            <button onclick="toggleMobileMenu()" class="lg:hidden nav-icon hover:opacity-70 transition-opacity">
                 <i class="ph ph-list text-2xl"></i>
             </button>
 
@@ -317,6 +327,34 @@
             </div>
         </div>
     </nav>
+
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
+            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-gold-dark italic block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Slide-Out Checkout Cart -->
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
@@ -858,6 +896,20 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // Mobile Menu Dropdown Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('-translate-y-full')) {
+                menu.classList.remove('-translate-y-full');
+                menu.classList.add('translate-y-0', 'menu-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-y-0', 'menu-open');
+                menu.classList.add('-translate-y-full');
+                document.body.style.overflow = '';
+            }
+        }
+
         // Cart Logic (Verbatim from v1.5.2)
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('open');
@@ -910,4 +962,3 @@
     </script>
 </body>
 </html>
-
