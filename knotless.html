@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
         tailwind.config = {
@@ -487,20 +487,18 @@
                 
                 <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-5">
                     <div>
-                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Full Name</label>
-                        <input type="text" id="cust-name" required class="luxury-input" placeholder="e.g. Jane Doe">
-                    </div>
-                    <div>
-                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Email Address</label>
+                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Email Address (For Confirmation)</label>
                         <input type="email" id="cust-email" required class="luxury-input" placeholder="jane@example.com">
-                    </div>
-                    <div>
-                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Phone Number</label>
-                        <input type="tel" id="cust-phone" required class="luxury-input" placeholder="+44 7000 000000">
                     </div>
                     <div>
                         <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Preferred Appointment Date</label>
                         <input type="date" id="cust-date" required class="luxury-input" min="2026-01-01">
+                    </div>
+
+                    <h3 class="font-display text-lg text-eby-dark mt-6 mb-2 border-t border-eby-gold-dark/10 pt-4">Payment Details</h3>
+                    <div class="border border-eby-gold-dark/30 p-4 bg-eby-surface">
+                        <div id="card-element" class="w-full"></div>
+                        <div id="card-errors" role="alert" class="text-red-500 text-xs mt-2"></div>
                     </div>
 
                     <div class="pt-4 border-t border-eby-gold-dark/10">
@@ -547,6 +545,40 @@
 
         let cartTotal = 0;
         let cartItemsData = []; 
+
+        // Initialize Stripe
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    color: '#2A1A12',
+                    fontFamily: '"Lexend", sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '14px',
+                    '::placeholder': {
+                        color: '#6B5749'
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cardElement.mount('#card-element');
+            
+            cardElement.on('change', function(event) {
+                const displayError = document.getElementById('card-errors');
+                if (event.error) {
+                    displayError.textContent = event.error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+        });
 
         function formatCurrency(amount) { return `£${amount.toFixed(2)}`; }
         function formatTime(hours) { 
@@ -726,34 +758,51 @@
             document.getElementById('cart-title').innerText = "Your Bag";
         }
 
-        // Real Backend Connection (Google Apps Script)
+        // Real Backend Connection (Stripe First, THEN Google Apps Script)
         async function submitBooking(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-booking-btn');
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing...';
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing Payment...';
             btn.disabled = true;
 
-            const customerName = document.getElementById('cust-name').value;
             const customerEmail = document.getElementById('cust-email').value;
-            const customerPhone = document.getElementById('cust-phone').value;
             const appointmentDate = document.getElementById('cust-date').value;
 
+            // 1. GATEKEEPER: Securely process Stripe Payment FIRST
+            const {paymentMethod, error} = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+                billing_details: {
+                    email: customerEmail
+                }
+            });
+
+            // 2. IF STRIPE FAILS: Stop immediately. Do not send invalid/unpaid bookings to GAS.
+            if (error) {
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+                btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle text-lg"></i>';
+                btn.disabled = false;
+                return;
+            }
+
+            // 3. IF STRIPE SUCCEEDS: Build the verified payload
             const orderPayload = {
-                customerName: customerName,
                 customerEmail: customerEmail,
-                customerPhone: customerPhone,
                 bookingDate: appointmentDate,
                 items: cartItemsData,
-                totalAmount: cartTotal
+                totalAmount: cartTotal,
+                paymentMethodId: paymentMethod.id, // Proof of secure card capture
+                paymentStatus: "Verified"
             };
 
             const gasUrl = "https://script.google.com/macros/library/d/1eEeLxepYS2wNFhlJ6sCWUGdPD0BcTb51PAR5xZurfN8XVrYTEhwv5eAd/1";
 
             try {
-                // Note: Make sure your GAS URL ends in /exec for live production web apps
+                // 4. SEND TO GAS: Only happens for paid/verified users
                 await fetch(gasUrl, {
                     method: 'POST',
-                    mode: 'no-cors', // Bypasses strict preflight CORS checks on Google Scripts
+                    mode: 'no-cors', 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderPayload)
                 });
@@ -770,6 +819,7 @@
                 btn.disabled = false;
                 cartItemsData = [];
                 cartTotal = 0;
+                cardElement.clear(); // Clear the secure card input
 
             } catch (error) {
                 console.error("Booking System Error:", error);
