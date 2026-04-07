@@ -48,7 +48,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Dynamic Shifting Background (Technological Spirit) */
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -60,7 +59,6 @@
             animation: gradientShift 20s ease infinite;
         }
 
-        /* Cursor Glow Tracking */
         .cursor-glow {
             pointer-events: none;
             position: fixed;
@@ -77,7 +75,6 @@
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
 
-        /* Tech-Luxury Geometric Pattern */
         .swirl-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -90,7 +87,6 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .reveal-delay-1 { transition-delay: 0.15s; }
-        .reveal-delay-2 { transition-delay: 0.3s; }
 
         .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
         .btn-luxury::after {
@@ -106,12 +102,8 @@
             border: 1px solid rgba(194, 163, 120, 0.2);
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
         }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05);
-        }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
 
-        /* Navbar - Always solid for PDP for readability */
         .nav-scrolled {
             background: rgba(252, 251, 248, 0.95);
             backdrop-filter: blur(16px);
@@ -120,7 +112,6 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* Custom Selector Buttons */
         .variant-btn {
             border: 1px solid rgba(194, 163, 120, 0.3);
             color: #6B5749;
@@ -132,11 +123,9 @@
             border-color: #2A1A12;
         }
 
-        /* Color Swatch Custom Rings */
         .color-swatch { transition: all 0.3s ease; }
         .color-swatch.selected { outline: 2px solid #C2A378; outline-offset: 2px; }
 
-        /* Animated SVG Text Pattern (Footer) */
         .text-pattern {
             background-color: #2A1A12;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -148,13 +137,11 @@
         }
         @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
 
-        /* Cart Sidebar Styles */
         #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #cart-sidebar.open { transform: translateX(0); }
         #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
         #cart-overlay.open { opacity: 1; pointer-events: auto; }
 
-        /* Checkout Inputs */
         .luxury-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.5);
@@ -164,15 +151,7 @@
             color: #2A1A12;
             transition: all 0.3s ease;
         }
-        .luxury-input:focus {
-            outline: none;
-            border-color: #2A1A12;
-            background: #FFFFFF;
-        }
-        .luxury-input::placeholder {
-            color: #6B5749;
-            opacity: 0.6;
-        }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
@@ -180,23 +159,20 @@
     <div class="cursor-glow"></div>
     <div class="swirl-bg"></div>
 
+    <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-scrolled py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
-                <i class="ph ph-list text-3xl text-eby-dark"></i>
-            </button>
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors">
-                Eby's Place
-            </a>
-            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
-                <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
-                <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
-                <a href="services.html" class="text-eby-gold-dark transition-colors">Services</a>
-                <a href="booking.html" class="hover:text-eby-gold-dark transition-colors">Booking</a>
-                <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+            <button class="lg:hidden p-2 -ml-2"><i class="ph ph-list text-3xl text-eby-dark"></i></button>
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark">Eby's Place</a>
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="services.html" class="text-eby-gold-dark">Services</a>
+                <a href="booking.html">Booking</a>
+                <a href="about.html">About Us</a>
             </div>
-            <div class="flex items-center space-x-6 text-eby-dark">
-                <button onclick="toggleCart()" class="relative hover:text-eby-gold-dark transition-opacity group">
+            <div class="flex items-center space-x-6">
+                <button onclick="toggleCart()" class="relative group transition-opacity">
                     <i class="ph ph-shopping-bag text-2xl"></i>
                     <span id="cart-badge" class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
@@ -204,671 +180,300 @@
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="w-full min-h-screen pt-24 pb-0 flex flex-col lg:flex-row relative">
-        
+        <!-- Gallery -->
         <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen flex flex-col p-6 lg:p-12 lg:pr-6 pb-0">
-            <div class="w-full h-full relative rounded-sm overflow-hidden flex flex-col group">
+            <div class="w-full h-full relative rounded-sm overflow-hidden flex flex-col">
                 <div class="flex-grow relative overflow-hidden bg-eby-surface/50">
-                    <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" alt="Knotless Box Braids" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
-                    <div class="absolute inset-0 bg-eby-dark/10 pointer-events-none mix-blend-overlay"></div>
+                    <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
                 </div>
-                
                 <div class="h-24 w-full mt-4 flex gap-4">
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 relative overflow-hidden outline outline-2 outline-eby-dark outline-offset-2">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 relative overflow-hidden border border-eby-gold-dark/30">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-60">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615510306_suukb7.png', this)" class="thumbnail-btn flex-1 relative overflow-hidden border border-eby-gold-dark/30">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615510306_suukb7.png" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity">
-                    </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png', this)" class="thumbnail-btn flex-1 relative overflow-hidden border border-eby-gold-dark/30">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="w-full h-full object-cover opacity-60">
                     </button>
                 </div>
             </div>
         </section>
 
+        <!-- Configurator -->
         <section class="lg:w-1/2 p-6 lg:p-12 lg:pl-16 pt-12 lg:pt-24 pb-32">
             <div class="max-w-xl mx-auto lg:mx-0">
-                
-                <div class="mb-10 reveal">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface">Signature Service</span>
-                    </div>
-                    <h1 class="font-display text-4xl md:text-5xl text-eby-dark mb-4 leading-tight">Signature Knotless<br><span class="italic text-eby-brown-light font-normal text-3xl md:text-4xl">Box Braids</span></h1>
-                    <p class="text-eby-brown-light text-base leading-relaxed">
-                        Lightweight, meticulously parted, and engineered for zero root tension. Our signature knotless technique protects your natural hair while delivering an incredibly natural, fluid finish.
-                    </p>
+                <div class="mb-10 reveal active">
+                    <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface">Signature Service</span>
+                    <h1 class="font-display text-4xl md:text-5xl text-eby-dark mt-4 mb-4 leading-tight">Signature Knotless<br><span class="italic text-eby-brown-light">Box Braids</span></h1>
+                    <p class="text-eby-brown-light">Engineered for zero root tension and fluid, natural movement.</p>
                 </div>
 
-                <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-10"></div>
-
-                <div class="space-y-10 reveal reveal-delay-1">
-                    
+                <div class="space-y-10 reveal active">
                     <div>
                         <div class="flex justify-between items-end mb-4">
-                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-dark">Parting Size</h3>
-                            <span class="text-xs text-eby-brown-light" id="size-indicator">Medium (Standard)</span>
+                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Parting Size</h3>
+                            <span class="text-xs text-eby-brown-light" id="size-indicator">Medium</span>
                         </div>
                         <div class="grid grid-cols-3 gap-3">
-                            <button type="button" onclick="updateVariant(this, 'size', 'large', -20, -1)" class="variant-btn bg-eby-surface py-4 text-xs font-medium uppercase tracking-widest">Large</button>
-                            <button type="button" onclick="updateVariant(this, 'size', 'medium', 0, 0)" class="variant-btn selected py-4 text-xs font-medium uppercase tracking-widest">Medium</button>
-                            <button type="button" onclick="updateVariant(this, 'size', 'smedium', 40, 2)" class="variant-btn bg-eby-surface py-4 text-xs font-medium uppercase tracking-widest">Smedium</button>
+                            <button onclick="updateVariant(this, 'size', 'large', -20, -1)" class="variant-btn py-4 text-xs uppercase">Large</button>
+                            <button onclick="updateVariant(this, 'size', 'medium', 0, 0)" class="variant-btn selected py-4 text-xs uppercase">Medium</button>
+                            <button onclick="updateVariant(this, 'size', 'smedium', 40, 2)" class="variant-btn py-4 text-xs uppercase">Smedium</button>
                         </div>
                     </div>
 
                     <div>
                         <div class="flex justify-between items-end mb-4">
-                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-dark">Length</h3>
+                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Length</h3>
                             <span class="text-xs text-eby-brown-light" id="length-indicator">Mid-Back</span>
                         </div>
                         <div class="flex flex-col gap-3">
-                            <button type="button" onclick="updateVariant(this, 'length', 'mid-back', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between items-center text-xs font-medium uppercase tracking-widest w-full text-left">
-                                <span class="pointer-events-none">Mid-Back</span> <span class="pointer-events-none">+£0</span>
-                            </button>
-                            <button type="button" onclick="updateVariant(this, 'length', 'waist', 30, 1.5)" class="variant-btn bg-eby-surface py-5 px-6 flex justify-between items-center text-xs font-medium uppercase tracking-widest w-full text-left">
-                                <span class="pointer-events-none">Waist Length</span> <span class="pointer-events-none">+£30</span>
-                            </button>
-                            <button type="button" onclick="updateVariant(this, 'length', 'bum', 60, 3)" class="variant-btn bg-eby-surface py-5 px-6 flex justify-between items-center text-xs font-medium uppercase tracking-widest w-full text-left">
-                                <span class="pointer-events-none">Bum Length</span> <span class="pointer-events-none">+£60</span>
-                            </button>
+                            <button onclick="updateVariant(this, 'length', 'mid-back', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between uppercase"><span>Mid-Back</span> <span>+£0</span></button>
+                            <button onclick="updateVariant(this, 'length', 'waist', 30, 1.5)" class="variant-btn py-5 px-6 flex justify-between uppercase"><span>Waist Length</span> <span>+£30</span></button>
+                            <button onclick="updateVariant(this, 'length', 'bum', 60, 3)" class="variant-btn py-5 px-6 flex justify-between uppercase"><span>Bum Length</span> <span>+£60</span></button>
                         </div>
                     </div>
 
                     <div>
                         <div class="flex justify-between items-end mb-4">
-                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-dark">Extension Colour</h3>
+                            <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Extension Colour</h3>
                             <span class="text-xs text-eby-brown-light" id="color-indicator">1B (Natural Black)</span>
                         </div>
                         <div class="flex flex-wrap gap-4">
-                            <button type="button" onclick="updateColor('1B', this)" title="1B Natural Black" class="color-swatch selected w-10 h-10 rounded-full bg-[#1A1A1A] shadow-inner cursor-pointer"></button>
-                            <button type="button" onclick="updateColor('2', this)" title="2 Dark Brown" class="color-swatch w-10 h-10 rounded-full bg-[#2A201C] shadow-inner cursor-pointer"></button>
-                            <button type="button" onclick="updateColor('4', this)" title="4 Medium Brown" class="color-swatch w-10 h-10 rounded-full bg-[#3D2314] shadow-inner cursor-pointer"></button>
-                            <button type="button" onclick="updateColor('27', this)" title="27 Honey Blonde" class="color-swatch w-10 h-10 rounded-full bg-[#CFA876] shadow-inner cursor-pointer"></button>
-                            <button type="button" onclick="updateColor('33', this)" title="33 Auburn" class="color-swatch w-10 h-10 rounded-full bg-[#52201C] shadow-inner cursor-pointer"></button>
+                            <button onclick="updateColor('1B', this)" title="1B Natural Black" class="color-swatch selected w-10 h-10 rounded-full bg-[#1A1A1A]"></button>
+                            <button onclick="updateColor('2', this)" title="2 Dark Brown" class="color-swatch w-10 h-10 rounded-full bg-[#2A201C]"></button>
+                            <button onclick="updateColor('27', this)" title="27 Honey Blonde" class="color-swatch w-10 h-10 rounded-full bg-[#CFA876]"></button>
                         </div>
-                        <p class="text-xs text-eby-brown-light mt-4 italic"><i class="ph ph-info mr-1"></i> Pre-stretched braiding hair is included in the base price.</p>
                     </div>
-
                 </div>
 
                 <div class="mt-16 sticky bottom-6 z-30">
-                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-eby-gold-dark/40 bg-eby-surface/95">
+                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 bg-eby-surface/95">
                         <div class="text-center sm:text-left">
                             <p class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-bold mb-1">Total Estimate</p>
-                            <div class="flex items-baseline gap-3 justify-center sm:justify-start">
-                                <span class="font-display text-3xl text-eby-dark" id="total-price">£120.00</span>
-                                <span class="text-sm text-eby-brown-light flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark"></i> <span id="total-time">5 hrs</span></span>
+                            <div class="flex items-baseline gap-3">
+                                <span class="font-display text-3xl" id="total-price">£120.00</span>
+                                <span class="text-sm text-eby-brown-light" id="total-time">5 hrs</span>
                             </div>
                         </div>
-                        <button onclick="addToBooking(this)" class="btn-luxury w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light whitespace-nowrap">
+                        <button onclick="addToBooking(this)" class="btn-luxury w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 uppercase text-[10px] font-bold tracking-widest">
                             Reserve Appointment
                         </button>
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
 
-    <section class="py-32 bg-eby-dark text-eby-surface relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center bg-fixed opacity-10 mix-blend-overlay"></div>
-        
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
-                <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Technique</span>
-                <h2 class="font-display text-4xl md:text-5xl mb-6">Engineering Comfort.</h2>
-                <p class="text-eby-gold/80 text-lg font-light leading-relaxed">
-                    Why Eby's Knotless Braids are the gold standard. We don't force hair; we work with its natural bio-mechanics to eliminate tension entirely.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-12 text-center">
-                <div class="reveal reveal-delay-1 flex flex-col items-center">
-                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6">
-                        <i class="ph ph-bounding-box text-3xl text-eby-gold-dark"></i>
-                    </div>
-                    <h3 class="font-display text-2xl mb-3">Architectural Parting</h3>
-                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">
-                        Precision brick-lay parting ensures equal weight distribution across the scalp, preventing localized follicle stress.
-                    </p>
-                </div>
-                <div class="reveal reveal-delay-2 flex flex-col items-center">
-                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6">
-                        <i class="ph ph-feather text-3xl text-eby-gold-dark"></i>
-                    </div>
-                    <h3 class="font-display text-2xl mb-3">Weightless Feeding</h3>
-                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">
-                        Extensions are integrated progressively. No heavy knots at the base means immediate flexibility and zero initial pain.
-                    </p>
-                </div>
-                <div class="reveal reveal-delay-3 flex flex-col items-center">
-                    <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6">
-                        <i class="ph ph-shield-check text-3xl text-eby-gold-dark"></i>
-                    </div>
-                    <h3 class="font-display text-2xl mb-3">Edge Isolation</h3>
-                    <p class="text-sm text-eby-gold/60 leading-relaxed font-light">
-                        We map out delicate hairline zones, applying a lighter tension ratio to preserve your most vulnerable hair.
-                    </p>
-                </div>
-            </div>
-        </div>
+    <!-- Content Sections (Technique, Footer, etc.) -->
+    <section class="py-32 bg-eby-dark text-eby-surface text-center">
+        <h2 class="font-display text-4xl mb-6">Engineering Comfort.</h2>
+        <p class="text-eby-gold/80 max-w-2xl mx-auto px-6 font-light">Eliminating tension through biological hair mapping.</p>
     </section>
 
-    <section class="py-24 bg-eby-bg border-y border-eby-gold-dark/10">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12 reveal">
-                <div>
-                    <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-2">Maintain The Perfection</h2>
-                    <p class="text-eby-brown-light text-sm">Elevate your style longevity with our curated scalp-care essentials.</p>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="glass-card group flex flex-col reveal p-6">
-                    <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Scalp Mist" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
-                        <i class="ph ph-drop text-4xl text-eby-surface relative z-10 drop-shadow-md"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-display text-lg mb-1 text-eby-dark">Soothing Scalp Mist</h3>
-                        <p class="text-eby-brown-light text-xs mb-4">Relieves tension, hydrates follicles.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-sans font-medium text-xs text-eby-dark">£18.00</span>
-                            <button type="button" onclick="addUpsellToCart(this, 'Soothing Scalp Mist', 18.00, 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors py-2 px-4 border border-eby-gold-dark/30 rounded-sm">Add to Bag</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card group flex flex-col reveal reveal-delay-1 p-6">
-                    <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Styling Mousse" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
-                        <i class="ph ph-sparkle text-4xl text-eby-surface relative z-10 drop-shadow-md"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-display text-lg mb-1 text-eby-dark">Silky Styling Mousse</h3>
-                        <p class="text-eby-brown-light text-xs mb-4">Lays flyaways, intense shine.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-sans font-medium text-xs text-eby-dark">£15.00</span>
-                            <button type="button" onclick="addUpsellToCart(this, 'Silky Styling Mousse', 15.00, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors py-2 px-4 border border-eby-gold-dark/30 rounded-sm">Add to Bag</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card group flex flex-col reveal reveal-delay-2 p-6 border-eby-gold-dark/40 shadow-sm">
-                    <div class="relative h-48 bg-eby-dark flex items-center justify-center mb-6 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Silk Bonnet" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
-                        <i class="ph ph-moon-stars text-4xl text-eby-gold-dark relative z-10 drop-shadow-md"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-display text-lg mb-1 text-eby-dark">Luxury Silk Bonnet</h3>
-                        <p class="text-eby-brown-light text-xs mb-4">Frictionless overnight protection.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-sans font-medium text-xs text-eby-dark">£25.00</span>
-                            <button type="button" onclick="addUpsellToCart(this, 'Luxury Silk Bonnet', 25.00, 'https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80')" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors py-2 px-4 border border-eby-gold-dark/30 rounded-sm">Add to Bag</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                <div class="col-span-1 md:col-span-2">
-                    <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
-                    <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">
-                        Premium African hair braiding services in Somerset, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
-                        <li><a href="services.html" class="hover:text-eby-dark transition-colors">Our Services</a></li>
-                        <li><a href="shop.html" class="hover:text-eby-dark transition-colors">Shop</a></li>
-                        <li><a href="booking.html" class="hover:text-eby-dark transition-colors">Booking</a></li>
-                        <li><a href="membership.html" class="hover:text-eby-dark transition-colors">Membership Plans</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
-                        <li><a href="policies.html#booking" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
-                        <li><a href="policies.html#returns" class="hover:text-eby-dark transition-colors">Returns Policy</a></li>
-                        <li><a href="contact.html" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
-                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
-                <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
-                    <p>© 2026 Eby’s Place. All Rights Reserved.</p>
-                </div>
-            </div>
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="font-display font-bold text-[8vw] uppercase text-pattern mb-12">BEAUTY IN EVERY STRAND</h2>
+            <p class="text-[9px] uppercase tracking-widest text-eby-brown-light">© 2026 Eby’s Place. Somerset, UK.</p>
         </div>
     </footer>
 
+    <!-- Sidebar Cart -->
     <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
         
-        <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center">
+        <!-- Sidebar Header -->
+        <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
             <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
             <button onclick="toggleCart()" class="text-eby-brown-light hover:text-eby-dark"><i class="ph ph-x text-2xl"></i></button>
         </div>
         
-        <div id="cart-empty-state" class="p-6 flex-grow flex flex-col items-center justify-center text-center">
-            <i class="ph ph-bag text-5xl text-eby-gold-dark/50 mb-4"></i>
-            <p class="text-eby-brown-light text-sm mb-6">Your bag is empty.</p>
-            <button onclick="toggleCart()" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark hover:text-eby-dark border-b border-eby-gold-dark pb-1">Continue Browsing</button>
-        </div>
-
-        <div id="cart-active-state" class="hidden flex-col h-full">
-            <div class="p-6 flex-grow overflow-y-auto" id="cart-items-container">
-                </div>
-            <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg">
-                <div class="flex justify-between items-center mb-6 font-display text-lg">
-                    <span class="text-eby-brown-light">Subtotal</span>
-                    <span class="text-eby-dark font-semibold" id="cart-subtotal">£0.00</span>
-                </div>
-                <button onclick="proceedToCheckout()" class="w-full block text-center bg-eby-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-colors">
-                    Secure Checkout →
-                </button>
+        <!-- Main Sidebar Content (Scrollable Container) -->
+        <div class="flex-grow overflow-y-auto">
+            
+            <!-- Empty State -->
+            <div id="cart-empty-state" class="p-12 flex flex-col items-center justify-center text-center">
+                <i class="ph ph-bag text-5xl text-eby-gold-dark/50 mb-4"></i>
+                <p class="text-eby-brown-light text-sm mb-6">Your bag is empty.</p>
+                <button onclick="toggleCart()" class="text-[10px] font-bold uppercase tracking-widest border-b border-eby-gold-dark pb-1">Continue Browsing</button>
             </div>
-        </div>
 
-        <div id="checkout-form-state" class="hidden flex-col h-full bg-eby-bg">
-            <div class="p-6 flex-grow overflow-y-auto">
-                <div class="flex items-center gap-3 mb-6">
-                    <i class="ph ph-lock-key text-eby-gold-dark text-lg"></i>
-                    <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">Express Checkout</span>
+            <!-- Active State (Now fully scrollable with button at the end) -->
+            <div id="cart-active-state" class="hidden flex-col">
+                <div id="cart-items-container" class="p-6 space-y-6">
+                    <!-- Items dynamically injected here -->
                 </div>
                 
-                <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-5">
+                <!-- PRIMARY ACTION AREA (Moved inside scroll) -->
+                <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg/30">
+                    <div class="flex justify-between items-center mb-6 font-display text-lg">
+                        <span class="text-eby-brown-light">Subtotal</span>
+                        <span class="text-eby-dark font-semibold" id="cart-subtotal">£0.00</span>
+                    </div>
+                    <button onclick="proceedToCheckout()" class="w-full bg-eby-dark text-eby-surface py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all shadow-xl">
+                        Secure Checkout →
+                    </button>
+                    <p class="mt-4 text-[9px] text-center text-eby-brown-light uppercase tracking-widest">Taxes calculated at checkout</p>
+                </div>
+            </div>
+
+            <!-- Checkout Form State -->
+            <div id="checkout-form-state" class="hidden flex-col p-6 space-y-8 bg-eby-bg/50">
+                <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-6">
                     <div>
-                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Email Address (For Confirmation)</label>
+                        <label class="text-[8px] uppercase tracking-widest font-bold text-eby-brown-light mb-2 block">Email Address</label>
                         <input type="email" id="cust-email" required class="luxury-input" placeholder="jane@example.com">
                     </div>
                     <div>
-                        <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Preferred Appointment Date</label>
-                        <input type="date" id="cust-date" required class="luxury-input" min="2026-01-01">
+                        <label class="text-[8px] uppercase tracking-widest font-bold text-eby-brown-light mb-2 block">Appointment Date</label>
+                        <input type="date" id="cust-date" required class="luxury-input">
+                    </div>
+                    
+                    <div class="pt-6 border-t border-eby-gold-dark/20">
+                        <h3 class="font-display text-lg mb-4">Payment</h3>
+                        <div id="card-element" class="p-4 bg-white border border-eby-gold-dark/30 rounded-sm"></div>
+                        <div id="card-errors" class="text-red-500 text-xs mt-2"></div>
                     </div>
 
-                    <h3 class="font-display text-lg text-eby-dark mt-6 mb-2 border-t border-eby-gold-dark/10 pt-4">Payment Details</h3>
-                    <div class="border border-eby-gold-dark/30 p-4 bg-eby-surface">
-                        <div id="card-element" class="w-full"></div>
-                        <div id="card-errors" role="alert" class="text-red-500 text-xs mt-2"></div>
-                    </div>
-
-                    <div class="pt-4 border-t border-eby-gold-dark/10">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="font-display text-lg text-eby-dark">Total Due Now</span>
-                            <span class="font-display text-xl text-eby-dark font-semibold" id="checkout-total">£0.00</span>
-                        </div>
-                        <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-eby-surface py-4 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-dark transition-colors flex justify-center items-center gap-2 shadow-lg">
-                            Confirm Booking <i class="ph ph-check-circle text-lg"></i>
-                        </button>
-                        <button type="button" onclick="backToCart()" class="w-full mt-4 text-center font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light hover:text-eby-dark">
-                            ← Back to Bag
-                        </button>
-                    </div>
+                    <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-eby-surface py-5 font-sans uppercase text-[10px] font-bold tracking-widest shadow-lg">
+                        Confirm Booking
+                    </button>
+                    <button type="button" onclick="backToCart()" class="w-full text-center text-[9px] font-bold uppercase tracking-widest text-eby-brown-light mt-4">← Back to Items</button>
                 </form>
             </div>
-        </div>
-
-        <div id="checkout-success-state" class="hidden flex-col h-full bg-eby-dark text-eby-surface items-center justify-center p-8 text-center">
-            <div class="w-24 h-24 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface/5">
-                <i class="ph ph-envelope-open text-4xl text-eby-gold-dark"></i>
+            
+            <!-- Success Screen -->
+            <div id="checkout-success-state" class="hidden flex-col items-center justify-center p-12 text-center h-full">
+                <div class="w-20 h-20 rounded-full bg-eby-gold flex items-center justify-center mb-6"><i class="ph ph-check text-3xl text-eby-gold-dark"></i></div>
+                <h2 class="font-display text-2xl mb-4">Request Received</h2>
+                <p class="text-sm opacity-70 mb-8">Dispatched to <span id="success-email-display" class="font-bold">your email</span>.</p>
+                <button onclick="toggleCart()" class="text-[10px] uppercase font-bold border-b border-eby-dark pb-1">Return to Site</button>
             </div>
-            <h2 class="font-display text-3xl mb-4">Request Received</h2>
-            <p class="font-body text-sm font-light text-eby-surface/70 leading-relaxed mb-8">
-                Your booking request has been securely captured. A confirmation and itinerary has been dispatched to <strong id="success-email-display" class="text-eby-gold-dark font-normal">your email</strong>.
-            </p>
-            <button onclick="toggleCart()" class="border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-widest pb-1 hover:text-white hover:border-white transition-colors">
-                Return to Site
-            </button>
         </div>
     </div>
 
     <script>
         const basePrice = 120;
-        const baseTime = 5;
-        
-        let state = {
-            sizePriceMod: 0,
-            sizeTimeMod: 0,
-            lengthPriceMod: 0,
-            lengthTimeMod: 0,
-            color: '1B'
-        };
-
+        let state = { sizePriceMod: 0, lengthPriceMod: 0, color: '1B' };
         let cartTotal = 0;
-        let cartItemsData = []; 
+        let cartItemsData = [];
 
-        // Initialize Stripe
+        // STRIPE
         const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
         const elements = stripe.elements();
-        const cardElement = elements.create('card', {
-            style: {
-                base: {
-                    color: '#2A1A12',
-                    fontFamily: '"Lexend", sans-serif',
-                    fontSmoothing: 'antialiased',
-                    fontSize: '14px',
-                    '::placeholder': {
-                        color: '#6B5749'
-                    }
-                },
-                invalid: {
-                    color: '#fa755a',
-                    iconColor: '#fa755a'
-                }
-            }
-        });
+        const cardElement = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12' } } });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            cardElement.mount('#card-element');
-            
-            cardElement.on('change', function(event) {
-                const displayError = document.getElementById('card-errors');
-                if (event.error) {
-                    displayError.textContent = event.error.message;
-                } else {
-                    displayError.textContent = '';
-                }
-            });
-        });
+        document.addEventListener('DOMContentLoaded', () => cardElement.mount('#card-element'));
 
         function formatCurrency(amount) { return `£${amount.toFixed(2)}`; }
-        function formatTime(hours) { 
-            const h = Math.floor(hours);
-            const m = (hours - h) * 60;
-            return m > 0 ? `${h}h ${m}m` : `${h} hrs`; 
-        }
 
         function updatePriceAndTime() {
-            const totalPrice = basePrice + state.sizePriceMod + state.lengthPriceMod;
-            const totalTime = baseTime + state.sizeTimeMod + state.lengthTimeMod;
-            
-            const priceEl = document.getElementById('total-price');
-            priceEl.style.opacity = 0;
-            setTimeout(() => {
-                priceEl.innerText = formatCurrency(totalPrice);
-                priceEl.style.opacity = 1;
-            }, 150);
-            
-            document.getElementById('total-time').innerText = formatTime(totalTime);
+            const total = basePrice + state.sizePriceMod + state.lengthPriceMod;
+            document.getElementById('total-price').innerText = formatCurrency(total);
         }
 
-        // Box Function (Variant Selection)
-        function updateVariant(btn, type, value, priceMod, timeMod) {
-            const container = btn.closest('div.grid') || btn.closest('div.flex-col');
-            const btns = container.querySelectorAll('.variant-btn');
-            
-            btns.forEach(b => {
-                b.classList.remove('selected', 'bg-eby-dark', 'text-eby-surface', 'border-eby-dark');
-                b.classList.add('bg-eby-surface', 'text-eby-brown-light');
-            });
-
-            btn.classList.remove('bg-eby-surface', 'text-eby-brown-light');
+        function updateVariant(btn, type, value, price, time) {
+            btn.parentNode.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-
-            if(type === 'size') {
-                state.sizePriceMod = priceMod;
-                state.sizeTimeMod = timeMod;
-                document.getElementById('size-indicator').innerText = value.charAt(0).toUpperCase() + value.slice(1);
-            } else if (type === 'length') {
-                state.lengthPriceMod = priceMod;
-                state.lengthTimeMod = timeMod;
-                let formattedValue = value.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                document.getElementById('length-indicator').innerText = formattedValue;
-            }
-
+            if(type === 'size') { state.sizePriceMod = price; document.getElementById('size-indicator').innerText = value; }
+            else { state.lengthPriceMod = price; document.getElementById('length-indicator').innerText = value; }
             updatePriceAndTime();
         }
 
-        function updateColor(colorCode, btnElement) {
-            const swatches = document.querySelectorAll('.color-swatch');
-            swatches.forEach(swatch => swatch.classList.remove('selected'));
-            btnElement.classList.add('selected');
-            state.color = colorCode;
-            document.getElementById('color-indicator').innerText = btnElement.getAttribute('title');
+        function updateColor(code, btn) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            btn.classList.add('selected');
+            state.color = code;
+            document.getElementById('color-indicator').innerText = btn.title;
         }
 
-        function changeImage(src, btnElement) {
-            const mainImg = document.getElementById('main-gallery-img');
-            mainImg.style.opacity = 0;
-            setTimeout(() => {
-                mainImg.src = src;
-                mainImg.style.opacity = 1;
-            }, 200);
-
-            const thumbs = document.querySelectorAll('.thumbnail-btn');
-            thumbs.forEach(t => {
-                t.classList.remove('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
-                t.classList.add('border', 'border-eby-gold-dark/30');
-                t.querySelector('img').classList.replace('opacity-80', 'opacity-60');
-            });
-
-            btnElement.classList.remove('border', 'border-eby-gold-dark/30');
-            btnElement.classList.add('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
-            btnElement.querySelector('img').classList.replace('opacity-60', 'opacity-80');
-        }
-
-        // Cart Injection Logic with Image Thumbnails
-        function addItemToCartHTML(title, desc, priceStr, imgSrc) {
-            const container = document.getElementById('cart-items-container');
-            const itemHTML = `
-                <div class="flex gap-4 items-center mb-6 pb-6 border-b border-eby-gold-dark/10">
-                    <div class="w-16 h-20 bg-eby-gold/10 flex items-center justify-center border border-eby-gold-dark/20 flex-shrink-0 overflow-hidden rounded-sm">
-                        <img src="${imgSrc}" class="w-full h-full object-cover" alt="${title}">
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="font-display text-sm text-eby-dark font-semibold mb-1">${title}</h4>
-                        <p class="text-[10px] text-eby-brown-light mb-2 leading-relaxed">${desc}</p>
-                        <span class="font-sans font-medium text-xs text-eby-dark">${priceStr}</span>
-                    </div>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', itemHTML);
-            cartItemsData.push({ item: title, details: desc, price: priceStr });
-        }
-
-        function addToBooking(btn) {
-            const ogText = btn.innerText;
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
-            
-            setTimeout(() => {
-                btn.innerText = "Added to Bag";
-                btn.classList.add('bg-eby-gold-dark', 'text-eby-surface', 'border-eby-gold-dark');
-                
-                const sizeStr = document.getElementById('size-indicator').innerText;
-                const lengthStr = document.getElementById('length-indicator').innerText;
-                const colorStr = document.getElementById('color-indicator').innerText;
-                const priceText = document.getElementById('total-price').innerText;
-                const priceVal = parseFloat(priceText.replace('£', ''));
-                const currentImage = document.getElementById('main-gallery-img').src;
-                
-                addItemToCartHTML("Signature Knotless Box Braids", `${sizeStr} Parting • ${lengthStr} • Color: ${colorStr}`, priceText, currentImage);
-                
-                cartTotal += priceVal;
-                document.getElementById('cart-subtotal').innerText = formatCurrency(cartTotal);
-                document.getElementById('checkout-total').innerText = formatCurrency(cartTotal);
-                
-                document.getElementById('cart-empty-state').classList.add('hidden');
-                document.getElementById('cart-empty-state').classList.remove('flex');
-                document.getElementById('cart-active-state').classList.remove('hidden');
-                document.getElementById('cart-active-state').classList.add('flex');
-                
-                const badge = document.getElementById('cart-badge');
-                badge.innerText = parseInt(badge.innerText) + 1;
-
-                setTimeout(() => toggleCart(), 600);
-                
-                setTimeout(() => {
-                    btn.innerText = ogText;
-                    btn.classList.remove('bg-eby-gold-dark', 'text-eby-surface', 'border-eby-gold-dark');
-                }, 2000);
-            }, 800);
-        }
-
-        function addUpsellToCart(btn, itemName, price, imgSrc) {
-            const ogText = btn.innerText;
-            btn.innerText = "Added";
-            btn.classList.add('bg-eby-gold-dark', 'text-eby-surface');
-            btn.classList.remove('text-eby-gold-dark');
-            
-            addItemToCartHTML(itemName, "Curated Scalp-Care Essential", formatCurrency(price), imgSrc);
-            
-            cartTotal += price;
-            document.getElementById('cart-subtotal').innerText = formatCurrency(cartTotal);
-            document.getElementById('checkout-total').innerText = formatCurrency(cartTotal);
-            
-            document.getElementById('cart-empty-state').classList.add('hidden');
-            document.getElementById('cart-empty-state').classList.remove('flex');
-            document.getElementById('cart-active-state').classList.remove('hidden');
-            document.getElementById('cart-active-state').classList.add('flex');
-            
-            const badge = document.getElementById('cart-badge');
-            badge.innerText = parseInt(badge.innerText) + 1;
-            
-            setTimeout(() => toggleCart(), 400);
-            
-            setTimeout(() => {
-                btn.innerText = ogText;
-                btn.classList.remove('bg-eby-gold-dark', 'text-eby-surface');
-                btn.classList.add('text-eby-gold-dark');
-            }, 2000);
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+            if(!document.getElementById('cart-sidebar').classList.contains('open')) backToCart();
         }
 
         function proceedToCheckout() {
             document.getElementById('cart-active-state').classList.add('hidden');
-            document.getElementById('cart-active-state').classList.remove('flex');
             document.getElementById('checkout-form-state').classList.remove('hidden');
-            document.getElementById('checkout-form-state').classList.add('flex');
             document.getElementById('cart-title').innerText = "Checkout";
         }
 
         function backToCart() {
             document.getElementById('checkout-form-state').classList.add('hidden');
-            document.getElementById('checkout-form-state').classList.remove('flex');
             document.getElementById('cart-active-state').classList.remove('hidden');
-            document.getElementById('cart-active-state').classList.add('flex');
             document.getElementById('cart-title').innerText = "Your Bag";
         }
 
-        // Real Backend Connection (Stripe First, THEN Google Apps Script)
+        function addItemToCartHTML(title, desc, price, imgSrc) {
+            const container = document.getElementById('cart-items-container');
+            const html = `
+                <div class="flex gap-4 items-center border-b border-eby-gold-dark/10 pb-6">
+                    <div class="w-16 h-20 bg-eby-gold/10 overflow-hidden"><img src="${imgSrc}" class="w-full h-full object-cover"></div>
+                    <div class="flex-grow">
+                        <h4 class="text-sm font-bold">${title}</h4>
+                        <p class="text-[10px] opacity-60 mb-2">${desc}</p>
+                        <span class="text-xs font-bold">${price}</span>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+            cartItemsData.push({ item: title, details: desc, price: price });
+        }
+
+        function addToBooking(btn) {
+            // FIXED STATE RESET: Clear previous braid booking to prevent double-entries
+            document.getElementById('cart-items-container').innerHTML = '';
+            cartItemsData = [];
+            cartTotal = 0;
+
+            const priceText = document.getElementById('total-price').innerText;
+            addItemToCartHTML("Knotless Box Braids", `${document.getElementById('size-indicator').innerText} | ${document.getElementById('length-indicator').innerText}`, priceText, document.getElementById('main-gallery-img').src);
+            
+            cartTotal = parseFloat(priceText.replace('£', ''));
+            document.getElementById('cart-subtotal').innerText = formatCurrency(cartTotal);
+            document.getElementById('cart-badge').innerText = "1";
+            
+            document.getElementById('cart-empty-state').classList.add('hidden');
+            document.getElementById('cart-active-state').classList.remove('hidden');
+            toggleCart();
+        }
+
         async function submitBooking(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-booking-btn');
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing Payment...';
-            btn.disabled = true;
-
-            const customerEmail = document.getElementById('cust-email').value;
-            const appointmentDate = document.getElementById('cust-date').value;
-
-            // 1. GATEKEEPER: Securely process Stripe Payment FIRST
-            const {paymentMethod, error} = await stripe.createPaymentMethod({
-                type: 'card',
-                card: cardElement,
-                billing_details: {
-                    email: customerEmail
-                }
-            });
-
-            // 2. IF STRIPE FAILS: Stop immediately. Do not send invalid/unpaid bookings to GAS.
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
+            
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
             if (error) {
-                const errorElement = document.getElementById('card-errors');
-                errorElement.textContent = error.message;
-                btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle text-lg"></i>';
-                btn.disabled = false;
+                document.getElementById('card-errors').textContent = error.message;
+                btn.innerText = "Confirm Booking";
                 return;
             }
 
-            // 3. IF STRIPE SUCCEEDS: Build the verified payload
-            const orderPayload = {
-                customerEmail: customerEmail,
-                bookingDate: appointmentDate,
-                items: cartItemsData,
-                totalAmount: cartTotal,
-                paymentMethodId: paymentMethod.id, // Proof of secure card capture
-                paymentStatus: "Verified"
-            };
+            const payload = { email: document.getElementById('cust-email').value, date: document.getElementById('cust-date').value, items: cartItemsData, total: cartTotal, stripeId: paymentMethod.id };
+            
+            await fetch('https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec', {
+                method: 'POST', mode: 'no-cors', body: JSON.stringify(payload)
+            });
 
-            const gasUrl = "https://script.google.com/macros/library/d/1eEeLxepYS2wNFhlJ6sCWUGdPD0BcTb51PAR5xZurfN8XVrYTEhwv5eAd/1";
-
-            try {
-                // 4. SEND TO GAS: Only happens for paid/verified users
-                await fetch(gasUrl, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderPayload)
-                });
-
-                document.getElementById('cart-title').innerText = "Confirmed";
-                document.getElementById('checkout-form-state').classList.add('hidden');
-                document.getElementById('checkout-form-state').classList.remove('flex');
-                
-                document.getElementById('success-email-display').innerText = customerEmail;
-                document.getElementById('checkout-success-state').classList.remove('hidden');
-                document.getElementById('checkout-success-state').classList.add('flex');
-                
-                btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle text-lg"></i>';
-                btn.disabled = false;
-                cartItemsData = [];
-                cartTotal = 0;
-                cardElement.clear(); // Clear the secure card input
-
-            } catch (error) {
-                console.error("Booking System Error:", error);
-                btn.innerHTML = 'Confirm Booking <i class="ph ph-check-circle text-lg"></i>';
-                btn.disabled = false;
-                alert("Network error. If this persists, ensure your Google Script URL ends in '/exec' instead of '/1'.");
-            }
+            document.getElementById('checkout-form-state').classList.add('hidden');
+            document.getElementById('checkout-success-state').classList.remove('hidden');
+            document.getElementById('cart-title').innerText = "Confirmed";
         }
 
-        function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            const overlay = document.getElementById('cart-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
-            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-            
-            if(!sidebar.classList.contains('open')) {
-                setTimeout(() => {
-                    if (cartTotal > 0) {
-                        document.getElementById('cart-active-state').classList.add('flex');
-                        document.getElementById('cart-active-state').classList.remove('hidden');
-                    }
-                    document.getElementById('checkout-form-state').classList.add('hidden');
-                    document.getElementById('checkout-form-state').classList.remove('flex');
-                    document.getElementById('checkout-success-state').classList.add('hidden');
-                    document.getElementById('checkout-success-state').classList.remove('flex');
-                    document.getElementById('cart-title').innerText = "Your Bag";
-                }, 500); 
-            }
+        function changeImage(src, btn) {
+            document.getElementById('main-gallery-img').src = src;
+            document.querySelectorAll('.thumbnail-btn').forEach(t => t.classList.remove('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2'));
+            btn.classList.add('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
         }
 
         document.addEventListener('mousemove', (e) => {
             const glow = document.querySelector('.cursor-glow');
-            if(glow) {
-                glow.style.setProperty('--x', e.clientX + 'px');
-                glow.style.setProperty('--y', e.clientY + 'px');
-            }
+            if(glow) { glow.style.setProperty('--x', e.clientX + 'px'); glow.style.setProperty('--y', e.clientY + 'px'); }
         });
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
     </script>
 </body>
 </html>
