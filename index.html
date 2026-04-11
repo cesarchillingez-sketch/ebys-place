@@ -324,7 +324,7 @@
                 <h2 class="font-display text-4xl text-eby-dark">What you use between appointments matters more.</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Product 1 (Sold Out) -->
+                <!-- Product 1 (Sold Out Banner) -->
                 <div class="glass-card group flex flex-col p-8 reveal">
                     <div class="relative h-[300px] bg-eby-gold rounded-[24px] overflow-hidden flex items-center justify-center p-0">
                         <!-- Product Image -->
@@ -349,25 +349,59 @@
                 </div>
                 <!-- Product 2 (Active) -->
                 <div class="glass-card flex flex-col p-8 reveal reveal-delay-1 border-eby-gold-dark/40 shadow-xl">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
-                        <span class="absolute top-4 left-4 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">New Arrival</span>
-                        <i class="ph ph-sparkle text-6xl text-eby-gold-dark group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="pt-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between mb-2"><h3 class="font-display text-xl">Silky French Curl</h3><span class="font-bold">£10.00</span></div>
-                            <p class="text-eby-brown-light text-sm mb-6">Premium 24 Inch Silky French Curl Braiding Hair. Lightweight and minimal shedding.</p>
-                        </div>
-                        <button onclick="addItemToCart('Silky French Curl', 'Premium 24 Inch Hair', 10, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Add to Bag</button>
-                    </div>
-                </div>
+    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
+        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">New Arrival</span>
+        
+        <img 
+            src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" 
+            alt="Silky French Curl" 
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+        >
+    </div>
+
+    <div class="pt-8 flex-grow flex flex-col justify-between">
+        <div>
+            <div class="flex justify-between mb-2">
+                <h3 class="font-display text-xl">Silky French Curl</h3>
+                <span class="font-bold">£10.00</span>
+            </div>
+            <p class="text-eby-brown-light text-sm mb-6">Premium 24 Inch Silky French Curl Braiding Hair. Lightweight and minimal shedding.</p>
+        </div>
+        
+        <button 
+            onclick="addItemToCart('Silky French Curl', 'Premium 24 Inch Hair', 10, 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png')" 
+            class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+            Add to Bag
+        </button>
+    </div>
+</div>
                 <!-- Product 3 -->
-                <div class="glass-card flex flex-col p-8 reveal reveal-delay-2 opacity-60 grayscale">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8"><i class="ph ph-waves text-4xl"></i><span class="absolute top-4 left-4 bg-white text-[8px] font-bold px-3 py-1 rounded-full">Sold Out</span></div>
-                    <div class="pt-8 flex-grow flex flex-col justify-between">
-                        <div><h3 class="font-display text-xl text-eby-dark mb-2">32" Deep Wave Bulk</h3><p class="text-eby-brown-light text-sm line-clamp-2">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids.</p></div>
-                        <button disabled class="mt-6 w-full py-4 border border-eby-dark/10 rounded-2xl uppercase text-[9px] font-bold cursor-not-allowed">Notify Me</button>
-                    </div>
+                <div class="glass-card flex flex-col p-8 reveal reveal-delay-2 border-eby-gold-dark/40 shadow-xl">
+    <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
+        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">In Stock</span>
+        
+        <img 
+            src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" 
+            alt="32 Deep Wave Bulk" 
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+        >
+    </div>
+
+    <div class="pt-8 flex-grow flex flex-col justify-between">
+        <div>
+            <div class="flex justify-between mb-2">
+                <h3 class="font-display text-xl text-eby-dark">32" Deep Wave Bulk</h3>
+                <span class="font-bold">£12.00</span> </div>
+            <p class="text-eby-brown-light text-sm mb-6 line-clamp-2">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids.</p>
+        </div>
+        
+        <button 
+            onclick="addItemToCart('32 Deep Wave Bulk', 'Colour 33 Multicolor', 12, 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png')" 
+            class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+            Add to Bag
+        </button>
+    </div>
+</div>
                 </div>
             </div>
         </div>
