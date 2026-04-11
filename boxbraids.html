@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Box Braids | Eby's Place</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-bg': '#FCFBF8',
+                        'eby-surface': '#FFFFFF',
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#F4EFE6',
+                        'eby-gold-dark': '#C2A378',
+                    },
+                    fontFamily: {
+                        body: ['Lexend', 'sans-serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .variant-btn { border: 1px solid rgba(194, 163, 120, 0.3); color: #6B5749; transition: all 0.3s ease; }
+        .variant-btn.selected { background-color: #2A1A12; color: #FFFFFF; border-color: #2A1A12; }
+        .color-swatch { transition: all 0.3s ease; cursor: pointer; }
+        .color-swatch.selected { outline: 2px solid #C2A378; outline-offset: 2px; }
+        #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        #cart-sidebar.open { transform: translateX(0); }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 45; position: fixed; inset: 0; background: rgba(42, 26, 18, 0.3); backdrop-filter: blur(4px); }
+        #cart-overlay.open { opacity: 1; pointer-events: auto; }
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1rem; color: #2A1A12; transition: border 0.3s; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: white; }
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); }
+    </style>
+</head>
+<body class="font-body font-light bg-shifting relative">
+
+    <div class="cursor-glow"></div>
+
+    <nav class="fixed w-full z-40 bg-eby-surface/90 backdrop-blur-md border-b border-eby-gold-dark/10 py-4">
+        <div class="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase">Eby's Place</a>
+            <div class="flex items-center space-x-6">
+                <button onclick="toggleCart()" class="relative group">
+                    <i class="ph ph-shopping-bag text-2xl"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="w-full min-h-screen pt-24 flex flex-col lg:flex-row">
+        <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen p-6 lg:p-12">
+            <div class="w-full h-full flex flex-col">
+                <div class="flex-grow relative overflow-hidden rounded-sm bg-eby-surface/50">
+                    <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774788893/Gemini_Generated_Image_2mhk4f2mhk4f2mhk_m9o1bu.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
+                </div>
+                <div class="h-24 w-full mt-4 flex gap-4">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774788893/Gemini_Generated_Image_2mhk4f2mhk4f2mhk_m9o1bu.png', this)" class="thumbnail-btn flex-1 outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774788893/Gemini_Generated_Image_2mhk4f2mhk4f2mhk_m9o1bu.png" class="w-full h-full object-cover">
+                    </button>
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774788851/Gemini_Generated_Image_gjtbongjtbongjtb_l5tddv.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774788851/Gemini_Generated_Image_gjtbongjtbongjtb_l5tddv.png" class="w-full h-full object-cover opacity-60">
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="lg:w-1/2 p-6 lg:p-12 lg:pl-16 pt-12 lg:pt-24 pb-32">
+            <div class="max-w-xl mx-auto lg:mx-0">
+                <div class="mb-10 reveal active">
+                    <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface">Timeless Classic</span>
+                    <h1 class="font-display text-4xl md:text-5xl text-eby-dark mt-6 mb-4 leading-tight">Signature Geometric<br><span class="italic text-eby-brown-light font-normal">Box Braids</span></h1>
+                    <p class="text-eby-brown-light text-base leading-relaxed">Defining structural elegance. Clean, high-contrast parting meets robust, high-tension braids for maximum longevity and iconic volume.</p>
+                </div>
+
+                <div class="space-y-10 reveal active">
+                    <div>
+                        <h3 class="font-sans text-[11px] uppercase font-bold mb-4">Parting Precision</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="updateVariant(this, 'size', 'medium', 0, 0)" class="variant-btn selected py-4 text-[10px] uppercase tracking-widest">Medium (Standard)</button>
+                            <button onclick="updateVariant(this, 'size', 'large', -15, -1)" class="variant-btn py-4 text-[10px] uppercase tracking-widest">Large (Quick)</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-sans text-[11px] uppercase font-bold mb-4">Length Selection</h3>
+                        <div class="flex flex-col gap-3">
+                            <button onclick="updateVariant(this, 'length', 'mid-back', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest"><span>Mid-Back</span> <span>+£0</span></button>
+                            <button onclick="updateVariant(this, 'length', 'waist', 25, 1)" class="variant-btn py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest"><span>Waist Length</span> <span>+£25</span></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-sans text-[11px] uppercase font-bold mb-4">Extension Colour</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="updateColor('1B', this)" title="1B Natural Black" class="color-swatch selected w-10 h-10 rounded-full bg-[#1A1A1A]"></button>
+                            <button onclick="updateColor('2', this)" title="Dark Brown" class="color-swatch w-10 h-10 rounded-full bg-[#2A201C]"></button>
+                            <button onclick="updateColor('33', this)" title="Rich Auburn" class="color-swatch w-10 h-10 rounded-full bg-[#52201C]"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 sticky bottom-6 z-30">
+                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6">
+                        <div class="text-center sm:text-left">
+                            <p class="font-sans text-[9px] uppercase font-bold text-eby-brown-light">Estimate</p>
+                            <div class="flex items-baseline gap-3"><span class="font-display text-3xl text-eby-dark" id="total-price">£100.00</span><span class="text-sm text-eby-brown-light" id="total-time">4.5 hrs</span></div>
+                        </div>
+                        <button onclick="addToBooking(this)" class="bg-eby-dark text-eby-surface px-10 py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all whitespace-nowrap">Reserve Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col">
+        <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center">
+            <h2 class="font-display text-2xl" id="cart-title">Your Bag</h2>
+            <button onclick="toggleCart()"><i class="ph ph-x text-2xl"></i></button>
+        </div>
+        <div id="cart-items-container" class="p-6 flex-grow overflow-y-auto"></div>
+        <div id="cart-footer" class="hidden p-6 border-t border-eby-gold-dark/20 bg-eby-bg">
+            <div class="flex justify-between items-center mb-6"><span class="font-display">Subtotal</span><span class="text-xl font-semibold" id="cart-subtotal">£0.00</span></div>
+            <button onclick="showCheckout()" class="w-full bg-eby-dark text-eby-surface py-4 uppercase text-[10px] font-bold">Secure Checkout</button>
+        </div>
+        
+        <div id="checkout-form-container" class="hidden h-full flex flex-col bg-eby-bg">
+            <div class="p-6 overflow-y-auto">
+                <form onsubmit="submitMultiOrder(event)" class="space-y-4">
+                    <input type="text" id="cust-name" placeholder="Full Name" required class="luxury-input">
+                    <input type="email" id="cust-email" placeholder="Email Address" required class="luxury-input">
+                    <input type="tel" id="cust-phone" placeholder="Phone Number" required class="luxury-input">
+                    <input type="date" id="cust-date" required class="luxury-input">
+                    <button type="submit" id="submit-btn" class="w-full mt-6 bg-eby-gold-dark text-eby-surface py-4 uppercase text-[10px] font-bold">Confirm Total: <span id="final-sum"></span></button>
+                </form>
+            </div>
+        </div>
+
+        <div id="success-screen" class="hidden h-full bg-eby-dark text-eby-surface items-center justify-center p-8 text-center flex-col">
+            <i class="ph ph-check-circle text-6xl text-eby-gold-dark mb-4"></i>
+            <h2 class="font-display text-3xl mb-2">Confirmed</h2>
+            <p class="text-sm opacity-70 mb-8">Details sent to <span id="success-email"></span></p>
+            <button onclick="localStorage.removeItem('ebys_cart'); location.reload();" class="border-b border-eby-gold-dark text-eby-gold-dark text-[10px] uppercase">Home</button>
+        </div>
+    </div>
+
+    <script>
+        const basePrice = 100;
+        const baseTime = 4.5;
+        let state = { sizePriceMod: 0, sizeTimeMod: 0, lengthPriceMod: 0, lengthTimeMod: 0, color: '1B' };
+        let cartItems = [];
+
+        window.onload = function() {
+            const saved = localStorage.getItem('ebys_cart');
+            if(saved) { cartItems = JSON.parse(saved); updateCartUI(); }
+        };
+
+        function updatePriceAndTime() {
+            const total = basePrice + state.sizePriceMod + state.lengthPriceMod;
+            document.getElementById('total-price').innerText = `£${total.toFixed(2)}`;
+            document.getElementById('total-time').innerText = `${baseTime + state.sizeTimeMod + state.lengthTimeMod} hrs`;
+        }
+
+        function updateVariant(btn, type, val, pMod, tMod) {
+            btn.parentNode.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            if(type === 'size') { state.sizePriceMod = pMod; state.sizeTimeMod = tMod; }
+            else { state.lengthPriceMod = pMod; state.lengthTimeMod = tMod; }
+            updatePriceAndTime();
+        }
+
+        function updateColor(code, btn) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+            btn.classList.add('selected');
+            state.color = code;
+        }
+
+        function changeImage(src, btn) {
+            document.getElementById('main-gallery-img').src = src;
+            document.querySelectorAll('.thumbnail-btn').forEach(t => t.classList.remove('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2'));
+            btn.classList.add('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+        }
+
+        function addToBooking(btn) {
+            const item = {
+                item: "Signature Box Braids",
+                price: document.getElementById('total-price').innerText,
+                details: `Parting: ${state.sizePriceMod < 0 ? 'Large' : 'Medium'} | Color: ${state.color}`,
+                img: document.getElementById('main-gallery-img').src
+            };
+            cartItems.push(item);
+            localStorage.setItem('ebys_cart', JSON.stringify(cartItems));
+            updateCartUI();
+            toggleCart();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = cartItems.length ? '' : '<p class="text-center mt-20 opacity-50">Empty Bag.</p>';
+            cartItems.forEach((it, idx) => {
+                container.innerHTML += `<div class="flex gap-4 mb-6 pb-6 border-b border-eby-gold-dark/10">
+                    <img src="${it.img}" class="w-16 h-20 object-cover rounded-sm">
+                    <div class="flex-grow"><h4 class="font-semibold text-sm">${it.item}</h4><p class="text-[10px] opacity-60">${it.details}</p><span class="text-xs font-bold">${it.price}</span></div>
+                    <button onclick="cartItems.splice(${idx}, 1); localStorage.setItem('ebys_cart', JSON.stringify(cartItems)); updateCartUI();" class="text-red-800 text-[8px] uppercase">Del</button>
+                </div>`;
+            });
+            const totalSum = cartItems.reduce((acc, i) => acc + parseFloat(i.price.replace('£','')), 0);
+            document.getElementById('cart-subtotal').innerText = `£${totalSum.toFixed(2)}`;
+            document.getElementById('final-sum').innerText = `£${totalSum.toFixed(2)}`;
+            document.getElementById('cart-badge').innerText = cartItems.length;
+            document.getElementById('cart-footer').classList.toggle('hidden', cartItems.length === 0);
+        }
+
+        function showCheckout() {
+            document.getElementById('cart-items-container').classList.add('hidden');
+            document.getElementById('cart-footer').classList.add('hidden');
+            document.getElementById('checkout-form-container').classList.replace('hidden', 'flex');
+        }
+
+        async function submitMultiOrder(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Processing..."; btn.disabled = true;
+            const payload = {
+                customerName: document.getElementById('cust-name').value,
+                customerEmail: document.getElementById('cust-email').value,
+                customerPhone: document.getElementById('cust-phone').value,
+                bookingDate: document.getElementById('cust-date').value,
+                totalPrice: document.getElementById('cart-subtotal').innerText,
+                items: cartItems
+            };
+            try {
+                await fetch("https://script.google.com/macros/s/AKfycbzP8dxSChrSNd2TavVjGvItXruTasrXdfw-Gn9De6oYx-8IEbXNqP2wQG2Ie9cZfSbV/exec", {
+                    method: 'POST', mode: 'no-cors', body: JSON.stringify(payload)
+                });
+                document.getElementById('success-email').innerText = payload.customerEmail;
+                document.getElementById('checkout-form-container').classList.add('hidden');
+                document.getElementById('success-screen').classList.replace('hidden', 'flex');
+            } catch (err) { btn.disabled = false; }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            document.querySelector('.cursor-glow').style.setProperty('--x', e.clientX + 'px');
+            document.querySelector('.cursor-glow').style.setProperty('--y', e.clientY + 'px');
+        });
+    </script>
+</body>
+</html>
