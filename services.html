@@ -112,10 +112,6 @@
             border: 1px solid rgba(194, 163, 120, 0.2);
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
         }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05);
-        }
 
         /* Animated SVG Text Pattern (Footer) */
         .text-pattern {
@@ -129,6 +125,42 @@
         }
         @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
 
+        /* Service Slider Portal Styles */
+        #service-slider {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 98vh;
+            background: #FCFBF8;
+            z-index: 100;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        #service-slider.active {
+            transform: translateY(0);
+        }
+        #service-slider-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(42, 26, 18, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        #service-slider-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* Mobile Menu Animations */
         .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
         .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
@@ -139,7 +171,6 @@
         .menu-open .delay-4 { transition-delay: 0.4s; }
         .menu-open .delay-5 { transition-delay: 0.5s; }
 
-        /* Hide scrollbar for category menu */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -155,13 +186,34 @@
     <div class="cursor-glow"></div>
     <div class="swirl-bg"></div>
 
+    <!-- Service Slider Portal -->
+    <div id="service-slider-overlay" onclick="closeServiceSlider()"></div>
+    <div id="service-slider">
+        <div class="p-4 border-b border-eby-gold-dark/10 flex justify-between items-center bg-white sticky top-0 z-10">
+            <div class="flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-eby-gold-dark animate-pulse"></span>
+                <h3 id="slider-header-title" class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark">Luxury Portal</h3>
+            </div>
+            <button onclick="closeServiceSlider()" class="w-10 h-10 flex items-center justify-center rounded-full bg-eby-bg hover:bg-eby-gold-dark hover:text-white transition-all">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+        <div class="w-full h-full relative pb-20">
+            <div id="slider-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-eby-bg z-0">
+                <i class="ph ph-circle-notch animate-spin text-3xl text-eby-gold-dark mb-4"></i>
+                <span class="font-display italic text-eby-brown-light">Loading experience...</span>
+            </div>
+            <iframe id="service-iframe" src="" class="w-full h-full border-none relative z-10" loading="lazy"></iframe>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 glass-nav py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2 relative z-50 cursor-pointer pointer-events-auto">
                 <i class="ph ph-list text-3xl text-eby-dark"></i>
             </button>
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4">
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4 relative z-50">
                 Eby's Place
             </a>
             <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
@@ -169,9 +221,9 @@
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="text-eby-gold-dark transition-colors">Services</a>
                 <a href="booking.html" class="hover:text-eby-gold-dark transition-colors">Booking</a>
-                <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+                <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
-            <div class="flex items-center space-x-6 text-eby-dark">
+            <div class="flex items-center space-x-6 text-eby-dark relative z-50">
                 <a href="#" class="hidden sm:block text-[10px] font-sans uppercase tracking-widest font-medium hover:text-eby-gold-dark transition-colors">My Account</a>
             </div>
         </div>
@@ -180,7 +232,7 @@
     <!-- Full-Screen Mobile Dropdown Menu -->
     <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
         <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
-            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2 cursor-pointer">
                 <i class="ph ph-x text-3xl text-eby-dark"></i>
             </button>
             <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
@@ -191,7 +243,7 @@
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-gold-dark italic block">Services.</a>
             <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
-            <a href="about us.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
         <div class="px-10 pb-12">
             <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
@@ -245,150 +297,133 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Service: Knotless -->
-                <div class="glass-card flex flex-col reveal group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-gold/20">
-                        <img src="https://images.unsplash.com/photo-1615802107412-259163d76e2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Knotless Braids" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                        <span class="absolute top-4 left-4 font-sans font-bold text-[8px] uppercase tracking-widest bg-eby-dark text-eby-surface px-3 py-1">Popular</span>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Knotless Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Lightweight, natural-looking braids with no knots at the base. Less tension on your scalp.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £120</span>
+                <!-- Knotless Braids -->
+                <div onclick="openServiceSlider('knotless.html', 'Knotless Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Popular</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Knotless Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Lightweight, natural-looking braids with no knots. Zero tension on your scalp.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hrs</span>
+                            <span class="text-eby-gold-dark">from £120</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
 
-                <!-- Service: Box Braids -->
-                <div class="glass-card flex flex-col reveal reveal-delay-1 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-gold/20">
-                        <img src="https://images.unsplash.com/photo-1596726884674-672ceae14ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Box Braids" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                        <span class="absolute top-4 left-4 font-sans font-bold text-[8px] uppercase tracking-widest bg-eby-dark text-eby-surface px-3 py-1">Popular</span>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Box Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Classic protective style with sectioned square parts. Versatile and incredibly long-lasting.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £100</span>
+                <!-- Box Braids -->
+                <div onclick="openServiceSlider('boxbraids.html', 'Box Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Classic</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Box Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">The classic protective style with sectioned square parts. Versatile and elegant.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hrs</span>
+                            <span class="text-eby-gold-dark">from £100</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
 
-                <!-- Service: Goddess Braids -->
-                <div class="glass-card flex flex-col reveal reveal-delay-2 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-sparkle text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Goddess Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Elegant chunky braids with beautiful curly accents for a romantic, bohemian look.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-5 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £140</span>
+                <!-- Goddess Braids -->
+                <div onclick="openServiceSlider('goddess.html', 'Goddess Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776159339/Gemini_Generated_Image_3l0eht3l0eht3l0e_1_v7bwrj.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Goddess Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Elegant chunky braids with beautiful curly accents for a romantic, bohemian look.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-5 hrs</span>
+                            <span class="text-eby-gold-dark">from £140</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
 
-                <!-- Service: Fulani Braids -->
-                <div class="glass-card flex flex-col reveal group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-crown text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Fulani Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Traditional African style with a distinctive middle parting and beautifully aligned side cornrows.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £110</span>
+                <!-- Fulani Braids -->
+                <div onclick="openServiceSlider('fulani.html', 'Fulani Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776158395/Gemini_Generated_Image_18i90718i90718i9_quwaol.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Fulani Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Traditional African style with a distinctive middle parting and beautifully aligned side cornrows.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hrs</span>
+                            <span class="text-eby-gold-dark">from £110</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
 
-                <!-- Service: Cornrows -->
-                <div class="glass-card flex flex-col reveal reveal-delay-1 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-lines-vertical text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Cornrows</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Tight, sleek braids woven precisely close to the scalp. Perfect for any occasion or foundation.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 2-4 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £60</span>
+                <!-- Cornrows -->
+                <div onclick="openServiceSlider('cornrows.html', 'Cornrows')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Cornrows</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Tight, sleek braids woven precisely close to the scalp. Perfect for any occasion or foundation.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 2-4 hrs</span>
+                            <span class="text-eby-gold-dark">from £60</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
 
-                <!-- Service: Stitch Braids -->
-                <div class="glass-card flex flex-col reveal reveal-delay-2 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-scissors text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Stitch Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Cornrows with a flawless feed-in stitch pattern creating beautiful, sharp geometric designs.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 3-5 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £80</span>
+                <!-- Stitch Braids -->
+                <div onclick="openServiceSlider('stitch.html', 'Stitch Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615510306_suukb7.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Stitch Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Cornrows with a flawless feed-in stitch pattern creating beautiful, sharp geometric designs.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 3-5 hrs</span>
+                            <span class="text-eby-gold-dark">from £80</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 
-                <!-- Service: Lemonade Braids -->
-                <div class="glass-card flex flex-col reveal group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-gold/20">
-                        <img src="https://images.unsplash.com/photo-1605372482354-94e80db6ce69?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Lemonade Braids" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                        <span class="absolute top-4 left-4 font-sans font-bold text-[8px] uppercase tracking-widest bg-eby-dark text-eby-surface px-3 py-1">Popular</span>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Lemonade Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Iconic side-swept cornrows inspired by Beyoncé. Stunning, highly stylish, and perfectly parted.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 3-5 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £90</span>
+                <!-- Lemonade Braids -->
+                <div onclick="openServiceSlider('lemon.html', 'Lemon Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Signature</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Lemonade Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Side-swept cornrows featuring immaculate parting. Stunning, highly stylish, and flawlessly executed.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 3-5 hrs</span>
+                            <span class="text-eby-gold-dark">from £90</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 
-                <!-- Service: Boho Braids -->
-                <div class="glass-card flex flex-col reveal reveal-delay-1 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-gold/20">
-                        <img src="https://images.unsplash.com/photo-1512496015851-a1fbcf6ce85a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Boho Braids" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Boho Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Knotless braids infused with loose, premium human-hair curly ends for a free-spirited luxury look.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £150</span>
+                <!-- Boho Braids -->
+                <div onclick="openServiceSlider('boho.html', 'Boho Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans bg-eby-gold-dark text-white text-[8px] uppercase font-bold px-3 py-1 mb-4 inline-block">Trending</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Boho Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Knotless braids with loose, curly ends for a free-spirited luxury look.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hrs</span>
+                            <span class="text-eby-gold-dark">from £150</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 
-                <!-- Service: Feed-In & Tribal grouped logic -->
-                 <div class="glass-card flex flex-col reveal reveal-delay-2 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-magic-wand text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Tribal Braids</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Lightweight, intricate cornrows and individual braids blending tradition with modern edge.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £100</span>
+                <!-- Tribal Braids -->
+                 <div onclick="openServiceSlider('tribal.html', 'Tribal Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Tribal Braids</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Lightweight, intricate cornrows and individual braids blending tradition with modern edge.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hrs</span>
+                            <span class="text-eby-gold-dark">from £100</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
             </div>
@@ -402,34 +437,30 @@
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Senegalese -->
-                <div class="glass-card flex flex-col reveal group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-spiral text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Senegalese Twists</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Smooth, silky two-strand twists. Incredibly elegant, versatile, and sophisticated.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £110</span>
+                <div onclick="openServiceSlider('senegalese.html', 'Senegalese Twists')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Senegalese Twists</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Smooth, silky two-strand twists. Incredibly elegant, versatile, and sophisticated.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hrs</span>
+                            <span class="text-eby-gold-dark">from £110</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 <!-- Passion -->
-                <div class="glass-card flex flex-col reveal reveal-delay-1 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <span class="absolute top-4 left-4 font-sans font-bold text-[8px] uppercase tracking-widest bg-eby-dark text-eby-surface px-3 py-1 z-10">Popular</span>
-                        <i class="ph ph-heart text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Passion Twists</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Bohemian-style twists utilizing specialized water wave hair for a fluffy, romantic texture.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £130</span>
+                <div onclick="openServiceSlider('passion.html', 'Passion Twists')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Popular</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Passion Twists</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Bohemian-style twists utilizing specialized water wave hair for a fluffy, romantic texture.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 4-6 hrs</span>
+                            <span class="text-eby-gold-dark">from £130</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
             </div>
@@ -443,49 +474,43 @@
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Faux Locs -->
-                <div class="glass-card flex flex-col reveal group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-lock-key text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Faux Locs</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Temporary, natural-looking locs wrapped seamlessly around your natural hair.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 6-8 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £150</span>
+                <div onclick="openServiceSlider('fauxlocs.html', 'Faux Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776158395/Gemini_Generated_Image_18i90718i90718i9_quwaol.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Faux Locs</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Temporary, natural-looking locs wrapped seamlessly around your natural hair.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 6-8 hrs</span>
+                            <span class="text-eby-gold-dark">from £150</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 <!-- Butterfly Locs -->
-                <div class="glass-card flex flex-col reveal reveal-delay-1 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <span class="absolute top-4 left-4 font-sans font-bold text-[8px] uppercase tracking-widest bg-eby-dark text-eby-surface px-3 py-1 z-10">Popular</span>
-                        <i class="ph ph-butterfly text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Butterfly Locs</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Beautifully distressed faux locs crafted to deliver a messy, signature bohemian finish.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £140</span>
+                <div onclick="openServiceSlider('butterfly.html', 'Butterfly Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block font-bold">Popular</span>
+                        <h3 class="font-display text-2xl text-white mb-2">Butterfly Locs</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Beautifully distressed faux locs crafted to deliver a messy, signature bohemian finish.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 5-7 hrs</span>
+                            <span class="text-eby-gold-dark">from £140</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
                 <!-- Starter Locs -->
-                <div class="glass-card flex flex-col reveal reveal-delay-2 group overflow-hidden">
-                    <div class="relative h-56 overflow-hidden bg-eby-dark/80 flex justify-center items-center">
-                        <i class="ph ph-leaf text-4xl text-eby-gold-dark opacity-50 group-hover:scale-110 transition-transform duration-700"></i>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h4 class="font-display text-xl text-eby-dark mb-2">Starter Locs</h4>
-                        <p class="text-eby-brown-light text-xs leading-relaxed mb-6 flex-grow">Begin your loc journey the right way with professional installation and tailored maintenance guidance.</p>
-                        <div class="flex justify-between items-center border-t border-eby-gold-dark/20 pt-4 mb-5">
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 2-4 hours</span>
-                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">from £80</span>
+                <div onclick="openServiceSlider('starterlocs.html', 'Starter Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-display text-2xl text-white mb-2">Starter Locs</h3>
+                        <p class="text-xs text-white/80 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 leading-relaxed">Begin your loc journey the right way with professional installation and tailored maintenance guidance.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest">
+                            <span class="flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> 2-4 hrs</span>
+                            <span class="text-eby-gold-dark">from £80</span>
                         </div>
-                        <a href="#" class="w-full text-center font-sans font-bold text-[9px] uppercase tracking-[0.2em] text-eby-gold-dark border border-eby-gold-dark/30 py-3 hover:bg-eby-dark hover:border-eby-dark hover:text-eby-surface transition-colors">Reserve Appointment</a>
                     </div>
                 </div>
             </div>
@@ -501,27 +526,33 @@
                 </div>
                 <div class="space-y-4">
                     <!-- Kids Braids -->
-                    <div class="glass-card p-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors">
-                        <div>
-                            <h4 class="font-display text-lg text-eby-dark mb-1">Kids Braids</h4>
-                            <p class="text-eby-brown-light text-xs mb-2">Fun styles, beads, and accessories included.</p>
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold"><i class="ph ph-clock text-eby-gold-dark"></i> 1-3 hrs</span>
+                    <div onclick="openServiceSlider('kids-braids.html', 'Kids Braids')" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
+                        <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm bg-eby-gold/20">
+                            <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="text-right">
+                        <div class="flex-grow">
+                            <h4 class="font-display text-lg text-eby-dark mb-1">Kids Braids</h4>
+                            <p class="text-eby-brown-light text-[10px] mb-2 leading-relaxed pr-2">Fun styles, beads, and accessories included.</p>
+                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark"></i> 1-3 hrs</span>
+                        </div>
+                        <div class="text-right pr-2">
                             <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">£40</span>
-                            <a href="#" class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 hover:text-eby-dark">Book</a>
+                            <span class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 group-hover:text-eby-dark">Book</span>
                         </div>
                     </div>
                     <!-- Kids Cornrows -->
-                    <div class="glass-card p-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors">
-                        <div>
-                            <h4 class="font-display text-lg text-eby-dark mb-1">Kids Cornrows</h4>
-                            <p class="text-eby-brown-light text-xs mb-2">Neat, quick, and highly comfortable foundation.</p>
-                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold"><i class="ph ph-clock text-eby-gold-dark"></i> 1-2 hrs</span>
+                    <div onclick="openServiceSlider('kids-cornrows.html', 'Kids Cornrows')" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
+                        <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm bg-eby-gold/20">
+                            <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="text-right">
+                        <div class="flex-grow">
+                            <h4 class="font-display text-lg text-eby-dark mb-1">Kids Cornrows</h4>
+                            <p class="text-eby-brown-light text-[10px] mb-2 leading-relaxed pr-2">Neat, quick, and highly comfortable foundation.</p>
+                            <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark"></i> 1-2 hrs</span>
+                        </div>
+                        <div class="text-right pr-2">
                             <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">£35</span>
-                            <a href="#" class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 hover:text-eby-dark">Book</a>
+                            <span class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 group-hover:text-eby-dark">Book</span>
                         </div>
                     </div>
                 </div>
@@ -534,33 +565,45 @@
                     <p class="text-eby-brown-light text-sm">Enhance your appointment experience.</p>
                 </div>
                 <div class="space-y-4">
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('wash-prep.html', 'Hair Wash & Prep')">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Hair Wash & Prep</h4>
                             <p class="text-eby-brown-light text-[10px]">Professional wash, condition, & blow-dry.</p>
                         </div>
-                        <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£20</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£20</span>
+                            <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
+                        </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('beads.html', 'Beads & Accessories')">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Beads & Accessories</h4>
                             <p class="text-eby-brown-light text-[10px]">Premium rings, cuffs, and beads.</p>
                         </div>
-                        <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£10</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£10</span>
+                            <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
+                        </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('edge-control.html', 'Edge Control & Styling')">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Edge Control & Styling</h4>
                             <p class="text-eby-brown-light text-[10px]">Baby hair styling for a polished finish.</p>
                         </div>
-                        <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£8</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£8</span>
+                            <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
+                        </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('takedown.html', 'Braid Takedown')">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Braid Takedown</h4>
                             <p class="text-eby-brown-light text-[10px]">Gentle removal of existing styles.</p>
                         </div>
-                        <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£30</span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-eby-dark font-sans font-bold text-xs tracking-widest">+£30</span>
+                            <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -570,7 +613,7 @@
     <!-- Important Booking Information (Policy Card) -->
     <section class="py-20 max-w-5xl mx-auto px-6 relative z-10">
         <div class="bg-eby-dark p-10 md:p-16 rounded-sm shadow-2xl relative overflow-hidden reveal border-l-4 border-l-eby-gold-dark">
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1584285408253-b4528148b6bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-eby-surface/5 mix-blend-overlay"></div>
             <div class="relative z-10 flex flex-col md:flex-row gap-10 items-center md:items-start">
                 <div class="md:w-1/3">
                     <i class="ph ph-info text-5xl text-eby-gold-dark mb-4"></i>
@@ -596,21 +639,21 @@
                 <!-- Text Details -->
                 <div class="lg:w-1/3 reveal">
                     <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-4">Visit The Studio</h2>
-                    <p class="text-eby-brown-light text-sm mb-10 leading-relaxed">
-                        Experience our luxury, pain-free braiding in a serene, controlled environment designed entirely for your comfort.
+                    <p class="text-eby-brown-light text-sm mb-10 leading-relaxed font-body font-light lowercase">
+                        experience our luxury, pain-free braiding in a serene, controlled environment designed entirely for your comfort.
                     </p>
                     <div class="space-y-8">
                         <div>
-                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Location</h4>
-                            <p class="text-eby-dark text-sm leading-relaxed">London Eye Area, London, UK<br><span class="text-eby-brown-light text-xs">(Full exclusive address provided upon booking)</span></p>
+                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Somerset, UK.</h4>
+                            <p class="text-eby-dark text-sm leading-relaxed font-body font-light lowercase">london eye area, london, uk<br><span class="text-eby-brown-light text-xs">(full exclusive address provided upon booking)</span></p>
                         </div>
                         <div>
                             <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Operating Hours</h4>
-                            <p class="text-eby-dark text-sm leading-relaxed">Mon - Sat: 9:00 AM - 7:00 PM<br>Sun: By Appointment</p>
+                            <p class="text-eby-dark text-sm leading-relaxed font-body font-light lowercase">mon - sat: 09:00 - 19:00<br>sunday: by appointment only</p>
                         </div>
                     </div>
                 </div>
-                <!-- Map iframe with Luxury Grayscale Filter pointing to London Eye -->
+                <!-- Map iframe with Luxury Grayscale Filter -->
                 <div class="lg:w-2/3 w-full h-[450px] rounded-sm overflow-hidden reveal reveal-delay-1 border border-eby-gold-dark/30 bg-eby-gold/20">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.288961634382!2d-0.12209488422954133!3d51.5031897184853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon%20Eye!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
@@ -627,24 +670,24 @@
     </section>
 
     <!-- Footer -->
-    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10">
+    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
                     <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
-                    <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">
-                        Premium African hair braiding services in London, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.
+                    <p class="font-body text-eby-brown-light text-sm max-w-sm leading-relaxed font-light">
+                        Experience the art of the painless aesthetic. Premium African hair braiding services engineered entirely for longevity and scalp health.
                     </p>
                     
-                    <div class="mt-8 space-y-2 text-sm text-eby-dark font-medium">
-                        <p class="flex items-center gap-2"><i class="ph ph-phone text-eby-gold-dark"></i> +44 7864 585110</p>
-                        <p class="flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> Mon- Sat: 9am – 7pm</p>
-                        <p class="flex items-center gap-2"><i class="ph ph-calendar text-eby-gold-dark"></i> Sun: By Appointment</p>
+                    <div class="mt-8 space-y-2 text-[10px] font-sans font-bold tracking-widest uppercase text-eby-dark">
+                        <p class="flex items-center gap-3"><i class="ph ph-phone text-eby-gold-dark text-sm"></i> Office: +44 7864 585110</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> Hours: Mon–Sat: 09:00 – 19:00</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-calendar text-eby-gold-dark text-sm"></i> Sunday: By Appointment Only</p>
                     </div>
                 </div>
                 <div>
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
@@ -654,7 +697,7 @@
                 </div>
                 <div>
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
-                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
+                    <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
                         <li><a href="#" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
@@ -668,7 +711,7 @@
             <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
                 <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
                 <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
-                    <p>© 2026 Eby’s Place. All Rights Reserved.</p>
+                    <p>© 2026 EBY’S PLACE. ALL RIGHTS RESERVED.</p>
                     <div class="flex space-x-6 text-eby-dark">
                         <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
                         <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
@@ -708,7 +751,6 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
                 if (scrollY >= (sectionTop - 150)) {
                     current = section.getAttribute('id');
                 }
@@ -723,6 +765,39 @@
                 }
             });
         });
+
+        // Service Slider Controller
+        function openServiceSlider(url, serviceName) {
+            const slider = document.getElementById('service-slider');
+            const overlay = document.getElementById('service-slider-overlay');
+            const iframe = document.getElementById('service-iframe');
+            const header = document.getElementById('slider-header-title');
+            const loader = document.getElementById('slider-loader');
+
+            header.innerText = `Luxury Portal: ${serviceName}`;
+            loader.style.display = 'flex';
+            iframe.src = url;
+            
+            slider.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            iframe.onload = () => {
+                loader.style.display = 'none';
+            };
+        }
+
+        function closeServiceSlider() {
+            const slider = document.getElementById('service-slider');
+            const overlay = document.getElementById('service-slider-overlay');
+            const iframe = document.getElementById('service-iframe');
+
+            slider.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            setTimeout(() => { iframe.src = ''; }, 600);
+        }
 
         // Tech-Spirit Background Glow
         document.addEventListener('mousemove', (e) => {
