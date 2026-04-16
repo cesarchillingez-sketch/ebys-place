@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signature Knotless Braids | Eby's Place</title>
     
+    <!-- Open Graph / Web Preview Meta Tags -->
+    <meta name="description" content="Experience our master-crafted knotless braids, meticulously parted and engineered for zero root tension. Book your slot at Eby's Place.">
+    <meta property="og:title" content="Signature Knotless Braids | Eby's Place">
+    <meta property="og:description" content="Experience our master-crafted knotless braids, meticulously parted and engineered for zero root tension. Book your slot at Eby's Place.">
+    <meta property="og:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png">
+    <meta property="og:url" content="https://ebysplace.com/services/knotless">
+    <meta property="og:type" content="product">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Signature Knotless Braids | Eby's Place">
+    <meta name="twitter:description" content="Experience our master-crafted knotless braids, meticulously parted and engineered for zero root tension. Book your slot at Eby's Place.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -12,6 +26,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://js.stripe.com/v3/"></script>
+
+    <script type="text/javascript">
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", "30min", {origin:"https://app.cal.com"});
+    </script>
 
     <script>
         tailwind.config = {
@@ -30,6 +49,7 @@
                         sans: ['Montserrat', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
                     },
+                    letterSpacing: { widest: '.2em', mega: '.3em' }
                 }
             }
         }
@@ -37,128 +57,184 @@
 
     <style>
         body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
-        .swirl-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FCFBF8; }
+        ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+        
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
         .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
         .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
+        
+        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
         .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
-        .nav-scrolled { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
+        
         .variant-btn { border: 1px solid rgba(194, 163, 120, 0.3); color: #6B5749; transition: all 0.3s ease; }
         .variant-btn.selected { background-color: #2A1A12; color: #FFFFFF; border-color: #2A1A12; }
-        .color-swatch { transition: all 0.3s ease; }
+        .color-swatch { transition: all 0.3s ease; cursor: pointer; }
         .color-swatch.selected { outline: 2px solid #C2A378; outline-offset: 2px; }
-        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1rem; font-size: 0.875rem; color: #2A1A12; transition: all 0.3s ease; }
-        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
-        .text-pattern { background-color: #2A1A12; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite; }
+        
         #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #cart-sidebar.open { transform: translateX(0); }
-        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 45; position: fixed; inset: 0; background: rgba(42, 26, 18, 0.3); backdrop-filter: blur(4px); }
         #cart-overlay.open { opacity: 1; pointer-events: auto; }
+        
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; color: #2A1A12; transition: border 0.3s; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: white; }
+        
+        .text-pattern { background-color: #2A1A12; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite; }
+        @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
+        
+        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
     </style>
 </head>
-<body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
+<body class="font-body font-light bg-shifting relative">
 
     <div class="cursor-glow"></div>
-    <div class="swirl-bg"></div>
 
-    <nav id="navbar" class="fixed w-full z-40 nav-scrolled py-2 transition-all">
+    <nav id="navbar" class="fixed w-full z-50 glass-nav py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button class="lg:hidden p-2 -ml-2"><i class="ph ph-list text-3xl text-eby-dark"></i></button>
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark">Eby's Place</a>
-            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium">
-                <a href="index.html">Home</a>
-                <a href="shop.html">Shop</a>
-                <a href="services.html" class="text-eby-gold-dark">Services</a>
-                <a href="booking.html">Booking</a>
-                <a href="about.html">About Us</a>
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-list text-3xl text-eby-dark"></i>
+            </button>
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4">
+                Eby's Place
+            </a>
+            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
+                <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
+                <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
+                <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
+                <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
+                <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
             <div class="flex items-center space-x-6 text-eby-dark">
-                <button onclick="toggleCart()" class="relative group">
+                <button onclick="toggleCart()" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
                     <i class="ph ph-shopping-bag text-2xl"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-2 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                    <span id="cart-badge" class="absolute top-1 right-0 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <main class="w-full min-h-screen pt-24 pb-0 flex flex-col lg:flex-row relative">
-        <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen flex flex-col p-6 lg:p-12 lg:pr-6 pb-0">
-            <div class="w-full h-full relative rounded-sm overflow-hidden flex flex-col group">
-                <div class="flex-grow relative overflow-hidden bg-eby-surface/50">
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
+            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Configurator -->
+    <main class="w-full min-h-screen pt-24 flex flex-col lg:flex-row">
+        
+        <!-- Left Side: Sticky Gallery -->
+        <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen p-6 lg:p-12">
+            <div class="w-full h-full flex flex-col">
+                <div class="flex-grow relative overflow-hidden rounded-sm bg-eby-surface/50">
                     <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
-                    <div class="absolute inset-0 bg-eby-dark/10 pointer-events-none mix-blend-overlay"></div>
                 </div>
                 <div class="h-24 w-full mt-4 flex gap-4">
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 relative outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 relative outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden rounded-sm">
                         <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
                         <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-60">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
                         <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="w-full h-full object-cover opacity-60">
                     </button>
                 </div>
             </div>
         </section>
 
+        <!-- Right Side: Configurator -->
         <section class="lg:w-1/2 p-6 lg:p-12 lg:pl-16 pt-12 lg:pt-24 pb-32">
             <div class="max-w-xl mx-auto lg:mx-0">
                 <div class="mb-10 reveal active">
-                    <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface">Signature Service</span>
+                    <span class="font-sans font-semibold text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/30 px-3 py-1 bg-eby-surface rounded-full">Signature Service</span>
                     <h1 class="font-display text-4xl md:text-5xl text-eby-dark mt-4 mb-4 leading-tight">Signature Knotless<br><span class="italic text-eby-brown-light">Box Braids</span></h1>
                     <p class="text-eby-brown-light">Experience our master-crafted knotless braids, meticulously priced by size and length.</p>
                 </div>
 
                 <div class="space-y-10 reveal active">
+                    <!-- Parting Size -->
                     <div>
                         <div class="flex justify-between items-end mb-4">
                             <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Parting Size</h3>
                             <span class="text-xs text-eby-brown-light" id="size-indicator">Medium</span>
                         </div>
                         <div class="grid grid-cols-3 md:grid-cols-5 gap-2">
-                            <button onclick="selectSize('jumbo', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">Jumbo</button>
-                            <button onclick="selectSize('large', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">Large</button>
-                            <button onclick="selectSize('medium', this)" class="variant-btn selected py-3 text-[9px] uppercase tracking-tighter">Medium</button>
-                            <button onclick="selectSize('smedium', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">S/Medium</button>
-                            <button onclick="selectSize('xsmall', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter">XSmall</button>
+                            <button onclick="selectSize('jumbo', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter rounded-lg">Jumbo</button>
+                            <button onclick="selectSize('large', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter rounded-lg">Large</button>
+                            <button onclick="selectSize('medium', this)" class="variant-btn selected py-3 text-[9px] uppercase tracking-tighter rounded-lg">Medium</button>
+                            <button onclick="selectSize('smedium', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter rounded-lg">S/Med</button>
+                            <button onclick="selectSize('xsmall', this)" class="variant-btn py-3 text-[9px] uppercase tracking-tighter rounded-lg">XSmall</button>
                         </div>
                     </div>
 
+                    <!-- Available Lengths -->
                     <div>
                         <div class="flex justify-between items-end mb-4">
                             <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Available Lengths</h3>
                             <span class="text-xs text-eby-brown-light" id="length-indicator">Mid-Back</span>
                         </div>
-                        <div id="length-options-container" class="flex flex-col gap-3"></div>
+                        <div id="length-options-container" class="flex flex-col gap-3">
+                            <!-- Injected by JS based on size -->
+                        </div>
                     </div>
 
+                    <!-- Extension Colour -->
                     <div>
                         <div class="flex justify-between items-end mb-4">
                             <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold">Extension Colour</h3>
                             <span class="text-xs text-eby-brown-light" id="color-indicator">1B (Natural Black)</span>
                         </div>
                         <div class="flex flex-wrap gap-4">
-                            <button onclick="updateColor('1B', this)" title="1B Natural Black" class="color-swatch selected w-10 h-10 rounded-full bg-[#1A1A1A]"></button>
-                            <button onclick="updateColor('2', this)" title="2 Dark Brown" class="color-swatch w-10 h-10 rounded-full bg-[#2A201C]"></button>
-                            <button onclick="updateColor('27', this)" title="27 Honey Blonde" class="color-swatch w-10 h-10 rounded-full bg-[#CFA876]"></button>
+                            <button onclick="updateColor('1B', this)" title="1B (Natural Black)" class="color-swatch selected w-10 h-10 rounded-full bg-[#1A1A1A]"></button>
+                            <button onclick="updateColor('2', this)" title="2 (Dark Brown)" class="color-swatch w-10 h-10 rounded-full bg-[#2A201C]"></button>
+                            <button onclick="updateColor('27', this)" title="27 (Honey Blonde)" class="color-swatch w-10 h-10 rounded-full bg-[#CFA876]"></button>
                         </div>
+                        <p class="text-xs text-eby-brown-light mt-4 italic"><i class="ph ph-info mr-1"></i> Pre-stretched braiding hair is included in the base price.</p>
                     </div>
                 </div>
 
+                <!-- Sticky Booking Total Bar -->
                 <div class="mt-16 sticky bottom-6 z-30">
-                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 bg-eby-surface/95">
+                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 bg-eby-surface/95 rounded-2xl">
                         <div class="text-center sm:text-left">
-                            <p class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-bold mb-1">Total Estimate</p>
-                            <span class="font-display text-3xl" id="total-price">£90.00</span>
+                            <p class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-bold mb-1">Estimate</p>
+                            <div class="flex items-baseline gap-3">
+                                <span class="font-display text-3xl" id="total-price">£90.00</span>
+                            </div>
                         </div>
-                        <button onclick="addToBooking(this)" class="btn-luxury w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 uppercase text-[10px] font-bold tracking-widest">
+                        <button onclick="scrollToBooking()" class="w-full sm:w-auto btn-luxury bg-eby-dark text-eby-surface px-10 py-5 uppercase text-[10px] font-bold tracking-widest rounded-2xl">
                             Reserve Appointment
                         </button>
                     </div>
@@ -201,6 +277,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="font-display text-3xl text-eby-dark mb-12 reveal active">Maintain The Perfection</h2>
             <div class="grid md:grid-cols-3 gap-6">
+                <!-- Upsell 1 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
                         <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
@@ -210,9 +287,10 @@
                     <p class="text-xs text-eby-brown-light mb-4">Relieves tension, hydrates follicles.</p>
                     <div class="flex justify-between items-center mt-auto">
                         <span class="text-xs font-bold text-eby-dark">£18.00</span>
-                        <button onclick="addItemToCart('Soothing Scalp Mist', 'Relieves tension, hydrates follicles', 18, 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                        <button onclick="toggleCart()" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4 hover:bg-eby-dark hover:border-eby-dark hover:text-white transition-colors">Add to Bag</button>
                     </div>
                 </div>
+                <!-- Upsell 2 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
                         <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
@@ -222,9 +300,10 @@
                     <p class="text-xs text-eby-brown-light mb-4">Lays flyaways, intense shine.</p>
                     <div class="flex justify-between items-center mt-auto">
                         <span class="text-xs font-bold text-eby-dark">£15.00</span>
-                        <button onclick="addItemToCart('Silky Styling Mousse', 'Lays flyaways, intense shine', 15, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                        <button onclick="toggleCart()" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4 hover:bg-eby-dark hover:border-eby-dark hover:text-white transition-colors">Add to Bag</button>
                     </div>
                 </div>
+                <!-- Upsell 3 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-dark flex items-center justify-center mb-6 overflow-hidden group">
                         <img src="https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
@@ -234,78 +313,94 @@
                     <p class="text-xs text-eby-brown-light mb-4">Frictionless overnight protection.</p>
                     <div class="flex justify-between items-center mt-auto">
                         <span class="text-xs font-bold text-eby-dark">£25.00</span>
-                        <button onclick="addItemToCart('Luxury Silk Bonnet', 'Frictionless overnight protection', 25, 'https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80')" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4">Add to Bag</button>
+                        <button onclick="toggleCart()" class="text-[9px] uppercase font-bold text-eby-gold-dark border border-eby-gold-dark/30 py-2 px-4 hover:bg-eby-dark hover:border-eby-dark hover:text-white transition-colors">Add to Bag</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="font-display font-bold text-[8vw] uppercase text-pattern mb-12">BEAUTY IN EVERY STRAND</h2>
-            <p class="text-[9px] uppercase tracking-widest text-eby-brown-light">© 2026 Eby’s Place. Somerset, UK.</p>
+    <!-- Stripe & Cal.com Booking Gate -->
+    <section id="booking" class="py-32 bg-eby-gold/30">
+        <div class="max-w-4xl mx-auto px-6">
+            <div id="booking-container" class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-3xl">
+                
+                <!-- Verification / Payment UI -->
+                <div id="booking-gate-ui" class="reveal active">
+                    <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Verification</span>
+                    <h2 id="booking-gate-title" class="font-display text-4xl mb-4 text-eby-dark">Initialize Your Reservation.</h2>
+                    <p id="booking-gate-desc" class="text-eby-brown-light text-sm mb-12 max-w-md mx-auto">Please confirm your £20.00 non-refundable deposit to unlock the luxury booking calendar.</p>
+                    
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-6 max-w-md mx-auto">
+                        <input type="email" id="dg-email" placeholder="Email Address" required class="luxury-input">
+                        <div id="gate-card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
+                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-left"></div>
+                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Slot (£20.00 Deposit)</button>
+                    </form>
+                </div>
+
+                <!-- Cal.com Portal UI (Hidden until paid) -->
+                <div id="booking-portal-ui" class="hidden w-full h-full flex-grow">
+                     <div id="cal-embed-wrapper" style="width:100%;height:600px;overflow:scroll"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 border-t border-eby-gold-dark/20 bg-eby-surface">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal active">
+                <div class="md:w-1/2 mb-8 md:mb-0"><h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3><p class="text-eby-brown-light text-sm">Early booking access and scalp care insights.</p></div>
+                <div class="md:w-1/2 w-full flex">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-2xl focus:outline-none"><button class="bg-eby-dark text-white px-8 rounded-r-2xl font-bold text-[9px] uppercase tracking-widest">Join</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal active">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="font-display font-semibold text-3xl uppercase text-eby-dark mb-6 block">Eby's Place</a>
+                    <p class="text-eby-brown-light text-sm max-w-sm">Premium African hair braiding services in Somerset, UK. Experience beauty engineered for scalp health.</p>
+                </div>
+                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Explore</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="services.html">Our Services</a></li><li><a href="shop.html">Shop</a></li><li><a href="booking.html">Booking</a></li></ul></div>
+                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Policies</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="booking.html">Booking Policy</a></li><li><a href="policies.html">Returns Policy</a></li></ul></div>
+            </div>
+            <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center">
+                <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none text-pattern mb-12 uppercase">BEAUTY IN EVERY STRAND</h2>
+                <p class="text-[9px] uppercase tracking-widest text-eby-brown-light">© 2026 Eby’s Place. Powered by 15D Group. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- Sidebar Cart -->
-    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50"></div>
+    <!-- Visual Only Cart Sidebar (Maintained for UI consistency) -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50 hidden"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
-        <div class="p-6 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
+        <div class="p-8 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
             <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
-            <button onclick="toggleCart()" class="text-eby-brown-light hover:text-eby-dark"><i class="ph ph-x text-2xl"></i></button>
+            <button onclick="toggleCart()"><i class="ph ph-x text-2xl hover:text-eby-gold-dark transition-colors"></i></button>
         </div>
-        
-        <div class="flex-grow overflow-y-auto">
-            <div id="cart-empty-state" class="p-12 flex flex-col items-center justify-center text-center">
-                <i class="ph ph-bag text-5xl text-eby-gold-dark/50 mb-4"></i>
-                <p class="text-eby-brown-light text-sm mb-6">Your bag is empty.</p>
-                <button onclick="toggleCart()" class="text-[10px] font-bold uppercase tracking-widest border-b border-eby-gold-dark pb-1">Continue Browsing</button>
-            </div>
-
-            <div id="cart-active-state" class="hidden flex-col">
-                <div id="cart-items-container" class="p-6 space-y-6"></div>
-                <div class="p-6 border-t border-eby-gold-dark/20 bg-eby-bg/30">
-                    <div class="flex justify-between items-center mb-6 font-display text-lg">
-                        <span class="text-eby-brown-light">Subtotal</span>
-                        <span class="text-eby-dark font-semibold" id="cart-subtotal">£0.00</span>
-                    </div>
-                    <button onclick="proceedToCheckout()" class="w-full bg-eby-dark text-eby-surface py-5 font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all shadow-xl">
-                        Secure Checkout →
-                    </button>
-                </div>
-            </div>
-
-            <div id="checkout-form-state" class="hidden flex-col p-6 space-y-8 bg-eby-bg/50">
-                <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-6">
-                    <div>
-                        <label class="text-[8px] uppercase tracking-widest font-bold text-eby-brown-light mb-2 block">Email Address</label>
-                        <input type="email" id="cust-email" required class="luxury-input" placeholder="jane@example.com">
-                    </div>
-                    <div>
-                        <label class="text-[8px] uppercase tracking-widest font-bold text-eby-brown-light mb-2 block">Appointment Date</label>
-                        <input type="date" id="cust-date" required class="luxury-input">
-                    </div>
-                    <div class="pt-6 border-t border-eby-gold-dark/20">
-                        <h3 class="font-display text-lg mb-4">Payment</h3>
-                        <div id="card-element" class="p-4 bg-white border border-eby-gold-dark/30 rounded-sm"></div>
-                        <div id="card-errors" class="text-red-500 text-xs mt-2"></div>
-                    </div>
-                    <button type="submit" id="submit-booking-btn" class="w-full bg-eby-gold-dark text-eby-surface py-5 uppercase text-[10px] font-bold tracking-widest shadow-lg">Confirm Booking</button>
-                    <button type="button" onclick="backToCart()" class="w-full text-center text-[9px] font-bold uppercase tracking-widest text-eby-brown-light mt-4">← Back to Bag</button>
-                </form>
-            </div>
-
-            <div id="checkout-success-state" class="hidden flex-col items-center justify-center p-12 text-center h-full">
-                <div class="w-20 h-20 rounded-full bg-eby-gold flex items-center justify-center mb-6"><i class="ph ph-check text-3xl text-eby-gold-dark"></i></div>
-                <h2 class="font-display text-2xl mb-4">Request Received</h2>
-                <p class="text-sm opacity-70 mb-8">Confirmed for <span id="success-email-display" class="font-bold">your email</span>.</p>
-                <button onclick="location.reload()" class="text-[10px] uppercase font-bold border-b border-eby-dark pb-1">Return to Site</button>
-            </div>
+        <div class="flex-grow p-12 flex flex-col items-center justify-center text-center">
+            <i class="ph ph-bag text-5xl text-eby-gold-dark/30 mb-4"></i>
+            <p class="text-eby-brown-light text-sm mb-6">Your bag is currently empty.</p>
+            <button onclick="toggleCart()" class="text-[10px] font-bold uppercase tracking-widest text-eby-dark border-b border-eby-dark pb-1 hover:text-eby-gold-dark hover:border-eby-gold-dark transition-colors">Continue Browsing</button>
         </div>
     </div>
 
+    <!-- Scripts for Logic & Interactivity -->
     <script>
+        // System variables
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const elements = stripe.elements();
+        const gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
+        
+        let currentBookingItem = "Signature Knotless Braids";
+        let currentPrice = 90;
+        let currentSize = 'medium';
+        let currentLength = 'Mid-Back';
+        let state = { color: '1B (Natural Black)' }; 
+        
+        // Knotless specific matrix structure
         const pricingMatrix = {
             'jumbo': { 'Waist': 80 },
             'large': { 'Bum Length': 100, 'Thigh Length': 120 },
@@ -314,24 +409,17 @@
             'xsmall': { 'Bob Length': 120, 'Mid-Back': 150, 'Waist Length': 200 }
         };
 
-        let currentSize = 'medium';
-        let currentLength = 'Mid-Back';
-        let cart = [];
-        let cartTotal = 0;
-
-        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
-        const elements = stripe.elements();
-        const cardElement = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12' } } });
-
         document.addEventListener('DOMContentLoaded', () => {
-            cardElement.mount('#card-element');
+            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             renderLengths();
         });
 
         function formatCurrency(amount) { return `£${amount.toFixed(2)}`; }
 
         function selectSize(size, btn) {
-            btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+            btn.parentNode.querySelectorAll('.variant-btn').forEach(b => {
+                b.classList.remove('selected', 'bg-eby-dark', 'text-white');
+            });
             btn.classList.add('selected');
             currentSize = size;
             document.getElementById('size-indicator').innerText = btn.innerText;
@@ -342,143 +430,157 @@
             const container = document.getElementById('length-options-container');
             container.innerHTML = '';
             const lengths = pricingMatrix[currentSize];
-            currentLength = Object.keys(lengths)[0];
+            
+            // Fallback if the previously selected length isn't available for the new size
+            if (!lengths[currentLength]) {
+                currentLength = Object.keys(lengths)[0];
+            }
+            
             document.getElementById('length-indicator').innerText = currentLength;
 
             for (const [name, price] of Object.entries(lengths)) {
                 const isSelected = name === currentLength;
                 const btn = document.createElement('button');
-                btn.className = `variant-btn py-5 px-6 flex justify-between uppercase ${isSelected ? 'selected' : 'bg-eby-surface'}`;
+                btn.className = `variant-btn py-5 px-6 flex justify-between uppercase text-[10px] tracking-widest rounded-lg ${isSelected ? 'selected' : 'bg-eby-surface'}`;
                 btn.innerHTML = `<span>${name}</span> <span>${formatCurrency(price)}</span>`;
                 btn.onclick = () => {
-                    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+                    container.querySelectorAll('.variant-btn').forEach(b => {
+                        b.classList.remove('selected', 'bg-eby-dark', 'text-white');
+                        b.classList.add('bg-eby-surface');
+                    });
                     btn.classList.add('selected');
+                    btn.classList.remove('bg-eby-surface');
                     currentLength = name;
+                    currentPrice = price;
                     document.getElementById('length-indicator').innerText = name;
                     document.getElementById('total-price').innerText = formatCurrency(price);
                 };
                 container.appendChild(btn);
             }
-            document.getElementById('total-price').innerText = formatCurrency(lengths[currentLength]);
+            currentPrice = lengths[currentLength];
+            document.getElementById('total-price').innerText = formatCurrency(currentPrice);
         }
 
         function updateColor(code, btn) {
             document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
             btn.classList.add('selected');
+            state.color = btn.title;
             document.getElementById('color-indicator').innerText = btn.title;
         }
 
-        function renderCart() {
-            const container = document.getElementById('cart-items-container');
-            const subtotalEl = document.getElementById('cart-subtotal');
-            const badge = document.getElementById('cart-badge');
-            container.innerHTML = '';
-            cartTotal = 0;
-
-            if (cart.length === 0) {
-                document.getElementById('cart-empty-state').classList.remove('hidden');
-                document.getElementById('cart-active-state').classList.add('hidden');
-                badge.innerText = '0';
-                return;
-            }
-
-            document.getElementById('cart-empty-state').classList.add('hidden');
-            document.getElementById('cart-active-state').classList.remove('hidden');
-
-            cart.forEach((item, index) => {
-                cartTotal += item.price;
-                const html = `
-                    <div class="flex gap-4 items-center border-b border-eby-gold-dark/10 pb-6 group">
-                        <div class="w-16 h-20 bg-eby-gold/10 overflow-hidden rounded-sm"><img src="${item.img}" class="w-full h-full object-cover"></div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between">
-                                <h4 class="text-sm font-bold text-eby-dark">${item.name}</h4>
-                                <button onclick="removeFromCart(${index})" class="text-red-800 opacity-40 hover:opacity-100 transition-opacity"><i class="ph ph-trash text-lg"></i></button>
-                            </div>
-                            <p class="text-[10px] opacity-60 text-eby-brown-light mb-2">${item.details}</p>
-                            <span class="text-xs font-bold text-eby-dark">${formatCurrency(item.price)}</span>
-                        </div>
-                    </div>`;
-                container.insertAdjacentHTML('beforeend', html);
+        function changeImage(src, btn) {
+            const mainImg = document.getElementById('main-gallery-img');
+            mainImg.style.opacity = 0;
+            setTimeout(() => {
+                mainImg.src = src;
+                mainImg.style.opacity = 1;
+            }, 200);
+            document.querySelectorAll('.thumbnail-btn').forEach(t => {
+                t.classList.remove('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
+                t.classList.add('border', 'border-eby-gold-dark/30');
+                t.querySelector('img').classList.replace('opacity-80', 'opacity-60');
             });
-
-            subtotalEl.innerText = formatCurrency(cartTotal);
-            badge.innerText = cart.length;
-        }
-
-        function addToBooking(btn) {
-            const sizeLabel = document.getElementById('size-indicator').innerText;
-            const price = pricingMatrix[currentSize][currentLength];
-            cart.push({
-                name: "Knotless Braids",
-                details: `${sizeLabel} | ${currentLength} | ${document.getElementById('color-indicator').innerText}`,
-                price: price,
-                img: document.getElementById('main-gallery-img').src
-            });
-            renderCart();
-            toggleCart();
-        }
-
-        function addItemToCart(name, details, price, img) {
-            cart.push({ name, details, price, img });
-            renderCart();
-            setTimeout(() => toggleCart(), 400);
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            renderCart();
+            btn.classList.remove('border', 'border-eby-gold-dark/30');
+            btn.classList.add('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
+            btn.querySelector('img').classList.replace('opacity-60', 'opacity-80');
         }
 
         function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            const overlay = document.getElementById('cart-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('hidden');
+            document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
         }
 
-        function proceedToCheckout() {
-            document.getElementById('cart-active-state').classList.add('hidden');
-            document.getElementById('checkout-form-state').classList.remove('hidden');
-            document.getElementById('cart-title').innerText = "Checkout";
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('-translate-y-full');
         }
 
-        function backToCart() {
-            document.getElementById('checkout-form-state').classList.add('hidden');
-            document.getElementById('cart-active-state').classList.remove('hidden');
-            document.getElementById('cart-title').innerText = "Your Bag";
+        // Scrolls to the Stripe/Cal.com Booking Gate
+        function scrollToBooking() {
+            const priceText = document.getElementById('total-price').innerText;
+            const sizeLabel = document.getElementById('size-indicator').innerText;
+            currentBookingItem = `Knotless Braids - ${sizeLabel}, ${currentLength}, ${state.color}`;
+
+            document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>Signature Knotless Braids</strong> (Estimated ${priceText}). Please confirm your £20.00 non-refundable booking deposit to unlock the calendar.`;
+            
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
         }
 
-        async function submitBooking(e) {
+        // Handles the Stripe Deposit and Reveals Cal.com
+        async function handleDepositGate(e) {
             e.preventDefault();
-            const btn = document.getElementById('submit-booking-btn');
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Processing...';
-            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
-            if (error) { document.getElementById('card-errors').textContent = error.message; btn.innerText = "Confirm Booking"; return; }
-            const payload = { email: document.getElementById('cust-email').value, date: document.getElementById('cust-date').value, items: cart, total: cartTotal, stripeId: paymentMethod.id };
-            await fetch('https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec', {
-                method: 'POST', mode: 'no-cors', body: JSON.stringify(payload)
+            const btn = document.getElementById('dg-btn');
+            const email = document.getElementById('dg-email').value;
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: gateCard });
+
+            if (error) {
+                document.getElementById('gate-errors').textContent = error.message;
+                btn.innerHTML = `Secure Slot (£20 Deposit)`;
+                btn.disabled = false;
+                return;
+            }
+
+            // SUCCESS FLOW
+            btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
+            
+            // Background Webhook to Google Apps Script
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: 20, stripeId: paymentMethod.id })
             });
-            document.getElementById('checkout-form-state').classList.add('hidden');
-            document.getElementById('checkout-success-state').classList.remove('hidden');
-            document.getElementById('success-email-display').innerText = payload.email;
+
+            // Transition UI to Cal.com Embed
+            setTimeout(() => {
+                document.getElementById('booking-gate-ui').classList.add('hidden');
+                document.getElementById('booking-portal-ui').classList.remove('hidden');
+                
+                Cal.ns["30min"]("inline", {
+                    elementOrSelector: "#cal-embed-wrapper",
+                    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+                    calLink: "ebys-place-o8qhbh/30min",
+                });
+                Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#2A1A12"}},"hideEventTypeDetails":false,"layout":"month_view"});
+            }, 800);
         }
 
-        function changeImage(src, btn) {
-            document.getElementById('main-gallery-img').src = src;
-            document.querySelectorAll('.thumbnail-btn').forEach(t => t.classList.remove('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2'));
-            btn.classList.add('outline', 'outline-2', 'outline-eby-dark', 'outline-offset-2');
-        }
-
+        // Tech-Spirit Background Glow
         document.addEventListener('mousemove', (e) => {
             const glow = document.querySelector('.cursor-glow');
-            if(glow) { glow.style.setProperty('--x', e.clientX + 'px'); glow.style.setProperty('--y', e.clientY + 'px'); }
+            if(glow) {
+                glow.style.setProperty('--x', e.clientX + 'px');
+                glow.style.setProperty('--y', e.clientY + 'px');
+            }
         });
 
+        // Scroll Animations
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
         }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach((e) => observer.observe(e));
+
+        document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
     </script>
 </body>
 </html>
