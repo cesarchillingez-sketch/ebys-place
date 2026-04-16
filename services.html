@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services & Pricing | Eby's Place</title>
     
-    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <!-- Open Graph / Web Preview Meta Tags -->
+    <meta name="description" content="From classic box braids to trending styles, we offer a wide range of professional, pain-free braiding services at Eby's Place.">
+    <meta property="og:title" content="Services & Pricing | Eby's Place">
+    <meta property="og:description" content="From classic box braids to trending styles, we offer a wide range of professional, pain-free braiding services at Eby's Place.">
+    <meta property="og:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png">
+    <meta property="og:url" content="https://ebysplace.com/services">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Services & Pricing | Eby's Place">
+    <meta name="twitter:description" content="From classic box braids to trending styles, we offer a wide range of professional, pain-free braiding services at Eby's Place.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -13,8 +27,13 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Phosphor Icons -->
+    <!-- Phosphor Icons & Stripe/Cal.com APIs -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", "30min", {origin:"https://app.cal.com"});
+    </script>
 
     <script>
         tailwind.config = {
@@ -43,52 +62,19 @@
     </script>
 
     <style>
-        body {
-            background-color: #FCFBF8;
-            color: #2A1A12;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Dynamic Shifting Background */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .bg-shifting {
-            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-
-        /* Cursor Glow Tracking */
-        .cursor-glow {
-            pointer-events: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
-            z-index: 1;
-            mix-blend-mode: multiply;
-            transition: background 0.1s ease;
-        }
-
+        body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
+        
+        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
+        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FCFBF8; }
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
 
-        /* Tech-Luxury Geometric Pattern */
-        .swirl-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            opacity: 0.6;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
+        .swirl-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.6; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
 
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -96,72 +82,14 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
 
-        /* Glassmorphism */
-        .glass-nav {
-            background: rgba(252, 251, 248, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
-            color: #2A1A12;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-        }
+        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); color: #2A1A12; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(194, 163, 120, 0.2);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
 
-        /* Animated SVG Text Pattern (Footer) */
-        .text-pattern {
-            background-color: #2A1A12;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 100px;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: patternShift 20s linear infinite;
-        }
+        .text-pattern { background-color: #2A1A12; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite; }
         @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
 
-        /* Service Slider Portal Styles */
-        #service-slider {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 98vh;
-            background: #FCFBF8;
-            z-index: 100;
-            transform: translateY(100%);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            border-radius: 30px 30px 0 0;
-            box-shadow: 0 -20px 50px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        #service-slider.active {
-            transform: translateY(0);
-        }
-        #service-slider-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(42, 26, 18, 0.4);
-            backdrop-filter: blur(8px);
-            z-index: 90;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        #service-slider-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Mobile Menu Animations */
         .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
         .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
@@ -174,38 +102,20 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .cat-link.active {
-            background-color: #2A1A12;
-            color: #FFFFFF;
-            border-color: #2A1A12;
-        }
+        .cat-link.active { background-color: #2A1A12; color: #FFFFFF; border-color: #2A1A12; }
+
+        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+        .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
+        .btn-luxury:hover::after { left: 100%; }
+
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; transition: all 0.3s ease; color: #2A1A12; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: #FFFFFF; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
 
     <div class="cursor-glow"></div>
     <div class="swirl-bg"></div>
-
-    <!-- Service Slider Portal -->
-    <div id="service-slider-overlay" onclick="closeServiceSlider()"></div>
-    <div id="service-slider">
-        <div class="p-4 border-b border-eby-gold-dark/10 flex justify-between items-center bg-white sticky top-0 z-10">
-            <div class="flex items-center gap-3">
-                <span class="w-2 h-2 rounded-full bg-eby-gold-dark animate-pulse"></span>
-                <h3 id="slider-header-title" class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark">Luxury Portal</h3>
-            </div>
-            <button onclick="closeServiceSlider()" class="w-10 h-10 flex items-center justify-center rounded-full bg-eby-bg hover:bg-eby-gold-dark hover:text-white transition-all">
-                <i class="ph ph-x text-xl"></i>
-            </button>
-        </div>
-        <div class="w-full h-full relative pb-20">
-            <div id="slider-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-eby-bg z-0">
-                <i class="ph ph-circle-notch animate-spin text-3xl text-eby-gold-dark mb-4"></i>
-                <span class="font-display italic text-eby-brown-light">Loading experience...</span>
-            </div>
-            <iframe id="service-iframe" src="" class="w-full h-full border-none relative z-10" loading="lazy"></iframe>
-        </div>
-    </div>
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 glass-nav py-2 transition-all">
@@ -243,7 +153,7 @@
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-gold-dark italic block">Services.</a>
             <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Booking.</a>
-            <a href="about us.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
         <div class="px-10 pb-12">
             <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
@@ -268,7 +178,7 @@
             </div>
             <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Our Services & Pricing</h2>
             <p class="text-eby-brown-light max-w-2xl mx-auto reveal reveal-delay-2 font-light text-sm md:text-base leading-relaxed">
-                From classic box braids to trending styles, we offer a wide range of professional braiding services. All prices are starting prices and may vary based on length, thickness, and style complexity.
+                From classic box braids to trending styles, we offer a wide range of professional braiding services. Select your preferred style below to initiate the booking sequence.
             </p>
         </div>
     </header>
@@ -298,7 +208,7 @@
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Knotless Braids -->
-                <div onclick="openServiceSlider('knotless.html', 'Knotless Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                <div onclick="startProductBooking('Knotless Braids', 120)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -313,7 +223,7 @@
                 </div>
 
                 <!-- Box Braids -->
-                <div onclick="openServiceSlider('boxbraids.html', 'Box Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                <div onclick="startProductBooking('Box Braids', 100)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -328,7 +238,7 @@
                 </div>
 
                 <!-- Goddess Braids -->
-                <div onclick="openServiceSlider('goddess.html', 'Goddess Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                <div onclick="startProductBooking('Goddess Braids', 140)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776159339/Gemini_Generated_Image_3l0eht3l0eht3l0e_1_v7bwrj.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -342,7 +252,7 @@
                 </div>
 
                 <!-- Fulani Braids -->
-                <div onclick="openServiceSlider('fulani.html', 'Fulani Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                <div onclick="startProductBooking('Fulani Braids', 110)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776158395/Gemini_Generated_Image_18i90718i90718i9_quwaol.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -356,7 +266,7 @@
                 </div>
 
                 <!-- Cornrows -->
-                <div onclick="openServiceSlider('cornrows.html', 'Cornrows')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                <div onclick="startProductBooking('Cornrows', 60)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -370,7 +280,7 @@
                 </div>
 
                 <!-- Stitch Braids -->
-                <div onclick="openServiceSlider('stitch.html', 'Stitch Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                <div onclick="startProductBooking('Stitch Braids', 80)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615510306_suukb7.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -384,7 +294,7 @@
                 </div>
                 
                 <!-- Lemonade Braids -->
-                <div onclick="openServiceSlider('lemon.html', 'Lemon Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                <div onclick="startProductBooking('Lemonade Braids', 90)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -399,7 +309,7 @@
                 </div>
                 
                 <!-- Boho Braids -->
-                <div onclick="openServiceSlider('boho.html', 'Boho Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                <div onclick="startProductBooking('Boho Braids', 150)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -414,7 +324,7 @@
                 </div>
                 
                 <!-- Tribal Braids -->
-                 <div onclick="openServiceSlider('tribal.html', 'Tribal Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                 <div onclick="startProductBooking('Tribal Braids', 100)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -437,7 +347,7 @@
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Senegalese -->
-                <div onclick="openServiceSlider('senegalese.html', 'Senegalese Twists')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                <div onclick="startProductBooking('Senegalese Twists', 110)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -450,7 +360,7 @@
                     </div>
                 </div>
                 <!-- Passion -->
-                <div onclick="openServiceSlider('passion.html', 'Passion Twists')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                <div onclick="startProductBooking('Passion Twists', 130)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -474,7 +384,7 @@
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Faux Locs -->
-                <div onclick="openServiceSlider('fauxlocs.html', 'Faux Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
+                <div onclick="startProductBooking('Faux Locs', 150)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776158395/Gemini_Generated_Image_18i90718i90718i9_quwaol.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -487,7 +397,7 @@
                     </div>
                 </div>
                 <!-- Butterfly Locs -->
-                <div onclick="openServiceSlider('butterfly.html', 'Butterfly Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
+                <div onclick="startProductBooking('Butterfly Locs', 140)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -501,7 +411,7 @@
                     </div>
                 </div>
                 <!-- Starter Locs -->
-                <div onclick="openServiceSlider('starterlocs.html', 'Starter Locs')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
+                <div onclick="startProductBooking('Starter Locs', 80)" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
                     <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
                     <div class="relative z-10">
@@ -526,7 +436,7 @@
                 </div>
                 <div class="space-y-4">
                     <!-- Kids Braids -->
-                    <div onclick="openServiceSlider('kids-braids.html', 'Kids Braids')" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
+                    <div onclick="startProductBooking('Kids Braids', 40)" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
                         <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm bg-eby-gold/20">
                             <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
                         </div>
@@ -536,12 +446,12 @@
                             <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark"></i> 1-3 hrs</span>
                         </div>
                         <div class="text-right pr-2">
-                            <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">£40</span>
+                            <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">from £40</span>
                             <span class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 group-hover:text-eby-dark">Book</span>
                         </div>
                     </div>
                     <!-- Kids Cornrows -->
-                    <div onclick="openServiceSlider('kids-cornrows.html', 'Kids Cornrows')" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
+                    <div onclick="startProductBooking('Kids Cornrows', 35)" class="group cursor-pointer glass-card p-4 reveal flex gap-4 items-center hover:bg-eby-surface/90 transition-colors">
                         <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm bg-eby-gold/20">
                             <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
                         </div>
@@ -551,7 +461,7 @@
                             <span class="text-eby-brown-light text-[9px] font-sans uppercase tracking-widest font-semibold flex items-center gap-1"><i class="ph ph-clock text-eby-gold-dark"></i> 1-2 hrs</span>
                         </div>
                         <div class="text-right pr-2">
-                            <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">£35</span>
+                            <span class="block text-eby-dark font-sans font-bold text-xs tracking-widest mb-2">from £35</span>
                             <span class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-gold-dark border-b border-eby-gold-dark pb-0.5 group-hover:text-eby-dark">Book</span>
                         </div>
                     </div>
@@ -565,7 +475,7 @@
                     <p class="text-eby-brown-light text-sm">Enhance your appointment experience.</p>
                 </div>
                 <div class="space-y-4">
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('wash-prep.html', 'Hair Wash & Prep')">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="startProductBooking('Hair Wash & Prep', 20)">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Hair Wash & Prep</h4>
                             <p class="text-eby-brown-light text-[10px]">Professional wash, condition, & blow-dry.</p>
@@ -575,7 +485,7 @@
                             <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
                         </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('beads.html', 'Beads & Accessories')">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="startProductBooking('Beads & Accessories', 10)">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Beads & Accessories</h4>
                             <p class="text-eby-brown-light text-[10px]">Premium rings, cuffs, and beads.</p>
@@ -585,7 +495,7 @@
                             <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
                         </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('edge-control.html', 'Edge Control & Styling')">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="startProductBooking('Edge Control & Styling', 8)">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Edge Control & Styling</h4>
                             <p class="text-eby-brown-light text-[10px]">Baby hair styling for a polished finish.</p>
@@ -595,7 +505,7 @@
                             <i class="ph ph-plus-circle text-eby-gold-dark text-xl group-hover:text-eby-dark transition-colors"></i>
                         </div>
                     </div>
-                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="openServiceSlider('takedown.html', 'Braid Takedown')">
+                    <div class="glass-card p-4 px-6 reveal flex justify-between items-center hover:bg-eby-surface/90 transition-colors cursor-pointer group" onclick="startProductBooking('Braid Takedown', 30)">
                         <div>
                             <h4 class="font-display text-base text-eby-dark">Braid Takedown</h4>
                             <p class="text-eby-brown-light text-[10px]">Gentle removal of existing styles.</p>
@@ -610,61 +520,30 @@
         </div>
     </main>
 
-    <!-- Important Booking Information (Policy Card) -->
-    <section class="py-20 max-w-5xl mx-auto px-6 relative z-10">
-        <div class="bg-eby-dark p-10 md:p-16 rounded-sm shadow-2xl relative overflow-hidden reveal border-l-4 border-l-eby-gold-dark">
-            <div class="absolute inset-0 bg-eby-surface/5 mix-blend-overlay"></div>
-            <div class="relative z-10 flex flex-col md:flex-row gap-10 items-center md:items-start">
-                <div class="md:w-1/3">
-                    <i class="ph ph-info text-5xl text-eby-gold-dark mb-4"></i>
-                    <h3 class="font-display text-3xl text-eby-surface mb-2">Booking Protocol</h3>
-                    <p class="text-eby-gold/60 text-sm font-light">Please review before securing your appointment.</p>
+    <!-- Stripe & Cal.com Booking Gate -->
+    <section id="booking-section" class="py-32 bg-eby-gold/30">
+        <div class="max-w-4xl mx-auto px-6">
+            <div id="booking-container" class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-3xl">
+                
+                <!-- Verification / Payment UI -->
+                <div id="booking-gate-ui" class="reveal active">
+                    <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Verification</span>
+                    <h2 id="booking-gate-title" class="font-display text-4xl mb-4 text-eby-dark">Initialize Your Reservation.</h2>
+                    <p id="booking-gate-desc" class="text-eby-brown-light text-sm mb-12 max-w-md mx-auto">Please confirm your £20.00 non-refundable deposit to unlock the luxury booking calendar.</p>
+                    
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-6 max-w-md mx-auto">
+                        <input type="email" id="dg-email" placeholder="Email Address" required class="luxury-input">
+                        <div id="gate-card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
+                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-left"></div>
+                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Slot (£20.00 Deposit)</button>
+                    </form>
                 </div>
-                <div class="md:w-2/3">
-                    <ul class="space-y-4 text-eby-surface/90 text-sm font-light">
-                        <li class="flex items-start gap-3"><i class="ph ph-check-circle text-eby-gold-dark mt-0.5"></i> A non-refundable deposit of £15 is required to secure your appointment slot.</li>
-                        <li class="flex items-start gap-3"><i class="ph ph-check-circle text-eby-gold-dark mt-0.5"></i> Prices shown are starting points and may vary slightly based on final hair length and complexity.</li>
-                        <li class="flex items-start gap-3"><i class="ph ph-check-circle text-eby-gold-dark mt-0.5"></i> Please arrive with clean, fully detangled hair (unless utilizing our Wash & Prep add-on).</li>
-                        <li class="flex items-start gap-3"><i class="ph ph-check-circle text-eby-gold-dark mt-0.5"></i> Bring visual references or photos if you have a highly specific style in mind.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Location / Map Section (London Eye) -->
-    <section class="py-24 bg-eby-bg relative z-10 border-t border-eby-gold-dark/10">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col lg:flex-row gap-12 items-center glass-card p-6 md:p-10">
-                <!-- Text Details -->
-                <div class="lg:w-1/3 reveal">
-                    <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-4">Visit The Studio</h2>
-                    <p class="text-eby-brown-light text-sm mb-10 leading-relaxed font-body font-light lowercase">
-                        experience our luxury, pain-free braiding in a serene, controlled environment designed entirely for your comfort.
-                    </p>
-                    <div class="space-y-8">
-                        <div>
-                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Somerset, UK.</h4>
-                            <p class="text-eby-dark text-sm leading-relaxed font-body font-light lowercase">london eye area, london, uk<br><span class="text-eby-brown-light text-xs">(full exclusive address provided upon booking)</span></p>
-                        </div>
-                        <div>
-                            <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-3">Operating Hours</h4>
-                            <p class="text-eby-dark text-sm leading-relaxed font-body font-light lowercase">mon - sat: 09:00 - 19:00<br>sunday: by appointment only</p>
-                        </div>
-                    </div>
+                <!-- Cal.com Portal UI (Hidden until paid) -->
+                <div id="booking-portal-ui" class="hidden w-full h-full flex-grow">
+                     <div id="cal-embed-wrapper" style="width:100%;height:600px;overflow:scroll"></div>
                 </div>
-                <!-- Map iframe with Luxury Grayscale Filter -->
-                <div class="lg:w-2/3 w-full h-[450px] rounded-sm overflow-hidden reveal reveal-delay-1 border border-eby-gold-dark/30 bg-eby-gold/20">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.288961634382!2d-0.12209488422954133!3d51.5031897184853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon%20Eye!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0; filter: grayscale(100%) contrast(1.1) opacity(0.9);" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
+
             </div>
         </div>
     </section>
@@ -688,21 +567,21 @@
                 <div>
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
                     <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Our Services</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Book Now</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shop</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">About Us</a></li>
+                        <li><a href="services.html" class="hover:text-eby-dark transition-colors">Our Services</a></li>
+                        <li><a href="booking.html" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="shop.html" class="hover:text-eby-dark transition-colors">Shop</a></li>
+                        <li><a href="services.html" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="about us.html" class="hover:text-eby-dark transition-colors">About Us</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
                     <ul class="space-y-4 text-sm text-eby-brown-light font-medium font-body font-light">
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                        <li><a href="contact.html" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="policies.html#booking" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="policies.html#cancellations" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="policies.html#hygiene" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="policies.html#shipping" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
                     </ul>
                 </div>
             </div>
@@ -722,13 +601,70 @@
         </div>
     </footer>
 
-    <!-- Back to Top Floating Button -->
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-dark text-eby-surface rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-gold-dark transition-colors group">
-        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
-    </button>
-
     <!-- Scripts for Logic & Interactivity -->
     <script>
+        // Setup variables & Stripe
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const elements = stripe.elements();
+        const gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
+        
+        let currentBookingItem = "Standard Appointment";
+        const currentBookingTotal = 20;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+        });
+
+        // 1. Unified Booking Gate Control
+        function startProductBooking(name, price) {
+            currentBookingItem = name;
+            
+            document.getElementById('booking-gate-title').innerText = "Secure Your Appointment.";
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing a slot for <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please confirm your £20.00 non-refundable booking deposit to unlock the calendar.`;
+            document.getElementById('dg-btn').innerText = `Secure Slot (£20.00 Deposit)`;
+            
+            document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 2. Stripe -> Cal.com Flow
+        async function handleDepositGate(e) {
+            e.preventDefault();
+            const btn = document.getElementById('dg-btn');
+            const email = document.getElementById('dg-email').value;
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: gateCard });
+
+            if (error) {
+                document.getElementById('gate-errors').textContent = error.message;
+                btn.innerHTML = `Secure Slot (£20.00 Deposit)`;
+                btn.disabled = false;
+                return;
+            }
+
+            btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
+            
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: currentBookingTotal, stripeId: paymentMethod.id })
+            });
+
+            setTimeout(() => {
+                document.getElementById('booking-gate-ui').classList.add('hidden');
+                document.getElementById('booking-portal-ui').classList.remove('hidden');
+                
+                Cal.ns["30min"]("inline", {
+                    elementOrSelector: "#cal-embed-wrapper",
+                    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+                    calLink: "ebys-place-o8qhbh/30min",
+                });
+                Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#2A1A12"}},"hideEventTypeDetails":false,"layout":"month_view"});
+            }, 800);
+        }
+
         // Mobile Menu Dropdown Logic
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
@@ -741,62 +677,6 @@
                 menu.classList.add('-translate-y-full');
                 document.body.style.overflow = '';
             }
-        }
-
-        // Active State logic for Category Filter Navigation
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.cat-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollY >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active', 'bg-eby-dark', 'text-eby-surface', 'border-eby-dark');
-                link.classList.add('text-eby-brown-light', 'border-eby-gold-dark/30');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active', 'bg-eby-dark', 'text-eby-surface', 'border-eby-dark');
-                    link.classList.remove('text-eby-brown-light', 'border-eby-gold-dark/30');
-                }
-            });
-        });
-
-        // Service Slider Controller
-        function openServiceSlider(url, serviceName) {
-            const slider = document.getElementById('service-slider');
-            const overlay = document.getElementById('service-slider-overlay');
-            const iframe = document.getElementById('service-iframe');
-            const header = document.getElementById('slider-header-title');
-            const loader = document.getElementById('slider-loader');
-
-            header.innerText = `Luxury Portal: ${serviceName}`;
-            loader.style.display = 'flex';
-            iframe.src = url;
-            
-            slider.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            iframe.onload = () => {
-                loader.style.display = 'none';
-            };
-        }
-
-        function closeServiceSlider() {
-            const slider = document.getElementById('service-slider');
-            const overlay = document.getElementById('service-slider-overlay');
-            const iframe = document.getElementById('service-iframe');
-
-            slider.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-            
-            setTimeout(() => { iframe.src = ''; }, 600);
         }
 
         // Tech-Spirit Background Glow
@@ -819,6 +699,18 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
     </script>
 </body>
 </html>
