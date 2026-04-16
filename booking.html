@@ -5,16 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment | Eby's Place</title>
     
-    <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
+    <!-- Open Graph / Web Preview Meta Tags -->
+    <meta name="description" content="Secure your appointment at Eby's Place. Experience the art of beautiful, pain-free braiding in Somerset, UK.">
+    <meta property="og:title" content="Book Appointment | Eby's Place">
+    <meta property="og:description" content="Secure your appointment at Eby's Place. Experience the art of beautiful, pain-free braiding in Somerset, UK.">
+    <meta property="og:url" content="https://ebysplace.com/booking">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
+    <!-- Frameworks & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Stripe & Cal.com APIs -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", "30min", {origin:"https://app.cal.com"});
+    </script>
 
     <script>
         tailwind.config = {
@@ -80,20 +92,36 @@
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
 
-        /* Tech-Luxury Geometric Pattern */
-        .swirl-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            opacity: 0.6;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .reveal-delay-1 { transition-delay: 0.1s; }
         .reveal-delay-2 { transition-delay: 0.2s; }
+
+        /* Luxury Button Hover Effects */
+        .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
+        .btn-luxury::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.7s ease;
+        }
+        .btn-luxury:hover::after { left: 100%; }
+
+        /* Custom Inputs */
+        .luxury-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(194, 163, 120, 0.3);
+            padding: 1.2rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #2A1A12;
+            transition: all 0.3s ease;
+        }
+        .luxury-input:focus {
+            outline: none;
+            border-color: #2A1A12;
+            background: #FFFFFF;
+        }
 
         /* Glassmorphism */
         .glass-nav {
@@ -138,15 +166,20 @@
         .category-row:hover .cat-arrow { transform: translateX(5px); opacity: 1; }
         .cat-title { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .cat-arrow { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
+
+        /* Cart Sidebar Styles */
+        #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        #cart-sidebar.open { transform: translateX(0); }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #cart-overlay.open { opacity: 1; pointer-events: auto; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
 
     <div class="cursor-glow"></div>
-    <div class="swirl-bg"></div>
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-50 glass-nav py-2 transition-all">
+    <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
             <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
                 <i class="ph ph-list text-3xl text-eby-dark"></i>
@@ -159,14 +192,15 @@
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
                 <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
-                <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+                <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
             <div class="flex items-center space-x-6 text-eby-dark">
                 <a href="#" class="hidden sm:block text-[10px] font-sans uppercase tracking-widest font-medium hover:text-eby-gold-dark transition-colors">My Account</a>
-                <!-- Cart icon linked out (No bug/slideout panel here) -->
-                <a href="#" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
+                <!-- Cart Icon -->
+                <button onclick="toggleCart()" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
                     <i class="ph ph-shopping-bag text-2xl"></i>
-                </a>
+                    <span id="cart-badge" class="absolute top-1 right-0 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -185,7 +219,7 @@
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
             <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
-            <a href="about us.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
         <div class="px-10 pb-12">
             <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
@@ -210,7 +244,7 @@
             </div>
             <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Book Your Pain-Free Appointment</h2>
             <p class="text-eby-brown-light max-w-xl mx-auto reveal reveal-delay-2 font-light text-sm md:text-base leading-relaxed">
-                Secure your slot with a £15 non-refundable deposit. We can’t wait to style you!
+                Secure your slot with a £20 non-refundable deposit. We can’t wait to style you!
             </p>
         </div>
     </header>
@@ -229,7 +263,7 @@
             <div class="flex flex-col border-t border-eby-gold-dark/20">
                 
                 <!-- Braids -->
-                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Braids')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Braids</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">10 Services</span>
@@ -238,7 +272,7 @@
                 </button>
 
                 <!-- Twists -->
-                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Twists')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Twists</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -247,7 +281,7 @@
                 </button>
 
                 <!-- Locs -->
-                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Locs')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Locs</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">3 Services</span>
@@ -256,7 +290,7 @@
                 </button>
 
                 <!-- Kids Styles -->
-                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Kids Styles')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Kids Styles</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -265,7 +299,7 @@
                 </button>
 
                 <!-- Add-Ons -->
-                <button class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Add-Ons')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Add-Ons</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">4 Services</span>
@@ -291,7 +325,7 @@
             <!-- London Eye Map with Grayscale Filter -->
             <div class="w-full h-[500px] lg:h-[650px] rounded-sm overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.288961634382!2d-0.12209488422954133!3d51.5031897184853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon%20Eye!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d160490.5735623048!2d-3.2384795293235305!3d51.09675270912165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486df5b9e078f8eb%3A0xc3df3c9cbfbb7b!2sSomerset%2C%20UK!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
                     width="100%" 
                     height="100%" 
                     style="border:0; filter: grayscale(100%) contrast(1.1) opacity(0.9);" 
@@ -299,13 +333,39 @@
                     loading="lazy" 
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
-                <!-- Protective overlay to make the map feel embedded rather than pasted -->
                 <div class="absolute inset-0 border border-black/5 pointer-events-none"></div>
             </div>
             
         </section>
-
     </main>
+
+    <!-- Stripe & Cal.com Booking Gate -->
+    <section id="booking-section" class="py-32 bg-eby-gold/30">
+        <div class="max-w-4xl mx-auto px-6">
+            <div id="booking-container" class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-3xl">
+                
+                <!-- Verification / Payment UI -->
+                <div id="booking-gate-ui" class="reveal active">
+                    <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Verification</span>
+                    <h2 id="booking-gate-title" class="font-display text-4xl mb-4 text-eby-dark">Initialize Your Reservation.</h2>
+                    <p id="booking-gate-desc" class="text-eby-brown-light text-sm mb-12 max-w-md mx-auto">Please confirm your £20.00 non-refundable deposit to unlock the luxury booking calendar.</p>
+                    
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-6 max-w-md mx-auto">
+                        <input type="email" id="dg-email" placeholder="Email Address" required class="luxury-input">
+                        <div id="gate-card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
+                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-left"></div>
+                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Slot (£20.00 Deposit)</button>
+                    </form>
+                </div>
+
+                <!-- Cal.com Portal UI (Hidden until paid) -->
+                <div id="booking-portal-ui" class="hidden w-full h-full flex-grow">
+                     <div id="cal-embed-wrapper" style="width:100%;height:600px;overflow:scroll"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
@@ -327,20 +387,20 @@
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Explore</h4>
                     <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
                         <li><a href="services.html" class="hover:text-eby-dark transition-colors">Our Services</a></li>
-                        <li><a href="booking.html" class="hover:text-eby-dark transition-colors">Book Now</a></li>
+                        <li><a href="#" class="text-eby-dark transition-colors">Book Now</a></li>
                         <li><a href="shop.html" class="hover:text-eby-dark transition-colors">Shop</a></li>
-                        <li><a href="#" class="hover:text-eby-dark transition-colors">Gallery</a></li>
-                        <li><a href="about us.html" class="hover:text-eby-dark transition-colors">About Us</a></li>
+                        <li><a href="gallery.html" class="hover:text-eby-dark transition-colors">Gallery</a></li>
+                        <li><a href="about.html" class="hover:text-eby-dark transition-colors">About Us</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-sans font-bold uppercase tracking-widest text-[9px] text-eby-gold-dark mb-6">Policies</h4>
                     <ul class="space-y-4 text-sm text-eby-brown-light font-medium">
-                        <li><a href="contact us.html" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
-                        <li><a href="policies.html" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
-                        <li><a href="policies.html" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
-                        <li><a href="policies.html" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
-                        <li><a href="policies.html" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
+                        <li><a href="contact.html" class="hover:text-eby-dark transition-colors">Contact Us</a></li>
+                        <li><a href="policies.html#booking" class="hover:text-eby-dark transition-colors">Booking Policy</a></li>
+                        <li><a href="policies.html#cancellations" class="hover:text-eby-dark transition-colors">Cancellation Policy</a></li>
+                        <li><a href="policies.html#hygiene" class="hover:text-eby-dark transition-colors">Hygiene Policy</a></li>
+                        <li><a href="policies.html#shipping" class="hover:text-eby-dark transition-colors">Shipping & Returns</a></li>
                     </ul>
                 </div>
             </div>
@@ -349,7 +409,7 @@
             <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center justify-center">
                 <h2 class="font-display font-bold text-[8vw] leading-[1.1] select-none whitespace-nowrap mb-12 text-center overflow-hidden w-full uppercase tracking-tight text-pattern">BEAUTY IN EVERY STRAND</h2>
                 <div class="w-full flex flex-col md:flex-row justify-between items-center font-sans font-medium text-[9px] text-eby-brown-light uppercase tracking-widest gap-6">
-                    <p>© 2026 Eby’s Place. Powered by 15D Group. All Rights Reserved.</p>
+                    <p>© 2026 Eby’s Place. All Rights Reserved.</p>
                     <div class="flex space-x-6 text-eby-dark">
                         <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-facebook-logo text-lg"></i> Facebook</a>
                         <a href="#" class="hover:text-eby-gold-dark transition-colors flex items-center gap-1"><i class="ph ph-instagram-logo text-lg"></i> Instagram</a>
@@ -365,8 +425,87 @@
         <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
     </button>
 
+    <!-- Visual Only Cart Sidebar (Maintained for UI consistency) -->
+    <div id="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
+        <div class="p-8 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
+            <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
+            <button onclick="toggleCart()"><i class="ph ph-x text-2xl"></i></button>
+        </div>
+        <div class="flex-grow p-12 flex flex-col items-center justify-center text-center">
+            <i class="ph ph-bag text-5xl text-eby-gold-dark/30 mb-4"></i>
+            <p class="text-eby-brown-light text-sm mb-6">Your bag is currently empty.</p>
+            <button onclick="toggleCart()" class="text-[10px] font-bold uppercase tracking-widest text-eby-dark border-b border-eby-dark pb-1 hover:text-eby-gold-dark hover:border-eby-gold-dark transition-colors">Continue Browsing</button>
+        </div>
+    </div>
+
     <!-- Scripts for Logic & Interactivity -->
     <script>
+        // Setup variables & Stripe
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const elements = stripe.elements();
+        const gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
+        
+        let currentBookingItem = "Standard Appointment";
+        const currentBookingTotal = 20;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+        });
+
+        // Initiates General Category Booking
+        function startGeneralBooking(categoryName) {
+            currentBookingItem = `${categoryName} Appointment`;
+            
+            document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
+            document.getElementById('booking-gate-desc').innerHTML = `You are requesting a <strong>${categoryName}</strong> appointment. Please confirm your £20.00 non-refundable booking deposit to unlock the calendar.`;
+            document.getElementById('dg-btn').innerText = `Secure Slot (£20.00 Deposit)`;
+            
+            document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Handles the Stripe Deposit and Reveals Cal.com
+        async function handleDepositGate(e) {
+            e.preventDefault();
+            const btn = document.getElementById('dg-btn');
+            const email = document.getElementById('dg-email').value;
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: gateCard });
+
+            if (error) {
+                document.getElementById('gate-errors').textContent = error.message;
+                btn.innerHTML = `Secure Slot (£20.00 Deposit)`;
+                btn.disabled = false;
+                return;
+            }
+
+            // SUCCESS FLOW
+            btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
+            
+            // Background Webhook to Google Apps Script
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: currentBookingTotal, stripeId: paymentMethod.id })
+            });
+
+            // Transition UI to Cal.com Embed
+            setTimeout(() => {
+                document.getElementById('booking-gate-ui').classList.add('hidden');
+                document.getElementById('booking-portal-ui').classList.remove('hidden');
+                
+                Cal.ns["30min"]("inline", {
+                    elementOrSelector: "#cal-embed-wrapper",
+                    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+                    calLink: "ebys-place-o8qhbh/30min",
+                });
+                Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#2A1A12"}},"hideEventTypeDetails":false,"layout":"month_view"});
+            }, 800);
+        }
+
         // Mobile Menu Dropdown Logic
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
@@ -379,6 +518,12 @@
                 menu.classList.add('-translate-y-full');
                 document.body.style.overflow = '';
             }
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
         }
 
         // Tech-Spirit Background Glow
