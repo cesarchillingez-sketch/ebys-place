@@ -5,12 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eby's Place | Luxury Pain-Free Braiding</title>
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Eby's Place offers luxury, pain-free hair braiding in Somerset, UK. Knotless braids, box braids, locs & more — engineered for scalp health and zero tension.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ebysplace.com/">
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Eby's Place | Luxury Pain-Free Braiding" />
-    <meta property="og:description" content="Zero pain. Zero trauma. Just perfection. Experience luxury braiding engineered for scalp health." />
+    <meta property="og:description" content="Zero pain. Zero trauma. Just perfection. Experience luxury braiding engineered for scalp health in Somerset, UK." />
     <meta property="og:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" />
-    <meta property="og:url" content="https://ebysplace.com" />
+    <meta property="og:url" content="https://ebysplace.com/" />
     <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Eby's Place | Luxury Pain-Free Braiding">
+    <meta name="twitter:description" content="Zero pain. Zero trauma. Just perfection. Experience luxury braiding engineered for scalp health in Somerset, UK.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png">
+
+    <!-- Structured Data: LocalBusiness / HairSalon -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HairSalon",
+      "name": "Eby's Place",
+      "description": "Luxury, pain-free African hair braiding studio in Somerset, UK. Specialising in knotless braids, box braids, locs, twists and protective styles.",
+      "url": "https://ebysplace.com",
+      "telephone": "+447864585110",
+      "email": "info@ebysplace.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Somerset",
+        "addressCountry": "GB"
+      },
+      "areaServed": "Somerset, UK",
+      "priceRange": "££",
+      "image": "https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png",
+      "sameAs": [
+        "https://www.facebook.com/ebysplace",
+        "https://www.instagram.com/ebysplace",
+        "https://www.tiktok.com/@ebysplace"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Braiding Services",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Knotless Braids"}, "price": "120", "priceCurrency": "GBP"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Box Braids"}, "price": "100", "priceCurrency": "GBP"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Lemonade Braids"}, "price": "90", "priceCurrency": "GBP"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Boho Braids"}, "price": "150", "priceCurrency": "GBP"}
+        ]
+      }
+    }
+    </script>
     <!-- Google Fonts: Montserrat (Accents), Lexend (Body), Playfair Display (Sophisticated Headers) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +67,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <script src="https://js.stripe.com/v3/"></script>
 
     <script type="text/javascript">
@@ -158,7 +205,7 @@
             <div class="max-w-2xl reveal active">
                 <div class="flex items-center gap-3 mb-6">
                     <span class="w-2 h-2 rounded-full bg-eby-gold-dark animate-pulse shadow-[0_0_10px_rgba(194,163,120,0.8)]"></span>
-                    <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">Luxury Braiding</h1>
+                    <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">Luxury Pain-Free Braiding in Somerset, UK</h1>
                 </div>
                 <p class="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-white mb-8 leading-[1.05] tracking-tight drop-shadow-md">Zero pain.<br>Zero trauma.<br><span class="italic text-eby-gold-dark font-normal">Just perfection.</span></p>
                 <a href="#booking" class="btn-luxury backdrop-blur-md bg-white/10 border border-white/30 text-white px-10 py-5 uppercase tracking-[0.2em] font-sans text-[10px] font-bold w-max text-center hover:bg-white hover:text-eby-dark transition-colors flex items-center gap-4 group">Book Your Pain-Free Appointment <i class="ph ph-arrow-right group-hover:translate-x-2 transition-transform"></i></a>
@@ -230,7 +277,7 @@
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div onclick="openServiceSlider('knotless.html', 'Knotless Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" alt="Woman with knotless braids at Eby's Place, Somerset" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 mb-4 inline-block">Popular</span>
@@ -240,7 +287,7 @@
                     </div>
                 </div>
                 <div onclick="openServiceSlider('boxbraids.html', 'Box Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-1 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png" alt="Luxury box braids styled at Eby's Place" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <h3 class="font-display text-2xl text-white mb-2">Box Braids</h3>
@@ -249,7 +296,7 @@
                     </div>
                 </div>
                 <div onclick="openServiceSlider('lemon.html', 'Lemon Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" alt="Boho braids with curly ends at Eby's Place" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <h3 class="font-display text-2xl text-white mb-2">Lemonade Braids</h3>
@@ -258,7 +305,7 @@
                     </div>
                 </div>
                 <div onclick="openServiceSlider('boho.html', 'Boho Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-3 overflow-hidden">
-                    <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" alt="Lemonade braids side-swept cornrows at Eby's Place" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
 
                     <div class="relative z-10">
@@ -287,7 +334,7 @@
                     </ul>
                 </div>
                 <div class="relative h-[600px] reveal reveal-delay-1 img-hover-zoom">
-                    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hair braiding appointment at Eby's Place luxury studio in Somerset" class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute -inset-4 border border-eby-gold-dark/30 hidden md:block"></div>
                 </div>
             </div>
@@ -303,7 +350,7 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="glass-card group flex flex-col p-8 reveal">
                     <div class="relative h-[300px] bg-eby-gold rounded-[24px] overflow-hidden flex items-center justify-center p-0">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png" alt="4X Pre Stretched Hair" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png" alt="4X Pre Stretched Hair" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                         <div class="absolute inset-0 bg-black/5"></div>
                         <span class="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-md text-eby-dark text-[8px] font-bold px-3 py-1 rounded-full shadow-sm">30 Pieces Left</span>
                     </div>
@@ -318,7 +365,7 @@
                 <div class="glass-card flex flex-col p-8 reveal reveal-delay-1 border-eby-gold-dark/40 shadow-xl">
                     <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
                         <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">Premium Service</span>
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" alt="French Curls Bone Straight" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" alt="French Curls Bone Straight" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="pt-8 flex-grow flex flex-col justify-between">
                         <div>
@@ -335,7 +382,7 @@
                 <div class="glass-card flex flex-col p-8 reveal reveal-delay-2 border-eby-gold-dark/40 shadow-xl">
                     <div class="relative h-[300px] bg-eby-gold rounded-[24px] flex items-center justify-center p-8 overflow-hidden group">
                         <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-full">In Stock</span>
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" alt="32 Deep Wave Bulk" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" alt="32 Deep Wave Bulk" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="pt-8 flex-grow flex flex-col justify-between">
                         <div>
@@ -589,7 +636,7 @@
                 const itemHTML = `
                     <div class="flex gap-4 items-center pb-6 border-b border-eby-gold-dark/10">
                         <div class="w-16 h-20 bg-eby-gold/10 flex items-center justify-center border border-eby-gold-dark/20 flex-shrink-0 overflow-hidden rounded-xl">
-                            <img src="${imgSrc}" class="w-full h-full object-cover" alt="${title}">
+                            <img loading="lazy" src="${imgSrc}" class="w-full h-full object-cover" alt="${title}">
                         </div>
                         <div class="flex-grow">
                             <h4 class="font-display text-sm text-eby-dark font-semibold mb-1">${title}</h4>

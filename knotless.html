@@ -4,13 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signature Knotless Braids | Eby's Place</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Book knotless braids at Eby's Place in Somerset, UK. Ultra-lightweight, pain-free knotless braids starting from £120. Zero tension, maximum longevity.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ebysplace.com/knotless">
+
+    <!-- Structured Data: Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Knotless Braids",
+      "description": "Book knotless braids at Eby's Place in Somerset, UK. Ultra-lightweight, pain-free knotless braids starting from £120. Zero tension, maximum longevity.",
+      "url": "https://ebysplace.com/knotless",
+      "provider": {
+        "@type": "HairSalon",
+        "name": "Eby's Place",
+        "url": "https://ebysplace.com",
+        "telephone": "+447864585110",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Somerset",
+          "addressCountry": "GB"
+        }
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "GBP",
+        "price": "120",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "minPrice": "120",
+          "priceCurrency": "GBP",
+          "description": "Starting price"
+        }
+      },
+      "areaServed": "Somerset, UK"
+    }
+    </script>
     
     <!-- Open Graph / Web Preview Meta Tags -->
     <meta name="description" content="Experience our master-crafted knotless braids, meticulously parted and engineered for zero root tension. Book your slot at Eby's Place.">
     <meta property="og:title" content="Signature Knotless Braids | Eby's Place">
     <meta property="og:description" content="Experience our master-crafted knotless braids, meticulously parted and engineered for zero root tension. Book your slot at Eby's Place.">
     <meta property="og:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png">
-    <meta property="og:url" content="https://ebysplace.com/services/knotless">
+    <meta property="og:url" content="https://ebysplace.com/knotless">
     <meta property="og:type" content="product">
 
     <!-- Twitter Card Meta Tags -->
@@ -24,7 +63,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <script src="https://js.stripe.com/v3/"></script>
 
     <script type="text/javascript">
@@ -158,17 +197,17 @@
         <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen p-6 lg:p-12">
             <div class="w-full h-full flex flex-col">
                 <div class="flex-grow relative overflow-hidden rounded-sm bg-eby-surface/50">
-                    <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
+                    <img alt="Knotless braids at Eby's Place Somerset" loading="lazy" id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
                 </div>
                 <div class="h-24 w-full mt-4 flex gap-4">
                     <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png', this)" class="thumbnail-btn flex-1 relative outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden rounded-sm">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80">
+                        <img alt="Knotless braids at Eby's Place Somerset" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png" class="w-full h-full object-cover opacity-80">
                     </button>
                     <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-60">
+                        <img alt="Cornrow braids at Eby's Place Somerset" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png" class="w-full h-full object-cover opacity-60">
                     </button>
                     <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
-                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="w-full h-full object-cover opacity-60">
+                        <img alt="Tribal braids heritage style at Eby's Place" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png" class="w-full h-full object-cover opacity-60">
                     </button>
                 </div>
             </div>
@@ -280,7 +319,7 @@
                 <!-- Upsell 1 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
+                        <img alt="Luxury braiding appointment at Eby's Place" loading="lazy" src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
                         <i class="ph ph-drop text-4xl text-white relative z-10"></i>
                     </div>
                     <h3 class="font-display text-lg text-eby-dark">Soothing Scalp Mist</h3>
@@ -293,7 +332,7 @@
                 <!-- Upsell 2 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-gold/20 flex items-center justify-center mb-6 overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
+                        <img alt="Luxury braiding appointment at Eby's Place" loading="lazy" src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-105 transition-transform duration-700">
                         <i class="ph ph-sparkle text-4xl text-white relative z-10"></i>
                     </div>
                     <h3 class="font-display text-lg text-eby-dark">Silky Styling Mousse</h3>
@@ -306,7 +345,7 @@
                 <!-- Upsell 3 -->
                 <div class="glass-card flex flex-col p-6 reveal active">
                     <div class="relative h-48 bg-eby-dark flex items-center justify-center mb-6 overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
+                        <img alt="Luxury braiding appointment at Eby's Place" loading="lazy" src="https://images.unsplash.com/photo-1615397323385-d4193574cfa4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
                         <i class="ph ph-moon-stars text-4xl text-eby-gold-dark relative z-10"></i>
                     </div>
                     <h3 class="font-display text-lg text-eby-dark">Luxury Silk Bonnet</h3>
