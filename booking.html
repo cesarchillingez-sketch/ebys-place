@@ -48,12 +48,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     
-    <!-- Stripe & Cal.com APIs -->
-    <script src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
-      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-      Cal("init", "30min", {origin:"https://app.cal.com"});
-    </script>
+
 
     <script>
         tailwind.config = {
@@ -271,7 +266,7 @@
             </div>
             <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Book Your Pain-Free Braiding Appointment in Somerset</h2>
             <p class="text-eby-brown-light max-w-xl mx-auto reveal reveal-delay-2 font-light text-sm md:text-base leading-relaxed">
-                Secure your slot with a £20 non-refundable deposit. We can’t wait to style you!
+                Browse our braiders, choose your style, pick a date and time — and confirm your booking in minutes.
             </p>
         </div>
     </header>
@@ -290,7 +285,7 @@
             <div class="flex flex-col border-t border-eby-gold-dark/20">
                 
                 <!-- Braids -->
-                <button type="button" onclick="startGeneralBooking('Braids')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="selectCategory('Braids')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Braids</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">10 Services</span>
@@ -299,7 +294,7 @@
                 </button>
 
                 <!-- Twists -->
-                <button type="button" onclick="startGeneralBooking('Twists')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="selectCategory('Twists')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Twists</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -308,7 +303,7 @@
                 </button>
 
                 <!-- Locs -->
-                <button type="button" onclick="startGeneralBooking('Locs')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="selectCategory('Locs')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Locs</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">3 Services</span>
@@ -317,7 +312,7 @@
                 </button>
 
                 <!-- Kids Styles -->
-                <button type="button" onclick="startGeneralBooking('Kids Styles')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="selectCategory('Kids Styles')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Kids Styles</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -326,7 +321,7 @@
                 </button>
 
                 <!-- Add-Ons -->
-                <button type="button" onclick="startGeneralBooking('Add-Ons')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="selectCategory('Add-Ons')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Add-Ons</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">4 Services</span>
@@ -366,56 +361,119 @@
         </section>
     </main>
 
-    <!-- Stripe & Cal.com Booking Gate -->
-    <section id="booking-section" class="py-32 bg-eby-gold/30">
-        <div class="max-w-4xl mx-auto px-6">
-            <div id="booking-container" class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-3xl">
-                
-                <!-- Verification / Payment UI -->
-                <div id="booking-gate-ui" class="reveal active">
-                    <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Verification</span>
-                    <h2 id="booking-gate-title" class="font-display text-4xl mb-4 text-eby-dark">Initialize Your Reservation.</h2>
-                    <p id="booking-gate-desc" class="text-eby-brown-light text-sm mb-12 max-w-md mx-auto">Please confirm your £20.00 non-refundable deposit to unlock the luxury booking calendar.</p>
-                    
-                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-6 max-w-md mx-auto">
-                        <input type="email" id="dg-email" placeholder="Email Address" required class="luxury-input">
-                        <div id="gate-card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
-                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-left"></div>
-                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Slot (£20.00 Deposit)</button>
-                    </form>
+    <!-- Eby's Place Booking Portal -->
+    <section id="booking-portal" class="py-20 md:py-28 bg-eby-bg relative z-10">
+        <!-- Decorative top border -->
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-eby-gold-dark/40 to-transparent"></div>
+
+        <div class="max-w-[1400px] mx-auto px-6">
+
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 reveal">
+                <div>
+                    <span class="font-sans font-bold text-[10px] uppercase tracking-[0.3em] text-eby-gold-dark mb-3 flex items-center gap-3">
+                        <span class="inline-block w-6 h-px bg-eby-gold-dark"></span>
+                        <span id="widget-category-label">Book Your Appointment</span>
+                    </span>
+                    <h2 class="font-display text-4xl md:text-5xl text-eby-dark leading-tight">
+                        Secure Your Slot <em class="italic text-eby-gold-dark">Instantly.</em>
+                    </h2>
+                </div>
+                <p class="font-body font-light text-sm text-eby-brown-light max-w-sm leading-relaxed md:text-right">
+                    No deposit required to browse. Choose your braider, pick a date, and confirm in minutes.
+                </p>
+            </div>
+
+            <!-- Split Layout: Steps + Widget -->
+            <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10 lg:gap-16 items-start">
+
+                <!-- Left: How It Works Steps -->
+                <div class="space-y-0 reveal">
+                    <div class="mb-8">
+                        <h3 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-4 border-l-2 border-eby-gold-dark pl-3">How It Works</h3>
+                    </div>
+
+                    <!-- Step 1 -->
+                    <div class="flex gap-5 pb-8 border-b border-eby-gold-dark/10 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">01</div>
+                        <div>
+                            <p class="font-display text-lg text-eby-dark mb-1">Choose Your Style</p>
+                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">Select from our full range of braid styles &mdash; box braids, knotless, locs, twists &amp; more.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex gap-5 py-8 border-b border-eby-gold-dark/10 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">02</div>
+                        <div>
+                            <p class="font-display text-lg text-eby-dark mb-1">Pick a Date &amp; Time</p>
+                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">View real-time availability and select the slot that works best for you.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex gap-5 pt-8 group">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">03</div>
+                        <div>
+                            <p class="font-display text-lg text-eby-dark mb-1">Confirm &amp; Relax</p>
+                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">Receive your confirmation instantly. We'll take care of everything else.</p>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badge -->
+                    <div class="mt-10 p-5 bg-eby-gold/40 rounded-2xl border border-eby-gold-dark/15">
+                        <div class="flex items-start gap-3">
+                            <i class="ph ph-shield-check text-eby-gold-dark text-2xl flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <p class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-1">Secure Booking</p>
+                                <p class="text-eby-brown-light text-xs leading-relaxed font-light">Your information is protected. No card required to browse &mdash; pay at your appointment.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Try-On CTA -->
+                    <div class="mt-6">
+                        <a href="tryon.html" class="group flex items-center gap-3 text-eby-dark hover:text-eby-gold-dark transition-colors duration-300">
+                            <div class="w-10 h-10 rounded-full border border-eby-gold-dark/30 flex items-center justify-center group-hover:bg-eby-gold-dark group-hover:border-eby-gold-dark transition-all duration-300">
+                                <i class="ph ph-magic-wand text-eby-gold-dark group-hover:text-white text-lg transition-colors duration-300"></i>
+                            </div>
+                            <div>
+                                <p class="font-sans font-bold text-[10px] uppercase tracking-widest">Try a Style First</p>
+                                <p class="text-eby-brown-light text-[10px] font-light">AI hairstyle preview &mdash; free</p>
+                            </div>
+                            <i class="ph ph-arrow-right ml-auto text-eby-gold-dark/50 group-hover:text-eby-gold-dark group-hover:translate-x-1 transition-all duration-300"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Cal.com Portal UI (Hidden until paid) -->
-                <div id="booking-portal-ui" class="hidden w-full h-full flex-grow">
-                     <div id="cal-embed-wrapper" style="width:100%;height:600px;overflow:scroll"></div>
+                <!-- Right: Booking Widget -->
+                <div class="reveal reveal-delay-1">
+                    <div class="relative">
+                        <!-- Decorative corner accents -->
+                        <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-eby-gold-dark/30 rounded-tr-2xl pointer-events-none z-10"></div>
+                        <div class="absolute -bottom-3 -left-3 w-16 h-16 border-b-2 border-l-2 border-eby-gold-dark/30 rounded-bl-2xl pointer-events-none z-10"></div>
+
+                        <!-- Widget card -->
+                        <div class="bg-white border border-eby-gold-dark/20 rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
+                            <!-- Widget header bar -->
+                            <div class="px-6 py-4 bg-eby-dark flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_8px_rgba(194,163,120,0.8)]"></span>
+                                    <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Eby's Place &mdash; Live Booking</span>
+                                </div>
+                                <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Available Now</span>
+                            </div>
+                            <!-- The widget iframe loads here -->
+                            <div id="ebysplace-widget" class="min-h-[600px]"></div>
+                            <script src="https://booking.ebysplace.com/widget.js" data-braider="ebysplace-ugqs" data-theme="light" async></script>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
-
-    <!-- Eby's Place Booking Widget Section -->
-    <section class="py-24 bg-eby-bg relative z-10">
-        <div class="max-w-5xl mx-auto px-6">
-            <p class="font-sans text-[10px] font-medium tracking-[0.3em] uppercase text-eby-gold-dark mb-4 flex items-center gap-3">
-                <span class="inline-block w-6 h-px bg-eby-gold-dark"></span>
-                Book Instantly
-            </p>
-            <h2 class="font-display text-4xl md:text-5xl font-light text-eby-dark mb-4 leading-tight">
-                Find &amp; book your braider &mdash;
-                <em class="italic text-eby-gold-dark">right here.</em>
-            </h2>
-            <p class="font-body font-light text-sm text-eby-dark/60 max-w-xl mb-10 leading-relaxed">
-                Browse available braiders, choose your style, pick a date and time, and confirm your booking in minutes.
-            </p>
-            <div class="bg-white border border-eby-gold-dark/20 rounded-3xl overflow-hidden shadow-xl">
-                <div id="ebysplace-widget"></div>
-                <script src="https://booking.ebysplace.com/widget.js" data-braider="ebysplace-ugqs" data-theme="light" async></script>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
+        <!-- Footer -->
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
@@ -489,72 +547,20 @@
 
     <!-- Scripts for Logic & Interactivity -->
     <script>
-        // Setup variables & Stripe
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
-        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
-        const elements = stripe.elements();
-        const gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
-        
-        let currentBookingItem = "Standard Appointment";
-        const currentBookingTotal = 20;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
-        });
-
-        // Initiates General Category Booking
-        function startGeneralBooking(categoryName) {
-            currentBookingItem = `${categoryName} Appointment`;
-            
-            document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are requesting a <strong>${categoryName}</strong> appointment. Please confirm your £20.00 non-refundable booking deposit to unlock the calendar.`;
-            document.getElementById('dg-btn').innerText = `Secure Slot (£20.00 Deposit)`;
-            
-            document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Handles the Stripe Deposit and Reveals Cal.com
-        async function handleDepositGate(e) {
-            e.preventDefault();
-            const btn = document.getElementById('dg-btn');
-            const email = document.getElementById('dg-email').value;
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
-            btn.disabled = true;
-
-            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: gateCard });
-
-            if (error) {
-                document.getElementById('gate-errors').textContent = error.message;
-                btn.innerHTML = `Secure Slot (£20.00 Deposit)`;
-                btn.disabled = false;
-                return;
+        // Select category and scroll to booking widget
+        function selectCategory(categoryName) {
+            const label = document.getElementById('widget-category-label');
+            if (label) {
+                label.textContent = categoryName + ' — Select a Braider Below';
             }
-
-            // SUCCESS FLOW
-            btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
-            
-            // Background Webhook to Google Apps Script
-            fetch(GAS_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: currentBookingTotal, stripeId: paymentMethod.id })
-            });
-
-            // Transition UI to Cal.com Embed
-            setTimeout(() => {
-                document.getElementById('booking-gate-ui').classList.add('hidden');
-                document.getElementById('booking-portal-ui').classList.remove('hidden');
-                
-                Cal.ns["30min"]("inline", {
-                    elementOrSelector: "#cal-embed-wrapper",
-                    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
-                    calLink: "ebys-place-o8qhbh/30min",
-                });
-                Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#2A1A12"}},"hideEventTypeDetails":false,"layout":"month_view"});
-            }, 800);
+            const portal = document.getElementById('booking-portal');
+            if (portal) {
+                portal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         // Mobile Menu Dropdown Logic
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             if(menu.classList.contains('-translate-y-full')) {
