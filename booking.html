@@ -503,7 +503,7 @@
 
                                     <div class="glass-card rounded-2xl p-4 border border-eby-gold-dark/20">
                                         <h4 class="font-display text-xl text-eby-dark mb-2">Select Time</h4>
-                                        <p class="font-sans font-semibold text-[11px] uppercase tracking-widest text-eby-brown-light mb-4">Mon - Sat: 9am to 7pm</p>
+                                        <p id="time-slot-hours" class="font-sans font-semibold text-[11px] uppercase tracking-widest text-eby-brown-light mb-4"></p>
                                         <div id="time-slots" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-2 gap-2"></div>
                                     </div>
                                 </div>
@@ -629,8 +629,15 @@
             currentMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
             selectedDate: null,
             selectedTime: null,
-            timeSlots: Array.from({ length: 11 }, (_, i) => i + 9)
+            bookingDaysLabel: 'Mon - Sat',
+            bookingStartHour: 9,
+            bookingEndHour: 19,
+            timeSlots: []
         };
+        bookingCalendarState.timeSlots = Array.from(
+            { length: bookingCalendarState.bookingEndHour - bookingCalendarState.bookingStartHour + 1 },
+            (_, i) => bookingCalendarState.bookingStartHour + i
+        );
 
         function formatDateLabel(dateValue) {
             return dateValue.toLocaleDateString('en-GB', {
@@ -642,9 +649,16 @@
         }
 
         function formatTimeLabel(hour) {
+            const normalizedHour = ((hour % 24) + 24) % 24;
+            const hour12 = normalizedHour % 12 || 12;
+            const suffix = normalizedHour >= 12 ? 'pm' : 'am';
+            return `${hour12}:00 ${suffix}`;
+        }
+
+        function formatHourCompact(hour) {
             const hour12 = hour % 12 || 12;
             const suffix = hour < 12 ? 'am' : 'pm';
-            return `${hour12}:00 ${suffix}`;
+            return `${hour12}${suffix}`;
         }
 
         function updateBookingSelectionDisplay() {
@@ -737,7 +751,12 @@
         function initializeBookingCalendar() {
             const prevButton = document.getElementById('calendar-prev');
             const nextButton = document.getElementById('calendar-next');
+            const hoursLabel = document.getElementById('time-slot-hours');
             if (!prevButton || !nextButton) return;
+
+            if (hoursLabel) {
+                hoursLabel.textContent = `${bookingCalendarState.bookingDaysLabel}: ${formatHourCompact(bookingCalendarState.bookingStartHour)} to ${formatHourCompact(bookingCalendarState.bookingEndHour)}`;
+            }
 
             prevButton.addEventListener('click', () => {
                 bookingCalendarState.currentMonth = new Date(
