@@ -517,10 +517,19 @@
                                     <p class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-1">Secure Your Slot</p>
                                     <p id="booking-deposit-desc" class="text-eby-brown-light text-xs mb-5">A non-refundable £20 deposit is required to hold your chosen date and time.</p>
                                     <form id="booking-deposit-form" onsubmit="handleBookingDeposit(event)" class="space-y-4">
-                                        <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input" autocomplete="name">
-                                        <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input" autocomplete="email">
-                                        <div class="border border-eby-gold-dark/20 p-4 bg-white rounded-2xl shadow-sm">
-                                            <div id="booking-card-element"></div>
+                                        <div>
+                                            <label for="bk-name" class="sr-only">Full Name</label>
+                                            <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input" autocomplete="name">
+                                        </div>
+                                        <div>
+                                            <label for="bk-email" class="sr-only">Email Address</label>
+                                            <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input" autocomplete="email">
+                                        </div>
+                                        <div>
+                                            <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">Card Details</label>
+                                            <div class="border border-eby-gold-dark/20 p-4 bg-white rounded-2xl shadow-sm">
+                                                <div id="booking-card-element"></div>
+                                            </div>
                                         </div>
                                         <div id="booking-card-errors" class="text-red-500 text-[10px]"></div>
                                         <button type="submit" id="booking-deposit-btn" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-sans font-bold uppercase tracking-widest text-[10px]">
