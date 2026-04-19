@@ -675,7 +675,7 @@
             fetch(GAS_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: currentBookingTotal, stripeId: paymentMethod.id })
+                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: currentBookingTotal, stripeId: paymentMethod.id, adminEmail: 'hello@ebysplace.com' })
             });
 
             setTimeout(() => {

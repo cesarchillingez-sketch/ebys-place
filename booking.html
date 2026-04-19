@@ -44,6 +44,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <!-- Frameworks & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
@@ -508,8 +511,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Kouvia booking embed -->
-                            <iframe src="https://booking.ebysplace.com/embed/book" width="100%" height="850" frameborder="0" style="border: none; display: block; min-height: 800px;" title="Book an appointment at Eby's Place" allow="payment"></iframe>
+                            <!-- £20 Deposit Gate (shown after date/time selection) -->
+                            <div id="booking-deposit-gate" class="p-5 md:p-6 border-b border-eby-gold-dark/15">
+                                <div class="max-w-md mx-auto">
+                                    <p class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-1">Secure Your Slot</p>
+                                    <p id="booking-deposit-desc" class="text-eby-brown-light text-xs mb-5">A non-refundable £20 deposit is required to hold your chosen date and time.</p>
+                                    <form id="booking-deposit-form" onsubmit="handleBookingDeposit(event)" class="space-y-4">
+                                        <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input" autocomplete="name">
+                                        <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input" autocomplete="email">
+                                        <div class="border border-eby-gold-dark/20 p-4 bg-white rounded-2xl shadow-sm">
+                                            <div id="booking-card-element"></div>
+                                        </div>
+                                        <div id="booking-card-errors" class="text-red-500 text-[10px]"></div>
+                                        <button type="submit" id="booking-deposit-btn" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-2xl font-sans font-bold uppercase tracking-widest text-[10px]">
+                                            Pay £20 &amp; Reserve Appointment
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Kouvia booking embed (hidden until deposit paid) -->
+                            <div id="booking-widget-section" class="hidden">
+                                <iframe src="https://booking.ebysplace.com/embed/book" width="100%" height="850" frameborder="0" style="border: none; display: block; min-height: 800px;" title="Book an appointment at Eby's Place" allow="payment"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -597,6 +621,10 @@
             if (label) {
                 label.textContent = categoryName + ' — Select a Braider Below';
             }
+            const descEl = document.getElementById('booking-deposit-desc');
+            if (descEl) {
+                descEl.textContent = `You are reserving a slot for ${categoryName}. A non-refundable £20 deposit holds your chosen date and time.`;
+            }
             const portal = document.getElementById('booking-portal');
             if (portal) {
                 portal.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -622,6 +650,78 @@
             document.getElementById('cart-sidebar').classList.toggle('open');
             document.getElementById('cart-overlay').classList.toggle('open');
             document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
+        }
+
+        // Stripe Setup & £20 Booking Deposit
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
+        const ADMIN_EMAIL = 'hello@ebysplace.com';
+        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+        const stripeElements = stripe.elements();
+        const bookingCard = stripeElements.create('card', {
+            style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('booking-card-element')) {
+                bookingCard.mount('#booking-card-element');
+            }
+        });
+
+        async function handleBookingDeposit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('booking-deposit-btn');
+            const name = document.getElementById('bk-name').value.trim();
+            const email = document.getElementById('bk-email').value.trim();
+            const selectedDate = bookingCalendarState.selectedDate
+                ? bookingCalendarState.selectedDate.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                : '';
+            const selectedTime = bookingCalendarState.selectedTime || '';
+
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing...';
+            btn.disabled = true;
+            document.getElementById('booking-card-errors').textContent = '';
+
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: bookingCard,
+                billing_details: { name: name, email: email }
+            });
+
+            if (error) {
+                document.getElementById('booking-card-errors').textContent = error.message;
+                btn.innerHTML = 'Pay £20 &amp; Reserve Appointment';
+                btn.disabled = false;
+                return;
+            }
+
+            const categoryLabel = document.getElementById('widget-category-label');
+            const item = (categoryLabel && categoryLabel.textContent !== 'Select a service category above to begin')
+                ? categoryLabel.textContent
+                : 'Appointment at Eby\'s Place';
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    customerName: name,
+                    email: email,
+                    type: 'BOOKING_DEPOSIT',
+                    item: item,
+                    amount: 20,
+                    stripeId: paymentMethod.id,
+                    selectedDate: selectedDate,
+                    selectedTime: selectedTime,
+                    adminEmail: ADMIN_EMAIL
+                })
+            });
+
+            btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed — Loading your calendar…';
+
+            setTimeout(() => {
+                document.getElementById('booking-deposit-gate').classList.add('hidden');
+                document.getElementById('booking-widget-section').classList.remove('hidden');
+                document.getElementById('booking-widget-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 900);
         }
 
         const bookingCalendarState = {
