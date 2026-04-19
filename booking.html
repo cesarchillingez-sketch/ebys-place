@@ -656,8 +656,9 @@
         }
 
         function formatHourCompact(hour) {
-            const hour12 = hour % 12 || 12;
-            const suffix = hour < 12 ? 'am' : 'pm';
+            const normalizedHour = ((hour % 24) + 24) % 24;
+            const hour12 = normalizedHour % 12 || 12;
+            const suffix = normalizedHour >= 12 ? 'pm' : 'am';
             return `${hour12}${suffix}`;
         }
 
