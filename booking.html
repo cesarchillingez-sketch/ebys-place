@@ -466,6 +466,48 @@
                                 </div>
                                 <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Available Now</span>
                             </div>
+                            <div class="p-5 md:p-6 bg-gradient-to-b from-eby-gold/35 via-white to-white border-b border-eby-gold-dark/15">
+                                <div class="glass-card rounded-2xl p-4 mb-6 border border-eby-gold-dark/20 shadow-sm">
+                                    <p class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-3">Your Selection</p>
+                                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-6">
+                                        <p class="text-xs text-eby-brown-light"><span class="font-sans font-semibold uppercase tracking-widest text-[9px] text-eby-dark">Date:</span> <span id="selected-date-display" class="text-eby-dark font-medium">Choose a date</span></p>
+                                        <p class="text-xs text-eby-brown-light"><span class="font-sans font-semibold uppercase tracking-widest text-[9px] text-eby-dark">Time:</span> <span id="selected-time-display" class="text-eby-dark font-medium">Choose a time</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
+                                    <div class="glass-card rounded-2xl p-4 border border-eby-gold-dark/20">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <h4 class="font-display text-xl text-eby-dark">Select Date</h4>
+                                            <div class="flex items-center gap-2">
+                                                <button id="calendar-prev" type="button" class="w-9 h-9 rounded-full border border-eby-gold-dark/25 text-eby-dark hover:bg-eby-dark hover:text-white transition-all duration-300" aria-label="Previous month">
+                                                    <i class="ph ph-caret-left text-sm"></i>
+                                                </button>
+                                                <button id="calendar-next" type="button" class="w-9 h-9 rounded-full border border-eby-gold-dark/25 text-eby-dark hover:bg-eby-dark hover:text-white transition-all duration-300" aria-label="Next month">
+                                                    <i class="ph ph-caret-right text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p id="calendar-month-label" class="font-sans font-semibold text-[11px] uppercase tracking-widest text-eby-brown-light mb-3"></p>
+                                        <div class="grid grid-cols-7 gap-2 mb-3">
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Sun</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Mon</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Tue</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Wed</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Thu</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Fri</span>
+                                            <span class="text-center font-sans font-medium text-[9px] uppercase tracking-widest text-eby-brown-light/80">Sat</span>
+                                        </div>
+                                        <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
+                                    </div>
+
+                                    <div class="glass-card rounded-2xl p-4 border border-eby-gold-dark/20">
+                                        <h4 class="font-display text-xl text-eby-dark mb-2">Select Time</h4>
+                                        <p class="font-sans font-semibold text-[11px] uppercase tracking-widest text-eby-brown-light mb-4">Mon - Sat: 9am to 7pm</p>
+                                        <div id="time-slots" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-2 gap-2"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Kouvia booking embed -->
                             <iframe src="https://booking.ebysplace.com/embed/book" width="100%" height="850" frameborder="0" style="border: none; display: block; min-height: 800px;" title="Book an appointment at Eby's Place" allow="payment"></iframe>
                         </div>
@@ -582,6 +624,144 @@
             document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
         }
 
+        const bookingCalendarState = {
+            today: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+            currentMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            selectedDate: null,
+            selectedTime: null,
+            timeSlots: Array.from({ length: 11 }, (_, i) => i + 9)
+        };
+
+        function formatDateLabel(dateValue) {
+            return dateValue.toLocaleDateString('en-GB', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function formatTimeLabel(hour) {
+            const hour12 = hour % 12 || 12;
+            const suffix = hour < 12 ? 'am' : 'pm';
+            return `${hour12}:00 ${suffix}`;
+        }
+
+        function updateBookingSelectionDisplay() {
+            const dateDisplay = document.getElementById('selected-date-display');
+            const timeDisplay = document.getElementById('selected-time-display');
+            if (dateDisplay) {
+                dateDisplay.textContent = bookingCalendarState.selectedDate
+                    ? formatDateLabel(bookingCalendarState.selectedDate)
+                    : 'Choose a date';
+            }
+            if (timeDisplay) {
+                timeDisplay.textContent = bookingCalendarState.selectedTime || 'Choose a time';
+            }
+        }
+
+        function renderCalendar() {
+            const monthLabel = document.getElementById('calendar-month-label');
+            const grid = document.getElementById('calendar-grid');
+            if (!monthLabel || !grid) return;
+
+            const year = bookingCalendarState.currentMonth.getFullYear();
+            const month = bookingCalendarState.currentMonth.getMonth();
+            const monthName = bookingCalendarState.currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+            monthLabel.textContent = monthName;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            grid.innerHTML = '';
+
+            for (let i = 0; i < firstDay; i += 1) {
+                const spacer = document.createElement('div');
+                spacer.className = 'h-10';
+                grid.appendChild(spacer);
+            }
+
+            for (let day = 1; day <= totalDays; day += 1) {
+                const dateValue = new Date(year, month, day);
+                const isPast = dateValue < bookingCalendarState.today;
+                const isToday = dateValue.getTime() === bookingCalendarState.today.getTime();
+                const isSelected = bookingCalendarState.selectedDate && dateValue.getTime() === bookingCalendarState.selectedDate.getTime();
+
+                const dayButton = document.createElement('button');
+                dayButton.type = 'button';
+                dayButton.textContent = String(day);
+                dayButton.disabled = isPast;
+                dayButton.className = `h-10 rounded-xl border text-sm font-medium transition-all duration-300 ${
+                    isSelected
+                        ? 'bg-eby-dark border-eby-dark text-white shadow-[0_10px_30px_rgba(42,26,18,0.2)]'
+                        : isToday
+                            ? 'bg-eby-gold/60 border-eby-gold-dark text-eby-dark'
+                            : 'bg-white/80 border-eby-gold-dark/20 text-eby-dark hover:bg-eby-gold/50'
+                } ${isPast ? 'opacity-40 cursor-not-allowed hover:bg-white/80' : 'cursor-pointer'}`;
+
+                dayButton.addEventListener('click', () => {
+                    if (isPast) return;
+                    bookingCalendarState.selectedDate = dateValue;
+                    renderCalendar();
+                    updateBookingSelectionDisplay();
+                });
+                grid.appendChild(dayButton);
+            }
+        }
+
+        function renderTimeSlots() {
+            const timeSlotsContainer = document.getElementById('time-slots');
+            if (!timeSlotsContainer) return;
+            timeSlotsContainer.innerHTML = '';
+
+            bookingCalendarState.timeSlots.forEach((hour) => {
+                const timeLabel = formatTimeLabel(hour);
+                const timeButton = document.createElement('button');
+                timeButton.type = 'button';
+                timeButton.textContent = timeLabel;
+                timeButton.className = `rounded-xl border px-3 py-2 text-[11px] font-sans font-semibold uppercase tracking-widest transition-all duration-300 ${
+                    bookingCalendarState.selectedTime === timeLabel
+                        ? 'bg-eby-dark text-white border-eby-dark shadow-[0_10px_30px_rgba(42,26,18,0.2)]'
+                        : 'bg-white/80 text-eby-dark border-eby-gold-dark/25 hover:bg-eby-gold/50'
+                }`;
+
+                timeButton.addEventListener('click', () => {
+                    bookingCalendarState.selectedTime = timeLabel;
+                    renderTimeSlots();
+                    updateBookingSelectionDisplay();
+                });
+
+                timeSlotsContainer.appendChild(timeButton);
+            });
+        }
+
+        function initializeBookingCalendar() {
+            const prevButton = document.getElementById('calendar-prev');
+            const nextButton = document.getElementById('calendar-next');
+            if (!prevButton || !nextButton) return;
+
+            prevButton.addEventListener('click', () => {
+                bookingCalendarState.currentMonth = new Date(
+                    bookingCalendarState.currentMonth.getFullYear(),
+                    bookingCalendarState.currentMonth.getMonth() - 1,
+                    1
+                );
+                renderCalendar();
+            });
+
+            nextButton.addEventListener('click', () => {
+                bookingCalendarState.currentMonth = new Date(
+                    bookingCalendarState.currentMonth.getFullYear(),
+                    bookingCalendarState.currentMonth.getMonth() + 1,
+                    1
+                );
+                renderCalendar();
+            });
+
+            renderCalendar();
+            renderTimeSlots();
+            updateBookingSelectionDisplay();
+        }
+
         // Tech-Spirit Background Glow
         document.addEventListener('mousemove', (e) => {
             const glow = document.querySelector('.cursor-glow');
@@ -602,6 +782,7 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+        initializeBookingCalendar();
     </script>
 </body>
 </html>
