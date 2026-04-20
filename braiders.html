@@ -179,18 +179,7 @@
                 </div>
             </div>
 
-            <!-- Live Braider Cards (fetched from Kouvia API) -->
-            <div id="braider-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14 reveal">
-                <!-- Skeleton loaders -->
-                <div class="animate-pulse bg-white rounded-2xl p-6 border border-eby-gold-dark/10 h-52"></div>
-                <div class="animate-pulse bg-white rounded-2xl p-6 border border-eby-gold-dark/10 h-52"></div>
-                <div class="animate-pulse bg-white rounded-2xl p-6 border border-eby-gold-dark/10 h-52"></div>
-            </div>
-            <div id="braider-empty" class="hidden text-center py-12 reveal">
-                <p class="font-body text-eby-brown-light text-sm">No braiders found in that area yet. <a href="https://booking.ebysplace.com/register" target="_blank" class="text-eby-gold-dark underline">Be the first to register.</a></p>
-            </div>
-
-            <!-- Full Directory (Kouvia platform embed) -->
+            <!-- Braider Directory -->
             <div class="reveal">
                 <div class="relative">
                     <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-eby-gold-dark/30 rounded-tr-2xl pointer-events-none z-10"></div>
@@ -198,12 +187,15 @@
                     <div class="bg-eby-dark px-6 py-4 rounded-t-3xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_8px_rgba(194,163,120,0.8)]"></span>
-                            <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Kouvia &mdash; Full Braider Directory</span>
+                            <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Eby's Place &mdash; Braider Directory</span>
                         </div>
-                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Powered by Eby's Place</span>
+                        <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Coming Soon</span>
                     </div>
-                    <div class="bg-white border border-eby-gold-dark/20 border-t-0 rounded-b-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
-                        <iframe id="braiders-iframe" src="https://booking.ebysplace.com/find-a-braider" title="Find a Braider — Kouvia" loading="lazy" scrolling="no"></iframe>
+                    <div class="bg-white border border-eby-gold-dark/20 border-t-0 rounded-b-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)] flex items-center justify-center" style="min-height: 300px; padding: 40px; text-align: center;">
+                        <div>
+                            <p style="font-family: inherit; font-size: 1rem; color: #6b5c4e; margin-bottom: 12px;">The braider directory is coming soon.</p>
+                            <p style="font-family: inherit; font-size: 0.875rem; color: #9b8a7a;">Check back shortly to find braiders near you.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,7 +208,7 @@
                         <h3 class="font-display text-3xl md:text-4xl text-white mb-3">Are you a braider?</h3>
                         <p class="text-white/60 font-light text-sm max-w-md leading-relaxed">Join Eby's Place and get your own booking page, calendar management, and client tools &mdash; starting free. No commission ever.</p>
                     </div>
-                    <a href="https://booking.ebysplace.com/register" target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-3 bg-eby-gold-dark text-eby-dark px-8 py-4 rounded-2xl font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-colors duration-300 group">
+                    <a href="#" class="shrink-0 inline-flex items-center gap-3 bg-eby-gold-dark text-eby-dark px-8 py-4 rounded-2xl font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-colors duration-300 group">
                         Join as a Braider
                         <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform duration-300"></i>
                     </a>
@@ -258,78 +250,6 @@
     </footer>
 
     <script>
-        // ── Live Braider Cards from Kouvia API ──
-        let allBraiders = [];
-
-        async function loadBraiders() {
-            try {
-                const res = await fetch('https://booking.ebysplace.com/api/braiders?limit=50');
-                const data = await res.json();
-                allBraiders = data.braiders || [];
-                renderBraiders(allBraiders);
-            } catch (e) {
-                // Silently hide the card grid on error — iframe still shows
-                document.getElementById('braider-grid').style.display = 'none';
-            }
-        }
-
-        function filterBraiders(city) {
-            const q = (city || '').toLowerCase().trim();
-            const filtered = q ? allBraiders.filter(b => (b.city || '').toLowerCase().includes(q)) : allBraiders;
-            renderBraiders(filtered);
-        }
-
-        function renderBraiders(braiders) {
-            const grid = document.getElementById('braider-grid');
-            const empty = document.getElementById('braider-empty');
-            if (!braiders.length) {
-                grid.innerHTML = '';
-                grid.classList.add('hidden');
-                empty.classList.remove('hidden');
-                return;
-            }
-            empty.classList.add('hidden');
-            grid.classList.remove('hidden');
-            grid.innerHTML = braiders.map(b => `
-                <div class="bg-white rounded-2xl border border-eby-gold-dark/15 p-6 hover:shadow-[0_8px_32px_rgba(42,26,18,0.1)] transition-all duration-300 group flex flex-col">
-                    <div class="flex items-start gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-eby-dark flex items-center justify-center text-eby-gold-dark font-display text-xl shrink-0">
-                            ${(b.businessName || 'B')[0].toUpperCase()}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display text-lg text-eby-dark truncate">${escHtml(b.businessName)}</h3>
-                            <p class="font-sans text-[10px] uppercase tracking-widest text-eby-brown-light">${escHtml(b.city || '')}${b.county ? ', ' + escHtml(b.county) : ''}</p>
-                        </div>
-                        ${b.subscriptionTier && b.subscriptionTier !== 'free' ? `<span class="shrink-0 font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark border border-eby-gold-dark/40 px-2 py-1 rounded-full">${escHtml(b.subscriptionTier)}</span>` : ''}
-                    </div>
-                    ${b.bio ? `<p class="font-body text-sm text-eby-brown-light leading-relaxed mb-4 line-clamp-2">${escHtml(b.bio)}</p>` : ''}
-                    ${b.services && b.services.length ? `<div class="flex flex-wrap gap-1.5 mb-4">${b.services.slice(0,3).map(s => `<span class="font-sans text-[9px] uppercase tracking-wider text-eby-brown-light bg-eby-gold/60 px-2 py-1 rounded-full">${escHtml(s)}</span>`).join('')}${b.services.length > 3 ? `<span class="font-sans text-[9px] text-eby-brown-light">+${b.services.length - 3} more</span>` : ''}</div>` : ''}
-                    <div class="mt-auto flex items-center justify-between">
-                        ${b.priceFrom ? `<span class="font-body text-sm text-eby-dark">From <strong>£${escHtml(String(b.priceFrom))}</strong></span>` : '<span></span>'}
-                        <a href="${escHtml(b.bookingUrl)}" target="_blank" rel="noopener"
-                            class="inline-flex items-center gap-2 bg-eby-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-widest px-4 py-2.5 rounded-xl hover:bg-eby-gold-dark hover:text-eby-dark transition-colors duration-300">
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function escHtml(str) {
-            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        }
-
-        loadBraiders();
-
-        // Auto-resize iframe
-        window.addEventListener('message', (e) => {
-            if (e.origin === 'https://booking.ebysplace.com' && e.data && e.data.type === 'resize') {
-                const iframe = document.getElementById('braiders-iframe');
-                if (iframe && e.data.height) {
-                    iframe.style.height = (e.data.height + 40) + 'px';
-                }
-            }
-        });
 
         // Mobile Menu
         function toggleMobileMenu() {

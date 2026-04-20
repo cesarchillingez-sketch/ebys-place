@@ -470,10 +470,8 @@
 
                 setLoadingStatus('Uploading your photo…');
 
-                const resp = await fetch('https://booking.ebysplace.com/api/trpc/tryon.generate', {
-                    method: 'POST',
-                    body: formData
-                });
+                // AI Try-On API endpoint to be configured
+                throw new Error('The AI Try-On service is currently unavailable. Please check back soon.');
 
                 if (!resp.ok) {
                     const errText = await resp.text();
