@@ -32,16 +32,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Inject the Replicate API key into tryon.html at build time.
-      # The key is stored as a GitHub Actions secret (never in source code).
-      # Add it under: Settings → Secrets and variables → Actions → REPLICATE_API_KEY
-      - name: Inject Replicate API key
-        if: ${{ secrets.REPLICATE_API_KEY != '' }}
-        env:
-          REPLICATE_API_KEY: ${{ secrets.REPLICATE_API_KEY }}
-        run: |
-          sed -i "s|__REPLICATE_API_KEY__|${REPLICATE_API_KEY}|g" tryon.html
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
