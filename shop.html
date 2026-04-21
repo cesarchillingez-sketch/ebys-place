@@ -181,6 +181,22 @@
         
         .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; color: #2A1A12; transition: border 0.3s; }
         .luxury-input:focus { outline: none; border-color: #2A1A12; background: white; }
+
+        .tryon-canvas-wrap {
+            background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(244,239,230,0.8));
+            border: 1px solid rgba(194, 163, 120, 0.25);
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+        #tryon-canvas {
+            width: 100%;
+            height: auto;
+            min-height: 380px;
+            display: block;
+            touch-action: none;
+            cursor: grab;
+        }
+        #tryon-canvas.dragging { cursor: grabbing; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
@@ -350,7 +366,10 @@
                             <h3 class="font-display text-lg mb-2 text-eby-dark leading-snug">4X Pre Stretched Braiding Hair 38"</h3>
                             <p class="text-eby-brown-light text-xs mb-6 line-clamp-3 leading-relaxed">X-Pression Kanekalon African Braid Hair | Colours 1B, 27, 33.</p>
                         </div>
-                        <button class="font-sans font-semibold w-full py-4 rounded-2xl border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed hover:bg-eby-bg transition-colors">Notify Me</button>
+                        <div class="space-y-3">
+                            <button class="font-sans font-semibold w-full py-4 rounded-2xl border border-eby-gold-dark/20 text-[9px] uppercase tracking-widest text-eby-brown-light cursor-not-allowed hover:bg-eby-bg transition-colors">Notify Me</button>
+                            <button onclick="openTryOnStudio('4X Pre Stretched Braiding Hair 38&quot;', 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png')" class="font-sans font-semibold w-full py-4 rounded-2xl border border-eby-dark/20 text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-bg transition-colors">AI Try-On</button>
+                        </div>
                     </div>
                 </div>
 
@@ -369,7 +388,10 @@
                             </div>
                             <p class="text-eby-brown-light text-xs mb-6 leading-relaxed">Premium 24 Inch Silky French Curl Braiding Hair. Immensely lightweight, minimal shedding.</p>
                         </div>
-                        <button onclick="startProductBooking('Silky French Curl', 10)" class="btn-luxury font-sans w-full py-4 rounded-2xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Buy & Book Appointment</button>
+                        <div class="space-y-3">
+                            <button onclick="startProductBooking('Silky French Curl', 10)" class="btn-luxury font-sans w-full py-4 rounded-2xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Buy & Book Appointment</button>
+                            <button onclick="openTryOnStudio('Silky French Curl', 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png')" class="font-sans font-semibold w-full py-4 rounded-2xl border border-eby-dark/20 text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-bg transition-colors">AI Try-On</button>
+                        </div>
                     </div>
                 </div>
 
@@ -388,13 +410,72 @@
                             </div>
                             <p class="text-eby-brown-light text-xs mb-6 leading-relaxed">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids.</p>
                         </div>
-                        <button onclick="startProductBooking('32 Deep Wave Bulk', 12)" class="btn-luxury font-sans w-full py-4 rounded-2xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Buy & Book Appointment</button>
+                        <div class="space-y-3">
+                            <button onclick="startProductBooking('32 Deep Wave Bulk', 12)" class="btn-luxury font-sans w-full py-4 rounded-2xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Buy & Book Appointment</button>
+                            <button onclick="openTryOnStudio('32 Deep Wave Bulk', 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png')" class="font-sans font-semibold w-full py-4 rounded-2xl border border-eby-dark/20 text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-bg transition-colors">AI Try-On</button>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </div>
     </main>
+
+    <!-- AI Try-On Studio -->
+    <section id="tryon-studio" class="py-24 bg-eby-surface/70 border-y border-eby-gold-dark/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-10 text-center">
+                <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px]">AI Try-On Studio</span>
+                <h2 class="font-display text-4xl md:text-5xl mt-4 text-eby-dark">Preview styles before checkout</h2>
+                <p class="text-eby-brown-light text-sm max-w-2xl mx-auto mt-4">Upload a selfie, choose a style, then drag and resize the hair overlay. AI face alignment will auto-place the style when supported by your browser.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="glass-card rounded-3xl p-8 space-y-6 lg:col-span-1">
+                    <div>
+                        <label for="tryon-person-upload" class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-dark block mb-3">Upload your photo</label>
+                        <input id="tryon-person-upload" type="file" accept="image/*" class="block w-full text-xs text-eby-brown-light file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-eby-dark file:text-eby-surface hover:file:bg-eby-brown-light">
+                    </div>
+
+                    <div>
+                        <label for="tryon-style-select" class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-dark block mb-3">Hair style</label>
+                        <select id="tryon-style-select" class="w-full border border-eby-gold-dark/30 rounded-xl p-3 text-sm bg-white">
+                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png">4X Pre Stretched Braiding Hair 38"</option>
+                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" selected>Silky French Curl</option>
+                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png">32 Deep Wave Bulk</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="tryon-scale" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Scale</label>
+                            <input id="tryon-scale" type="range" min="25" max="130" value="55" class="w-full">
+                        </div>
+                        <div>
+                            <label for="tryon-rotation" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Rotation</label>
+                            <input id="tryon-rotation" type="range" min="-40" max="40" value="0" class="w-full">
+                        </div>
+                        <div>
+                            <label for="tryon-opacity" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Opacity</label>
+                            <input id="tryon-opacity" type="range" min="20" max="100" value="90" class="w-full">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button id="tryon-reset" type="button" class="font-sans font-semibold w-full py-3 rounded-xl border border-eby-dark/20 text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-bg transition-colors">Reset</button>
+                        <button id="tryon-download" type="button" class="font-sans font-semibold w-full py-3 rounded-xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">Download</button>
+                    </div>
+                    <p id="tryon-status" class="text-xs text-eby-brown-light">Upload a photo to begin.</p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="tryon-canvas-wrap shadow-sm">
+                        <canvas id="tryon-canvas" width="900" height="1200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Location / Map Section -->
                             <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" alt="32 Deep Wave Bulk" class="w-full h-full object-cover rounded-full">
@@ -521,10 +602,238 @@
         
         let currentBookingItem = "Standard Appointment";
         let currentBookingTotal = 20;
+        const tryOnState = {
+            personImage: null,
+            personImageUrl: '',
+            hairImage: null,
+            x: 0.5,
+            y: 0.3,
+            scale: 0.55,
+            rotation: 0,
+            opacity: 0.9,
+            dragging: false,
+            dragLastX: 0,
+            dragLastY: 0,
+            styleName: 'Silky French Curl'
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            initializeTryOnStudio();
         });
+
+        function initializeTryOnStudio() {
+            const fileInput = document.getElementById('tryon-person-upload');
+            const styleSelect = document.getElementById('tryon-style-select');
+            const scaleInput = document.getElementById('tryon-scale');
+            const rotationInput = document.getElementById('tryon-rotation');
+            const opacityInput = document.getElementById('tryon-opacity');
+            const resetBtn = document.getElementById('tryon-reset');
+            const downloadBtn = document.getElementById('tryon-download');
+            const canvas = document.getElementById('tryon-canvas');
+
+            if (!canvas || !fileInput || !styleSelect) return;
+
+            styleSelect.addEventListener('change', () => {
+                const selectedLabel = styleSelect.options[styleSelect.selectedIndex]?.text || 'Selected Style';
+                setTryOnHairImage(styleSelect.value, selectedLabel);
+            });
+
+            fileInput.addEventListener('change', async (event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                if (tryOnState.personImageUrl) URL.revokeObjectURL(tryOnState.personImageUrl);
+
+                const url = URL.createObjectURL(file);
+                tryOnState.personImageUrl = url;
+                const img = await loadImage(url);
+                tryOnState.personImage = img;
+                const width = Math.min(1200, img.naturalWidth || img.width || 900);
+                const ratio = (img.naturalHeight || img.height || 1200) / (img.naturalWidth || img.width || 900);
+                canvas.width = width;
+                canvas.height = Math.round(width * ratio);
+                setTryOnStatus('Photo loaded. Use drag + sliders to fit your look.');
+                await autoPositionHairWithAI();
+                renderTryOnCanvas();
+            });
+
+            scaleInput.addEventListener('input', (e) => {
+                tryOnState.scale = Number(e.target.value) / 100;
+                renderTryOnCanvas();
+            });
+            rotationInput.addEventListener('input', (e) => {
+                tryOnState.rotation = Number(e.target.value);
+                renderTryOnCanvas();
+            });
+            opacityInput.addEventListener('input', (e) => {
+                tryOnState.opacity = Number(e.target.value) / 100;
+                renderTryOnCanvas();
+            });
+
+            resetBtn.addEventListener('click', () => {
+                tryOnState.x = 0.5;
+                tryOnState.y = 0.3;
+                tryOnState.scale = 0.55;
+                tryOnState.rotation = 0;
+                tryOnState.opacity = 0.9;
+                scaleInput.value = 55;
+                rotationInput.value = 0;
+                opacityInput.value = 90;
+                renderTryOnCanvas();
+                setTryOnStatus('Placement reset.');
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                if (!tryOnState.personImage || !tryOnState.hairImage) {
+                    setTryOnStatus('Add a photo and style first.');
+                    return;
+                }
+                const link = document.createElement('a');
+                link.download = `ebys-place-try-on-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+
+            canvas.addEventListener('pointerdown', (e) => {
+                if (!tryOnState.personImage || !tryOnState.hairImage) return;
+                tryOnState.dragging = true;
+                tryOnState.dragLastX = e.clientX;
+                tryOnState.dragLastY = e.clientY;
+                canvas.classList.add('dragging');
+                canvas.setPointerCapture(e.pointerId);
+            });
+            canvas.addEventListener('pointermove', (e) => {
+                if (!tryOnState.dragging) return;
+                const dx = (e.clientX - tryOnState.dragLastX) / canvas.clientWidth;
+                const dy = (e.clientY - tryOnState.dragLastY) / canvas.clientHeight;
+                tryOnState.x = Math.min(1.2, Math.max(-0.2, tryOnState.x + dx));
+                tryOnState.y = Math.min(1.2, Math.max(-0.2, tryOnState.y + dy));
+                tryOnState.dragLastX = e.clientX;
+                tryOnState.dragLastY = e.clientY;
+                renderTryOnCanvas();
+            });
+            const endDrag = (e) => {
+                if (!tryOnState.dragging) return;
+                tryOnState.dragging = false;
+                canvas.classList.remove('dragging');
+                if (typeof e.pointerId !== 'undefined') {
+                    try { canvas.releasePointerCapture(e.pointerId); } catch {}
+                }
+            };
+            canvas.addEventListener('pointerup', endDrag);
+            canvas.addEventListener('pointercancel', endDrag);
+            canvas.addEventListener('pointerleave', endDrag);
+
+            setTryOnHairImage(styleSelect.value, styleSelect.options[styleSelect.selectedIndex]?.text || 'Silky French Curl');
+            renderTryOnCanvas();
+        }
+
+        async function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.crossOrigin = 'anonymous';
+                image.onload = () => resolve(image);
+                image.onerror = reject;
+                image.src = src;
+            });
+        }
+
+        async function setTryOnHairImage(src, styleName) {
+            try {
+                tryOnState.hairImage = await loadImage(src);
+                tryOnState.styleName = styleName;
+                renderTryOnCanvas();
+            } catch {
+                setTryOnStatus('Could not load selected hair style.');
+            }
+        }
+
+        function setTryOnStatus(message) {
+            const status = document.getElementById('tryon-status');
+            if (status) status.textContent = message;
+        }
+
+        function renderTryOnCanvas() {
+            const canvas = document.getElementById('tryon-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#F4EFE6';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (!tryOnState.personImage) {
+                ctx.fillStyle = '#6B5749';
+                ctx.textAlign = 'center';
+                ctx.font = '500 22px Lexend';
+                ctx.fillText('Upload your photo to start AI Try-On', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+
+            ctx.drawImage(tryOnState.personImage, 0, 0, canvas.width, canvas.height);
+
+            if (!tryOnState.hairImage) return;
+
+            const img = tryOnState.hairImage;
+            const hairWidth = canvas.width * tryOnState.scale;
+            const hairHeight = hairWidth * ((img.naturalHeight || img.height) / (img.naturalWidth || img.width));
+            const x = tryOnState.x * canvas.width;
+            const y = tryOnState.y * canvas.height;
+
+            ctx.save();
+            ctx.globalAlpha = tryOnState.opacity;
+            ctx.translate(x, y);
+            ctx.rotate((tryOnState.rotation * Math.PI) / 180);
+            ctx.drawImage(img, -hairWidth / 2, -hairHeight / 2, hairWidth, hairHeight);
+            ctx.restore();
+        }
+
+        async function autoPositionHairWithAI() {
+            if (!tryOnState.personImage) return;
+            if (!('FaceDetector' in window)) {
+                setTryOnStatus('AI auto-align unavailable in this browser. You can position manually.');
+                return;
+            }
+
+            try {
+                const detector = new FaceDetector({ fastMode: true, maxDetectedFaces: 1 });
+                const faces = await detector.detect(tryOnState.personImage);
+                if (!faces.length) {
+                    setTryOnStatus('No face detected. You can position manually.');
+                    return;
+                }
+
+                const box = faces[0].boundingBox;
+                const canvas = document.getElementById('tryon-canvas');
+                if (!canvas) return;
+                tryOnState.x = (box.x + box.width / 2) / canvas.width;
+                tryOnState.y = (box.y + box.height * 0.35) / canvas.height;
+                tryOnState.scale = Math.min(1.2, Math.max(0.25, (box.width / canvas.width) * 1.9));
+
+                const scaleInput = document.getElementById('tryon-scale');
+                if (scaleInput) scaleInput.value = Math.round(tryOnState.scale * 100);
+                setTryOnStatus('AI auto-align complete. Fine-tune with drag and sliders.');
+            } catch {
+                setTryOnStatus('AI auto-align failed. You can position manually.');
+            }
+        }
+
+        function openTryOnStudio(productName, imageUrl) {
+            const section = document.getElementById('tryon-studio');
+            const select = document.getElementById('tryon-style-select');
+            if (select) {
+                let existing = Array.from(select.options).find(opt => opt.value === imageUrl);
+                if (!existing) {
+                    existing = new Option(productName, imageUrl, true, true);
+                    select.add(existing);
+                }
+                select.value = imageUrl;
+            }
+            setTryOnHairImage(imageUrl, productName);
+            section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTryOnStatus(`Loaded ${productName} for try-on.`);
+        }
 
         // 1. Unified Booking Gate Control (Products + Appt)
         function startProductBooking(name, price) {
