@@ -5,11 +5,18 @@
  *   POST /api/tryon          — Submit a new try-on job
  *   GET  /api/tryon/:jobId   — Poll job status / retrieve result URL
  *
+ * Pipeline (2-stage, exact face preservation):
+ *   Stage 1 — jonathandinu/face-parsing
+ *     Segments the uploaded photo and returns a hair-region mask URL.
+ *   Stage 2 — black-forest-labs/flux-fill-pro
+ *     Inpaints only the masked hair region; face pixels are untouched by design.
+ *
  * Required Worker secrets (set via `wrangler secret put`):
  *   REPLICATE_API_KEY  — Your Replicate API token
  *
- * Optional Worker KV namespace binding (for rate limiting):
- *   RATE_LIMITER  — A KV namespace bound in wrangler.toml
+ * Required Worker KV namespace bindings (wrangler.toml):
+ *   RATE_LIMITER  — KV namespace for IP rate limiting
+ *   JOB_STATE     — KV namespace for per-job pipeline state
  */
 
 // ---------------------------------------------------------------------------
@@ -22,9 +29,22 @@ const ALLOWED_ORIGINS = [
   'https://www.ebysplace.com',
 ];
 
-/** Replicate model used for instruction-based image editing (hair style swap). */
-const REPLICATE_MODEL_OWNER = 'timothybrooks';
-const REPLICATE_MODEL_NAME  = 'instruct-pix2pix';
+// ---------------------------------------------------------------------------
+// Stage 1 — hair segmentation (face-parsing)
+// ---------------------------------------------------------------------------
+/** Replicate model that returns a hair-region segmentation mask. */
+const STAGE1_MODEL_OWNER = 'jonathandinu';
+const STAGE1_MODEL_NAME  = 'face-parsing';
+
+// ---------------------------------------------------------------------------
+// Stage 2 — hair inpainting
+// ---------------------------------------------------------------------------
+/**
+ * FLUX Fill Pro inpaints only the masked (hair) region.
+ * Because the face sits outside the mask, it is preserved pixel-perfectly.
+ */
+const STAGE2_MODEL_OWNER = 'black-forest-labs';
+const STAGE2_MODEL_NAME  = 'flux-fill-pro';
 
 /**
  * Rate limiting — requests per window per IP.
@@ -33,6 +53,9 @@ const REPLICATE_MODEL_NAME  = 'instruct-pix2pix';
  */
 const RATE_LIMIT_REQUESTS = 5;
 const RATE_LIMIT_WINDOW_SECONDS = 60;
+
+/** TTL for per-job pipeline state stored in JOB_STATE KV (1 hour). */
+const JOB_STATE_TTL_SECONDS = 3600;
 
 // ---------------------------------------------------------------------------
 // Worker entry point
@@ -122,30 +145,58 @@ async function handleSubmit(request, env, corsHeaders) {
   const base64  = arrayBufferToBase64(buffer);
   const dataUrl = `data:${photo.type};base64,${base64}`;
 
-  // 5. Build a face-preserving prompt
-  const fullPrompt = buildPrompt(prompt);
-
-  // 6. Submit to Replicate
+  // 5. Stage 1 — hair segmentation via face-parsing
   let prediction;
   try {
-    prediction = await replicateSubmit(env.REPLICATE_API_KEY, dataUrl, fullPrompt);
+    prediction = await replicateStage1(env.REPLICATE_API_KEY, dataUrl);
   } catch (err) {
-    console.error('[tryon] Replicate submit error:', err.message);
+    console.error('[tryon] Stage-1 submit error:', err.message);
     return jsonResponse(
       { error: 'Failed to start generation. Please try again shortly.' },
       502, corsHeaders,
     );
   }
 
-  console.log(`[tryon] Job ${prediction.id} submitted — style: ${styleName}, ip: ${ip}`);
+  // 6. Persist job state so the poll handler can advance to stage 2
+  //    when stage 1 completes.  JOB_STATE KV must be bound in wrangler.toml;
+  //    without it the pipeline cannot advance beyond stage 1.
+  if (!env.JOB_STATE) {
+    console.error('[tryon] JOB_STATE KV binding is missing — 2-stage pipeline requires it.');
+    return jsonResponse(
+      { error: 'Service misconfiguration. Please contact support.' },
+      500, corsHeaders,
+    );
+  }
+
+  const inpaintPrompt = buildInpaintPrompt(prompt);
+  await env.JOB_STATE.put(
+    `job:${prediction.id}`,
+    JSON.stringify({ stage: 1, originalImage: dataUrl, prompt: inpaintPrompt }),
+    { expirationTtl: JOB_STATE_TTL_SECONDS },
+  );
+
+  console.log(`[tryon] Stage-1 job ${prediction.id} submitted — style: ${styleName}, ip: ${ip}`);
 
   return jsonResponse(
-    { jobId: prediction.id, status: prediction.status },
+    { jobId: prediction.id, status: prediction.status, stage: 1 },
     202, corsHeaders,
   );
 }
 
 async function handlePoll(jobId, env, corsHeaders) {
+  // ------------------------------------------------------------------
+  // Look up whether this jobId belongs to a tracked pipeline stage.
+  // If JOB_STATE KV is not bound, behave as a simple Replicate poll.
+  // ------------------------------------------------------------------
+  let jobState = null;
+  if (env.JOB_STATE) {
+    const raw = await env.JOB_STATE.get(`job:${jobId}`);
+    if (raw) {
+      try { jobState = JSON.parse(raw); } catch { /* ignore malformed */ }
+    }
+  }
+
+  // Fetch current prediction status from Replicate
   let prediction;
   try {
     prediction = await replicatePoll(env.REPLICATE_API_KEY, jobId);
@@ -157,17 +208,61 @@ async function handlePoll(jobId, env, corsHeaders) {
     );
   }
 
-  const body = { status: prediction.status };
+  const { status } = prediction;
 
-  if (prediction.status === 'succeeded') {
-    const raw = prediction.output;
-    const url = Array.isArray(raw) ? raw[0] : raw;
+  // ------------------------------------------------------------------
+  // Stage 1 complete → submit stage 2 (inpainting)
+  // ------------------------------------------------------------------
+  if (jobState?.stage === 1 && status === 'succeeded') {
+    const maskUrl = extractOutputUrl(prediction.output);
+    if (!maskUrl) {
+      return jsonResponse({ error: 'Hair segmentation returned no mask.' }, 502, corsHeaders);
+    }
+
+    let stage2Prediction;
+    try {
+      stage2Prediction = await replicateStage2(
+        env.REPLICATE_API_KEY,
+        jobState.originalImage,
+        maskUrl,
+        jobState.prompt,
+      );
+    } catch (err) {
+      console.error(`[tryon] Stage-2 submit error for ${jobId}:`, err.message);
+      return jsonResponse(
+        { error: 'Failed to start inpainting. Please try again shortly.' },
+        502, corsHeaders,
+      );
+    }
+
+    // Clean up stage-1 state; no need to track stage-2 separately
+    await env.JOB_STATE.delete(`job:${jobId}`).catch(err =>
+      console.warn(`[tryon] Failed to delete KV entry for ${jobId}:`, err.message),
+    );
+
+    console.log(`[tryon] Stage-2 job ${stage2Prediction.id} submitted (from stage-1 ${jobId})`);
+
+    // Tell the client to start polling the new stage-2 job ID
+    return jsonResponse(
+      { status: 'processing', stage: 2, jobId: stage2Prediction.id },
+      200, corsHeaders,
+    );
+  }
+
+  // ------------------------------------------------------------------
+  // Stage 1 still running, or plain stage-2 / legacy job
+  // ------------------------------------------------------------------
+  const body = { status };
+  if (jobState?.stage === 1) body.stage = 1;
+
+  if (status === 'succeeded') {
+    const url = extractOutputUrl(prediction.output);
     if (!url) {
       return jsonResponse({ error: 'AI returned no image.' }, 502, corsHeaders);
     }
     body.url = url;
     console.log(`[tryon] Job ${jobId} succeeded — url: ${url}`);
-  } else if (prediction.status === 'failed' || prediction.status === 'canceled') {
+  } else if (status === 'failed' || status === 'canceled') {
     body.error = prediction.error || 'Generation failed. Please try again.';
     console.warn(`[tryon] Job ${jobId} failed:`, prediction.error);
   }
@@ -176,16 +271,59 @@ async function handlePoll(jobId, env, corsHeaders) {
 }
 
 // ---------------------------------------------------------------------------
-// Replicate helpers
+// Extract a result URL from model output (handles string or array)
+// ---------------------------------------------------------------------------
+function extractOutputUrl(output) {
+  if (!output) return null;
+  if (Array.isArray(output)) return output[0] || null;
+  if (typeof output === 'string') return output;
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Replicate helpers — 2-stage pipeline
 // ---------------------------------------------------------------------------
 
 /**
- * Submit a new prediction to the latest version of the model.
- * Uses /v1/models/:owner/:name/predictions so no version hash is needed.
+ * Stage 1 — Submit to jonathandinu/face-parsing.
+ * The model returns a segmented image where the hair region is coloured
+ * distinctly (CelebAMask-HQ label 17).  We use that image directly as the
+ * inpainting mask in stage 2 — FLUX Fill Pro treats any non-black region
+ * in the mask as the area to inpaint, so the coloured hair segment drives
+ * the edit while the face is untouched.
  */
-async function replicateSubmit(apiKey, imageDataUrl, prompt) {
+async function replicateStage1(apiKey, imageDataUrl) {
   const resp = await fetch(
-    `https://api.replicate.com/v1/models/${REPLICATE_MODEL_OWNER}/${REPLICATE_MODEL_NAME}/predictions`,
+    `https://api.replicate.com/v1/models/${STAGE1_MODEL_OWNER}/${STAGE1_MODEL_NAME}/predictions`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${apiKey}`,
+        'Content-Type':  'application/json',
+        'Prefer':        'respond-async',
+      },
+      body: JSON.stringify({
+        input: { image: imageDataUrl },
+      }),
+    },
+  );
+
+  if (!resp.ok) {
+    const body = await resp.text().catch(() => '');
+    throw new Error(`Replicate stage-1 ${resp.status}: ${body}`);
+  }
+
+  return resp.json();
+}
+
+/**
+ * Stage 2 — Submit to black-forest-labs/flux-fill-pro.
+ * Inpaints only the masked hair region; face pixels are structurally
+ * preserved because they lie outside the mask.
+ */
+async function replicateStage2(apiKey, imageDataUrl, maskUrl, prompt) {
+  const resp = await fetch(
+    `https://api.replicate.com/v1/models/${STAGE2_MODEL_OWNER}/${STAGE2_MODEL_NAME}/predictions`,
     {
       method: 'POST',
       headers: {
@@ -195,13 +333,12 @@ async function replicateSubmit(apiKey, imageDataUrl, prompt) {
       },
       body: JSON.stringify({
         input: {
-          image:               imageDataUrl,
-          prompt:              prompt,
-          negative_prompt:     'changed face, different person, altered eyes, altered nose, altered mouth, altered skin tone, altered expression, blurry face, distorted face, deformed face, low quality, ugly',
-          image_guidance_scale: 2.5,
-          guidance_scale:       7.5,
-          num_inference_steps:  50,
-          num_outputs:          1,
+          image:          imageDataUrl,
+          mask:           maskUrl,
+          prompt:         prompt,
+          output_format:  'jpg',
+          output_quality: 90,
+          safety_tolerance: 2,
         },
       }),
     },
@@ -209,7 +346,7 @@ async function replicateSubmit(apiKey, imageDataUrl, prompt) {
 
   if (!resp.ok) {
     const body = await resp.text().catch(() => '');
-    throw new Error(`Replicate ${resp.status}: ${body}`);
+    throw new Error(`Replicate stage-2 ${resp.status}: ${body}`);
   }
 
   return resp.json();
@@ -270,13 +407,12 @@ function buildCorsHeaders(origin) {
 }
 
 /**
- * Build a hair-only instruction prompt for instruct-pix2pix.
- * The model responds to short imperative phrases. A high image_guidance_scale (2.5)
- * combined with explicit "do not change" wording keeps the face, skin, and
- * background identical and restricts changes to the hair region only.
+ * Build an inpainting prompt for FLUX Fill Pro (stage 2).
+ * The prompt describes only the hair since the face is structurally preserved
+ * by the mask — the model only generates pixels inside the masked region.
  */
-function buildPrompt(stylePrompt) {
-  return `Replace only the hairstyle with ${stylePrompt}. Keep the person's face, eyes, nose, mouth, skin tone, expression, neck, shoulders, clothing, and background completely identical. Do not change anything except the hair.`;
+function buildInpaintPrompt(stylePrompt) {
+  return `${stylePrompt}, professional braiding salon quality, natural realistic look, high resolution`;
 }
 
 /** Convert an ArrayBuffer to a base64 string without Buffer (Workers runtime). */

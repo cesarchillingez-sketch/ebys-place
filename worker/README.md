@@ -10,18 +10,30 @@ validating uploaded images.
 
 ---
 
-## Architecture
+## Architecture — 2-stage pipeline (exact face preservation)
 
 ```
 Browser (tryon.html)
   │  POST /api/tryon         (multipart: photo + style + prompt)
-  │  GET  /api/tryon/:jobId  (poll for result)
+  │  GET  /api/tryon/:jobId  (poll — client follows stage transitions)
   ▼
 Cloudflare Worker  (this directory)
-  │  submit prediction / poll status
-  ▼
-Replicate API  →  timothybrooks/instruct-pix2pix
+  │
+  ├─ Stage 1 ─ jonathandinu/face-parsing
+  │            Segments the photo; returns a hair-region mask image URL.
+  │            Job state (original image + prompt) stored in JOB_STATE KV.
+  │
+  └─ Stage 2 ─ black-forest-labs/flux-fill-pro
+               Inpaints only the masked hair region.
+               Face pixels lie outside the mask → zero AI drift.
 ```
+
+**Why exact face preservation?**
+Previous approach (`instruct-pix2pix`) edited the whole image via text
+instructions — the face could drift slightly on every run.  The 2-stage
+pipeline uses a structural mask, so the model is physically prevented from
+touching any pixel outside the hair region.  The face, eyes, skin tone, and
+expression are preserved exactly.
 
 ---
 
@@ -41,18 +53,23 @@ wrangler login
 
 ## One-time setup
 
-### 1. Create a KV namespace for rate limiting
+### 1. Create KV namespaces
 
 ```bash
 wrangler kv namespace create RATE_LIMITER
+wrangler kv namespace create JOB_STATE
 ```
 
-Copy the `id` from the output and paste it into `wrangler.toml`:
+Copy the `id` values from the output and paste them into `wrangler.toml`:
 
 ```toml
 [[kv_namespaces]]
 binding = "RATE_LIMITER"
-id      = "PASTE_YOUR_ID_HERE"
+id      = "PASTE_RATE_LIMITER_ID_HERE"
+
+[[kv_namespaces]]
+binding = "JOB_STATE"
+id      = "PASTE_JOB_STATE_ID_HERE"
 ```
 
 ### 2. Add your Replicate API key as a secret
@@ -136,22 +153,40 @@ then refresh the page.
 
 ---
 
-## Changing the AI model
+## Pipeline details
 
-The worker defaults to **`timothybrooks/instruct-pix2pix`** on Replicate,
-an instruction-tuned diffusion model that accepts an input photo and a text
-instruction ("change the hairstyle to knotless braids") and modifies only
-the described region while preserving the rest of the image.
+### Stage 1 — `jonathandinu/face-parsing`
 
-To switch models, update the two constants near the top of `index.js`:
+Segments the uploaded portrait using a BiSeNet model trained on CelebAMask-HQ.
+Returns a coloured segmentation image where the hair region is distinctly
+coloured (label 17 in the CelebAMask-HQ taxonomy).  This segmentation image
+is used directly as the inpainting mask for stage 2.
 
-```js
-const REPLICATE_MODEL_OWNER = 'timothybrooks';
-const REPLICATE_MODEL_NAME  = 'instruct-pix2pix';
+Job state (original image data URL + inpainting prompt) is stored in the
+`JOB_STATE` KV namespace under key `job:{stage1Id}` with a 1-hour TTL.
+
+### Stage 2 — `black-forest-labs/flux-fill-pro`
+
+Receives:
+- `image` — the original uploaded photo (data URL, from KV)
+- `mask`  — the hair segmentation from stage 1 (Replicate URL)
+- `prompt` — the selected braid style description
+
+FLUX Fill Pro inpaints only the pixels covered by the mask.  Because the
+face lies outside the mask it is structurally unchanged — no negative prompts
+or guidance tricks are needed.
+
+### Stage transition (client-side)
+
+When the worker detects that stage 1 has completed it immediately submits
+stage 2 and returns:
+
+```json
+{ "status": "processing", "stage": 2, "jobId": "<new-stage2-id>" }
 ```
 
-Ensure the replacement model accepts the same `input` schema (or update
-`replicateSubmit()` accordingly).
+`tryon.html` detects `data.jobId !== currentJobId`, swaps to the new ID,
+and continues polling.
 
 ---
 
@@ -161,3 +196,5 @@ Ensure the replacement model accepts the same `input` schema (or update
 * Uploaded images are validated for MIME type and size server-side.
 * IP-based rate limiting (5 requests / 60 s) is enforced via Cloudflare KV.
 * CORS is restricted to `ebysplace.com` and `*.github.io` origins.
+* Job state in KV uses a 1-hour TTL — original image data is never persisted
+  beyond that window.
