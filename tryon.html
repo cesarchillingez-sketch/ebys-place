@@ -345,6 +345,7 @@
         let selectedStyle = null;
         let uploadedFile = null;
         let uploadedDataUrl = null;
+        let compressedDataUrl = null; // base64 data URL of the compressed image for stage 2
 
         // Render style cards
         function renderStyles() {
@@ -434,6 +435,7 @@
         function clearPhoto() {
             uploadedFile = null;
             uploadedDataUrl = null;
+            compressedDataUrl = null;
             photoInput.value = '';
             document.getElementById('upload-placeholder').classList.remove('hidden');
             document.getElementById('upload-preview').classList.add('hidden');
@@ -441,7 +443,7 @@
         }
 
         // ---------------------------------------------------------------------------
-        // Generate — submit → poll → result
+        // Generate — submit → poll stage 1 → submit stage 2 → poll → result
         // ---------------------------------------------------------------------------
         document.getElementById('generate-btn').addEventListener('click', runGenerate);
 
@@ -454,14 +456,17 @@
                 setLoadingStatus('Preparing your photo…');
                 const compressed = await compressImage(uploadedFile, 1024, 0.85);
 
-                // 2. Build form data
+                // Store compressed image as data URL so we can reuse it in stage 2
+                compressedDataUrl = await blobToDataUrl(compressed);
+
+                // 2. Build form data for stage 1 (hair segmentation)
                 const formData = new FormData();
                 formData.append('photo',     compressed, 'photo.jpg');
                 formData.append('style',     selectedStyle.id);
                 formData.append('prompt',    selectedStyle.prompt);
                 formData.append('styleName', selectedStyle.name);
 
-                // 3. Submit job
+                // 3. Submit stage 1
                 setLoadingStatus('Sending to AI…');
                 const submitResp = await fetchWithTimeout(
                     TRYON_API_BASE + '/tryon',
@@ -474,11 +479,39 @@
                     throw new Error(err.error || 'Submission failed. Please try again.');
                 }
 
-                const { jobId } = await submitResp.json();
+                const { jobId, prompt: inpaintPrompt } = await submitResp.json();
                 if (!jobId) throw new Error('No job ID returned by server.');
 
-                // 4. Poll until done
-                const imageUrl = await pollForResult(jobId);
+                // 4. Poll stage 1 until the mask is ready
+                setLoadingStatus('Analysing your photo… (stage 1 of 2)');
+                const maskUrl = await pollUntilSucceeded(jobId, 'Analysing your photo…');
+
+                // 5. Submit stage 2 (inpainting) with the mask from stage 1
+                setLoadingStatus('Applying your new hairstyle… (stage 2 of 2)');
+                const inpaintResp = await fetchWithTimeout(
+                    TRYON_API_BASE + '/tryon/inpaint',
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            image:  compressedDataUrl,
+                            mask:   maskUrl,
+                            prompt: inpaintPrompt,
+                        }),
+                    },
+                    SUBMIT_TIMEOUT_MS,
+                );
+
+                if (!inpaintResp.ok) {
+                    const err = await inpaintResp.json().catch(() => ({}));
+                    throw new Error(err.error || 'Inpainting failed. Please try again.');
+                }
+
+                const { jobId: stage2JobId } = await inpaintResp.json();
+                if (!stage2JobId) throw new Error('No stage-2 job ID returned by server.');
+
+                // 6. Poll stage 2 until the final image is ready
+                const imageUrl = await pollUntilSucceeded(stage2JobId, 'Applying your new hairstyle…');
                 showResult(imageUrl);
 
             } catch (err) {
@@ -487,24 +520,15 @@
         }
 
         // ---------------------------------------------------------------------------
-        // Polling — GET /api/tryon/:jobId every 2 s, max 120 s
-        //
-        // The backend uses a 2-stage pipeline:
-        //   Stage 1 — face-parsing (hair segmentation)
-        //   Stage 2 — flux-fill-pro inpainting (hair region only)
-        //
-        // When stage 1 completes the server returns:
-        //   { status: 'processing', stage: 2, jobId: '<new-stage2-id>' }
-        // The client swaps to the new jobId and continues polling.
+        // Poll a single Replicate job until it succeeds, fails, or times out.
+        // Returns the output URL on success.
         // ---------------------------------------------------------------------------
-        async function pollForResult(jobId, maxAttempts = 60, intervalMs = 2000) {
-            let currentJobId = jobId;
-
+        async function pollUntilSucceeded(jobId, stageLabel, maxAttempts = 60, intervalMs = 2000) {
             for (let i = 0; i < maxAttempts; i++) {
                 await sleep(intervalMs);
 
                 const resp = await fetchWithTimeout(
-                    TRYON_API_BASE + '/tryon/' + currentJobId,
+                    TRYON_API_BASE + '/tryon/' + jobId,
                     {},
                     POLL_TIMEOUT_MS,
                 );
@@ -514,7 +538,7 @@
                 const data = await resp.json();
 
                 if (data.status === 'succeeded') {
-                    if (!data.url) throw new Error('AI returned no image. Please try again.');
+                    if (!data.url) throw new Error('AI returned no output. Please try again.');
                     return data.url;
                 }
 
@@ -522,20 +546,24 @@
                     throw new Error(data.error || 'Generation failed. Please try again.');
                 }
 
-                // Stage transition: server finished stage 1 and started stage 2
-                if (data.jobId && data.jobId !== currentJobId) {
-                    currentJobId = data.jobId;
-                    setLoadingStatus('Applying your new hairstyle… stage 2 of 2');
-                    continue;
-                }
-
                 // 'starting' | 'processing' — keep polling and update timer
                 const elapsed = Math.round(((i + 1) * intervalMs) / 1000);
-                const stageLabel = data.stage === 1 ? 'Analysing your photo…' : 'Applying your new hairstyle…';
                 setLoadingStatus(`${stageLabel} (${elapsed}s)`);
             }
 
             throw new Error('Generation timed out after 120 s. Please try again.');
+        }
+
+        // ---------------------------------------------------------------------------
+        // Convert a Blob to a base64 data URL
+        // ---------------------------------------------------------------------------
+        function blobToDataUrl(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read compressed image.'));
+                reader.readAsDataURL(blob);
+            });
         }
 
         // ---------------------------------------------------------------------------

@@ -5,8 +5,7 @@ backend for the AI Try-On feature on `tryon.html`.
 
 Because `ebysplace.com` is hosted on GitHub Pages (static files only), the
 worker runs as a separate edge service and handles everything that requires a
-secret key: calling the Replicate AI API, rate limiting requests, and
-validating uploaded images.
+secret key: calling the Replicate AI API and validating uploaded images.
 
 ---
 
@@ -14,26 +13,28 @@ validating uploaded images.
 
 ```
 Browser (tryon.html)
-  │  POST /api/tryon         (multipart: photo + style + prompt)
-  │  GET  /api/tryon/:jobId  (poll — client follows stage transitions)
+  │  POST /api/tryon           (multipart: photo + style + prompt)
+  │  GET  /api/tryon/:jobId    (poll stage 1 until mask is ready)
+  │  POST /api/tryon/inpaint   (JSON: image + mask + prompt → start stage 2)
+  │  GET  /api/tryon/:jobId    (poll stage 2 until final image is ready)
   ▼
 Cloudflare Worker  (this directory)
   │
   ├─ Stage 1 ─ jonathandinu/face-parsing
   │            Segments the photo; returns a hair-region mask image URL.
-  │            Job state (original image + prompt) stored in JOB_STATE KV.
   │
   └─ Stage 2 ─ black-forest-labs/flux-fill-pro
                Inpaints only the masked hair region.
                Face pixels lie outside the mask → zero AI drift.
 ```
 
+Pipeline state (original image, mask URL, prompt) is tracked **client-side**
+in `tryon.html`, so no Cloudflare KV namespaces are required.
+
 **Why exact face preservation?**
-Previous approach (`instruct-pix2pix`) edited the whole image via text
-instructions — the face could drift slightly on every run.  The 2-stage
-pipeline uses a structural mask, so the model is physically prevented from
-touching any pixel outside the hair region.  The face, eyes, skin tone, and
-expression are preserved exactly.
+The 2-stage pipeline uses a structural mask, so the model is physically
+prevented from touching any pixel outside the hair region.  The face, eyes,
+skin tone, and expression are preserved exactly.
 
 ---
 
@@ -53,26 +54,7 @@ wrangler login
 
 ## One-time setup
 
-### 1. Create KV namespaces
-
-```bash
-wrangler kv namespace create RATE_LIMITER
-wrangler kv namespace create JOB_STATE
-```
-
-Copy the `id` values from the output and paste them into `wrangler.toml`:
-
-```toml
-[[kv_namespaces]]
-binding = "RATE_LIMITER"
-id      = "PASTE_RATE_LIMITER_ID_HERE"
-
-[[kv_namespaces]]
-binding = "JOB_STATE"
-id      = "PASTE_JOB_STATE_ID_HERE"
-```
-
-### 2. Add your Replicate API key as a secret
+### 1. Add your Replicate API key as a secret
 
 Get a free API key at <https://replicate.com/account/api-tokens>.
 
@@ -81,7 +63,7 @@ wrangler secret put REPLICATE_API_KEY
 # Paste your token and press Enter — it is stored encrypted, never in files.
 ```
 
-### 3. Update the route in `wrangler.toml`
+### 2. Update the route in `wrangler.toml`
 
 Edit the `[[routes]]` section to match your domain and Cloudflare zone:
 
@@ -110,7 +92,7 @@ The worker will be available at `http://localhost:8787`.
 Update `tryon.html` temporarily to point to the local endpoint:
 
 ```js
-const API_BASE = 'http://localhost:8787';
+localStorage.setItem('TRYON_API_BASE', 'http://localhost:8787')
 ```
 
 ---
@@ -162,14 +144,11 @@ Returns a coloured segmentation image where the hair region is distinctly
 coloured (label 17 in the CelebAMask-HQ taxonomy).  This segmentation image
 is used directly as the inpainting mask for stage 2.
 
-Job state (original image data URL + inpainting prompt) is stored in the
-`JOB_STATE` KV namespace under key `job:{stage1Id}` with a 1-hour TTL.
-
 ### Stage 2 — `black-forest-labs/flux-fill-pro`
 
 Receives:
-- `image` — the original uploaded photo (data URL, from KV)
-- `mask`  — the hair segmentation from stage 1 (Replicate URL)
+- `image` — the original uploaded photo (data URL, from the browser)
+- `mask`  — the hair segmentation URL from stage 1
 - `prompt` — the selected braid style description
 
 FLUX Fill Pro inpaints only the pixels covered by the mask.  Because the
@@ -178,15 +157,14 @@ or guidance tricks are needed.
 
 ### Stage transition (client-side)
 
-When the worker detects that stage 1 has completed it immediately submits
-stage 2 and returns:
-
-```json
-{ "status": "processing", "stage": 2, "jobId": "<new-stage2-id>" }
-```
-
-`tryon.html` detects `data.jobId !== currentJobId`, swaps to the new ID,
-and continues polling.
+`tryon.html` drives the pipeline:
+1. Submits stage 1 via `POST /api/tryon`, receives a `jobId`.
+2. Polls `GET /api/tryon/:jobId` until `status === "succeeded"` — the `url`
+   in the response is the hair mask.
+3. Submits stage 2 via `POST /api/tryon/inpaint` with the original image,
+   mask URL, and prompt.
+4. Polls the new stage-2 `jobId` until `status === "succeeded"` — the `url`
+   is the final result image shown to the user.
 
 ---
 
@@ -194,7 +172,4 @@ and continues polling.
 
 * The `REPLICATE_API_KEY` secret is **never** exposed to the browser.
 * Uploaded images are validated for MIME type and size server-side.
-* IP-based rate limiting (5 requests / 60 s) is enforced via Cloudflare KV.
 * CORS is restricted to `ebysplace.com` and `*.github.io` origins.
-* Job state in KV uses a 1-hour TTL — original image data is never persisted
-  beyond that window.

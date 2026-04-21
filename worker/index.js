@@ -2,8 +2,9 @@
  * Eby's Place — AI Try-On Cloudflare Worker
  *
  * Routes:
- *   POST /api/tryon          — Submit a new try-on job
- *   GET  /api/tryon/:jobId   — Poll job status / retrieve result URL
+ *   POST /api/tryon          — Submit stage 1 (hair segmentation)
+ *   POST /api/tryon/inpaint  — Submit stage 2 (hair inpainting) with mask from stage 1
+ *   GET  /api/tryon/:jobId   — Poll any Replicate job for its current status
  *
  * Pipeline (2-stage, exact face preservation):
  *   Stage 1 — jonathandinu/face-parsing
@@ -11,51 +12,27 @@
  *   Stage 2 — black-forest-labs/flux-fill-pro
  *     Inpaints only the masked hair region; face pixels are untouched by design.
  *
- * Required Worker secrets (set via `wrangler secret put`):
- *   REPLICATE_API_KEY  — Your Replicate API token
+ * Pipeline state is tracked client-side, so no KV namespaces are required.
  *
- * Required Worker KV namespace bindings (wrangler.toml):
- *   RATE_LIMITER  — KV namespace for IP rate limiting
- *   JOB_STATE     — KV namespace for per-job pipeline state
+ * Required Worker secret (set via `wrangler secret put`):
+ *   REPLICATE_API_KEY  — Your Replicate API token
  */
 
 // ---------------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------------
 
-/** Domains allowed to call this API.  GitHub Pages sub-domain is included. */
+/** Domains allowed to call this API. */
 const ALLOWED_ORIGINS = [
   'https://ebysplace.com',
   'https://www.ebysplace.com',
 ];
 
-// ---------------------------------------------------------------------------
-// Stage 1 — hair segmentation (face-parsing)
-// ---------------------------------------------------------------------------
-/** Replicate model that returns a hair-region segmentation mask. */
 const STAGE1_MODEL_OWNER = 'jonathandinu';
 const STAGE1_MODEL_NAME  = 'face-parsing';
 
-// ---------------------------------------------------------------------------
-// Stage 2 — hair inpainting
-// ---------------------------------------------------------------------------
-/**
- * FLUX Fill Pro inpaints only the masked (hair) region.
- * Because the face sits outside the mask, it is preserved pixel-perfectly.
- */
 const STAGE2_MODEL_OWNER = 'black-forest-labs';
 const STAGE2_MODEL_NAME  = 'flux-fill-pro';
-
-/**
- * Rate limiting — requests per window per IP.
- * Requires a KV namespace called RATE_LIMITER bound in wrangler.toml.
- * If the binding is absent the check is silently skipped (no KV = no limiting).
- */
-const RATE_LIMIT_REQUESTS = 5;
-const RATE_LIMIT_WINDOW_SECONDS = 60;
-
-/** TTL for per-job pipeline state stored in JOB_STATE KV (1 hour). */
-const JOB_STATE_TTL_SECONDS = 3600;
 
 // ---------------------------------------------------------------------------
 // Worker entry point
@@ -73,9 +50,14 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    // POST /api/tryon — submit
+    // POST /api/tryon — submit stage 1
     if (request.method === 'POST' && url.pathname === '/api/tryon') {
       return handleSubmit(request, env, corsHeaders);
+    }
+
+    // POST /api/tryon/inpaint — submit stage 2 using mask from stage 1
+    if (request.method === 'POST' && url.pathname === '/api/tryon/inpaint') {
+      return handleInpaint(request, env, corsHeaders);
     }
 
     // GET /api/tryon/:jobId — poll
@@ -93,17 +75,15 @@ export default {
 // ---------------------------------------------------------------------------
 
 async function handleSubmit(request, env, corsHeaders) {
-  // 1. Rate limiting
-  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-  const allowed = await checkRateLimit(env, ip);
-  if (!allowed) {
+  if (!env.REPLICATE_API_KEY) {
+    console.error('[tryon] REPLICATE_API_KEY secret is not set.');
     return jsonResponse(
-      { error: 'Too many requests — please wait a minute and try again.' },
-      429, corsHeaders,
+      { error: 'Service misconfiguration. Please contact support.' },
+      500, corsHeaders,
     );
   }
 
-  // 2. Parse multipart form data
+  // Parse multipart form data
   let formData;
   try {
     formData = await request.formData();
@@ -123,7 +103,7 @@ async function handleSubmit(request, env, corsHeaders) {
     );
   }
 
-  // 3. Validate image
+  // Validate image
   const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
   if (!ALLOWED_TYPES.includes(photo.type)) {
     return jsonResponse(
@@ -140,12 +120,12 @@ async function handleSubmit(request, env, corsHeaders) {
     );
   }
 
-  // 4. Convert image to base64 data URL (Replicate accepts this format)
+  // Convert image to base64 data URL (Replicate accepts this format)
   const buffer  = await photo.arrayBuffer();
   const base64  = arrayBufferToBase64(buffer);
   const dataUrl = `data:${photo.type};base64,${base64}`;
 
-  // 5. Stage 1 — hair segmentation via face-parsing
+  // Submit to Stage 1 — hair segmentation via face-parsing
   let prediction;
   try {
     prediction = await replicateStage1(env.REPLICATE_API_KEY, dataUrl);
@@ -157,46 +137,67 @@ async function handleSubmit(request, env, corsHeaders) {
     );
   }
 
-  // 6. Persist job state so the poll handler can advance to stage 2
-  //    when stage 1 completes.  JOB_STATE KV must be bound in wrangler.toml;
-  //    without it the pipeline cannot advance beyond stage 1.
-  if (!env.JOB_STATE) {
-    console.error('[tryon] JOB_STATE KV binding is missing — 2-stage pipeline requires it.');
+  const inpaintPrompt = buildInpaintPrompt(prompt);
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  console.log(`[tryon] Stage-1 job ${prediction.id} submitted — style: ${styleName}, ip: ${ip}`);
+
+  // Return jobId + the inpaint prompt so the client can submit stage 2 itself
+  return jsonResponse(
+    { jobId: prediction.id, status: prediction.status, stage: 1, prompt: inpaintPrompt },
+    202, corsHeaders,
+  );
+}
+
+async function handleInpaint(request, env, corsHeaders) {
+  if (!env.REPLICATE_API_KEY) {
+    console.error('[tryon] REPLICATE_API_KEY secret is not set.');
     return jsonResponse(
       { error: 'Service misconfiguration. Please contact support.' },
       500, corsHeaders,
     );
   }
 
-  const inpaintPrompt = buildInpaintPrompt(prompt);
-  await env.JOB_STATE.put(
-    `job:${prediction.id}`,
-    JSON.stringify({ stage: 1, originalImage: dataUrl, prompt: inpaintPrompt }),
-    { expirationTtl: JOB_STATE_TTL_SECONDS },
-  );
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ error: 'Invalid request format.' }, 400, corsHeaders);
+  }
 
-  console.log(`[tryon] Stage-1 job ${prediction.id} submitted — style: ${styleName}, ip: ${ip}`);
+  const { image, mask, prompt } = body;
+  if (!image || !mask || !prompt) {
+    return jsonResponse(
+      { error: 'Missing required fields: image, mask, prompt.' },
+      400, corsHeaders,
+    );
+  }
 
+  let prediction;
+  try {
+    prediction = await replicateStage2(env.REPLICATE_API_KEY, image, mask, prompt);
+  } catch (err) {
+    console.error('[tryon] Stage-2 submit error:', err.message);
+    return jsonResponse(
+      { error: 'Failed to start inpainting. Please try again shortly.' },
+      502, corsHeaders,
+    );
+  }
+
+  console.log(`[tryon] Stage-2 job ${prediction.id} submitted`);
   return jsonResponse(
-    { jobId: prediction.id, status: prediction.status, stage: 1 },
+    { jobId: prediction.id, status: prediction.status, stage: 2 },
     202, corsHeaders,
   );
 }
 
 async function handlePoll(jobId, env, corsHeaders) {
-  // ------------------------------------------------------------------
-  // Look up whether this jobId belongs to a tracked pipeline stage.
-  // If JOB_STATE KV is not bound, behave as a simple Replicate poll.
-  // ------------------------------------------------------------------
-  let jobState = null;
-  if (env.JOB_STATE) {
-    const raw = await env.JOB_STATE.get(`job:${jobId}`);
-    if (raw) {
-      try { jobState = JSON.parse(raw); } catch { /* ignore malformed */ }
-    }
+  if (!env.REPLICATE_API_KEY) {
+    return jsonResponse(
+      { error: 'Service misconfiguration. Please contact support.' },
+      500, corsHeaders,
+    );
   }
 
-  // Fetch current prediction status from Replicate
   let prediction;
   try {
     prediction = await replicatePoll(env.REPLICATE_API_KEY, jobId);
@@ -209,56 +210,12 @@ async function handlePoll(jobId, env, corsHeaders) {
   }
 
   const { status } = prediction;
-
-  // ------------------------------------------------------------------
-  // Stage 1 complete → submit stage 2 (inpainting)
-  // ------------------------------------------------------------------
-  if (jobState?.stage === 1 && status === 'succeeded') {
-    const maskUrl = extractOutputUrl(prediction.output);
-    if (!maskUrl) {
-      return jsonResponse({ error: 'Hair segmentation returned no mask.' }, 502, corsHeaders);
-    }
-
-    let stage2Prediction;
-    try {
-      stage2Prediction = await replicateStage2(
-        env.REPLICATE_API_KEY,
-        jobState.originalImage,
-        maskUrl,
-        jobState.prompt,
-      );
-    } catch (err) {
-      console.error(`[tryon] Stage-2 submit error for ${jobId}:`, err.message);
-      return jsonResponse(
-        { error: 'Failed to start inpainting. Please try again shortly.' },
-        502, corsHeaders,
-      );
-    }
-
-    // Clean up stage-1 state; no need to track stage-2 separately
-    await env.JOB_STATE.delete(`job:${jobId}`).catch(err =>
-      console.warn(`[tryon] Failed to delete KV entry for ${jobId}:`, err.message),
-    );
-
-    console.log(`[tryon] Stage-2 job ${stage2Prediction.id} submitted (from stage-1 ${jobId})`);
-
-    // Tell the client to start polling the new stage-2 job ID
-    return jsonResponse(
-      { status: 'processing', stage: 2, jobId: stage2Prediction.id },
-      200, corsHeaders,
-    );
-  }
-
-  // ------------------------------------------------------------------
-  // Stage 1 still running, or plain stage-2 / legacy job
-  // ------------------------------------------------------------------
   const body = { status };
-  if (jobState?.stage === 1) body.stage = 1;
 
   if (status === 'succeeded') {
     const url = extractOutputUrl(prediction.output);
     if (!url) {
-      return jsonResponse({ error: 'AI returned no image.' }, 502, corsHeaders);
+      return jsonResponse({ error: 'AI returned no output.' }, 502, corsHeaders);
     }
     body.url = url;
     console.log(`[tryon] Job ${jobId} succeeded — url: ${url}`);
@@ -365,26 +322,6 @@ async function replicatePoll(apiKey, predictionId) {
   }
 
   return resp.json();
-}
-
-// ---------------------------------------------------------------------------
-// Rate limiting (Cloudflare KV)
-// ---------------------------------------------------------------------------
-
-async function checkRateLimit(env, ip) {
-  if (!env.RATE_LIMITER) return true; // KV not bound — skip
-
-  const key     = `rl:${ip}`;
-  const current = await env.RATE_LIMITER.get(key);
-  const count   = current ? parseInt(current, 10) : 0;
-
-  if (count >= RATE_LIMIT_REQUESTS) return false;
-
-  await env.RATE_LIMITER.put(key, String(count + 1), {
-    expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
-  });
-
-  return true;
 }
 
 // ---------------------------------------------------------------------------
