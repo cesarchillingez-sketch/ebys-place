@@ -100,6 +100,26 @@ const API_BASE = 'http://localhost:8787';
 
 ## Deployment
 
+### Automatic (recommended) — GitHub Actions
+
+The workflow `.github/workflows/deploy-worker.yml` runs on every push to `main`
+that touches `worker/**`. It deploys the worker and syncs the `REPLICATE_API_KEY`
+secret automatically.
+
+**Add these three secrets once** under
+`Settings → Secrets and variables → Actions → New repository secret`:
+
+| Secret name | Where to get it |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) — create a token with **Edit Workers** permission |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → right sidebar on any zone page |
+| `REPLICATE_API_KEY` | [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens) |
+
+Once the secrets are in place, push any change to `worker/` (or trigger the
+workflow manually from the **Actions** tab) and the worker is live.
+
+### Manual
+
 ```bash
 cd worker
 wrangler deploy
