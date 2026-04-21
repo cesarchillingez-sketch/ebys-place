@@ -422,7 +422,7 @@
     </main>
 
     <!-- AI Try-On Studio -->
-    <section id="tryon-studio" class="py-24 bg-eby-surface/70 border-y border-eby-gold-dark/10">
+    <section id="tryon-studio" class="py-24 bg-eby-surface/70 border-y border-eby-gold-dark/10" aria-label="Virtual hair try-on studio">
         <div class="max-w-7xl mx-auto px-6">
             <div class="mb-10 text-center">
                 <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px]">AI Try-On Studio</span>
@@ -434,7 +434,7 @@
                 <div class="glass-card rounded-3xl p-8 space-y-6 lg:col-span-1">
                     <div>
                         <label for="tryon-person-upload" class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-dark block mb-3">Upload your photo</label>
-                        <input id="tryon-person-upload" type="file" accept="image/*" class="block w-full text-xs text-eby-brown-light file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-eby-dark file:text-eby-surface hover:file:bg-eby-brown-light">
+                        <input id="tryon-person-upload" type="file" accept="image/*" aria-describedby="tryon-status" class="block w-full text-xs text-eby-brown-light file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-eby-dark file:text-eby-surface hover:file:bg-eby-brown-light">
                     </div>
 
                     <div>
@@ -470,7 +470,7 @@
 
                 <div class="lg:col-span-2">
                     <div class="tryon-canvas-wrap shadow-sm">
-                        <canvas id="tryon-canvas" width="900" height="1200"></canvas>
+                        <canvas id="tryon-canvas" width="900" height="1200" role="img" aria-label="Try-on preview canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -606,7 +606,11 @@
         const TRYON_POSITION_MAX = 1.2;
         const TRYON_SCALE_MIN = 0.25;
         const TRYON_SCALE_MAX = 1.2;
-        const TRYON_FACE_SCALE_RATIO = 1.9;
+        const TRYON_DEFAULT_CANVAS_WIDTH = 900;
+        const TRYON_DEFAULT_CANVAS_HEIGHT = 1200;
+        const TRYON_FACE_SCALE_RATIO = 1.9; // Empirically tuned to map face width to natural hair overlay width.
+        const TRYON_FACE_VERTICAL_OFFSET_RATIO = 0.35;
+        const TRYON_HINT_FONT = '500 22px Lexend';
         const tryOnState = {
             personImage: null,
             personImageUrl: '',
@@ -653,8 +657,8 @@
                 tryOnState.personImageUrl = url;
                 const img = await loadImage(url);
                 tryOnState.personImage = img;
-                const width = Math.min(1200, img.naturalWidth || img.width || 900);
-                const ratio = (img.naturalHeight || img.height || 1200) / (img.naturalWidth || img.width || 900);
+                const width = Math.min(1200, img.naturalWidth || img.width || TRYON_DEFAULT_CANVAS_WIDTH);
+                const ratio = (img.naturalHeight || img.height || TRYON_DEFAULT_CANVAS_HEIGHT) / (img.naturalWidth || img.width || TRYON_DEFAULT_CANVAS_WIDTH);
                 canvas.width = width;
                 canvas.height = Math.round(width * ratio);
                 setTryOnStatus('Photo loaded. Use drag + sliders to fit your look.');
@@ -664,14 +668,17 @@
 
             scaleInput.addEventListener('input', (e) => {
                 tryOnState.scale = Number(e.target.value) / 100;
+                updateTryOnAriaValues();
                 renderTryOnCanvas();
             });
             rotationInput.addEventListener('input', (e) => {
                 tryOnState.rotation = Number(e.target.value);
+                updateTryOnAriaValues();
                 renderTryOnCanvas();
             });
             opacityInput.addEventListener('input', (e) => {
                 tryOnState.opacity = Number(e.target.value) / 100;
+                updateTryOnAriaValues();
                 renderTryOnCanvas();
             });
 
@@ -684,6 +691,7 @@
                 scaleInput.value = 55;
                 rotationInput.value = 0;
                 opacityInput.value = 90;
+                updateTryOnAriaValues();
                 renderTryOnCanvas();
                 setTryOnStatus('Placement reset.');
             });
@@ -721,8 +729,8 @@
                 if (!tryOnState.dragging) return;
                 tryOnState.dragging = false;
                 canvas.classList.remove('dragging');
-                if (typeof e.pointerId !== 'undefined') {
-                    try { canvas.releasePointerCapture(e.pointerId); } catch { /* pointer may already be released */ }
+                if (typeof e.pointerId !== 'undefined' && canvas.hasPointerCapture(e.pointerId)) {
+                    canvas.releasePointerCapture(e.pointerId);
                 }
             };
             canvas.addEventListener('pointerup', endDrag);
@@ -730,7 +738,17 @@
             canvas.addEventListener('pointerleave', endDrag);
 
             setTryOnHairImage(styleSelect.value, styleSelect.options[styleSelect.selectedIndex]?.text || 'Silky French Curl');
+            updateTryOnAriaValues();
             renderTryOnCanvas();
+        }
+
+        function updateTryOnAriaValues() {
+            const scaleInput = document.getElementById('tryon-scale');
+            const rotationInput = document.getElementById('tryon-rotation');
+            const opacityInput = document.getElementById('tryon-opacity');
+            if (scaleInput) scaleInput.setAttribute('aria-valuetext', `Scale: ${Math.round(tryOnState.scale * 100)} percent`);
+            if (rotationInput) rotationInput.setAttribute('aria-valuetext', `Rotation: ${Math.round(tryOnState.rotation)} degrees`);
+            if (opacityInput) opacityInput.setAttribute('aria-valuetext', `Opacity: ${Math.round(tryOnState.opacity * 100)} percent`);
         }
 
         async function loadImage(src) {
@@ -771,7 +789,7 @@
             if (!tryOnState.personImage) {
                 ctx.fillStyle = '#6B5749';
                 ctx.textAlign = 'center';
-                ctx.font = '500 22px Lexend';
+                ctx.font = TRYON_HINT_FONT;
                 ctx.fillText('Upload your photo to start AI Try-On', canvas.width / 2, canvas.height / 2);
                 return;
             }
@@ -813,11 +831,12 @@
                 const canvas = document.getElementById('tryon-canvas');
                 if (!canvas) return;
                 tryOnState.x = (box.x + box.width / 2) / canvas.width;
-                tryOnState.y = (box.y + box.height * 0.35) / canvas.height;
+                tryOnState.y = (box.y + box.height * TRYON_FACE_VERTICAL_OFFSET_RATIO) / canvas.height;
                 tryOnState.scale = Math.min(TRYON_SCALE_MAX, Math.max(TRYON_SCALE_MIN, (box.width / canvas.width) * TRYON_FACE_SCALE_RATIO));
 
                 const scaleInput = document.getElementById('tryon-scale');
                 if (scaleInput) scaleInput.value = Math.round(tryOnState.scale * 100);
+                updateTryOnAriaValues();
                 setTryOnStatus('AI auto-align complete. Fine-tune with drag and sliders.');
             } catch {
                 setTryOnStatus('AI auto-align failed. You can position manually.');
@@ -839,6 +858,10 @@
             section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             setTryOnStatus(`Loaded ${productName} for try-on.`);
         }
+
+        window.addEventListener('beforeunload', () => {
+            if (tryOnState.personImageUrl) URL.revokeObjectURL(tryOnState.personImageUrl);
+        });
 
         // 1. Unified Booking Gate Control (Products + Appt)
         function startProductBooking(name, price) {
