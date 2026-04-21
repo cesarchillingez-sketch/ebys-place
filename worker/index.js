@@ -197,8 +197,8 @@ async function replicateSubmit(apiKey, imageDataUrl, prompt) {
         input: {
           image:               imageDataUrl,
           prompt:              prompt,
-          negative_prompt:     'blurry, deformed face, different person, changed face, distorted features, low quality',
-          image_guidance_scale: 1.5,
+          negative_prompt:     'changed face, different person, altered eyes, altered nose, altered mouth, altered skin tone, altered expression, blurry face, distorted face, deformed face, low quality, ugly',
+          image_guidance_scale: 2.5,
           guidance_scale:       7.5,
           num_inference_steps:  50,
           num_outputs:          1,
@@ -270,11 +270,13 @@ function buildCorsHeaders(origin) {
 }
 
 /**
- * Build a face-preserving instruction prompt.
- * instruct-pix2pix responds best to short, imperative phrases.
+ * Build a hair-only instruction prompt for instruct-pix2pix.
+ * The model responds to short imperative phrases. A high image_guidance_scale (2.5)
+ * combined with explicit "do not change" wording keeps the face, skin, and
+ * background identical and restricts changes to the hair region only.
  */
 function buildPrompt(stylePrompt) {
-  return `Change only the hairstyle to: ${stylePrompt}. Keep the face, skin tone, expression, and background exactly the same. Do not alter anything except the hair.`;
+  return `Replace only the hairstyle with ${stylePrompt}. Keep the person's face, eyes, nose, mouth, skin tone, expression, neck, shoulders, clothing, and background completely identical. Do not change anything except the hair.`;
 }
 
 /** Convert an ArrayBuffer to a base64 string without Buffer (Workers runtime). */
