@@ -449,15 +449,15 @@
                     <div class="space-y-4">
                         <div>
                             <label for="tryon-scale" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Scale</label>
-                            <input id="tryon-scale" type="range" min="25" max="130" value="55" class="w-full">
+                            <input id="tryon-scale" type="range" min="25" max="130" value="55" role="slider" aria-valuemin="25" aria-valuemax="130" aria-valuenow="55" class="w-full">
                         </div>
                         <div>
                             <label for="tryon-rotation" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Rotation</label>
-                            <input id="tryon-rotation" type="range" min="-40" max="40" value="0" class="w-full">
+                            <input id="tryon-rotation" type="range" min="-40" max="40" value="0" role="slider" aria-valuemin="-40" aria-valuemax="40" aria-valuenow="0" class="w-full">
                         </div>
                         <div>
                             <label for="tryon-opacity" class="font-sans font-semibold uppercase tracking-widest text-[10px] text-eby-dark block mb-2">Opacity</label>
-                            <input id="tryon-opacity" type="range" min="20" max="100" value="90" class="w-full">
+                            <input id="tryon-opacity" type="range" min="20" max="100" value="90" role="slider" aria-valuemin="20" aria-valuemax="100" aria-valuenow="90" class="w-full">
                         </div>
                     </div>
 
@@ -608,7 +608,7 @@
         const TRYON_SCALE_MAX = 1.2;
         const TRYON_DEFAULT_CANVAS_WIDTH = 900;
         const TRYON_DEFAULT_CANVAS_HEIGHT = 1200;
-        const TRYON_FACE_SCALE_RATIO = 1.9; // Empirically tuned to map face width to natural hair overlay width.
+        const TRYON_FACE_SCALE_RATIO = 1.9; // empirically tuned to map face width to natural hair overlay width.
         const TRYON_FACE_VERTICAL_OFFSET_RATIO = 0.35;
         const TRYON_HINT_FONT = '500 22px Lexend';
         const tryOnState = {
@@ -729,7 +729,7 @@
                 if (!tryOnState.dragging) return;
                 tryOnState.dragging = false;
                 canvas.classList.remove('dragging');
-                if (typeof e.pointerId !== 'undefined' && canvas.hasPointerCapture(e.pointerId)) {
+                if (typeof e.pointerId !== 'undefined' && typeof canvas.hasPointerCapture === 'function' && canvas.hasPointerCapture(e.pointerId)) {
                     canvas.releasePointerCapture(e.pointerId);
                 }
             };
@@ -747,8 +747,11 @@
             const rotationInput = document.getElementById('tryon-rotation');
             const opacityInput = document.getElementById('tryon-opacity');
             if (scaleInput) scaleInput.setAttribute('aria-valuetext', `Scale: ${Math.round(tryOnState.scale * 100)} percent`);
+            if (scaleInput) scaleInput.setAttribute('aria-valuenow', String(Math.round(tryOnState.scale * 100)));
             if (rotationInput) rotationInput.setAttribute('aria-valuetext', `Rotation: ${Math.round(tryOnState.rotation)} degrees`);
+            if (rotationInput) rotationInput.setAttribute('aria-valuenow', String(Math.round(tryOnState.rotation)));
             if (opacityInput) opacityInput.setAttribute('aria-valuetext', `Opacity: ${Math.round(tryOnState.opacity * 100)} percent`);
+            if (opacityInput) opacityInput.setAttribute('aria-valuenow', String(Math.round(tryOnState.opacity * 100)));
         }
 
         async function loadImage(src) {
