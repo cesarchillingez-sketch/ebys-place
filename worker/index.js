@@ -292,6 +292,9 @@ function arrayBufferToBase64(buffer) {
 /** Chunk size for String.fromCharCode in arrayBufferToBase64.
  *  Kept below the JS call-stack argument limit to avoid "Maximum call stack size exceeded". */
 const BASE64_CHUNK_SIZE = 0x8000; // 32 768 bytes
+
+/** Serialize data as JSON and attach CORS / content-type headers. */
+function jsonResponse(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { ...extraHeaders, 'Content-Type': 'application/json' },
