@@ -307,18 +307,22 @@
 
     <script>
         // ---------------------------------------------------------------------------
-        // API endpoint
-        // Defaults to production API origin to avoid host-specific routing issues.
-        // Optional override:
-        //   localStorage.setItem('TRYON_API_BASE', 'https://<worker>.workers.dev')
-        // or set window.__TRYON_API_BASE__ before this script runs.
+        // Replicate API — called directly from the browser via Cloudflare AI Gateway.
+        //
+        // REPLICATE_API_KEY is injected at deploy time by GitHub Actions (see
+        // .github/workflows/static.yml). It is never committed to source control.
+        //
+        // To add the key: GitHub repo → Settings → Secrets and variables → Actions
+        //   → New repository secret → Name: REPLICATE_API_KEY
         // ---------------------------------------------------------------------------
-        const RAW_API_BASE =
-            localStorage.getItem('TRYON_API_BASE') ||
-            window.__TRYON_API_BASE__ ||
-            'https://www.ebysplace.com';
-        const API_BASE = RAW_API_BASE.replace(/\/+$/, '');
-        const TRYON_API_BASE = API_BASE.endsWith('/api') ? API_BASE : `${API_BASE}/api`;
+        const REPLICATE_API_KEY = '__REPLICATE_API_KEY__';
+
+        // Cloudflare AI Gateway URL — routes requests to Replicate, adds CORS headers,
+        // logging, and rate limiting. No Cloudflare Worker or server required.
+        const CF_GATEWAY = 'https://gateway.ai.cloudflare.com/v1/eaeaa2cab5a25c411f916ea8c47970cf/default/replicate';
+
+        const STAGE1_MODEL = 'jonathandinu/face-parsing';
+        const STAGE2_MODEL = 'black-forest-labs/flux-fill-pro';
 
         // Network timeout constants
         const SUBMIT_TIMEOUT_MS = 30_000; // 30 s for initial job submission
@@ -345,6 +349,7 @@
         let selectedStyle = null;
         let uploadedFile = null;
         let uploadedDataUrl = null;
+        let compressedDataUrl = null; // base64 data URL of the compressed image for stage 2
 
         // Render style cards
         function renderStyles() {
@@ -434,6 +439,7 @@
         function clearPhoto() {
             uploadedFile = null;
             uploadedDataUrl = null;
+            compressedDataUrl = null;
             photoInput.value = '';
             document.getElementById('upload-placeholder').classList.remove('hidden');
             document.getElementById('upload-preview').classList.add('hidden');
@@ -441,44 +447,45 @@
         }
 
         // ---------------------------------------------------------------------------
-        // Generate — submit → poll → result
+        // Generate — compress → stage 1 (segmentation) → stage 2 (inpainting)
+        // All API calls go directly to Replicate via the Cloudflare AI Gateway.
         // ---------------------------------------------------------------------------
         document.getElementById('generate-btn').addEventListener('click', runGenerate);
 
         async function runGenerate() {
             if (!uploadedFile || !selectedStyle) return;
+
+            // Guard: key hasn't been injected yet (local dev without a key)
+            if (!REPLICATE_API_KEY || REPLICATE_API_KEY === '__REPLICATE_API_KEY__') {
+                showError('AI try-on is not set up yet — please contact the salon.');
+                return;
+            }
+
             showLoading();
 
             try {
-                // 1. Compress and resize image client-side before upload
+                // 1. Compress & resize client-side
                 setLoadingStatus('Preparing your photo…');
                 const compressed = await compressImage(uploadedFile, 1024, 0.85);
+                compressedDataUrl = await blobToDataUrl(compressed);
 
-                // 2. Build form data
-                const formData = new FormData();
-                formData.append('photo',     compressed, 'photo.jpg');
-                formData.append('style',     selectedStyle.id);
-                formData.append('prompt',    selectedStyle.prompt);
-                formData.append('styleName', selectedStyle.name);
+                // 2. Stage 1 — hair segmentation (face-parsing)
+                setLoadingStatus('Analysing your photo… (stage 1 of 2)');
+                const stage1 = await replicateSubmit(STAGE1_MODEL, { image: compressedDataUrl });
+                const maskUrl = await pollUntilSucceeded(stage1.id, 'Analysing your photo…');
 
-                // 3. Submit job
-                setLoadingStatus('Sending to AI…');
-                const submitResp = await fetchWithTimeout(
-                    TRYON_API_BASE + '/tryon',
-                    { method: 'POST', body: formData },
-                    SUBMIT_TIMEOUT_MS,
-                );
-
-                if (!submitResp.ok) {
-                    const err = await submitResp.json().catch(() => ({}));
-                    throw new Error(err.error || 'Submission failed. Please try again.');
-                }
-
-                const { jobId } = await submitResp.json();
-                if (!jobId) throw new Error('No job ID returned by server.');
-
-                // 4. Poll until done
-                const imageUrl = await pollForResult(jobId);
+                // 3. Stage 2 — inpaint hair region only (flux-fill-pro)
+                setLoadingStatus('Applying your new hairstyle… (stage 2 of 2)');
+                const inpaintPrompt = `${selectedStyle.prompt}, professional braiding salon quality, natural realistic look, high resolution`;
+                const stage2 = await replicateSubmit(STAGE2_MODEL, {
+                    image:            compressedDataUrl,
+                    mask:             maskUrl,
+                    prompt:           inpaintPrompt,
+                    output_format:    'jpg',
+                    output_quality:   90,
+                    safety_tolerance: 2,
+                });
+                const imageUrl = await pollUntilSucceeded(stage2.id, 'Applying your new hairstyle…');
                 showResult(imageUrl);
 
             } catch (err) {
@@ -487,55 +494,77 @@
         }
 
         // ---------------------------------------------------------------------------
-        // Polling — GET /api/tryon/:jobId every 2 s, max 120 s
-        //
-        // The backend uses a 2-stage pipeline:
-        //   Stage 1 — face-parsing (hair segmentation)
-        //   Stage 2 — flux-fill-pro inpainting (hair region only)
-        //
-        // When stage 1 completes the server returns:
-        //   { status: 'processing', stage: 2, jobId: '<new-stage2-id>' }
-        // The client swaps to the new jobId and continues polling.
+        // Replicate API helpers (via Cloudflare AI Gateway)
         // ---------------------------------------------------------------------------
-        async function pollForResult(jobId, maxAttempts = 60, intervalMs = 2000) {
-            let currentJobId = jobId;
 
+        async function replicateSubmit(model, input) {
+            const resp = await fetchWithTimeout(
+                `${CF_GATEWAY}/v1/models/${model}/predictions`,
+                {
+                    method:  'POST',
+                    headers: {
+                        'Authorization': `Token ${REPLICATE_API_KEY}`,
+                        'Content-Type':  'application/json',
+                        'Prefer':        'respond-async',
+                    },
+                    body: JSON.stringify({ input }),
+                },
+                SUBMIT_TIMEOUT_MS,
+            );
+            if (!resp.ok) {
+                const err = await resp.json().catch(() => ({}));
+                throw new Error(err.detail || `API error ${resp.status}. Please try again.`);
+            }
+            return resp.json();
+        }
+
+        async function replicatePoll(jobId) {
+            const resp = await fetchWithTimeout(
+                `${CF_GATEWAY}/v1/predictions/${jobId}`,
+                { headers: { 'Authorization': `Token ${REPLICATE_API_KEY}` } },
+                POLL_TIMEOUT_MS,
+            );
+            if (!resp.ok) throw new Error(`Failed to check progress (${resp.status}). Please try again.`);
+            return resp.json();
+        }
+
+        // ---------------------------------------------------------------------------
+        // Poll until a Replicate job succeeds, fails, or times out.
+        // Returns the output URL string on success.
+        // ---------------------------------------------------------------------------
+        async function pollUntilSucceeded(jobId, stageLabel, maxAttempts = 60, intervalMs = 2000) {
             for (let i = 0; i < maxAttempts; i++) {
                 await sleep(intervalMs);
 
-                const resp = await fetchWithTimeout(
-                    TRYON_API_BASE + '/tryon/' + currentJobId,
-                    {},
-                    POLL_TIMEOUT_MS,
-                );
-
-                if (!resp.ok) throw new Error('Failed to check progress. Please try again.');
-
-                const data = await resp.json();
+                const data = await replicatePoll(jobId);
 
                 if (data.status === 'succeeded') {
-                    if (!data.url) throw new Error('AI returned no image. Please try again.');
-                    return data.url;
+                    const url = Array.isArray(data.output) ? data.output[0] : data.output;
+                    if (!url) throw new Error('AI returned no output. Please try again.');
+                    return url;
                 }
 
                 if (data.status === 'failed' || data.status === 'canceled') {
                     throw new Error(data.error || 'Generation failed. Please try again.');
                 }
 
-                // Stage transition: server finished stage 1 and started stage 2
-                if (data.jobId && data.jobId !== currentJobId) {
-                    currentJobId = data.jobId;
-                    setLoadingStatus('Applying your new hairstyle… stage 2 of 2');
-                    continue;
-                }
-
-                // 'starting' | 'processing' — keep polling and update timer
                 const elapsed = Math.round(((i + 1) * intervalMs) / 1000);
-                const stageLabel = data.stage === 1 ? 'Analysing your photo…' : 'Applying your new hairstyle…';
                 setLoadingStatus(`${stageLabel} (${elapsed}s)`);
             }
 
             throw new Error('Generation timed out after 120 s. Please try again.');
+        }
+
+        // ---------------------------------------------------------------------------
+        // Convert a Blob to a base64 data URL
+        // ---------------------------------------------------------------------------
+        function blobToDataUrl(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to read compressed image.'));
+                reader.readAsDataURL(blob);
+            });
         }
 
         // ---------------------------------------------------------------------------
