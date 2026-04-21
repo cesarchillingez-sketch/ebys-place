@@ -439,11 +439,7 @@
 
                     <div>
                         <label for="tryon-style-select" class="font-sans font-bold uppercase tracking-widest text-[10px] text-eby-dark block mb-3">Hair style</label>
-                        <select id="tryon-style-select" class="w-full border border-eby-gold-dark/30 rounded-xl p-3 text-sm bg-white">
-                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png">4X Pre Stretched Braiding Hair 38"</option>
-                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" selected>Silky French Curl</option>
-                            <option value="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png">32 Deep Wave Bulk</option>
-                        </select>
+                        <select id="tryon-style-select" class="w-full border border-eby-gold-dark/30 rounded-xl p-3 text-sm bg-white"></select>
                     </div>
 
                     <div class="space-y-4">
@@ -461,8 +457,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <button id="tryon-reset" type="button" class="font-sans font-semibold w-full py-3 rounded-xl border border-eby-dark/20 text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-bg transition-colors">Reset</button>
+                    <div>
                         <button id="tryon-download" type="button" class="font-sans font-semibold w-full py-3 rounded-xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">Download</button>
                     </div>
                     <p id="tryon-status" class="text-xs text-eby-brown-light">Upload a photo to begin.</p>
@@ -611,6 +606,20 @@
         const TRYON_FACE_SCALE_RATIO = 1.9; // empirically tuned to map face width to natural hair overlay width.
         const TRYON_FACE_VERTICAL_OFFSET_RATIO = 0.35;
         const TRYON_HINT_FONT = '500 22px Lexend';
+        const TRYON_STYLE_OPTIONS = [
+            { name: 'Knotless Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615605353_u46ye4.png' },
+            { name: 'Box Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774696211/1774692679808_oftdgt.png' },
+            { name: 'Goddess Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776159339/Gemini_Generated_Image_3l0eht3l0eht3l0e_1_v7bwrj.png' },
+            { name: 'Fulani Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1776158395/Gemini_Generated_Image_18i90718i90718i9_quwaol.png' },
+            { name: 'Cornrows', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774685396/1774615661883_dznfvz.png' },
+            { name: 'Stitch Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774685398/1774615510306_suukb7.png' },
+            { name: 'Lemonade Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png' },
+            { name: 'Boho Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png' },
+            { name: 'Tribal Braids', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/v1774685400/1774615053571_v9dghc.png' },
+            { name: '4X Pre Stretched Braiding Hair 38"', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png' },
+            { name: 'Silky French Curl', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png' },
+            { name: '32 Deep Wave Bulk', imageUrl: 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png' }
+        ];
         const tryOnState = {
             personImage: null,
             personImageUrl: '',
@@ -645,11 +654,11 @@
             const scaleInput = document.getElementById('tryon-scale');
             const rotationInput = document.getElementById('tryon-rotation');
             const opacityInput = document.getElementById('tryon-opacity');
-            const resetBtn = document.getElementById('tryon-reset');
             const downloadBtn = document.getElementById('tryon-download');
             const canvas = document.getElementById('tryon-canvas');
 
             if (!canvas || !fileInput || !styleSelect) return;
+            hydrateTryOnStyleSelect(styleSelect);
 
             styleSelect.addEventListener('change', () => {
                 const selectedLabel = styleSelect.options[styleSelect.selectedIndex]?.text || 'Selected Style';
@@ -688,20 +697,6 @@
                 tryOnState.opacity = Number(e.target.value) / 100;
                 updateTryOnAriaValues();
                 renderTryOnCanvas();
-            });
-
-            resetBtn.addEventListener('click', () => {
-                tryOnState.x = 0.5;
-                tryOnState.y = 0.3;
-                tryOnState.scale = 0.55;
-                tryOnState.rotation = 0;
-                tryOnState.opacity = 0.9;
-                scaleInput.value = 55;
-                rotationInput.value = 0;
-                opacityInput.value = 90;
-                updateTryOnAriaValues();
-                renderTryOnCanvas();
-                setTryOnStatus('Placement reset.');
             });
 
             downloadBtn.addEventListener('click', () => {
@@ -748,6 +743,16 @@
             setTryOnHairImage(styleSelect.value, styleSelect.options[styleSelect.selectedIndex]?.text || 'Silky French Curl');
             updateTryOnAriaValues();
             renderTryOnCanvas();
+        }
+
+        function hydrateTryOnStyleSelect(select) {
+            if (!select) return;
+            select.innerHTML = '';
+            TRYON_STYLE_OPTIONS.forEach((style) => {
+                const option = new Option(style.name, style.imageUrl);
+                if (style.name === 'Silky French Curl') option.selected = true;
+                select.add(option);
+            });
         }
 
         function updateTryOnAriaValues() {
