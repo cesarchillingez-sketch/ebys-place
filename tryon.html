@@ -204,7 +204,7 @@
                             <div class="w-12 h-12 border-2 border-eby-gold-dark border-t-transparent rounded-full spinner"></div>
                             <div>
                                 <p class="font-sans text-sm font-medium text-eby-dark">Creating your look…</p>
-                                <p class="text-xs font-sans text-eby-brown-light mt-1">This takes 15–30 seconds</p>
+                                <p class="text-xs font-sans text-eby-brown-light mt-1">This takes 30–60 seconds (2-stage AI)</p>
                             </div>
                             <div id="loading-status" class="text-xs font-sans text-eby-brown-light"></div>
                         </div>
@@ -307,9 +307,18 @@
 
     <script>
         // ---------------------------------------------------------------------------
-        // API endpoint — update this after deploying the Cloudflare Worker
+        // API endpoint
+        // Defaults to same-origin (https://www.ebysplace.com/api/*).
+        // Optional override:
+        //   localStorage.setItem('TRYON_API_BASE', 'https://<worker>.workers.dev')
+        // or set window.__TRYON_API_BASE__ before this script runs.
         // ---------------------------------------------------------------------------
-        const API_BASE = 'https://api.ebysplace.com';
+        const RAW_API_BASE =
+            localStorage.getItem('TRYON_API_BASE') ||
+            window.__TRYON_API_BASE__ ||
+            window.location.origin;
+        const API_BASE = RAW_API_BASE.replace(/\/+$/, '');
+        const TRYON_API_BASE = API_BASE.endsWith('/api') ? API_BASE : `${API_BASE}/api`;
 
         // Network timeout constants
         const SUBMIT_TIMEOUT_MS = 30_000; // 30 s for initial job submission
@@ -455,7 +464,7 @@
                 // 3. Submit job
                 setLoadingStatus('Sending to AI…');
                 const submitResp = await fetchWithTimeout(
-                    API_BASE + '/api/tryon',
+                    TRYON_API_BASE + '/tryon',
                     { method: 'POST', body: formData },
                     SUBMIT_TIMEOUT_MS,
                 );
@@ -478,14 +487,24 @@
         }
 
         // ---------------------------------------------------------------------------
-        // Polling — GET /api/tryon/:jobId every 2 s, max 90 s
+        // Polling — GET /api/tryon/:jobId every 2 s, max 120 s
+        //
+        // The backend uses a 2-stage pipeline:
+        //   Stage 1 — face-parsing (hair segmentation)
+        //   Stage 2 — flux-fill-pro inpainting (hair region only)
+        //
+        // When stage 1 completes the server returns:
+        //   { status: 'processing', stage: 2, jobId: '<new-stage2-id>' }
+        // The client swaps to the new jobId and continues polling.
         // ---------------------------------------------------------------------------
-        async function pollForResult(jobId, maxAttempts = 45, intervalMs = 2000) {
+        async function pollForResult(jobId, maxAttempts = 60, intervalMs = 2000) {
+            let currentJobId = jobId;
+
             for (let i = 0; i < maxAttempts; i++) {
                 await sleep(intervalMs);
 
                 const resp = await fetchWithTimeout(
-                    API_BASE + '/api/tryon/' + jobId,
+                    TRYON_API_BASE + '/tryon/' + currentJobId,
                     {},
                     POLL_TIMEOUT_MS,
                 );
@@ -503,12 +522,20 @@
                     throw new Error(data.error || 'Generation failed. Please try again.');
                 }
 
+                // Stage transition: server finished stage 1 and started stage 2
+                if (data.jobId && data.jobId !== currentJobId) {
+                    currentJobId = data.jobId;
+                    setLoadingStatus('Applying your new hairstyle… stage 2 of 2');
+                    continue;
+                }
+
                 // 'starting' | 'processing' — keep polling and update timer
                 const elapsed = Math.round(((i + 1) * intervalMs) / 1000);
-                setLoadingStatus(`AI is creating your look… (${elapsed}s)`);
+                const stageLabel = data.stage === 1 ? 'Analysing your photo…' : 'Applying your new hairstyle…';
+                setLoadingStatus(`${stageLabel} (${elapsed}s)`);
             }
 
-            throw new Error('Generation timed out after 90 s. Please try again.');
+            throw new Error('Generation timed out after 120 s. Please try again.');
         }
 
         // ---------------------------------------------------------------------------

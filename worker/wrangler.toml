@@ -4,10 +4,10 @@ compatibility_date = "2024-01-01"
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
 # Replace the pattern below with your actual Worker domain / custom domain.
-# This example binds the worker to https://api.ebysplace.com/api/*
+# This example binds the worker to https://www.ebysplace.com/api/*
 
 [[routes]]
-pattern = "api.ebysplace.com/api/*"
+pattern = "www.ebysplace.com/api/*"
 zone_name = "ebysplace.com"
 
 # ─── Secrets (set via CLI, never committed to source control) ────────────────
@@ -15,14 +15,23 @@ zone_name = "ebysplace.com"
 #   wrangler secret put REPLICATE_API_KEY
 # and paste your Replicate API token when prompted.
 
-# ─── KV namespace for rate limiting (optional but recommended) ───────────────
+# ─── KV namespace for rate limiting (required) ───────────────────────────────
 # Create a namespace first:
 #   wrangler kv namespace create RATE_LIMITER
 # Then paste the generated id below.
 
 [[kv_namespaces]]
 binding = "RATE_LIMITER"
-id      = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id      = "REPLACE_WITH_YOUR_RATE_LIMITER_KV_ID"
+
+# ─── KV namespace for 2-stage pipeline job state (required) ──────────────────
+# Create a namespace first:
+#   wrangler kv namespace create JOB_STATE
+# Then paste the generated id below.
+
+[[kv_namespaces]]
+binding = "JOB_STATE"
+id      = "REPLACE_WITH_YOUR_JOB_STATE_KV_ID"
 
 # ─── Build (no bundler required — Workers supports ES modules natively) ───────
 [build]
