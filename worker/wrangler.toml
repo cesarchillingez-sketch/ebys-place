@@ -4,10 +4,10 @@ compatibility_date = "2024-01-01"
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
 # Replace the pattern below with your actual Worker domain / custom domain.
-# This example binds the worker to https://api.ebysplace.com/api/*
+# This example binds the worker to https://www.ebysplace.com/api/*
 
 [[routes]]
-pattern = "api.ebysplace.com/api/*"
+pattern = "www.ebysplace.com/api/*"
 zone_name = "ebysplace.com"
 
 # ─── Secrets (set via CLI, never committed to source control) ────────────────

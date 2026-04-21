@@ -70,7 +70,7 @@ Edit the `[[routes]]` section to match your domain and Cloudflare zone:
 
 ```toml
 [[routes]]
-pattern   = "api.ebysplace.com/api/*"
+pattern   = "www.ebysplace.com/api/*"
 zone_name = "ebysplace.com"
 ```
 
@@ -105,8 +105,14 @@ cd worker
 wrangler deploy
 ```
 
-After deploying, update the `API_BASE` constant at the top of `tryon.html`
-to point to your worker URL, then push to `main` to redeploy GitHub Pages.
+After deploying, `tryon.html` uses same-origin by default (`/api/*` on
+`www.ebysplace.com`). If you need to target a `workers.dev` URL, set:
+
+```js
+localStorage.setItem('TRYON_API_BASE', 'https://<your-worker>.workers.dev')
+```
+
+then refresh the page.
 
 ---
 
