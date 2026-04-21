@@ -47,6 +47,12 @@
     <!-- Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script>
 
+    <!-- Cal.com Embed -->
+    <script>
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", "30min", {origin:"https://app.cal.com"});
+    </script>
+
     <!-- Frameworks & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
@@ -219,7 +225,6 @@
                 <a href="booking.html" class="text-eby-gold-dark">Booking</a>
                 <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
                 <a href="tryon.html" class="hover:text-eby-gold-dark transition-colors">AI Try-On</a>
-                <a href="pricing.html" class="hover:text-eby-gold-dark transition-colors">Pricing</a>
                 <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
             <div class="flex items-center space-x-6 text-eby-dark">
@@ -539,10 +544,11 @@
                                 </div>
                             </div>
 
-                            <!-- Kouvia booking embed (hidden until deposit paid) -->
+                            <!-- Cal.com booking embed (hidden until deposit paid) -->
                             <div id="booking-widget-section" class="hidden">
-                                <iframe src="https://booking.ebysplace.com/embed/book" width="100%" height="850" frameborder="0" style="border: none; display: block; min-height: 800px;" title="Book an appointment at Eby's Place" allow="payment"></iframe>
+                                <div id="cal-embed-wrapper" style="width:100%;min-height:600px;overflow:auto"></div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -730,6 +736,15 @@
                 document.getElementById('booking-deposit-gate').classList.add('hidden');
                 document.getElementById('booking-widget-section').classList.remove('hidden');
                 document.getElementById('booking-widget-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                if (typeof Cal !== 'undefined') {
+                    Cal.ns["30min"]("inline", {
+                        elementOrSelector: "#cal-embed-wrapper",
+                        config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+                        calLink: "ebys-place-o8qhbh/30min",
+                    });
+                    Cal.ns["30min"]("ui", { cssVarsPerTheme: { light: { "cal-brand": "#2A1A12" } }, hideEventTypeDetails: false, layout: "month_view" });
+                }
             }, 900);
         }
 
