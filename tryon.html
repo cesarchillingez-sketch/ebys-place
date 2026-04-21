@@ -45,46 +45,26 @@
     </script>
     <style>
         body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.12), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FCFBF8; }
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: 0.15s; }
-        .reveal-delay-2 { transition-delay: 0.3s; }
-        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0,0,0,0.05); }
-        .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
-        .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
-        .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
-        .menu-open .delay-1 { transition-delay: 0.1s; }
-        .menu-open .delay-2 { transition-delay: 0.2s; }
-        .menu-open .delay-3 { transition-delay: 0.3s; }
-        .menu-open .delay-4 { transition-delay: 0.4s; }
-        .menu-open .delay-5 { transition-delay: 0.5s; }
+        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); }
         /* Upload zone */
-        #upload-zone { border: 2px dashed #C2A378; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; }
+        #upload-zone { border: 2px dashed #C2A378; border-radius: 12px; cursor: pointer; }
         #upload-zone:hover, #upload-zone.drag-over { border-color: #2A1A12; background: rgba(194, 163, 120, 0.08); }
         /* Style cards */
-        .style-card { cursor: pointer; border: 2px solid transparent; transition: all 0.25s ease; border-radius: 12px; }
+        .style-card { cursor: pointer; border: 2px solid transparent; border-radius: 12px; }
         .style-card:hover { border-color: #C2A378; background: rgba(194, 163, 120, 0.08); }
         .style-card.selected { border-color: #2A1A12; background: rgba(42, 26, 18, 0.06); }
         /* Generate button */
-        #generate-btn { transition: all 0.3s ease; }
-        #generate-btn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(42, 26, 18, 0.25); }
         #generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        /* Result */
-        #result-img { transition: opacity 0.5s ease; }
-        /* Progress */
-        .progress-step { transition: all 0.3s ease; }
         /* Spinner */
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface">
-    <div class="cursor-glow"></div>
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
@@ -108,7 +88,7 @@
                 Book Now
             </a>
             <!-- Mobile menu panel -->
-            <div id="mobile-menu" class="slide-panel fixed inset-0 bg-eby-bg z-50 flex flex-col px-8 py-10 translate-x-full">
+            <div id="mobile-menu" class="fixed inset-0 bg-eby-bg z-50 flex flex-col px-8 py-10 translate-x-full">
                 <div class="flex justify-between items-center mb-12">
                     <span class="font-display text-2xl font-semibold uppercase">Eby's Place</span>
                     <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity">
@@ -116,54 +96,26 @@
                     </button>
                 </div>
                 <nav class="flex flex-col gap-8">
-                    <a href="index.html" class="mobile-link delay-1 font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Home</a>
-                    <a href="shop.html" class="mobile-link delay-2 font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Shop</a>
-                    <a href="services.html" class="mobile-link delay-3 font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Services</a>
-                    <a href="booking.html" class="mobile-link delay-4 font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Booking</a>
-                    <a href="braiders.html" class="mobile-link delay-5 font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Find a Braider</a>
+                    <a href="index.html" class="font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Home</a>
+                    <a href="shop.html" class="font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Shop</a>
+                    <a href="services.html" class="font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Services</a>
+                    <a href="booking.html" class="font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Booking</a>
+                    <a href="braiders.html" class="font-display text-4xl font-medium text-eby-dark hover:text-eby-gold-dark transition-colors">Find a Braider</a>
                 </nav>
             </div>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="pt-36 pb-16 px-6">
+    <section class="pt-36 pb-10 px-6">
         <div class="max-w-[1400px] mx-auto">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-                <div class="reveal">
-                    <p class="text-[10px] font-sans uppercase tracking-mega font-medium text-eby-gold-dark mb-6 flex items-center gap-3">
-                        <span class="w-2 h-2 rounded-full bg-eby-gold-dark inline-block"></span>
-                        AI-POWERED — FREE TO USE — NO ACCOUNT NEEDED
-                    </p>
-                    <h1 class="font-display text-5xl lg:text-7xl font-medium text-eby-dark leading-none mb-6">
-                        See yourself in<br>
-                        <em class="text-eby-gold-dark">any braid style.</em>
-                    </h1>
-                    <p class="text-base lg:text-lg text-eby-brown-light max-w-lg leading-relaxed">
-                        Upload a clear photo, choose a braid style, and our AI shows you exactly
-                        how it looks — keeping your face, skin tone, and expression completely
-                        unchanged. Only the hair changes.
-                    </p>
-                </div>
-                <div class="reveal reveal-delay-1 flex flex-col gap-3 text-right">
-                    <div class="flex items-center justify-end gap-3 text-sm text-eby-brown-light">
-                        <i class="ph ph-check-circle text-eby-gold-dark text-xl"></i>
-                        <span class="font-sans uppercase tracking-widest text-[10px] font-medium">Face preserved exactly</span>
-                    </div>
-                    <div class="flex items-center justify-end gap-3 text-sm text-eby-brown-light">
-                        <i class="ph ph-check-circle text-eby-gold-dark text-xl"></i>
-                        <span class="font-sans uppercase tracking-widest text-[10px] font-medium">All Eby's Place styles available</span>
-                    </div>
-                    <div class="flex items-center justify-end gap-3 text-sm text-eby-brown-light">
-                        <i class="ph ph-check-circle text-eby-gold-dark text-xl"></i>
-                        <span class="font-sans uppercase tracking-widest text-[10px] font-medium">Results in under 30 seconds</span>
-                    </div>
-                    <div class="flex items-center justify-end gap-3 text-sm text-eby-brown-light">
-                        <i class="ph ph-check-circle text-eby-gold-dark text-xl"></i>
-                        <span class="font-sans uppercase tracking-widest text-[10px] font-medium">Completely free</span>
-                    </div>
-                </div>
-            </div>
+            <p class="text-[10px] font-sans uppercase tracking-mega font-medium text-eby-gold-dark mb-4">AI-POWERED — FREE — NO ACCOUNT NEEDED</p>
+            <h1 class="font-display text-4xl lg:text-6xl font-medium text-eby-dark leading-tight mb-4">
+                See yourself in any braid style.
+            </h1>
+            <p class="text-base text-eby-brown-light max-w-lg leading-relaxed">
+                Upload a clear photo, choose a style, and the AI applies only the braids — your face, skin tone, and expression stay exactly as they are.
+            </p>
         </div>
     </section>
 
@@ -273,15 +225,27 @@
                     </div>
 
                     <!-- Action buttons (shown after result) -->
-                    <div id="result-actions" class="hidden flex gap-3">
-                        <a id="download-btn" href="#" download="ebysplace-tryon.jpg"
-                            class="flex-1 flex items-center justify-center gap-2 bg-eby-dark text-eby-surface font-sans text-[10px] uppercase tracking-widest font-medium py-4 hover:bg-eby-brown-light transition-colors">
-                            <i class="ph ph-download-simple"></i> Save Image
-                        </a>
-                        <a href="booking.html"
-                            class="flex-1 flex items-center justify-center gap-2 border border-eby-dark text-eby-dark font-sans text-[10px] uppercase tracking-widest font-medium py-4 hover:bg-eby-dark hover:text-eby-surface transition-colors">
-                            <i class="ph ph-calendar-check"></i> Book This Style
-                        </a>
+                    <div id="result-actions" class="hidden gap-3">
+                        <div class="flex gap-3">
+                            <a id="download-btn" href="#" download="ebysplace-tryon.jpg"
+                                class="flex-1 flex items-center justify-center gap-2 bg-eby-dark text-eby-surface font-sans text-[10px] uppercase tracking-widest font-medium py-4 hover:bg-eby-brown-light transition-colors">
+                                <i class="ph ph-download-simple"></i> Save Image
+                            </a>
+                            <a href="booking.html"
+                                class="flex-1 flex items-center justify-center gap-2 border border-eby-dark text-eby-dark font-sans text-[10px] uppercase tracking-widest font-medium py-4 hover:bg-eby-dark hover:text-eby-surface transition-colors">
+                                <i class="ph ph-calendar-check"></i> Book This Style
+                            </a>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="retryGenerate()"
+                                class="flex-1 flex items-center justify-center gap-2 border border-eby-gold-dark text-eby-brown-light font-sans text-[10px] uppercase tracking-widest font-medium py-3 hover:bg-eby-gold transition-colors">
+                                <i class="ph ph-arrows-clockwise"></i> Try Again
+                            </button>
+                            <button onclick="changeStyle()"
+                                class="flex-1 flex items-center justify-center gap-2 border border-eby-gold-dark text-eby-brown-light font-sans text-[10px] uppercase tracking-widest font-medium py-3 hover:bg-eby-gold transition-colors">
+                                <i class="ph ph-swap"></i> Change Style
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Tips -->
@@ -342,7 +306,18 @@
     </footer>
 
     <script>
+        // ---------------------------------------------------------------------------
+        // API endpoint — update this after deploying the Cloudflare Worker
+        // ---------------------------------------------------------------------------
+        const API_BASE = 'https://api.ebysplace.com';
+
+        // Network timeout constants
+        const SUBMIT_TIMEOUT_MS = 30_000; // 30 s for initial job submission
+        const POLL_TIMEOUT_MS   = 10_000; // 10 s per polling request
+
+        // ---------------------------------------------------------------------------
         // Braid styles data
+        // ---------------------------------------------------------------------------
         const BRAID_STYLES = [
             { id: 'knotless', emoji: '🌿', name: 'Knotless Braids', desc: 'Tension-free, natural look', prompt: 'knotless box braids, medium length, natural black hair, neat parting, no added tension at roots' },
             { id: 'box-braids', emoji: '📦', name: 'Box Braids', desc: 'Classic protective style', prompt: 'classic box braids, medium length, black hair, neat square sections, sleek finish' },
@@ -456,41 +431,131 @@
             updateButton();
         }
 
-        // Generate
-        document.getElementById('generate-btn').addEventListener('click', async () => {
+        // ---------------------------------------------------------------------------
+        // Generate — submit → poll → result
+        // ---------------------------------------------------------------------------
+        document.getElementById('generate-btn').addEventListener('click', runGenerate);
+
+        async function runGenerate() {
             if (!uploadedFile || !selectedStyle) return;
             showLoading();
+
             try {
-                // Upload photo to server
+                // 1. Compress and resize image client-side before upload
+                setLoadingStatus('Preparing your photo…');
+                const compressed = await compressImage(uploadedFile, 1024, 0.85);
+
+                // 2. Build form data
                 const formData = new FormData();
-                formData.append('photo', uploadedFile);
-                formData.append('style', selectedStyle.id);
-                formData.append('prompt', selectedStyle.prompt);
+                formData.append('photo',     compressed, 'photo.jpg');
+                formData.append('style',     selectedStyle.id);
+                formData.append('prompt',    selectedStyle.prompt);
                 formData.append('styleName', selectedStyle.name);
 
-                setLoadingStatus('Uploading your photo…');
+                // 3. Submit job
+                setLoadingStatus('Sending to AI…');
+                const submitResp = await fetchWithTimeout(
+                    API_BASE + '/api/tryon',
+                    { method: 'POST', body: formData },
+                    SUBMIT_TIMEOUT_MS,
+                );
 
-                // AI Try-On API endpoint to be configured
-                throw new Error('The AI Try-On service is currently unavailable. Please check back soon.');
-
-                if (!resp.ok) {
-                    const errText = await resp.text();
-                    throw new Error(errText || 'Server error');
+                if (!submitResp.ok) {
+                    const err = await submitResp.json().catch(() => ({}));
+                    throw new Error(err.error || 'Submission failed. Please try again.');
                 }
 
-                setLoadingStatus('AI is creating your look…');
+                const { jobId } = await submitResp.json();
+                if (!jobId) throw new Error('No job ID returned by server.');
 
-                const result = await resp.json();
-                const imageUrl = result?.result?.data?.json?.url || result?.url;
-
-                if (!imageUrl) throw new Error('No image returned');
-
+                // 4. Poll until done
+                const imageUrl = await pollForResult(jobId);
                 showResult(imageUrl);
 
             } catch (err) {
                 showError(err.message || 'Something went wrong. Please try again.');
             }
-        });
+        }
+
+        // ---------------------------------------------------------------------------
+        // Polling — GET /api/tryon/:jobId every 2 s, max 90 s
+        // ---------------------------------------------------------------------------
+        async function pollForResult(jobId, maxAttempts = 45, intervalMs = 2000) {
+            for (let i = 0; i < maxAttempts; i++) {
+                await sleep(intervalMs);
+
+                const resp = await fetchWithTimeout(
+                    API_BASE + '/api/tryon/' + jobId,
+                    {},
+                    POLL_TIMEOUT_MS,
+                );
+
+                if (!resp.ok) throw new Error('Failed to check progress. Please try again.');
+
+                const data = await resp.json();
+
+                if (data.status === 'succeeded') {
+                    if (!data.url) throw new Error('AI returned no image. Please try again.');
+                    return data.url;
+                }
+
+                if (data.status === 'failed' || data.status === 'canceled') {
+                    throw new Error(data.error || 'Generation failed. Please try again.');
+                }
+
+                // 'starting' | 'processing' — keep polling and update timer
+                const elapsed = Math.round(((i + 1) * intervalMs) / 1000);
+                setLoadingStatus(`AI is creating your look… (${elapsed}s)`);
+            }
+
+            throw new Error('Generation timed out after 90 s. Please try again.');
+        }
+
+        // ---------------------------------------------------------------------------
+        // Image compression — resize to maxDimension px, convert to JPEG
+        // ---------------------------------------------------------------------------
+        function compressImage(file, maxDimension, quality) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    let { width, height } = img;
+                    if (width > maxDimension || height > maxDimension) {
+                        const ratio = Math.min(maxDimension / width, maxDimension / height);
+                        width  = Math.round(width  * ratio);
+                        height = Math.round(height * ratio);
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width  = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    canvas.toBlob(
+                        blob => blob ? resolve(blob) : reject(new Error('Image compression failed.')),
+                        'image/jpeg',
+                        quality,
+                    );
+                };
+                img.onerror = () => reject(new Error('Failed to read image file.'));
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // ---------------------------------------------------------------------------
+        // Fetch with an AbortController timeout
+        // ---------------------------------------------------------------------------
+        async function fetchWithTimeout(url, options, timeoutMs) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                return await fetch(url, { ...options, signal: controller.signal });
+            } catch (err) {
+                if (err.name === 'AbortError') throw new Error('Request timed out. Check your connection and try again.');
+                throw err;
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
         function showLoading() {
             document.getElementById('result-idle').classList.add('hidden');
@@ -499,6 +564,7 @@
             document.getElementById('result-success').classList.add('hidden');
             document.getElementById('result-error').classList.add('hidden');
             document.getElementById('result-actions').classList.add('hidden');
+            document.getElementById('result-actions').classList.remove('flex', 'flex-col');
             document.getElementById('generate-btn').disabled = true;
             setStep(3);
         }
@@ -514,6 +580,7 @@
             document.getElementById('result-img').src = url;
             document.getElementById('download-btn').href = url;
             document.getElementById('result-actions').classList.remove('hidden');
+            document.getElementById('result-actions').classList.add('flex', 'flex-col');
             document.getElementById('generate-btn').disabled = false;
         }
 
@@ -529,34 +596,32 @@
         function resetResult() {
             document.getElementById('result-error').classList.add('hidden');
             document.getElementById('result-error').classList.remove('flex');
+            document.getElementById('result-success').classList.add('hidden');
             document.getElementById('result-idle').classList.remove('hidden');
             document.getElementById('result-actions').classList.add('hidden');
+            document.getElementById('result-actions').classList.remove('flex', 'flex-col');
+        }
+
+        /** Re-run generation with the same photo and style (no re-upload needed). */
+        function retryGenerate() {
+            runGenerate();
+        }
+
+        /** Keep the uploaded photo but reset style so the user picks a new one. */
+        function changeStyle() {
+            selectedStyle = null;
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            resetResult();
+            updateButton();
+            // Scroll the style grid into view
+            document.getElementById('style-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // Mobile menu
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
-            const isOpen = !menu.classList.contains('translate-x-full');
-            if (isOpen) {
-                menu.classList.add('translate-x-full');
-                document.body.classList.remove('menu-open');
-            } else {
-                menu.classList.remove('translate-x-full');
-                document.body.classList.add('menu-open');
-            }
+            menu.classList.toggle('translate-x-full');
         }
-
-        // Cursor glow
-        document.addEventListener('mousemove', e => {
-            document.documentElement.style.setProperty('--x', e.clientX + 'px');
-            document.documentElement.style.setProperty('--y', e.clientY + 'px');
-        });
-
-        // Reveal on scroll
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // Init
         renderStyles();
