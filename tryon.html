@@ -308,7 +308,7 @@
     <script>
         // ---------------------------------------------------------------------------
         // API endpoint
-        // Defaults to same-origin (https://www.ebysplace.com/api/*).
+        // Defaults to production API origin to avoid host-specific routing issues.
         // Optional override:
         //   localStorage.setItem('TRYON_API_BASE', 'https://<worker>.workers.dev')
         // or set window.__TRYON_API_BASE__ before this script runs.
@@ -316,7 +316,7 @@
         const RAW_API_BASE =
             localStorage.getItem('TRYON_API_BASE') ||
             window.__TRYON_API_BASE__ ||
-            window.location.origin;
+            'https://www.ebysplace.com';
         const API_BASE = RAW_API_BASE.replace(/\/+$/, '');
         const TRYON_API_BASE = API_BASE.endsWith('/api') ? API_BASE : `${API_BASE}/api`;
 
