@@ -538,7 +538,7 @@
                 const data = await pollJob(jobId);
 
                 if (data.status === 'succeeded') {
-                    const url = Array.isArray(data.output) ? data.output[0] : data.output;
+                    const url = data.url || (Array.isArray(data.output) ? data.output[0] : data.output);
                     if (!url) throw new Error('AI returned no output. Please try again.');
                     return url;
                 }
