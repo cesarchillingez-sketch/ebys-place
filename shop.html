@@ -403,27 +403,6 @@
         </div>
     </main>
 
-
-    <!-- Location / Map Section -->
-                            <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" alt="32 Deep Wave Bulk" class="w-full h-full object-cover rounded-full">
-                        </div>
-                    </div>
-                    <div class="p-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex flex-col mb-4">
-                                <h3 class="font-display text-xl text-eby-dark mb-1">32" Deep Wave Bulk</h3>
-                                <span class="font-sans font-bold text-eby-gold-dark text-xs tracking-widest">£12.00</span>
-                            </div>
-                            <p class="text-eby-brown-light text-xs mb-6 leading-relaxed">Colour 33 Multicolor | 120g Chemical Fiber for Boho Braids.</p>
-                        </div>
-                        <button onclick="startProductBooking('32 Deep Wave Bulk', 12)" class="btn-luxury font-sans w-full py-4 rounded-2xl bg-eby-dark text-eby-surface text-[9px] uppercase tracking-[0.15em] font-bold hover:bg-eby-brown-light transition-colors">Buy & Book Appointment</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
     <!-- Stripe & Cal.com Booking Gate -->
     <section id="booking-section" class="py-32 bg-eby-gold/30">
         <div class="max-w-4xl mx-auto px-6">
@@ -531,7 +510,7 @@
         let currentBookingTotal = 20;
 
         document.addEventListener('DOMContentLoaded', () => {
-            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            if (document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
         });
 
         // 1. Unified Booking Gate Control (Products + Appt)
