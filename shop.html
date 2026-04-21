@@ -629,6 +629,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             initializeTryOnStudio();
+
+            // Deep-link from homepage: ?tryonProduct=...&tryonImg=...#tryon-studio
+            const params = new URLSearchParams(window.location.search);
+            const tryonProduct = params.get('tryonProduct');
+            const tryonImg = params.get('tryonImg');
+            if (tryonProduct && tryonImg) {
+                openTryOnStudio(tryonProduct, tryonImg);
+            }
         });
 
         function initializeTryOnStudio() {
