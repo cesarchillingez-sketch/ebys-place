@@ -211,6 +211,8 @@
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
                 <a href="#booking" class="text-eby-gold-dark transition-colors">Booking</a>
                 <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
+                
+                
                 <a href="gallery.html" class="hover:text-eby-gold-dark transition-colors">Gallery</a>
                 <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
@@ -239,6 +241,8 @@
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
             <a href="#booking" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
             <a href="braiders.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Find a Braider.</a>
+            <a href="tryon.html" class="mobile-link delay-6 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">AI Try-On.</a>
+            <a href="pricing.html" class="mobile-link delay-7 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Pricing.</a>
             <a href="gallery.html" class="mobile-link delay-8 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Gallery.</a>
             <a href="about.html" class="mobile-link delay-9 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
@@ -527,17 +531,17 @@
         </div>
         <div class="relative w-full flex overflow-x-hidden group">
             <div class="flex animate-[marquee_40s_linear_infinite] py-4 whitespace-nowrap group-hover:[animation-play-state:paused]">
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"I didn’t feel pain for the first time in years. They changed how I experience braiding entirely."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Camille Magnolia</p>
                 </div>
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"For the first time ever, I slept the exact same night I got braids. My edges finally feel safe."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Sabrina Murray</p>
                 </div>
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"I actually enjoyed the entire appointment. I genuinely didn't realize how much pain I had normalized."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Matthew</p>
@@ -549,43 +553,87 @@
 
     <!-- General Booking Gate (GAS Bespoke) -->
     <section id="booking" class="py-32 bg-eby-gold/30">
-        <div class="max-w-4xl mx-auto px-6">
-            <div id="booking-container" class="glass-card p-8 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[500px] flex flex-col justify-center transition-all duration-700 rounded-[38px] shadow-xl">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div id="booking-container" class="glass-card p-8 md:p-12 border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-[38px] shadow-xl overflow-hidden relative">
                 
                 <!-- Verification / Payment UI -->
-                <div id="booking-gate-ui" class="reveal active text-left max-w-lg mx-auto w-full">
-                    <div class="text-center mb-8">
+                <div id="booking-gate-ui" class="reveal active w-full">
+                    <div class="text-center mb-12">
                         <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-2 block">Secure Consultation</span>
                         <h2 id="booking-gate-title" class="font-display text-3xl md:text-4xl mb-4 text-eby-dark">Initialize Reservation</h2>
-                        <p id="booking-gate-desc" class="text-eby-brown-light text-sm">Please confirm your £20.00 non-refundable deposit to officially book your bespoke appointment slot.</p>
+                        <p id="booking-gate-desc" class="text-eby-brown-light text-sm max-w-lg mx-auto">Please select your preferred date and time, and confirm your £20.00 non-refundable deposit to officially book your bespoke appointment slot.</p>
                     </div>
                     
-                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-5">
-                        <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
-                        <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="grid lg:grid-cols-12 gap-12 text-left">
                         
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Date</label>
-                                <input type="date" id="bk-date" required class="luxury-input !rounded-[20px]" min="2026-01-01">
+                        <!-- Left Column: The Interactive Calendar -->
+                        <div class="lg:col-span-7 space-y-8">
+                            
+                            <!-- Calendar Grid Container -->
+                            <div class="bg-white border border-eby-gold-dark/20 rounded-[28px] p-6 md:p-8 shadow-sm relative overflow-hidden">
+                                
+                                <!-- Calendar Header -->
+                                <div class="flex justify-between items-center mb-8">
+                                    <button type="button" onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-left text-eby-dark"></i></button>
+                                    <h4 id="cal-month-year" class="font-sans font-bold text-xs uppercase tracking-widest text-eby-dark">Month Year</h4>
+                                    <button type="button" onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-right text-eby-dark"></i></button>
+                                </div>
+                                
+                                <!-- Day Labels -->
+                                <div class="grid grid-cols-7 gap-2 text-center mb-4">
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Su</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Mo</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Tu</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">We</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Th</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Fr</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Sa</div>
+                                </div>
+                                
+                                <!-- Calendar Grid (Injected via JS) -->
+                                <div id="cal-grid" class="grid grid-cols-7 gap-y-2 gap-x-2 text-center">
+                                </div>
                             </div>
-                            <div>
-                                <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Time</label>
-                                <select id="bk-time" required class="luxury-input !rounded-[20px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23C2A378%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-1rem)_center]">
-                                    <option value="09:00:00">09:00 AM</option>
-                                    <option value="14:00:00">02:00 PM</option>
-                                </select>
+
+                            <!-- Dynamic Time Slots -->
+                            <div id="time-slots-wrapper" class="hidden">
+                                <h4 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-4 border-l-2 border-eby-gold-dark pl-3">Available Slots</h4>
+                                <div id="time-slots-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <!-- Injected via JS -->
+                                </div>
                             </div>
                         </div>
 
-                        <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] mt-4 shadow-sm">
-                            <div id="gate-card-element" class="w-full"></div>
+                        <!-- Right Column: Details & Stripe -->
+                        <div class="lg:col-span-5 flex flex-col space-y-6 bg-eby-bg/50 p-6 md:p-8 rounded-[28px] border border-eby-gold-dark/10 h-max sticky top-32">
+                            
+                            <div>
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Client Details</h3>
+                                <div class="space-y-4">
+                                    <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
+                                    <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                                </div>
+                            </div>
+                            
+                            <div class="pt-6 border-t border-eby-gold-dark/10">
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Deposit Details</h3>
+                                <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] shadow-sm">
+                                    <div id="gate-card-element" class="w-full"></div>
+                                </div>
+                                <div id="gate-errors" class="text-red-500 text-[10px] mt-3 font-medium"></div>
+                            </div>
+                            
+                            <div class="pt-4 flex-grow flex flex-col justify-end">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="font-display text-lg text-eby-dark">Total Due Now</span>
+                                    <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
+                                </div>
+                                <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2">
+                                    Confirm & Pay <i class="ph ph-lock-key"></i>
+                                </button>
+                            </div>
+
                         </div>
-                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-center"></div>
-                        
-                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg mt-6">
-                            Secure Slot & Pay £20 Deposit
-                        </button>
                     </form>
                 </div>
 
@@ -738,10 +786,95 @@
         let ecoCart = [];
         let ecoCartTotal = 0;
 
+        // Calendar State
+        let calDate = new Date();
+        let selectedDateStr = null;
+        let selectedTimeStr = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
+            renderCalendar();
         });
+
+        // -------------------------
+        // CALENDAR RENDERING LOGIC
+        // -------------------------
+        function renderCalendar() {
+            const grid = document.getElementById('cal-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            
+            document.getElementById('cal-month-year').innerText = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(calDate);
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            for(let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+            
+            for(let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                
+                const isPast = date < today;
+                const isSunday = date.getDay() === 0;
+                const isDisabled = isPast || isSunday;
+                
+                let classes = "w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center text-sm font-medium transition-all ";
+                
+                if (isDisabled) {
+                    classes += "text-gray-300 cursor-not-allowed opacity-50";
+                } else if (selectedDateStr === dateStr) {
+                    classes += "bg-eby-gold-dark text-white shadow-md";
+                } else {
+                    classes += "text-eby-dark hover:bg-eby-gold/20 hover:text-eby-gold-dark cursor-pointer";
+                }
+                
+                grid.innerHTML += `<button type="button" ${isDisabled ? 'disabled' : `onclick="selectDate('${dateStr}')"`} class="${classes}">${i}</button>`;
+            }
+        }
+
+        function changeMonth(dir) {
+            calDate.setMonth(calDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr;
+            selectedTimeStr = null; 
+            renderCalendar(); 
+            
+            const slotsWrapper = document.getElementById('time-slots-wrapper');
+            const slotsGrid = document.getElementById('time-slots-grid');
+            
+            if(slotsWrapper && slotsGrid) {
+                slotsWrapper.classList.remove('hidden');
+                
+                slotsGrid.innerHTML = `
+                    <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
+                    <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
+                    <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
+                `;
+            }
+        }
+
+        function selectTime(timeStr, btn) {
+            selectedTimeStr = timeStr;
+            document.querySelectorAll('.time-slot-btn').forEach(b => {
+                b.classList.remove('bg-eby-dark', 'text-white', 'border-eby-dark');
+                b.classList.add('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            });
+            btn.classList.remove('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            btn.classList.add('bg-eby-dark', 'text-white', 'border-eby-dark');
+        }
 
         // ------------------------------------
         // SECTION 1: BESPOKE BOOKING LOGIC
@@ -754,7 +887,7 @@
             currentBookingItem = name;
             
             document.getElementById('booking-gate-title').innerText = "Secure Your Booking.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please confirm your £20.00 non-refundable booking deposit to officially book your bespoke appointment slot.`;
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please select an available date and time below to officially book your slot.`;
             
             document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
         }
@@ -764,23 +897,27 @@
             const btn = document.getElementById('dg-btn');
             const name = document.getElementById('bk-name').value;
             const email = document.getElementById('bk-email').value;
-            const date = document.getElementById('bk-date').value;
-            const time = document.getElementById('bk-time').value;
 
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
-            btn.disabled = true;
-            
-            if (!stripe) {
-                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
-                btn.disabled = false;
+            if (!selectedDateStr || !selectedTimeStr) {
+                document.getElementById('gate-errors').textContent = "Please select an available date and time slot from the calendar.";
                 return;
             }
 
-            const bookingStartISO = `${date}T${time}+01:00`; 
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            const bookingStartISO = `${selectedDateStr}T${selectedTimeStr}+01:00`; 
+            const totalHours = 4; // Default 4 hours for general services
             const startDateObj = new Date(bookingStartISO);
-            const endDateObj = new Date(startDateObj.getTime() + 4 * 60 * 60 * 1000);
+            const endDateObj = new Date(startDateObj.getTime() + totalHours * 60 * 60 * 1000);
             const bookingEndISO = endDateObj.toISOString();
+
+            if (!stripe) {
+                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
 
             const {paymentMethod, error} = await stripe.createPaymentMethod({ 
                 type: 'card', 
@@ -790,22 +927,23 @@
 
             if (error) {
                 document.getElementById('gate-errors').textContent = error.message;
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.innerHTML = `Confirm & Pay £20.00`;
                 btn.disabled = false;
                 return;
             }
 
             try {
+                // Strict Contract Payload
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ 
-                        customerName: name,
-                        email: email, 
+                        customerName: name, // STRICT Contract Requirement
+                        email: email, // STRICT Contract Requirement
                         type: "BOOKING_DEPOSIT", 
-                        item: currentBookingItem, 
-                        amount: currentBookingTotal, 
-                        stripeId: paymentMethod.id,
+                        item: currentBookingItem, // STRICT Contract Requirement
+                        amount: 20, // STRICT Contract Requirement
+                        stripeId: paymentMethod.id, // STRICT Contract Requirement
                         bookingStart: bookingStartISO,
                         bookingEnd: bookingEndISO
                     })
@@ -815,12 +953,12 @@
 
                 if (!result.success) {
                     document.getElementById('gate-errors').textContent = result.error;
-                    btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                    btn.innerHTML = `Confirm & Pay £20.00`;
                     btn.disabled = false;
                     return;
                 }
 
-                btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
+                btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -831,7 +969,7 @@
             } catch (error) {
                 console.error("Booking Error:", error);
                 document.getElementById('gate-errors').textContent = "Network Error. Please try again.";
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.innerHTML = `Confirm & Pay £20.00`;
                 btn.disabled = false;
             }
         }
