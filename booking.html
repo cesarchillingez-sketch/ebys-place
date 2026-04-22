@@ -47,8 +47,6 @@
     <!-- Frameworks & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
-    
-
 
     <script>
         tailwind.config = {
@@ -61,119 +59,51 @@
                         'eby-brown-light': '#6B5749',
                         'eby-gold': '#F4EFE6',
                         'eby-gold-dark': '#C2A378',
+                        'whatsapp-green': '#25D366',
                     },
                     fontFamily: {
                         body: ['Lexend', 'sans-serif'],
                         sans: ['Montserrat', 'sans-serif'],
                         display: ['Playfair Display', 'serif'],
                     },
-                    letterSpacing: {
-                        widest: '.2em',
-                        mega: '.3em',
-                    }
+                    letterSpacing: { widest: '.2em', mega: '.3em' }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background-color: #FCFBF8;
-            color: #2A1A12;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Dynamic Shifting Background */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .bg-shifting {
-            background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-
-        /* Cursor Glow Tracking */
-        .cursor-glow {
-            pointer-events: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%);
-            z-index: 1;
-            mix-blend-mode: multiply;
-            transition: background 0.1s ease;
-        }
-
+        body { background-color: #FCFBF8; color: #2A1A12; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
+        .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
+        
+        /* Smooth Scrollbars & iOS Scroll Fix */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FCFBF8; }
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
-
+        .overflow-y-auto { -webkit-overflow-scrolling: touch; }
+        
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
+        
+        /* Navigation Glassmorphism Fix for iOS */
+        .nav-transparent { background-color: transparent; border-bottom-color: transparent; box-shadow: none; }
+        .nav-scrolled { background-color: rgba(252, 251, 248, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom-color: rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
+        
+        /* Softer Radiuses */
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); border-radius: 28px; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
 
-        /* Luxury Button Hover Effects */
         .btn-luxury { position: relative; overflow: hidden; transition: all 0.5s ease; cursor: pointer; }
-        .btn-luxury::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.7s ease;
-        }
+        .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
 
-        /* Custom Inputs */
-        .luxury-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(194, 163, 120, 0.3);
-            padding: 1.2rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            color: #2A1A12;
-            transition: all 0.3s ease;
-        }
-        .luxury-input:focus {
-            outline: none;
-            border-color: #2A1A12;
-            background: #FFFFFF;
-        }
-
-        /* Glassmorphism */
-        .glass-nav {
-            background: rgba(252, 251, 248, 0.95);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(194, 163, 120, 0.15);
-            color: #2A1A12;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(194, 163, 120, 0.2);
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
-        }
-
-        /* Animated SVG Text Pattern (Footer) */
-        .text-pattern {
-            background-color: #2A1A12;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-size: 100px;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: patternShift 20s linear infinite;
-        }
+        .text-pattern { background-color: #2A1A12; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C2A378' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-size: 100px; color: transparent; -webkit-background-clip: text; background-clip: text; animation: patternShift 20s linear infinite; }
         @keyframes patternShift { 0% { background-position: 0px 0px; } 100% { background-position: 200px 200px; } }
-
-        /* Mobile Menu Animations */
+        
         .slide-panel { transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1); }
         .mobile-link { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .menu-open .mobile-link { opacity: 1; transform: translateY(0); }
@@ -182,45 +112,49 @@
         .menu-open .delay-3 { transition-delay: 0.3s; }
         .menu-open .delay-4 { transition-delay: 0.4s; }
         .menu-open .delay-5 { transition-delay: 0.5s; }
-        
+
+        /* Cart Sidebar Styles */
+        #cart-sidebar { transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        #cart-sidebar.open { transform: translateX(0); }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 45; position: fixed; inset: 0; background: rgba(42, 26, 18, 0.4); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+        #cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; color: #2A1A12; transition: border 0.3s; }
+        .luxury-input:focus { outline: none; border-color: #2A1A12; background: white; }
+
         /* Category Row Hover Animation */
         .category-row:hover .cat-title { transform: translateX(10px); color: #C2A378; }
         .category-row:hover .cat-arrow { transform: translateX(5px); opacity: 1; }
         .cat-title { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .cat-arrow { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
-
-        /* Cart Sidebar Styles */
-        #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        #cart-sidebar.open { transform: translateX(0); }
-        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
-        #cart-overlay.open { opacity: 1; pointer-events: auto; }
     </style>
 </head>
 <body class="font-body font-light selection:bg-eby-gold-dark selection:text-eby-surface bg-shifting relative">
 
     <div class="cursor-glow"></div>
 
+    <a href="https://wa.me/+447864585110" target="_blank" rel="noopener noreferrer" class="whatsapp-btn fixed bottom-8 right-8 z-50 flex items-center justify-center w-16 h-16 bg-whatsapp-green text-white rounded-full shadow-2xl hover:scale-110 transition-transform">
+        <i class="ph-fill ph-whatsapp-logo text-3xl"></i>
+    </a>
+
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
+    <nav id="navbar" class="fixed w-full z-40 nav-transparent transition-all duration-500 py-3">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2">
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2 relative z-50 cursor-pointer pointer-events-auto">
                 <i class="ph ph-list text-3xl text-eby-dark"></i>
             </button>
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4">
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4 relative z-50">
                 Eby's Place
             </a>
             <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
                 <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
-                <a href="booking.html" class="text-eby-gold-dark">Booking</a>
-                <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
+                <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
                 <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
-            <div class="flex items-center space-x-6 text-eby-dark">
-                <a href="#" class="hidden sm:block text-[10px] font-sans uppercase tracking-widest font-medium hover:text-eby-gold-dark transition-colors">My Account</a>
-                <!-- Cart Icon -->
-                <button onclick="toggleCart()" class="relative hover:text-eby-gold-dark transition-opacity group p-2 -mr-2">
+            <div class="flex items-center space-x-6 text-eby-dark relative z-50">
+                <button onclick="toggleCart()" class="relative hover:text-eby-gold-dark transition-opacity group cursor-pointer pointer-events-auto p-2 -mr-2">
                     <i class="ph ph-shopping-bag text-2xl"></i>
                     <span id="cart-badge" class="absolute top-1 right-0 bg-eby-gold-dark text-eby-surface text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
@@ -229,30 +163,20 @@
     </nav>
 
     <!-- Full-Screen Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
-        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl -webkit-backdrop-filter: blur(16px); slide-panel -translate-y-full flex flex-col justify-between overflow-y-auto">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10 shrink-0">
             <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
                 <i class="ph ph-x text-3xl text-eby-dark"></i>
             </button>
             <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
             <div class="w-10"></div>
         </div>
-        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+        <div class="flex-grow flex flex-col justify-center px-10 py-10 space-y-6">
             <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
             <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
-            <a href="about.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
-        </div>
-        <div class="px-10 pb-12">
-            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
-            <div class="flex justify-between items-center text-eby-dark">
-                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
-                <div class="flex space-x-4">
-                    <i class="ph ph-instagram-logo text-xl"></i>
-                    <i class="ph ph-tiktok-logo text-xl"></i>
-                </div>
-            </div>
+            <a href="about us.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
     </div>
 
@@ -265,28 +189,28 @@
                     Step Into Luxury
                 </h1>
             </div>
-            <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Book Your Pain-Free Braiding Appointment in Somerset</h2>
+            <h2 class="font-display text-4xl md:text-6xl text-eby-dark mb-6 reveal reveal-delay-1">Book Your Pain-Free Appointment</h2>
             <p class="text-eby-brown-light max-w-xl mx-auto reveal reveal-delay-2 font-light text-sm md:text-base leading-relaxed">
-                Browse our braiders, choose your style, pick a date and time — and confirm your booking in minutes.
+                Secure your slot with a £20 non-refundable deposit. We can’t wait to style you!
             </p>
         </div>
     </header>
 
-    <!-- Split-Screen Booking Portal -->
+    <!-- Split-Screen Category & Map Display -->
     <main class="max-w-[1400px] mx-auto px-6 py-16 md:py-24 flex flex-col lg:flex-row gap-12 lg:gap-20 relative z-10">
         
         <!-- Left Side: Service Selection Area -->
         <section class="lg:w-1/2 flex flex-col reveal">
             <div class="mb-12">
                 <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-gold-dark mb-2 border-l-2 border-eby-gold-dark pl-3">Service Selection</h3>
-                <p class="text-eby-dark text-2xl font-display">Please select a service for which you want to schedule an appointment.</p>
+                <p class="text-eby-dark text-2xl font-display">Please select a category to initiate the calendar synchronization.</p>
             </div>
 
             <!-- Categories List -->
             <div class="flex flex-col border-t border-eby-gold-dark/20">
                 
                 <!-- Braids -->
-                <button type="button" onclick="selectCategory('Braids')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Braids')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-[20px] cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Braids</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">10 Services</span>
@@ -295,7 +219,7 @@
                 </button>
 
                 <!-- Twists -->
-                <button type="button" onclick="selectCategory('Twists')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Twists')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-[20px] cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Twists</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -304,7 +228,7 @@
                 </button>
 
                 <!-- Locs -->
-                <button type="button" onclick="selectCategory('Locs')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Locs')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-[20px] cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Locs</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">3 Services</span>
@@ -313,7 +237,7 @@
                 </button>
 
                 <!-- Kids Styles -->
-                <button type="button" onclick="selectCategory('Kids Styles')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Kids Styles')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-[20px] cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Kids Styles</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">2 Services</span>
@@ -322,7 +246,7 @@
                 </button>
 
                 <!-- Add-Ons -->
-                <button type="button" onclick="selectCategory('Add-Ons')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-sm cursor-pointer outline-none">
+                <button type="button" onclick="startGeneralBooking('Add-Ons')" class="category-row w-full flex justify-between items-center py-8 border-b border-eby-gold-dark/10 hover:bg-eby-gold/20 transition-colors px-4 -mx-4 rounded-[20px] cursor-pointer outline-none">
                     <span class="font-display text-3xl md:text-4xl text-eby-dark cat-title">Add-Ons</span>
                     <div class="flex items-center gap-6">
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light font-medium">4 Services</span>
@@ -337,16 +261,16 @@
         <section class="lg:w-1/2 lg:sticky lg:top-32 h-max reveal reveal-delay-1 relative">
             
             <!-- Support / Concierge Float Box -->
-            <div class="glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px]">
+            <div class="glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px] !rounded-[28px]">
                 <h4 class="font-display text-xl text-eby-dark mb-2">Questions?</h4>
                 <p class="text-eby-brown-light text-xs leading-relaxed mb-4">Our studio concierge is available to assist with your booking.</p>
-                <a href="tel:+18589393746" class="flex items-center gap-2 font-sans font-bold text-[10px] tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors">
-                    <i class="ph ph-phone-call text-lg"></i> (858) 939-3746
+                <a href="tel:+447864585110" class="flex items-center gap-2 font-sans font-bold text-[10px] tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors">
+                    <i class="ph ph-phone-call text-lg"></i> +44 7864 585110
                 </a>
             </div>
 
-            <!-- London Eye Map with Grayscale Filter -->
-            <div class="w-full h-[500px] lg:h-[650px] rounded-sm overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
+            <!-- Somerset UK Map with Grayscale Filter -->
+            <div class="w-full h-[500px] lg:h-[650px] rounded-[38px] overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d160490.5735623048!2d-3.2384795293235305!3d51.09675270912165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486df5b9e078f8eb%3A0xc3df3c9cbfbb7b!2sSomerset%2C%20UK!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
                     width="100%" 
@@ -356,129 +280,134 @@
                     loading="lazy" 
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
-                <div class="absolute inset-0 border border-black/5 pointer-events-none"></div>
+                <div class="absolute inset-0 border border-black/5 pointer-events-none rounded-[38px]"></div>
             </div>
             
         </section>
     </main>
 
-    <!-- Eby's Place Booking Portal -->
-    <section id="booking-portal" class="py-20 md:py-28 bg-eby-bg relative z-10">
-        <!-- Decorative top border -->
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-eby-gold-dark/40 to-transparent"></div>
-
-        <div class="max-w-[1400px] mx-auto px-6">
-
-            <!-- Section Header -->
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 reveal">
-                <div>
-                    <span class="font-sans font-bold text-[10px] uppercase tracking-[0.3em] text-eby-gold-dark mb-3 flex items-center gap-3">
-                        <span class="inline-block w-6 h-px bg-eby-gold-dark"></span>
-                        <span id="widget-category-label">Book Your Appointment</span>
-                    </span>
-                    <h2 class="font-display text-4xl md:text-5xl text-eby-dark leading-tight">
-                        Secure Your Slot <em class="italic text-eby-gold-dark">Instantly.</em>
-                    </h2>
-                </div>
-                <p class="font-body font-light text-sm text-eby-brown-light max-w-sm leading-relaxed md:text-right">
-                    No deposit required to browse. Choose your braider, pick a date, and confirm in minutes.
-                </p>
-            </div>
-
-            <!-- Split Layout: Steps + Widget -->
-            <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10 lg:gap-16 items-start">
-
-                <!-- Left: How It Works Steps -->
-                <div class="space-y-0 reveal">
-                    <div class="mb-8">
-                        <h3 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-gold-dark mb-4 border-l-2 border-eby-gold-dark pl-3">How It Works</h3>
+    <!-- Custom Booking & Payment Architecture -->
+    <section id="booking-section" class="py-32 bg-eby-gold/30">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div id="booking-container" class="glass-card p-8 md:p-12 border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-[38px] shadow-xl overflow-hidden relative">
+                
+                <!-- Setup Phase: Custom Calendar & Stripe -->
+                <div id="booking-gate-ui" class="reveal active w-full">
+                    <div class="text-center mb-12">
+                        <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-2 block">Secure Consultation</span>
+                        <h2 id="booking-gate-title" class="font-display text-3xl md:text-4xl mb-4 text-eby-dark">Initialize Reservation</h2>
+                        <p id="booking-gate-desc" class="text-eby-brown-light text-sm max-w-lg mx-auto">Please select a category above, choose your preferred date and time, and confirm your £20.00 non-refundable deposit to officially book your slot.</p>
                     </div>
+                    
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="grid lg:grid-cols-12 gap-12 text-left">
+                        
+                        <!-- Left Column: The Interactive Calendar -->
+                        <div class="lg:col-span-7 space-y-8">
+                            
+                            <!-- Calendar Grid Container -->
+                            <div class="bg-white border border-eby-gold-dark/20 rounded-[28px] p-6 md:p-8 shadow-sm relative overflow-hidden">
+                                
+                                <!-- Calendar Header -->
+                                <div class="flex justify-between items-center mb-8">
+                                    <button type="button" onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-left text-eby-dark"></i></button>
+                                    <h4 id="cal-month-year" class="font-sans font-bold text-xs uppercase tracking-widest text-eby-dark">Month Year</h4>
+                                    <button type="button" onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-right text-eby-dark"></i></button>
+                                </div>
+                                
+                                <!-- Day Labels -->
+                                <div class="grid grid-cols-7 gap-2 text-center mb-4">
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Su</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Mo</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Tu</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">We</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Th</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Fr</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Sa</div>
+                                </div>
+                                
+                                <!-- Calendar Grid (Injected via JS) -->
+                                <div id="cal-grid" class="grid grid-cols-7 gap-y-2 gap-x-2 text-center">
+                                </div>
+                            </div>
 
-                    <!-- Step 1 -->
-                    <div class="flex gap-5 pb-8 border-b border-eby-gold-dark/10 group">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">01</div>
-                        <div>
-                            <p class="font-display text-lg text-eby-dark mb-1">Choose Your Style</p>
-                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">Select from our full range of braid styles &mdash; box braids, knotless, locs, twists &amp; more.</p>
+                            <!-- Dynamic Time Slots -->
+                            <div id="time-slots-wrapper" class="hidden">
+                                <h4 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-4 border-l-2 border-eby-gold-dark pl-3">Available Slots</h4>
+                                <div id="time-slots-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <!-- Injected via JS -->
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Step 2 -->
-                    <div class="flex gap-5 py-8 border-b border-eby-gold-dark/10 group">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">02</div>
-                        <div>
-                            <p class="font-display text-lg text-eby-dark mb-1">Pick a Date &amp; Time</p>
-                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">View real-time availability and select the slot that works best for you.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="flex gap-5 pt-8 group">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-eby-dark text-white flex items-center justify-center font-sans font-bold text-[11px] tracking-widest group-hover:bg-eby-gold-dark transition-colors duration-300">03</div>
-                        <div>
-                            <p class="font-display text-lg text-eby-dark mb-1">Confirm &amp; Relax</p>
-                            <p class="text-eby-brown-light text-xs leading-relaxed font-light">Receive your confirmation instantly. We'll take care of everything else.</p>
-                        </div>
-                    </div>
-
-                    <!-- Trust Badge -->
-                    <div class="mt-10 p-5 bg-eby-gold/40 rounded-2xl border border-eby-gold-dark/15">
-                        <div class="flex items-start gap-3">
-                            <i class="ph ph-shield-check text-eby-gold-dark text-2xl flex-shrink-0 mt-0.5"></i>
+                        <!-- Right Column: Details & Stripe -->
+                        <div class="lg:col-span-5 flex flex-col space-y-6 bg-eby-bg/50 p-6 md:p-8 rounded-[28px] border border-eby-gold-dark/10 h-max sticky top-32">
+                            
                             <div>
-                                <p class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-1">Secure Booking</p>
-                                <p class="text-eby-brown-light text-xs leading-relaxed font-light">Your information is protected. No card required to browse &mdash; pay at your appointment.</p>
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Client Details</h3>
+                                <div class="space-y-4">
+                                    <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
+                                    <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                            
+                            <div class="pt-6 border-t border-eby-gold-dark/10">
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Deposit Details</h3>
+                                <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] shadow-sm">
+                                    <div id="gate-card-element" class="w-full"></div>
+                                </div>
+                                <div id="gate-errors" class="text-red-500 text-[10px] mt-3 font-medium"></div>
+                            </div>
+                            
+                            <div class="pt-4 flex-grow flex flex-col justify-end">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="font-display text-lg text-eby-dark">Total Due Now</span>
+                                    <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
+                                </div>
+                                <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2">
+                                    Confirm & Pay <i class="ph ph-lock-key"></i>
+                                </button>
+                            </div>
 
+                        </div>
+                    </form>
                 </div>
 
-                <!-- Right: Booking Widget -->
-                <div class="reveal reveal-delay-1">
-                    <div class="relative">
-                        <!-- Decorative corner accents -->
-                        <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-eby-gold-dark/30 rounded-tr-2xl pointer-events-none z-10"></div>
-                        <div class="absolute -bottom-3 -left-3 w-16 h-16 border-b-2 border-l-2 border-eby-gold-dark/30 rounded-bl-2xl pointer-events-none z-10"></div>
-
-                        <!-- Widget card -->
-                        <div class="bg-white border border-eby-gold-dark/20 rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
-                            <!-- Widget header bar -->
-                            <div class="px-6 py-4 bg-eby-dark flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_8px_rgba(194,163,120,0.8)]"></span>
-                                    <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Eby's Place &mdash; Live Booking</span>
-                                </div>
-                                <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Available Now</span>
-                            </div>
-                            <!-- Booking system coming soon -->
-                            <div style="display: flex; align-items: center; justify-content: center; min-height: 400px; padding: 40px; text-align: center;">
-                                <div>
-                                    <p style="font-family: inherit; font-size: 1rem; color: #6b5c4e; margin-bottom: 12px;">Online booking will be available shortly.</p>
-                                    <p style="font-family: inherit; font-size: 0.875rem; color: #9b8a7a;">Please call us or send a message to book your appointment.</p>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Success State UI -->
+                <div id="booking-success-state" class="hidden flex-col h-full flex-grow items-center justify-center p-8 text-center text-eby-dark">
+                    <div class="w-24 h-24 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface shadow-inner mx-auto">
+                        <i class="ph ph-calendar-check text-4xl text-eby-gold-dark"></i>
                     </div>
+                    <h2 class="font-display text-4xl mb-4">Reservation Confirmed</h2>
+                    <p class="font-body text-sm font-light text-eby-brown-light leading-relaxed mb-8 max-w-sm mx-auto">
+                        Your appointment has been securely captured. A confirmation and `.ics` itinerary has been dispatched to your email.
+                    </p>
+                    <a href="index.html" class="inline-block border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">Return to Home</a>
                 </div>
 
             </div>
         </div>
     </section>
-        <!-- Footer -->
+
+    <!-- Footer -->
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal active">
+                <div class="md:w-1/2 mb-8 md:mb-0"><h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3><p class="text-eby-brown-light text-sm">Early booking access and scalp care insights.</p></div>
+                <div class="md:w-1/2 w-full flex">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-[20px] focus:outline-none"><button class="bg-eby-dark text-white px-8 rounded-r-[20px] font-bold text-[9px] uppercase tracking-widest">Join</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal active">
                 <div class="col-span-1 md:col-span-2">
                     <a href="index.html" class="font-display font-semibold text-3xl tracking-wide text-eby-dark uppercase block mb-6">Eby's Place</a>
                     <p class="text-eby-brown-light text-sm max-w-sm leading-relaxed">
                         Premium African hair braiding services in Somerset, UK. Experience the art of beautiful, pain-free braids engineered entirely for longevity and scalp health.
                     </p>
                     
-                    <div class="mt-8 space-y-2 text-sm text-eby-dark font-medium">
-                        <p class="flex items-center gap-2"><i class="ph ph-phone text-eby-gold-dark"></i> +44 7864 585110</p>
-                        <p class="flex items-center gap-2"><i class="ph ph-clock text-eby-gold-dark"></i> Mon- Sat: 9am – 7pm</p>
-                        <p class="flex items-center gap-2"><i class="ph ph-calendar text-eby-gold-dark"></i> Sun: By Appointment</p>
+                    <div class="mt-8 space-y-2 text-[10px] font-sans font-bold tracking-widest uppercase text-eby-dark">
+                        <p class="flex items-center gap-3"><i class="ph ph-phone text-eby-gold-dark text-sm"></i> Office: +44 7864 585110</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-clock text-eby-gold-dark text-sm"></i> Hours: Mon–Sat: 09:00 – 19:00</p>
+                        <p class="flex items-center gap-3"><i class="ph ph-calendar text-eby-gold-dark text-sm"></i> Sunday: By Appointment Only</p>
                     </div>
                 </div>
                 <div>
@@ -518,17 +447,12 @@
         </div>
     </footer>
 
-    <!-- Back to Top Floating Button -->
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 left-8 z-40 w-12 h-12 bg-eby-dark text-eby-surface rounded-full flex items-center justify-center shadow-2xl hover:bg-eby-gold-dark transition-colors group">
-        <i class="ph ph-arrow-up text-xl group-hover:-translate-y-1 transition-transform"></i>
-    </button>
-
-    <!-- Visual Only Cart Sidebar (Maintained for UI consistency) -->
-    <div id="cart-overlay" onclick="toggleCart()"></div>
+    <!-- Visual Only Cart Sidebar (Maintained for UI consistency if integrated later) -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50 hidden -webkit-backdrop-filter: blur(4px);"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
         <div class="p-8 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
             <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
-            <button onclick="toggleCart()"><i class="ph ph-x text-2xl"></i></button>
+            <button onclick="toggleCart()"><i class="ph ph-x text-2xl hover:text-eby-gold-dark transition-colors"></i></button>
         </div>
         <div class="flex-grow p-12 flex flex-col items-center justify-center text-center">
             <i class="ph ph-bag text-5xl text-eby-gold-dark/30 mb-4"></i>
@@ -539,20 +463,218 @@
 
     <!-- Scripts for Logic & Interactivity -->
     <script>
-        // Select category and scroll to booking widget
-        function selectCategory(categoryName) {
-            const label = document.getElementById('widget-category-label');
-            if (label) {
-                label.textContent = categoryName + ' — Select a Braider Below';
+        // Setup variables & Stripe
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
+        let stripe, elements, gateCard;
+        
+        try {
+            if (typeof Stripe !== 'undefined') {
+                stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+                elements = stripe.elements();
+                gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif', '::placeholder': { color: '#6B5749', opacity: 0.6 } } } });
             }
-            const portal = document.getElementById('booking-portal');
-            if (portal) {
-                portal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch (e) {
+            console.error('Stripe initialization failed:', e);
+        }
+        
+        let currentBookingItem = "General Consultation";
+        const currentBookingTotal = 20;
+
+        // Calendar State
+        let calDate = new Date();
+        let selectedDateStr = null;
+        let selectedTimeStr = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            renderCalendar();
+        });
+
+        // -------------------------
+        // CALENDAR RENDERING LOGIC
+        // -------------------------
+        function renderCalendar() {
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+            
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            
+            document.getElementById('cal-month-year').innerText = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(calDate);
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            // Empty slots for start of month alignment
+            for(let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+            
+            for(let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                
+                // Disable Past Dates and Sundays (0)
+                const isPast = date < today;
+                const isSunday = date.getDay() === 0;
+                const isDisabled = isPast || isSunday;
+                
+                let classes = "w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center text-sm font-medium transition-all ";
+                
+                if (isDisabled) {
+                    classes += "text-gray-300 cursor-not-allowed opacity-50";
+                } else if (selectedDateStr === dateStr) {
+                    classes += "bg-eby-gold-dark text-white shadow-md";
+                } else {
+                    classes += "text-eby-dark hover:bg-eby-gold/20 hover:text-eby-gold-dark cursor-pointer";
+                }
+                
+                grid.innerHTML += `<button type="button" ${isDisabled ? 'disabled' : `onclick="selectDate('${dateStr}')"`} class="${classes}">${i}</button>`;
             }
         }
 
-        // Mobile Menu Dropdown Logic
+        function changeMonth(dir) {
+            calDate.setMonth(calDate.getMonth() + dir);
+            renderCalendar();
+        }
 
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr;
+            selectedTimeStr = null; 
+            renderCalendar(); 
+            
+            const slotsWrapper = document.getElementById('time-slots-wrapper');
+            const slotsGrid = document.getElementById('time-slots-grid');
+            
+            slotsWrapper.classList.remove('hidden');
+            
+            // Inject stylish mock slots without fake load time
+            slotsGrid.innerHTML = `
+                <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
+                <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
+                <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
+            `;
+        }
+
+        function selectTime(timeStr, btn) {
+            selectedTimeStr = timeStr;
+            document.querySelectorAll('.time-slot-btn').forEach(b => {
+                b.classList.remove('bg-eby-dark', 'text-white', 'border-eby-dark');
+                b.classList.add('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            });
+            btn.classList.remove('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            btn.classList.add('bg-eby-dark', 'text-white', 'border-eby-dark');
+        }
+
+
+        // -------------------------
+        // BOOKING GATE LOGIC
+        // -------------------------
+
+        // Initiates General Category Booking
+        function startGeneralBooking(categoryName) {
+            currentBookingItem = `${categoryName} Appointment`;
+            
+            document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
+            document.getElementById('booking-gate-desc').innerHTML = `You are requesting a <strong>${categoryName}</strong> appointment. Please select a date and time, and confirm your £20.00 deposit to lock it in.`;
+            document.getElementById('dg-btn').innerText = `Confirm & Pay £20.00`;
+            
+            document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function handleDepositGate(e) {
+            e.preventDefault();
+            const btn = document.getElementById('dg-btn');
+            const name = document.getElementById('bk-name').value;
+            const email = document.getElementById('bk-email').value;
+
+            // Strict Validation for Custom Calendar
+            if (!selectedDateStr || !selectedTimeStr) {
+                document.getElementById('gate-errors').textContent = "Please select an available date and time slot from the calendar.";
+                return;
+            }
+
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            // Default general appointment is assumed to take 4 hours
+            const bookingStartISO = `${selectedDateStr}T${selectedTimeStr}+01:00`; 
+            const totalHours = 4; 
+            const startDateObj = new Date(bookingStartISO);
+            const endDateObj = new Date(startDateObj.getTime() + totalHours * 60 * 60 * 1000);
+            const bookingEndISO = endDateObj.toISOString();
+
+            if (!stripe) {
+                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
+
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ 
+                type: 'card', 
+                card: gateCard,
+                billing_details: { name: name, email: email }
+            });
+
+            if (error) {
+                document.getElementById('gate-errors').textContent = error.message;
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
+
+            try {
+                // Strict Contract Payload
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ 
+                        customerName: name, // STRICT Contract Requirement
+                        email: email, // STRICT Contract Requirement
+                        type: "BOOKING_DEPOSIT", 
+                        item: currentBookingItem, // STRICT Contract Requirement
+                        amount: 20, // STRICT Contract Requirement
+                        stripeId: paymentMethod.id, // STRICT Contract Requirement
+                        bookingStart: bookingStartISO,
+                        bookingEnd: bookingEndISO
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    document.getElementById('gate-errors').textContent = result.error;
+                    btn.innerHTML = `Confirm & Pay £20.00`;
+                    btn.disabled = false;
+                    return;
+                }
+
+                // SUCCESS FLOW
+                btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
+                
+                setTimeout(() => {
+                    document.getElementById('booking-gate-ui').classList.add('hidden');
+                    document.getElementById('booking-success-state').classList.remove('hidden');
+                    document.getElementById('booking-success-state').classList.add('flex');
+                }, 800);
+
+            } catch (error) {
+                console.error("Booking Error:", error);
+                document.getElementById('gate-errors').textContent = "Network Error. Please try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+            }
+        }
+
+        // -------------------------
+        // UI EFFECTS
+        // -------------------------
+
+        // Mobile Menu Dropdown Logic
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             if(menu.classList.contains('-translate-y-full')) {
@@ -567,9 +689,11 @@
         }
 
         function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('open');
-            document.getElementById('cart-overlay').classList.toggle('open');
-            document.body.style.overflow = document.getElementById('cart-sidebar').classList.contains('open') ? 'hidden' : '';
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
         }
 
         // Tech-Spirit Background Glow
@@ -592,6 +716,18 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
     </script>
 </body>
 </html>
