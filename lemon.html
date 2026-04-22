@@ -43,14 +43,6 @@
       "areaServed": "Somerset, UK"
     }
     </script>
-    
-    <!-- Open Graph / Web Preview Meta Tags -->
-    <meta name="description" content="Precision-engineered feed-in braids, swept to one side for a timeless, high-fashion silhouette. Book your Signature Lemon Braids at Eby's Place.">
-    <meta property="og:title" content="Signature Lemon Braids | Eby's Place">
-    <meta property="og:description" content="Precision-engineered feed-in braids, swept to one side for a timeless, high-fashion silhouette. Book your Signature Lemon Braids at Eby's Place.">
-    <meta property="og:image" content="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png">
-    <meta property="og:url" content="https://ebysplace.com/lemon">
-    <meta property="og:type" content="product">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -63,13 +55,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://js.stripe.com/v3/"></script>
-
-    <script type="text/javascript">
-      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-      Cal("init", "30min", {origin:"https://app.cal.com"});
-    </script>
 
     <script>
         tailwind.config = {
@@ -102,10 +89,13 @@
         .bg-shifting { background: linear-gradient(-45deg, #FCFBF8, #F4EFE6, #FCFBF8, #FDFCFB); background-size: 400% 400%; animation: gradientShift 20s ease infinite; }
         @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .cursor-glow { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle 600px at var(--x, 50vw) var(--y, 50vh), rgba(194, 163, 120, 0.15), transparent 40%); z-index: 1; mix-blend-mode: multiply; transition: background 0.1s ease; }
+        
+        /* Scrollbars & iOS Fix */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FCFBF8; }
         ::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #C2A378; }
+        .overflow-y-auto { -webkit-overflow-scrolling: touch; }
         
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -116,8 +106,10 @@
         .btn-luxury::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: all 0.7s ease; }
         .btn-luxury:hover::after { left: 100%; }
         
-        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
-        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; }
+        .glass-nav { background: rgba(252, 251, 248, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(194, 163, 120, 0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); }
+        
+        /* Modern 15% Softer Radiuses */
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(194, 163, 120, 0.2); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; border-radius: 28px; }
         .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(42, 26, 18, 0.05); }
         
         .variant-btn { border: 1px solid rgba(194, 163, 120, 0.3); color: #6B5749; transition: all 0.3s ease; }
@@ -127,7 +119,7 @@
         
         #cart-sidebar { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         #cart-sidebar.open { transform: translateX(0); }
-        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 45; position: fixed; inset: 0; background: rgba(42, 26, 18, 0.3); backdrop-filter: blur(4px); }
+        #cart-overlay { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 45; position: fixed; inset: 0; background: rgba(42, 26, 18, 0.3); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
         #cart-overlay.open { opacity: 1; pointer-events: auto; }
         
         .luxury-input { width: 100%; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(194, 163, 120, 0.3); padding: 1.2rem; border-radius: 20px; font-size: 0.875rem; color: #2A1A12; transition: border 0.3s; }
@@ -150,8 +142,8 @@
                 <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
-                <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
-                <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
+                <a href="#booking" class="text-eby-gold-dark transition-colors">Booking</a>
+                <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
             <div class="flex items-center space-x-6">
                 <button onclick="toggleCart()" class="relative group">
@@ -162,24 +154,52 @@
         </div>
     </nav>
 
+    <!-- Full-Screen Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-eby-bg/95 backdrop-blur-xl slide-panel -translate-y-full flex flex-col justify-between">
+        <div class="px-6 h-24 flex items-center justify-between border-b border-eby-gold-dark/10">
+            <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
+                <i class="ph ph-x text-3xl text-eby-dark"></i>
+            </button>
+            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <div class="w-10"></div>
+        </div>
+        <div class="flex-grow flex flex-col justify-center px-10 space-y-8">
+            <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
+            <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
+            <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
+            <a href="#booking" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
+            <a href="about us.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+        </div>
+        <div class="px-10 pb-12">
+            <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
+            <div class="flex justify-between items-center text-eby-dark">
+                <span class="font-sans text-[9px] uppercase tracking-widest font-bold">Follow Us</span>
+                <div class="flex space-x-4">
+                    <i class="ph ph-instagram-logo text-xl"></i>
+                    <i class="ph ph-tiktok-logo text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Configurator -->
     <main class="w-full min-h-screen pt-24 flex flex-col lg:flex-row">
         
         <!-- Left Side: Sticky Gallery -->
         <section class="lg:w-1/2 lg:sticky lg:top-0 h-[60vh] lg:h-screen p-6 lg:p-12">
             <div class="w-full h-full flex flex-col">
-                <div class="flex-grow relative overflow-hidden rounded-sm bg-eby-surface/50">
-                    <img alt="Lemonade braids side-swept cornrows at Eby's Place" loading="lazy" id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
+                <div class="flex-grow relative overflow-hidden rounded-[20px] bg-eby-surface/50">
+                    <img id="main-gallery-img" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500">
                 </div>
                 <div class="h-24 w-full mt-4 flex gap-4">
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png', this)" class="thumbnail-btn flex-1 outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden rounded-sm">
-                        <img alt="Lemonade braids side-swept cornrows at Eby's Place" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="w-full h-full object-cover">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png', this)" class="thumbnail-btn flex-1 outline outline-2 outline-eby-dark outline-offset-2 overflow-hidden rounded-[16px]">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" class="w-full h-full object-cover">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696289/1774693335517_xoyare.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
-                        <img alt="Eby's Place hair braiding style" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696289/1774693335517_xoyare.png" class="w-full h-full object-cover opacity-60">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696289/1774693335517_xoyare.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-[16px]">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696289/1774693335517_xoyare.png" class="w-full h-full object-cover opacity-60">
                     </button>
-                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696290/1774693413264_rhsonr.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-sm">
-                        <img alt="Eby's Place hair braiding style" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696290/1774693413264_rhsonr.png" class="w-full h-full object-cover opacity-60">
+                    <button onclick="changeImage('https://res.cloudinary.com/dfbweqelf/image/upload/v1774696290/1774693413264_rhsonr.png', this)" class="thumbnail-btn flex-1 border border-eby-gold-dark/30 overflow-hidden rounded-[16px]">
+                        <img src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696290/1774693413264_rhsonr.png" class="w-full h-full object-cover opacity-60">
                     </button>
                 </div>
             </div>
@@ -199,8 +219,8 @@
                     <div>
                         <h3 class="font-sans text-[11px] uppercase font-bold mb-4 tracking-widest text-eby-dark">Braid Thickness</h3>
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="updateVariant(this, 'size', 'standard', 0, 0)" class="variant-btn selected py-4 text-[10px] uppercase tracking-widest rounded-lg">Standard (Sleek)</button>
-                            <button onclick="updateVariant(this, 'size', 'jumbo', 20, -1)" class="variant-btn py-4 text-[10px] uppercase tracking-widest rounded-lg">Jumbo (Bold) +£20</button>
+                            <button onclick="updateVariant(this, 'size', 'standard', 0, 0)" class="variant-btn selected py-4 text-[10px] uppercase tracking-widest rounded-xl">Standard (Sleek)</button>
+                            <button onclick="updateVariant(this, 'size', 'jumbo', 20, -1)" class="variant-btn py-4 text-[10px] uppercase tracking-widest rounded-xl">Jumbo (Bold) +£20</button>
                         </div>
                     </div>
 
@@ -208,8 +228,8 @@
                     <div>
                         <h3 class="font-sans text-[11px] uppercase font-bold mb-4 tracking-widest text-eby-dark">Length Selection</h3>
                         <div class="flex flex-col gap-3">
-                            <button onclick="updateVariant(this, 'length', 'waist', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest rounded-lg"><span>Waist Length</span> <span>+£0</span></button>
-                            <button onclick="updateVariant(this, 'length', 'hip', 25, 1)" class="variant-btn py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest rounded-lg"><span>Hip Length</span> <span>+£25</span></button>
+                            <button onclick="updateVariant(this, 'length', 'waist', 0, 0)" class="variant-btn selected py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest rounded-xl"><span>Waist Length</span> <span>+£0</span></button>
+                            <button onclick="updateVariant(this, 'length', 'hip', 25, 1)" class="variant-btn py-5 px-6 flex justify-between text-[10px] uppercase tracking-widest rounded-xl"><span>Hip Length</span> <span>+£25</span></button>
                         </div>
                     </div>
 
@@ -226,40 +246,120 @@
 
                 <!-- Sticky Booking Total Bar -->
                 <div class="mt-16 sticky bottom-6 z-30">
-                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 rounded-2xl">
+                    <div class="glass-card p-6 shadow-2xl flex flex-col sm:flex-row justify-between items-center gap-6 rounded-[28px]">
                         <div class="text-center sm:text-left">
                             <p class="font-sans text-[9px] uppercase font-bold text-eby-brown-light tracking-widest">Estimate</p>
                             <div class="flex items-baseline gap-3"><span class="font-display text-3xl text-eby-dark" id="total-price">£90.00</span><span class="text-sm text-eby-brown-light" id="total-time">3.5 hrs</span></div>
                         </div>
-                        <button onclick="scrollToBooking()" class="w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 rounded-2xl font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all whitespace-nowrap btn-luxury">Reserve Appointment</button>
+                        <button onclick="scrollToBooking()" class="w-full sm:w-auto bg-eby-dark text-eby-surface px-10 py-5 rounded-[20px] font-sans uppercase tracking-[0.2em] text-[10px] font-bold hover:bg-eby-brown-light transition-all whitespace-nowrap btn-luxury">Reserve Appointment</button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Stripe & Cal.com Booking Gate -->
+    <!-- Custom Booking & Payment Architecture -->
     <section id="booking" class="py-32 bg-eby-gold/30">
-        <div class="max-w-4xl mx-auto px-6">
-            <div id="booking-container" class="glass-card p-12 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-3xl">
+        <div class="max-w-[1200px] mx-auto px-6">
+            <div id="booking-container" class="glass-card p-8 md:p-12 border-t-4 border-t-eby-dark min-h-[600px] flex flex-col justify-center transition-all duration-700 rounded-[38px] shadow-xl overflow-hidden relative">
                 
-                <!-- Verification / Payment UI -->
-                <div id="booking-gate-ui" class="reveal active">
-                    <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Verification</span>
-                    <h2 id="booking-gate-title" class="font-display text-4xl mb-4 text-eby-dark">Initialize Your Reservation.</h2>
-                    <p id="booking-gate-desc" class="text-eby-brown-light text-sm mb-12 max-w-md mx-auto">Please confirm your £20.00 non-refundable deposit to unlock the luxury booking calendar.</p>
+                <!-- Setup Phase: Custom Calendar & Stripe -->
+                <div id="booking-gate-ui" class="reveal active w-full">
+                    <div class="text-center mb-12">
+                        <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-2 block">Secure Consultation</span>
+                        <h2 id="booking-gate-title" class="font-display text-3xl md:text-5xl mb-4 text-eby-dark">Initialize Reservation</h2>
+                        <p id="booking-gate-desc" class="text-eby-brown-light text-sm max-w-lg mx-auto">Please select your preferred date and time, and confirm your £20.00 non-refundable deposit to officially book your bespoke appointment slot.</p>
+                    </div>
                     
-                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-6 max-w-md mx-auto">
-                        <input type="email" id="dg-email" placeholder="Email Address" required class="luxury-input">
-                        <div id="gate-card-element" class="p-5 bg-white border border-eby-gold-dark/20 rounded-2xl"></div>
-                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-left"></div>
-                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px]">Secure Slot (£20 Deposit)</button>
+                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="grid lg:grid-cols-12 gap-12 text-left">
+                        
+                        <!-- Left Column: The Interactive Calendar -->
+                        <div class="lg:col-span-7 space-y-8">
+                            
+                            <!-- Calendar Grid Container -->
+                            <div class="bg-white border border-eby-gold-dark/20 rounded-[28px] p-6 md:p-8 shadow-sm relative overflow-hidden">
+                                
+                                <!-- Loader Overlay (Simulating API fetch) -->
+                                <div id="cal-sync-loader" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-20 hidden flex-col items-center justify-center">
+                                    <i class="ph ph-spinner animate-spin text-3xl text-eby-gold-dark mb-2"></i>
+                                    <span class="font-sans text-[9px] uppercase tracking-widest text-eby-dark font-bold">Syncing Availability...</span>
+                                </div>
+                                
+                                <!-- Calendar Header -->
+                                <div class="flex justify-between items-center mb-8">
+                                    <button type="button" onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-left text-eby-dark"></i></button>
+                                    <h4 id="cal-month-year" class="font-sans font-bold text-xs uppercase tracking-widest text-eby-dark">Month Year</h4>
+                                    <button type="button" onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center hover:bg-eby-bg rounded-full transition-colors border border-transparent hover:border-eby-gold-dark/20"><i class="ph ph-caret-right text-eby-dark"></i></button>
+                                </div>
+                                
+                                <!-- Day Labels -->
+                                <div class="grid grid-cols-7 gap-2 text-center mb-4">
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Su</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Mo</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Tu</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">We</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Th</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Fr</div>
+                                    <div class="font-sans text-[9px] uppercase tracking-widest text-eby-brown-light">Sa</div>
+                                </div>
+                                
+                                <!-- Calendar Grid (Injected via JS) -->
+                                <div id="cal-grid" class="grid grid-cols-7 gap-y-2 gap-x-2 text-center">
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Time Slots -->
+                            <div id="time-slots-wrapper" class="hidden">
+                                <h4 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-4 border-l-2 border-eby-gold-dark pl-3">Available Slots</h4>
+                                <div id="time-slots-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <!-- Injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Details & Stripe -->
+                        <div class="lg:col-span-5 flex flex-col space-y-6 bg-eby-bg/50 p-6 md:p-8 rounded-[28px] border border-eby-gold-dark/10 h-max sticky top-32">
+                            
+                            <div>
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Client Details</h3>
+                                <div class="space-y-4">
+                                    <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
+                                    <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                                </div>
+                            </div>
+                            
+                            <div class="pt-6 border-t border-eby-gold-dark/10">
+                                <h3 class="font-display text-2xl text-eby-dark mb-4">Deposit Details</h3>
+                                <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] shadow-sm">
+                                    <div id="gate-card-element" class="w-full"></div>
+                                </div>
+                                <div id="gate-errors" class="text-red-500 text-[10px] mt-3 font-medium"></div>
+                            </div>
+                            
+                            <div class="pt-4 flex-grow flex flex-col justify-end">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="font-display text-lg text-eby-dark">Total Due Now</span>
+                                    <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
+                                </div>
+                                <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2">
+                                    Confirm & Pay <i class="ph ph-lock-key"></i>
+                                </button>
+                            </div>
+
+                        </div>
                     </form>
                 </div>
 
-                <!-- Cal.com Portal UI (Hidden until paid) -->
-                <div id="booking-portal-ui" class="hidden w-full h-full flex-grow">
-                     <div id="cal-embed-wrapper" style="width:100%;height:600px;overflow:scroll"></div>
+                <!-- Success State UI -->
+                <div id="booking-success-state" class="hidden flex-col h-full flex-grow items-center justify-center p-8 text-center text-eby-dark">
+                    <div class="w-24 h-24 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface shadow-inner mx-auto">
+                        <i class="ph ph-calendar-check text-4xl text-eby-gold-dark"></i>
+                    </div>
+                    <h2 class="font-display text-4xl mb-4">Reservation Confirmed</h2>
+                    <p class="font-body text-sm font-light text-eby-brown-light leading-relaxed mb-8 max-w-sm mx-auto">
+                        Your appointment has been securely captured. A confirmation and `.ics` itinerary has been dispatched to your email.
+                    </p>
+                    <a href="index.html" class="inline-block border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">Return to Home</a>
                 </div>
 
             </div>
@@ -290,8 +390,8 @@
         </div>
     </footer>
 
-    <!-- Visual Only Cart Sidebar (Maintained for UI consistency) -->
-    <div id="cart-overlay" onclick="toggleCart()"></div>
+    <!-- Visual Only Cart Sidebar -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-eby-dark/30 backdrop-blur-sm z-50 hidden"></div>
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-[450px] bg-eby-surface shadow-2xl z-50 flex flex-col border-l border-eby-gold-dark/20">
         <div class="p-8 border-b border-eby-gold-dark/20 flex justify-between items-center bg-eby-surface shrink-0">
             <h2 class="font-display text-2xl text-eby-dark" id="cart-title">Your Bag</h2>
@@ -306,22 +406,129 @@
 
     <!-- Scripts for Logic & Interactivity -->
     <script>
-        // Setup variables & Stripe
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzIgPRufXUUcewDxDfHoSdv5OMBJuuxjsGnl_4x8rvPqcoY9u4SDBy9xBUL_xkyyaqC/exec';
-        const stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
-        const elements = stripe.elements();
-        const gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
+        // System variables
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
+        let stripe, elements, gateCard;
         
+        try {
+            if (typeof Stripe !== 'undefined') {
+                stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
+                elements = stripe.elements();
+                gateCard = elements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif', '::placeholder': { color: '#6B5749', opacity: 0.6 } } } });
+            }
+        } catch (e) {
+            console.error('Stripe initialization failed:', e);
+        }
+        
+        // Product Pricing State
         const basePrice = 90;
         const baseTime = 3.5;
         let currentBookingItem = "Signature Lemon Braids";
-        
         let state = { sizePriceMod: 0, sizeTimeMod: 0, lengthPriceMod: 0, lengthTimeMod: 0, color: '1B' };
 
+        // Calendar State
+        let calDate = new Date();
+        let selectedDateStr = null;
+        let selectedTimeStr = null;
+
         document.addEventListener('DOMContentLoaded', () => {
-            if(document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            renderCalendar();
         });
 
+        // -------------------------
+        // CALENDAR RENDERING LOGIC
+        // -------------------------
+        function renderCalendar() {
+            const grid = document.getElementById('cal-grid');
+            grid.innerHTML = '';
+            
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            
+            document.getElementById('cal-month-year').innerText = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(calDate);
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            // Empty slots for start of month alignment
+            for(let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+            
+            for(let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                
+                // Disable Past Dates and Sundays (0)
+                const isPast = date < today;
+                const isSunday = date.getDay() === 0;
+                const isDisabled = isPast || isSunday;
+                
+                let classes = "w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center text-sm font-medium transition-all ";
+                
+                if (isDisabled) {
+                    classes += "text-gray-300 cursor-not-allowed opacity-50";
+                } else if (selectedDateStr === dateStr) {
+                    classes += "bg-eby-gold-dark text-white shadow-md";
+                } else {
+                    classes += "text-eby-dark hover:bg-eby-gold/20 hover:text-eby-gold-dark cursor-pointer";
+                }
+                
+                grid.innerHTML += `<button type="button" ${isDisabled ? 'disabled' : `onclick="selectDate('${dateStr}')"`} class="${classes}">${i}</button>`;
+            }
+        }
+
+        function changeMonth(dir) {
+            calDate.setMonth(calDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr;
+            selectedTimeStr = null; // reset time selection
+            renderCalendar(); // re-render to apply active class
+            
+            const loader = document.getElementById('cal-sync-loader');
+            const slotsWrapper = document.getElementById('time-slots-wrapper');
+            const slotsGrid = document.getElementById('time-slots-grid');
+            
+            // Simulate API Fetch
+            loader.classList.remove('hidden');
+            loader.classList.add('flex');
+            slotsWrapper.classList.add('hidden');
+            
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                loader.classList.remove('flex');
+                slotsWrapper.classList.remove('hidden');
+                
+                // Inject stylish mock slots
+                slotsGrid.innerHTML = `
+                    <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
+                    <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
+                    <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
+                `;
+            }, 600);
+        }
+
+        function selectTime(timeStr, btn) {
+            selectedTimeStr = timeStr;
+            document.querySelectorAll('.time-slot-btn').forEach(b => {
+                b.classList.remove('bg-eby-dark', 'text-white', 'border-eby-dark');
+                b.classList.add('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            });
+            btn.classList.remove('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            btn.classList.add('bg-eby-dark', 'text-white', 'border-eby-dark');
+        }
+
+
+        // -------------------------
+        // PRODUCT PDP LOGIC
+        // -------------------------
         function updatePriceAndTime() {
             const total = basePrice + state.sizePriceMod + state.lengthPriceMod;
             document.getElementById('total-price').innerText = `£${total.toFixed(2)}`;
@@ -364,61 +571,113 @@
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('open');
             document.getElementById('cart-overlay').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('hidden');
         }
 
-        // Scrolls to the Stripe/Cal.com Booking Gate
+
+        // -------------------------
+        // SECURE CHECKOUT LOGIC
+        // -------------------------
         function scrollToBooking() {
             const priceText = document.getElementById('total-price').innerText;
             const sizeMod = state.sizePriceMod > 0 ? 'Jumbo' : 'Standard';
             currentBookingItem = `Lemon Braids - ${sizeMod}, ${state.color}`;
 
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>Signature Lemon Braids</strong> (Estimated ${priceText}). Please confirm your £20.00 non-refundable booking deposit to unlock the calendar.`;
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>Signature Lemon Braids</strong> (Estimated ${priceText}). Please select an available date and time below to officially book your slot.`;
             
             document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Handles the Stripe Deposit and Reveals Cal.com
         async function handleDepositGate(e) {
             e.preventDefault();
             const btn = document.getElementById('dg-btn');
-            const email = document.getElementById('dg-email').value;
+            const name = document.getElementById('bk-name').value;
+            const email = document.getElementById('bk-email').value;
+
+            // Strict Validation for Custom Calendar
+            if (!selectedDateStr || !selectedTimeStr) {
+                document.getElementById('gate-errors').textContent = "Please select an available date and time slot from the calendar.";
+                return;
+            }
+
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
             btn.disabled = true;
 
-            const {paymentMethod, error} = await stripe.createPaymentMethod({ type: 'card', card: gateCard });
+            // Calculate End Time
+            const bookingStartISO = `${selectedDateStr}T${selectedTimeStr}+01:00`; 
+            const totalHours = baseTime + state.sizeTimeMod + state.lengthTimeMod;
+            const startDateObj = new Date(bookingStartISO);
+            const endDateObj = new Date(startDateObj.getTime() + totalHours * 60 * 60 * 1000);
+            const bookingEndISO = endDateObj.toISOString();
 
-            if (error) {
-                document.getElementById('gate-errors').textContent = error.message;
-                btn.innerHTML = `Secure Slot (£20 Deposit)`;
+            if (!stripe) {
+                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
+                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
                 btn.disabled = false;
                 return;
             }
 
-            // SUCCESS FLOW
-            btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
-            
-            // Background Webhook to Google Apps Script
-            fetch(GAS_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ email: email, type: "BOOKING_DEPOSIT", item: currentBookingItem, amount: 20, stripeId: paymentMethod.id })
+            const {paymentMethod, error} = await stripe.createPaymentMethod({ 
+                type: 'card', 
+                card: gateCard,
+                billing_details: { name: name, email: email }
             });
 
-            // Transition UI to Cal.com Embed
-            setTimeout(() => {
-                document.getElementById('booking-gate-ui').classList.add('hidden');
-                document.getElementById('booking-portal-ui').classList.remove('hidden');
-                
-                Cal.ns["30min"]("inline", {
-                    elementOrSelector: "#cal-embed-wrapper",
-                    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
-                    calLink: "ebys-place-o8qhbh/30min",
+            if (error) {
+                document.getElementById('gate-errors').textContent = error.message;
+                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.disabled = false;
+                return;
+            }
+
+            try {
+                // Strict Contract Payload
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ 
+                        customerName: name,
+                        email: email, 
+                        type: "BOOKING_DEPOSIT", 
+                        item: currentBookingItem, 
+                        amount: 20, 
+                        stripeId: paymentMethod.id,
+                        bookingStart: bookingStartISO,
+                        bookingEnd: bookingEndISO
+                    })
                 });
-                Cal.ns["30min"]("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#2A1A12"}},"hideEventTypeDetails":false,"layout":"month_view"});
-            }, 800);
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    document.getElementById('gate-errors').textContent = result.error;
+                    btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                    btn.disabled = false;
+                    return;
+                }
+
+                // SUCCESS FLOW
+                btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
+                
+                setTimeout(() => {
+                    document.getElementById('booking-gate-ui').classList.add('hidden');
+                    document.getElementById('booking-success-state').classList.remove('hidden');
+                    document.getElementById('booking-success-state').classList.add('flex');
+                }, 800);
+
+            } catch (error) {
+                console.error("Booking Error:", error);
+                document.getElementById('gate-errors').textContent = "Network Error. Please try again.";
+                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.disabled = false;
+            }
         }
 
+
+        // -------------------------
+        // UI EFFECTS
+        // -------------------------
         document.addEventListener('mousemove', (e) => {
             const glow = document.querySelector('.cursor-glow');
             if(glow) {
@@ -429,6 +688,21 @@
         
         const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); }); }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('-translate-y-full');
+        }
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-transparent');
+            } else {
+                navbar.classList.add('nav-transparent');
+                navbar.classList.remove('nav-scrolled');
+            }
+        });
     </script>
 </body>
 </html>
