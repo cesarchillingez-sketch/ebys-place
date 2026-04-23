@@ -165,6 +165,17 @@
         <img id="lightbox-img" src="" class="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl scale-95 transition-transform duration-500">
     </div>
 
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 z-[110] bg-black/95 backdrop-blur-md hidden flex-col items-center justify-center p-4" onclick="closeVideoModal(event)">
+        <button onclick="closeVideoModal()" class="absolute top-6 right-6 text-white hover:text-eby-gold-dark transition-colors z-10"><i class="ph ph-x text-4xl"></i></button>
+        <div class="w-full max-w-3xl" onclick="event.stopPropagation()">
+            <!-- Direct video -->
+            <video id="modal-video" controls class="w-full rounded-2xl shadow-2xl hidden max-h-[80vh] bg-black"></video>
+            <!-- Embed (YouTube / Vimeo) -->
+            <iframe id="modal-iframe" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen class="w-full aspect-video rounded-2xl shadow-2xl hidden"></iframe>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
@@ -501,10 +512,11 @@
                 const revealClass = idx === 0 ? 'reveal' : idx === 1 ? 'reveal reveal-delay-1' : 'reveal reveal-delay-2';
                 const isOutOfStock = p.stock === 'out-of-stock';
                 return `<div class="glass-card !rounded-[28px] group flex flex-col p-8 ${revealClass} border-eby-gold-dark/40 shadow-xl${isOutOfStock ? ' opacity-60' : ''}" id="${cardId}">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] overflow-hidden flex items-center justify-center p-0 cursor-pointer" onclick="openLightbox('${imgId}')">
+                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] overflow-hidden flex items-center justify-center p-0 cursor-pointer" onclick="${p.videoUrl ? `openVideoModal('${shopEscHtml(p.videoUrl)}')` : `openLightbox('${imgId}')`}">
                         <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px] shadow-sm">${shopEscHtml(badgeLabel)}</span>
+                        ${p.stockQty > 0 && p.stock !== 'out-of-stock' ? `<span class="absolute top-4 right-4 z-10 bg-white/90 text-eby-dark text-[8px] font-bold px-2 py-1 rounded-[6px] shadow-sm">${p.stockQty} left</span>` : ''}
                         <div class="absolute inset-0 bg-eby-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                            <i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>
+                            ${p.videoUrl ? '<i class="ph ph-play-circle text-white text-5xl drop-shadow-lg"></i>' : '<i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>'}
                         </div>
                         <img id="${imgId}" loading="lazy" src="${shopEscHtml(p.imageUrl || '')}" alt="${shopEscHtml(p.name)}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.style.opacity='0'">
                     </div>
@@ -834,6 +846,58 @@
                 document.body.style.overflow = '';
             }, 500);
         }
+
+        function openVideoModal(videoUrl) {
+            const modal = document.getElementById('video-modal');
+            const vid = document.getElementById('modal-video');
+            const iframe = document.getElementById('modal-iframe');
+            const lc = videoUrl.toLowerCase();
+            const isEmbed = lc.includes('youtube') || lc.includes('youtu.be') || lc.includes('vimeo');
+            if (isEmbed) {
+                let embedUrl = videoUrl;
+                try {
+                    if (lc.includes('youtu.be/')) {
+                        const id = videoUrl.split('youtu.be/')[1].split(/[?&#]/)[0];
+                        embedUrl = 'https://www.youtube.com/embed/' + id;
+                    } else if (lc.includes('watch')) {
+                        const id = new URL(videoUrl).searchParams.get('v') || '';
+                        embedUrl = 'https://www.youtube.com/embed/' + id;
+                    } else if (!lc.includes('/embed/')) {
+                        embedUrl = videoUrl; // already embed or vimeo player URL
+                    }
+                } catch (e) { embedUrl = videoUrl; }
+                const sep = embedUrl.includes('?') ? '&' : '?';
+                iframe.src = embedUrl + sep + 'autoplay=1';
+                iframe.classList.remove('hidden');
+                vid.classList.add('hidden');
+                vid.pause();
+            } else {
+                vid.src = videoUrl;
+                vid.classList.remove('hidden');
+                iframe.classList.add('hidden');
+                iframe.src = '';
+            }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal(e) {
+            if (e && e.currentTarget !== e.target && !e.target.closest('button')) return;
+            const modal = document.getElementById('video-modal');
+            const vid = document.getElementById('modal-video');
+            const iframe = document.getElementById('modal-iframe');
+            vid.pause();
+            vid.src = '';
+            iframe.src = '';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { closeLightbox(); closeVideoModal(); }
+        });
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');

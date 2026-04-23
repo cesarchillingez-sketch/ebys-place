@@ -1534,7 +1534,7 @@
         }
 
         function copyReviewLink() {
-            const url = window.location.origin + (window.location.pathname.replace(/[^/]*$/, '')) + 'review.html';
+            const url = new URL('review.html', window.location.href).toString();
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(url).then(function() {
                     var btn = document.getElementById('copy-review-btn');

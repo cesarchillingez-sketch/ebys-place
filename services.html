@@ -750,6 +750,30 @@
     <script>
         // System variables & Stripe Dual-Setup
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
+
+        // Availability cache — fetched from GAS on page load
+        let _cachedAvailability = null;
+
+        async function fetchAvailability() {
+            try {
+                const resp = await fetch(GAS_URL + '?type=GET_AVAILABILITY', { cache: 'no-store' });
+                const data = await resp.json();
+                if (data && data.success && data.availability) {
+                    _cachedAvailability = data.availability;
+                    localStorage.setItem('ebyAdmin_availability', JSON.stringify(data.availability));
+                    return;
+                }
+            } catch (e) {}
+            _cachedAvailability = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+        }
+
+        function getAvailabilityForDay(dayIdx) {
+            const avail = _cachedAvailability;
+            if (!avail || avail[dayIdx] === undefined) return Array.from({ length: 24 }, (_, i) => i);
+            const conf = avail[dayIdx];
+            if (conf.enabled === false) return [];
+            return conf.hours || [];
+        }
         
         let stripe, elements, gateCard;
         
@@ -773,7 +797,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
-            renderCalendar();
+            // Fetch admin availability from backend so changes reflect for all clients
+            fetchAvailability().then(() => renderCalendar());
         });
 
         // -------------------------
@@ -837,8 +862,7 @@
             
             slotsGrid.innerHTML = '';
             const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
-            const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
-            const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+            const _hours = getAvailabilityForDay(_dayIdx);
             if (_hours.length === 0) {
                 slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
             } else {
