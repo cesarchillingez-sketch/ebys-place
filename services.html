@@ -820,11 +820,23 @@
             
             slotsWrapper.classList.remove('hidden');
             
-            slotsGrid.innerHTML = `
-                <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
-                <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
-                <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
-            `;
+            slotsGrid.innerHTML = '';
+            for (let hour = 0; hour < 24; hour++) {
+                const hourText = String(hour).padStart(2, '0');
+                const timeValue = `${hourText}:00:00`;
+                const timeLabel = `${hourText}:00`;
+                const twelveHour = hour % 12 || 12;
+                const amPm = hour < 12 ? 'AM' : 'PM';
+                const slotButton = document.createElement('button');
+                slotButton.type = 'button';
+                slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
+                slotButton.textContent = timeLabel;
+                slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel} (${twelveHour}:00 ${amPm})`);
+                slotButton.addEventListener('click', function() {
+                    selectTime(timeValue, slotButton);
+                });
+                slotsGrid.appendChild(slotButton);
+            }
         }
 
         function selectTime(timeStr, btn) {
