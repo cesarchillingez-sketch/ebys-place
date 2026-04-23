@@ -553,6 +553,10 @@
                 .replace(/'/g, '&#39;');
         }
 
+        function formatPrice(amount) {
+            return Number(amount || 0).toFixed(2);
+        }
+
         // -------------------------
         // CALENDAR RENDERING LOGIC
         // -------------------------
@@ -663,7 +667,7 @@
                 btn.className = 'w-full flex items-center justify-between gap-4 text-left py-4 px-5 border border-eby-gold-dark/20 rounded-[16px] hover:border-eby-gold-dark hover:bg-eby-gold/20 transition-all';
                 btn.innerHTML = `
                     <span class="font-display text-xl text-eby-dark">${escapeHtml(service.name)}</span>
-                    <span class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-gold-dark">From £${service.fromPrice.toFixed(2)}</span>
+                    <span class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-gold-dark">From £${formatPrice(service.fromPrice)}</span>
                 `;
                 serviceItems.appendChild(btn);
             });
@@ -680,20 +684,21 @@
             currentBookingItem = serviceName;
             document.getElementById('gate-errors').textContent = '';
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${serviceName}</strong> (Estimated from £${price.toFixed(2)}). Please select a date and time, then confirm your £20.00 deposit.`;
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${serviceName}</strong> (Estimated from £${formatPrice(price)}). Please select a date and time, then confirm your £20.00 deposit.`;
             document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         async function handleDepositGate(e) {
             e.preventDefault();
             const btn = document.getElementById('dg-btn');
-            const name = document.getElementById('bk-name').value;
-            const email = document.getElementById('bk-email').value;
 
             if (!selectedServiceName) {
                 document.getElementById('gate-errors').textContent = "Please choose your service from the selected category before continuing.";
                 return;
             }
+
+            const name = document.getElementById('bk-name').value;
+            const email = document.getElementById('bk-email').value;
 
             // Strict Validation for Custom Calendar
             if (!selectedDateStr || !selectedTimeStr) {
