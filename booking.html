@@ -624,7 +624,7 @@
             
             // Inject full 24-hour slots in hourly intervals
             slotsGrid.innerHTML = '';
-            Array.from({ length: 24 }, (_, hour) => {
+            for (let hour = 0; hour < 24; hour++) {
                 const hourText = String(hour).padStart(2, '0');
                 const timeValue = `${hourText}:00:00`;
                 const timeLabel = `${hourText}:00`;
@@ -639,7 +639,7 @@
                     selectTime(timeValue, slotButton);
                 });
                 slotsGrid.appendChild(slotButton);
-            });
+            }
         }
 
         function selectTime(timeStr, btn) {
