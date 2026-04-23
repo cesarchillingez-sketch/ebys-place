@@ -255,6 +255,17 @@
                 </button>
 
             </div>
+
+            <!-- Services List (Injected after category selection) -->
+            <div id="service-list-panel" class="hidden mt-10 border border-eby-gold-dark/20 rounded-[24px] bg-white/70 p-6 md:p-8">
+                <div class="mb-6">
+                    <h4 class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-gold-dark mb-2 border-l-2 border-eby-gold-dark pl-3">Choose a Service</h4>
+                    <p id="service-list-copy" class="text-eby-brown-light text-sm">Select your style to continue to calendar booking.</p>
+                </div>
+                <div id="service-list-items" class="grid gap-3">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
         </section>
 
         <!-- Right Side: Cinematic Map Block -->
@@ -479,6 +490,40 @@
         
         let currentBookingItem = "General Consultation";
         const currentBookingTotal = 20;
+        let selectedServiceName = null;
+        const SERVICE_CATALOG = {
+            "Braids": [
+                { name: "Knotless Braids", fromPrice: 120 },
+                { name: "Box Braids", fromPrice: 100 },
+                { name: "Goddess Braids", fromPrice: 140 },
+                { name: "Fulani Braids", fromPrice: 110 },
+                { name: "Cornrows", fromPrice: 60 },
+                { name: "Stitch Braids", fromPrice: 80 },
+                { name: "Lemonade Braids", fromPrice: 90 },
+                { name: "Boho Braids", fromPrice: 150 },
+                { name: "Tribal Braids", fromPrice: 100 },
+                { name: "Feed-In Braids", fromPrice: 85 }
+            ],
+            "Twists": [
+                { name: "Senegalese Twists", fromPrice: 110 },
+                { name: "Passion Twists", fromPrice: 130 }
+            ],
+            "Locs": [
+                { name: "Faux Locs", fromPrice: 150 },
+                { name: "Butterfly Locs", fromPrice: 140 },
+                { name: "Starter Locs", fromPrice: 80 }
+            ],
+            "Kids Styles": [
+                { name: "Kids Braids", fromPrice: 40 },
+                { name: "Kids Cornrows", fromPrice: 35 }
+            ],
+            "Add-Ons": [
+                { name: "Hair Wash & Prep", fromPrice: 20 },
+                { name: "Beads & Accessories", fromPrice: 10 },
+                { name: "Edge Control & Styling", fromPrice: 8 },
+                { name: "Braid Takedown", fromPrice: 30 }
+            ]
+        };
 
         // Calendar State
         let calDate = new Date();
@@ -487,8 +532,34 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            const serviceListItems = document.getElementById('service-list-items');
+            if (serviceListItems) {
+                serviceListItems.addEventListener('click', (event) => {
+                    const serviceButton = event.target.closest('button[data-service-name]');
+                    if (!serviceButton) return;
+                    const { serviceName, servicePrice } = serviceButton.dataset;
+                    if (!serviceName || servicePrice === undefined || servicePrice === '') {
+                        document.getElementById('gate-errors').textContent = 'Selected service data is invalid. Please choose another service.';
+                        return;
+                    }
+                    selectService(serviceName, Number(servicePrice || 0));
+                });
+            }
             renderCalendar();
         });
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatPrice(amount) {
+            return Number(amount || 0).toFixed(2);
+        }
 
         // -------------------------
         // CALENDAR RENDERING LOGIC
@@ -576,18 +647,60 @@
 
         // Initiates General Category Booking
         function startGeneralBooking(categoryName) {
-            currentBookingItem = `${categoryName} Appointment`;
+            const servicePanel = document.getElementById('service-list-panel');
+            const serviceItems = document.getElementById('service-list-items');
+            const serviceListCopy = document.getElementById('service-list-copy');
+            const services = SERVICE_CATALOG[categoryName] || [];
+
+            selectedServiceName = null;
+            selectedDateStr = null;
+            selectedTimeStr = null;
+            renderCalendar();
+            document.getElementById('time-slots-wrapper').classList.add('hidden');
+            document.getElementById('time-slots-grid').innerHTML = '';
+            document.getElementById('gate-errors').textContent = '';
+
+            serviceListCopy.textContent = `You selected ${categoryName}. Choose a specific service to continue.`;
+            serviceItems.innerHTML = '';
+            services.forEach(service => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.serviceName = service.name;
+                btn.dataset.servicePrice = String(service.fromPrice);
+                btn.className = 'w-full flex items-center justify-between gap-4 text-left py-4 px-5 border border-eby-gold-dark/20 rounded-[16px] hover:border-eby-gold-dark hover:bg-eby-gold/20 transition-all';
+                btn.innerHTML = `
+                    <span class="font-display text-xl text-eby-dark">${escapeHtml(service.name)}</span>
+                    <span class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-gold-dark">From £${formatPrice(service.fromPrice)}</span>
+                `;
+                serviceItems.appendChild(btn);
+            });
+            servicePanel.classList.remove('hidden');
+            servicePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are requesting a <strong>${categoryName}</strong> appointment. Please select a date and time, and confirm your £20.00 deposit to lock it in.`;
+            document.getElementById('booking-gate-desc').innerHTML = `You selected <strong>${categoryName}</strong>. Choose a service above, then select a date and time to continue.`;
             document.getElementById('dg-btn').innerText = `Confirm & Pay £20.00`;
-            
+        }
+
+        function selectService(serviceName, price) {
+            selectedServiceName = serviceName;
+            currentBookingItem = serviceName;
+            const safeServiceName = escapeHtml(serviceName);
+            document.getElementById('gate-errors').textContent = '';
+            document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${safeServiceName}</strong> (Estimated from £${formatPrice(price)}). Please select a date and time, then confirm your £20.00 deposit.`;
             document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         async function handleDepositGate(e) {
             e.preventDefault();
             const btn = document.getElementById('dg-btn');
+
+            if (!selectedServiceName) {
+                document.getElementById('gate-errors').textContent = "Please choose your service from the selected category before continuing.";
+                return;
+            }
+
             const name = document.getElementById('bk-name').value;
             const email = document.getElementById('bk-email').value;
 
