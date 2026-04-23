@@ -1246,7 +1246,16 @@ function clearActivity() {
 // ======================================================
 function getReviews() { return JSON.parse(localStorage.getItem(KEYS.reviews) || '[]'); }
 
-function loadReviews() {
+async function loadReviews() {
+    // Sync reviews from GAS backend (shared store)
+    try {
+        const resp = await fetch(GAS_URL + '?type=GET_REVIEWS&adminKey=' + encodeURIComponent(ADMIN_PW), { cache: 'no-store' });
+        const data = await resp.json();
+        if (data && data.success && Array.isArray(data.reviews)) {
+            localStorage.setItem(KEYS.reviews, JSON.stringify(data.reviews));
+        }
+    } catch (e) {}
+
     const reviews = getReviews();
     const pending = reviews.filter(r => !r.approved);
     const approved = reviews.filter(r => r.approved);
@@ -1345,6 +1354,8 @@ function approveReview(id) {
     reviews[idx].approved = true;
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend so all clients see the update
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'APPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 function unapproveReview(id) {
@@ -1354,6 +1365,8 @@ function unapproveReview(id) {
     reviews[idx].approved = false;
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'UNAPPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 function deleteReview(id) {
@@ -1361,6 +1374,8 @@ function deleteReview(id) {
     const reviews = getReviews().filter(r => r.id !== id);
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'DELETE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 // ======================================================

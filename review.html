@@ -221,17 +221,13 @@
                 localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
             } catch(e) {}
 
-            // Notify admin via backend (fire-and-forget)
+            // Store in GAS backend as the shared source of truth
             fetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({
-                    type: 'REVIEW_SUBMITTED',
-                    customerName: name,
-                    rating: rating,
-                    text: text,
-                    service: service,
-                    timestamp: review.timestamp
+                    type: 'SUBMIT_REVIEW',
+                    review: review
                 })
             }).catch(function() {});
 

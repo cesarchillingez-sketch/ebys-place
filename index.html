@@ -1423,9 +1423,39 @@
         (function initReviewMarquee() {
             const marquee = document.getElementById('testimonials-marquee');
             if (!marquee) return;
-            try {
-                const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
-                const approved = reviews.filter(function(r) { return r.approved; });
+
+            async function loadApproved() {
+                let approved = [];
+                // Try fetching approved reviews from the shared GAS backend
+                try {
+                    const resp = await fetch(GAS_URL + '?type=GET_APPROVED_REVIEWS', { cache: 'no-store' });
+                    const data = await resp.json();
+                    if (data && data.success && Array.isArray(data.reviews)) {
+                        approved = data.reviews;
+                        // Merge into local cache so admin panel is also up to date
+                        try {
+                            const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                            const approvedIds = new Set(approved.map(function(r) { return r.id; }));
+                            const merged = all.map(function(r) {
+                                return approvedIds.has(r.id) ? Object.assign({}, r, { approved: true }) : r;
+                            });
+                            approved.forEach(function(r) {
+                                if (!merged.find(function(m) { return m.id === r.id; })) merged.push(r);
+                            });
+                            localStorage.setItem('ebyAdmin_reviews', JSON.stringify(merged));
+                        } catch(e) {}
+                    }
+                } catch(e) {}
+
+                // Fallback: localStorage approved reviews
+                if (!approved.length) {
+                    try {
+                        const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                        approved = all.filter(function(r) { return r.approved; });
+                    } catch(e) {}
+                }
+
+                // Append approved review cards
                 approved.forEach(function(r) {
                     const ratingVal = Number(r.rating);
                     if (!ratingVal || ratingVal < 1 || ratingVal > 5) return;
@@ -1439,12 +1469,14 @@
                         + '<p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- ' + escReview(r.name) + '</p>';
                     marquee.appendChild(card);
                 });
-            } catch(e) {}
-            // Duplicate children for seamless infinite loop
-            const originals = Array.from(marquee.children);
-            originals.forEach(function(card) {
-                marquee.appendChild(card.cloneNode(true));
-            });
+
+                // Duplicate all children (hardcoded + dynamic) for seamless infinite loop
+                Array.from(marquee.children).forEach(function(card) {
+                    marquee.appendChild(card.cloneNode(true));
+                });
+            }
+
+            loadApproved();
         })();
 
         function escReview(str) {
@@ -1520,12 +1552,12 @@
                 localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
             } catch(e) {}
 
-            // Notify admin via backend
+            // Store in GAS backend as the shared source of truth
             try {
                 fetch(GAS_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ type: 'REVIEW_SUBMITTED', customerName: name, rating: rating, text: text, timestamp: review.timestamp })
+                    body: JSON.stringify({ type: 'SUBMIT_REVIEW', review: review })
                 });
             } catch(e) {}
 
