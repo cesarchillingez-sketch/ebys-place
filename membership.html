@@ -639,5 +639,8 @@
 
         document.querySelectorAll('.reveal').forEach((elem) => observer.observe(elem));
     </script>
+    <script>
+        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
+    </script>
 </body>
 </html>

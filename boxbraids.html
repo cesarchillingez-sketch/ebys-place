@@ -697,11 +697,29 @@
             slotsWrapper.classList.remove('hidden');
             
             // Inject stylish mock slots without fake load time
-            slotsGrid.innerHTML = `
-                <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
-                <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
-                <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
-            `;
+            // Inject slots based on admin availability config
+            slotsGrid.innerHTML = '';
+            const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
+            const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+            const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+            if (_hours.length === 0) {
+                slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
+            } else {
+                _hours.forEach(function(hour) {
+                    const hourText = String(hour).padStart(2, '0');
+                    const timeValue = `${hourText}:00:00`;
+                    const timeLabel = `${hourText}:00`;
+                    const slotButton = document.createElement('button');
+                    slotButton.type = 'button';
+                    slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
+                    slotButton.textContent = timeLabel;
+                    slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel}`);
+                    slotButton.addEventListener('click', function() {
+                        selectTime(timeValue, slotButton);
+                    });
+                    slotsGrid.appendChild(slotButton);
+                });
+            }
         }
 
         function selectTime(timeStr, btn) {
@@ -1061,6 +1079,9 @@
 
                 // SUCCESS FLOW
                 btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
+
+                // Log booking to admin activity
+                try { var _a=JSON.parse(localStorage.getItem('ebyAdmin_activity')||'[]'); _a.unshift({type:'BOOKING_DEPOSIT',customerName:name,email:email,item:currentBookingItem,amount:20,bookingStart:bookingStartISO,timestamp:new Date().toISOString()}); if(_a.length>200)_a.length=200; localStorage.setItem('ebyAdmin_activity',JSON.stringify(_a)); } catch(e) {}
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -1143,6 +1164,9 @@
                 navbar.classList.remove('nav-scrolled');
             }
         });
+    </script>
+    <script>
+        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>

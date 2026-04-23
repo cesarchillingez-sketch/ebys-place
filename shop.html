@@ -274,100 +274,12 @@
         <div class="lg:w-3/4">
             <!-- Top Action Bar -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-10 pb-6 border-b border-eby-gold-dark/10 gap-4">
-                <p class="text-xs text-eby-brown-light font-sans uppercase tracking-widest">Showing 1–3 of 3 results</p>
+                <p class="text-xs text-eby-brown-light font-sans uppercase tracking-widest" id="shop-results-count">Loading products…</p>
             </div>
 
-            <!-- The Grid -->
-            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                
-                <!-- Product 1 (4X Pre Stretched - Restored & Clickable) -->
-                <div class="glass-card !rounded-[28px] group flex flex-col p-8 reveal border-eby-gold-dark/40 shadow-xl" id="shop-prod-1">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] overflow-hidden flex items-center justify-center p-0 cursor-pointer" onclick="openLightbox('img-prod-1')">
-                        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px] shadow-sm">In Stock</span>
-                        <!-- Magnify Overlay -->
-                        <div class="absolute inset-0 bg-eby-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                            <i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>
-                        </div>
-                        <img id="img-prod-1" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png" alt="4X Pre Stretched Hair" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="pt-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-display text-xl text-eby-dark pr-4">4X Pre Stretched Hair 38"</h3>
-                                <span class="font-bold text-eby-gold-dark">£15.00</span>
-                            </div>
-                            
-                            <!-- Interactive Swatches (Colors only, no image swap) -->
-                            <div class="flex gap-3 mb-4 mt-2">
-                                <button onclick="updateShopItem('shop-prod-1', '1B Natural Black', this)" class="w-6 h-6 rounded-full bg-[#1A1A1A] outline outline-2 outline-offset-2 outline-eby-gold-dark ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="1B Natural Black"></button>
-                                <button onclick="updateShopItem('shop-prod-1', '27 Honey Blonde', this)" class="w-6 h-6 rounded-full bg-[#CFA876] outline outline-2 outline-offset-2 outline-transparent ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="27 Honey Blonde"></button>
-                                <button onclick="updateShopItem('shop-prod-1', '33 Auburn', this)" class="w-6 h-6 rounded-full bg-[#52201C] outline outline-2 outline-offset-2 outline-transparent ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="33 Auburn"></button>
-                            </div>
-                            
-                            <p class="text-eby-brown-light text-xs font-semibold mb-6" id="desc-prod-1">Selected: 1B Natural Black</p>
-                        </div>
-                        <button id="btn-prod-1" data-base-name="4X Pre Stretched Hair 38&quot;" data-price="15" data-img="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png" onclick="addToBag(this, '4X Pre Stretched Hair 38&quot; - 1B Natural Black', 15, 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px]">Add to Bag - £15.00</button>
-                    </div>
-                </div>
-
-                <!-- Product 2 (Silky French Curl) -->
-                <div class="glass-card !rounded-[28px] group flex flex-col p-8 reveal reveal-delay-1 border-eby-gold-dark/40 shadow-xl" id="shop-prod-2">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] flex items-center justify-center p-8 overflow-hidden cursor-pointer" onclick="openLightbox('img-prod-2')">
-                        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px]">Best Seller</span>
-                        <!-- Magnify Overlay -->
-                        <div class="absolute inset-0 bg-eby-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                            <i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>
-                        </div>
-                        <img id="img-prod-2" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" alt="Silky French Curl" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="pt-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-display text-xl text-eby-dark pr-4">Silky French Curl</h3>
-                                <span class="font-bold text-eby-gold-dark">£10.00</span>
-                            </div>
-
-                            <!-- Interactive Swatches -->
-                            <div class="flex gap-3 mb-4 mt-2">
-                                <button onclick="updateShopItem('shop-prod-2', '1B Natural Black', this)" class="w-6 h-6 rounded-full bg-[#1A1A1A] outline outline-2 outline-offset-2 outline-eby-gold-dark ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="1B Natural Black"></button>
-                                <button onclick="updateShopItem('shop-prod-2', 'Burgundy', this)" class="w-6 h-6 rounded-full bg-[#800020] outline outline-2 outline-offset-2 outline-transparent ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="Burgundy"></button>
-                            </div>
-                            
-                            <p class="text-eby-brown-light text-xs font-semibold mb-6" id="desc-prod-2">Selected: 1B Natural Black</p>
-                        </div>
-                        <button id="btn-prod-2" data-base-name="Silky French Curl" data-price="10" data-img="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png" onclick="addToBag(this, 'Silky French Curl - 1B Natural Black', 10, 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px]">Add to Bag - £10.00</button>
-                    </div>
-                </div>
-
-                <!-- Product 3 (32 Deep Wave Bulk) -->
-                <div class="glass-card !rounded-[28px] group flex flex-col p-8 reveal reveal-delay-2 border-eby-gold-dark/40 shadow-xl" id="shop-prod-3">
-                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] flex items-center justify-center p-8 overflow-hidden cursor-pointer" onclick="openLightbox('img-prod-3')">
-                        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px]">In Stock</span>
-                        <!-- Magnify Overlay -->
-                        <div class="absolute inset-0 bg-eby-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                            <i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>
-                        </div>
-                        <img id="img-prod-3" loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" alt="32 Deep Wave Bulk" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    </div>
-                    <div class="pt-8 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-display text-xl text-eby-dark pr-4">32" Deep Wave Bulk</h3>
-                                <span class="font-bold text-eby-gold-dark">£12.00</span>
-                            </div>
-                            
-                            <!-- Interactive Swatches -->
-                            <div class="flex gap-3 mb-4 mt-2">
-                                <button onclick="updateShopItem('shop-prod-3', '33 Auburn', this)" class="w-6 h-6 rounded-full bg-[#52201C] outline outline-2 outline-offset-2 outline-eby-gold-dark ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="33 Auburn"></button>
-                                <button onclick="updateShopItem('shop-prod-3', '1B Natural Black', this)" class="w-6 h-6 rounded-full bg-[#1A1A1A] outline outline-2 outline-offset-2 outline-transparent ring-2 ring-transparent transition-all shadow-inner cursor-pointer" title="1B Natural Black"></button>
-                            </div>
-
-                            <p class="text-eby-brown-light text-xs font-semibold mb-6" id="desc-prod-3">Selected: 33 Auburn</p>
-                        </div>
-                        <button id="btn-prod-3" data-base-name="32 Inch Deep Wave Bulk" data-price="12" data-img="https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png" onclick="addToBag(this, '32 Inch Deep Wave Bulk - 33 Auburn', 12, 'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px]">Add to Bag - £12.00</button>
-                    </div>
-                </div>
-
+            <!-- The Grid — populated dynamically from admin product catalogue -->
+            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-8" id="shop-products-grid">
+                <!-- Injected by renderShopProducts() -->
             </div>
         </div>
     </main>
@@ -552,8 +464,74 @@
         let ecoCart = [];
         let ecoCartTotal = 0;
 
+        // ------------------------------------
+        // PRODUCT CATALOGUE (driven by admin)
+        // ------------------------------------
+        const SHOP_DEFAULTS = [
+            { id:'default-1', name:'4X Pre Stretched Hair 38"', description:'Premium pre-stretched braiding hair, ultra-lightweight and tangle-free.', price:15, badge:'In Stock', stock:'in-stock', imageUrl:'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775901387/Gemini_Generated_Image_dsfcb9dsfcb9dsfc_jb9ldo.png', colors:[{name:'1B Natural Black',hex:'#1A1A1A'},{name:'27 Honey Blonde',hex:'#CFA876'},{name:'33 Auburn',hex:'#52201C'}] },
+            { id:'default-2', name:'Silky French Curl', description:'Ultra-soft silky French curl — perfect for boho and goddess styles.', price:10, badge:'Best Seller', stock:'in-stock', imageUrl:'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775908472/Gemini_Generated_Image_9rifac9rifac9rif_wcol7o.png', colors:[{name:'1B Natural Black',hex:'#1A1A1A'},{name:'Burgundy',hex:'#800020'}] },
+            { id:'default-3', name:'32" Deep Wave Bulk', description:'32 inch deep wave bulk — rich texture for dramatic length and volume.', price:12, badge:'In Stock', stock:'in-stock', imageUrl:'https://res.cloudinary.com/dfbweqelf/image/upload/q_auto/f_auto/v1775909268/Gemini_Generated_Image_jnptwdjnptwdjnpt_3_gopnhg.png', colors:[{name:'33 Auburn',hex:'#52201C'},{name:'1B Natural Black',hex:'#1A1A1A'}] },
+        ];
+
+        function shopEscHtml(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+        function renderShopProducts() {
+            const saved = localStorage.getItem('ebyAdmin_products');
+            const products = saved ? JSON.parse(saved) : SHOP_DEFAULTS;
+            const grid = document.getElementById('shop-products-grid');
+            const countEl = document.getElementById('shop-results-count');
+            if (!grid) return;
+
+            const visible = products.filter(p => p.stock !== 'out-of-stock');
+            countEl.textContent = `Showing 1–${visible.length} of ${visible.length} result${visible.length !== 1 ? 's' : ''}`;
+
+            grid.innerHTML = products.map((p, idx) => {
+                const cardId = 'shop-prod-' + shopEscHtml(p.id);
+                const imgId = 'img-prod-' + shopEscHtml(p.id);
+                const descId = 'desc-prod-' + shopEscHtml(p.id);
+                const btnId = 'btn-prod-' + shopEscHtml(p.id);
+                const firstColor = (p.colors && p.colors.length) ? p.colors[0].name : '';
+                const priceStr = Number(p.price || 0).toFixed(2);
+                const badgeLabel = p.badge || (p.stock === 'out-of-stock' ? 'Out of Stock' : p.stock === 'low-stock' ? 'Low Stock' : 'In Stock');
+                const swatches = (p.colors || []).map((c, ci) => {
+                    const isFirst = ci === 0;
+                    const outlineClass = isFirst ? 'outline-eby-gold-dark' : 'outline-transparent';
+                    return `<button onclick="updateShopItem('${shopEscHtml(cardId)}','${shopEscHtml(c.name)}',this)" class="w-6 h-6 rounded-full outline outline-2 outline-offset-2 ${outlineClass} ring-2 ring-transparent transition-all shadow-inner cursor-pointer" style="background:${shopEscHtml(c.hex)}" title="${shopEscHtml(c.name)}"></button>`;
+                }).join('');
+                const revealClass = idx === 0 ? 'reveal' : idx === 1 ? 'reveal reveal-delay-1' : 'reveal reveal-delay-2';
+                const isOutOfStock = p.stock === 'out-of-stock';
+                return `<div class="glass-card !rounded-[28px] group flex flex-col p-8 ${revealClass} border-eby-gold-dark/40 shadow-xl${isOutOfStock ? ' opacity-60' : ''}" id="${cardId}">
+                    <div class="relative h-[300px] bg-eby-gold rounded-[20px] overflow-hidden flex items-center justify-center p-0 cursor-pointer" onclick="openLightbox('${imgId}')">
+                        <span class="absolute top-4 left-4 z-10 bg-eby-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px] shadow-sm">${shopEscHtml(badgeLabel)}</span>
+                        <div class="absolute inset-0 bg-eby-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
+                            <i class="ph ph-magnifying-glass-plus text-white text-4xl drop-shadow-lg"></i>
+                        </div>
+                        <img id="${imgId}" loading="lazy" src="${shopEscHtml(p.imageUrl || '')}" alt="${shopEscHtml(p.name)}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.style.opacity='0'">
+                    </div>
+                    <div class="pt-8 flex-grow flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-display text-xl text-eby-dark pr-4">${shopEscHtml(p.name)}</h3>
+                                <span class="font-bold text-eby-gold-dark whitespace-nowrap">£${priceStr}</span>
+                            </div>
+                            ${p.description ? `<p class="text-eby-brown-light text-xs mb-3 leading-relaxed">${shopEscHtml(p.description)}</p>` : ''}
+                            ${swatches ? `<div class="flex gap-3 mb-4 mt-2">${swatches}</div>` : ''}
+                            <p class="text-eby-brown-light text-xs font-semibold mb-6" id="${descId}">${firstColor ? 'Selected: ' + shopEscHtml(firstColor) : ''}</p>
+                        </div>
+                        <button id="${btnId}" data-base-name="${shopEscHtml(p.name)}" data-price="${Number(p.price||0)}" data-img="${shopEscHtml(p.imageUrl||'')}" onclick="addToBag(this,'${shopEscHtml(p.name)}${firstColor ? ' - ' + firstColor : ''}',${Number(p.price||0)},'${shopEscHtml(p.imageUrl||'')}')" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px]${isOutOfStock ? ' opacity-50 cursor-not-allowed pointer-events-none' : ''}">${isOutOfStock ? 'Out of Stock' : 'Add to Bag - £' + priceStr}</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Re-observe new reveal elements
+            grid.querySelectorAll('.reveal').forEach(el => {
+                if (typeof observer !== 'undefined') observer.observe(el);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
+            renderShopProducts();
         });
 
         // ------------------------------------
@@ -766,6 +744,14 @@
 
                 btn.innerHTML = '<i class="ph ph-check"></i> Payment Confirmed';
 
+                // Log shop order to admin activity
+                try {
+                    const orders = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
+                    orders.unshift({ type: 'SHOP_ORDER', customerName: name, email: email, items: ecoCart.map(i => i.name).join(', '), amount: ecoCartTotal, timestamp: new Date().toISOString() });
+                    if (orders.length > 200) orders.length = 200;
+                    localStorage.setItem('ebyAdmin_activity', JSON.stringify(orders));
+                } catch(e) {}
+
                 setTimeout(() => {
                     document.getElementById('checkout-form-state').classList.add('hidden');
                     document.getElementById('checkout-form-state').classList.remove('flex');
@@ -891,6 +877,10 @@
                 glow.style.setProperty('--y', e.clientY + 'px');
             }
         });
+    </script>
+    <script>
+        // Visitor tracking
+        (function(){try{var v=JSON.parse(localStorage.getItem('ebyAdmin_visitors')||'[]');v.unshift({type:'PAGE_VIEW',page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem('ebyAdmin_visitors',JSON.stringify(v));fetch('https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'PAGE_VIEW',page:location.pathname,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString()})}).catch(function(){});}catch(e){}})();
     </script>
 </body>
 </html>

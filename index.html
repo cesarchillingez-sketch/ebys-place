@@ -528,6 +528,9 @@
         <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal active">
             <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Inner Circle</span>
             <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">What Our Clients Say</h2>
+            <a href="https://www.google.com/search?q=Eby's+Place+Somerset+reviews" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[10px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">
+                View Live Reviews <i class="ph ph-arrow-up-right"></i>
+            </a>
         </div>
         <div class="relative w-full flex overflow-x-hidden group">
             <div class="flex animate-[marquee_40s_linear_infinite] py-4 whitespace-nowrap group-hover:[animation-play-state:paused]">
@@ -874,11 +877,29 @@
             if(slotsWrapper && slotsGrid) {
                 slotsWrapper.classList.remove('hidden');
                 
-                slotsGrid.innerHTML = `
-                    <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
-                    <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
-                    <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
-                `;
+                // Inject slots based on admin availability config
+                slotsGrid.innerHTML = '';
+                const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
+                const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+                const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+                if (_hours.length === 0) {
+                    slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
+                } else {
+                    _hours.forEach(function(hour) {
+                        const hourText = String(hour).padStart(2, '0');
+                        const timeValue = `${hourText}:00:00`;
+                        const timeLabel = `${hourText}:00`;
+                        const slotButton = document.createElement('button');
+                        slotButton.type = 'button';
+                        slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
+                        slotButton.textContent = timeLabel;
+                        slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel}`);
+                        slotButton.addEventListener('click', function() {
+                            selectTime(timeValue, slotButton);
+                        });
+                        slotsGrid.appendChild(slotButton);
+                    });
+                }
             }
         }
 
@@ -1383,6 +1404,9 @@
                 btn.disabled = false;
             }
         }
+    </script>
+    <script>
+        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>
