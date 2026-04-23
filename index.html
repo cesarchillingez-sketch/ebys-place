@@ -548,7 +548,7 @@
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Matthew</p>
                 </div>
             </div>
-            <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
+            <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { #testimonials-marquee { animation: none; } }</style>
         </div>
     </section>
 
@@ -565,8 +565,8 @@
             <div id="review-form-wrap" class="glass-card p-10 reveal active">
                 <!-- Star Rating -->
                 <div class="mb-6">
-                    <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-3">Your Rating *</label>
-                    <div id="star-rating" class="flex gap-2" role="group" aria-label="Star rating">
+                    <label id="rating-label" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-3">Your Rating *</label>
+                    <div id="star-rating" class="flex gap-2" role="group" aria-labelledby="rating-label" aria-required="true" aria-describedby="review-star-error">
                         <button type="button" data-star="1" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="1 star"><i class="ph-fill ph-star"></i></button>
                         <button type="button" data-star="2" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="2 stars"><i class="ph-fill ph-star"></i></button>
                         <button type="button" data-star="3" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="3 stars"><i class="ph-fill ph-star"></i></button>
@@ -578,14 +578,14 @@
 
                 <!-- Name -->
                 <div class="mb-5">
-                    <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Name *</label>
+                    <label for="review-name" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Name *</label>
                     <input type="text" id="review-name" placeholder="e.g. Camille M." maxlength="60" class="luxury-input">
                     <p id="review-name-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please enter your name.</p>
                 </div>
 
                 <!-- Review Text -->
                 <div class="mb-8">
-                    <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Review *</label>
+                    <label for="review-text" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Review *</label>
                     <textarea id="review-text" placeholder="Tell us about your experience…" maxlength="500" rows="4" class="luxury-input resize-none"></textarea>
                     <p id="review-text-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please share your experience (at least 10 characters).</p>
                 </div>
@@ -1469,13 +1469,15 @@
                 const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
                 const approved = reviews.filter(function(r) { return r.approved; });
                 approved.forEach(function(r) {
-                    const stars = Array.from({length: r.rating}, function() {
+                    const ratingVal = Number(r.rating);
+                    if (!ratingVal || ratingVal < 1 || ratingVal > 5) return;
+                    const stars = Array.from({length: ratingVal}, function() {
                         return '<i class="ph-fill ph-star"></i>';
                     }).join('');
                     const card = document.createElement('div');
                     card.className = 'glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal';
                     card.innerHTML = '<div class="flex text-eby-gold-dark mb-6 text-sm">' + stars + '</div>'
-                        + '<p class="text-eby-brown-light italic mb-6">&ldquo;' + escReview(r.text) + '&rdquo;</p>'
+                        + '<p class="text-eby-brown-light italic mb-6">“' + escReview(r.text) + '”</p>'
                         + '<p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- ' + escReview(r.name) + '</p>';
                     marquee.appendChild(card);
                 });
@@ -1491,19 +1493,21 @@
             return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
 
+        var _reviewRating = 0;
+
         (function initStarRating() {
             const stars = document.querySelectorAll('.star-btn');
             stars.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    window._reviewRating = parseInt(this.dataset.star);
-                    updateStarDisplay(window._reviewRating);
+                    _reviewRating = parseInt(this.dataset.star);
+                    updateStarDisplay(_reviewRating);
                     document.getElementById('review-star-error').classList.add('hidden');
                 });
                 btn.addEventListener('mouseenter', function() {
                     updateStarDisplay(parseInt(this.dataset.star));
                 });
                 btn.addEventListener('mouseleave', function() {
-                    updateStarDisplay(window._reviewRating || 0);
+                    updateStarDisplay(_reviewRating);
                 });
             });
         })();
@@ -1521,9 +1525,10 @@
         }
 
         function submitReview() {
+
             const name = (document.getElementById('review-name').value || '').trim();
             const text = (document.getElementById('review-text').value || '').trim();
-            const rating = window._reviewRating || 0;
+            const rating = _reviewRating || 0;
             let valid = true;
 
             document.getElementById('review-star-error').classList.add('hidden');
@@ -1545,7 +1550,7 @@
             if (!valid) return;
 
             try {
-                const review = { id: Date.now().toString(), name: name, rating: rating, text: text, timestamp: new Date().toISOString(), approved: false };
+                const review = { id: Date.now().toString(36) + Math.random().toString(36).slice(2), name: name, rating: rating, text: text, timestamp: new Date().toISOString(), approved: false };
                 const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
                 reviews.unshift(review);
                 localStorage.setItem('ebyAdmin_reviews', JSON.stringify(reviews));

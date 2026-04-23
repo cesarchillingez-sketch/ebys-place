@@ -1198,16 +1198,38 @@ function loadReviews() {
         approvedEl.classList.add('hidden');
         approvedEmpty.classList.remove('hidden');
     }
+
+    // Attach event delegation for review action buttons
+    ['reviews-pending','reviews-approved'].forEach(function(containerId) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        el.addEventListener('click', function(e) {
+            const btn = e.target.closest('.review-action-btn');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (action === 'approve') approveReview(id);
+            else if (action === 'unapprove') unapproveReview(id);
+            else if (action === 'delete') deleteReview(id);
+        }, { once: true });
+    });
 }
 
 function renderReviewCard(r, isApproved) {
+    const ratingVal = Math.max(0, Math.min(5, parseInt(r.rating) || 0));
     const stars = Array.from({length: 5}, (_, i) =>
-        `<i class="${i < r.rating ? 'ph-fill' : 'ph'} ph-star text-xs ${i < r.rating ? 'text-eby-gold-dark' : 'text-eby-gold-dark/30'}"></i>`
+        `<i class="${i < ratingVal ? 'ph-fill' : 'ph'} ph-star text-xs ${i < ratingVal ? 'text-eby-gold-dark' : 'text-eby-gold-dark/30'}"></i>`
     ).join('');
     const date = r.timestamp ? new Date(r.timestamp).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '';
-    const approveBtn = !isApproved
-        ? `<button onclick="approveReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 bg-eby-dark text-white rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-brown-light transition-colors"><i class="ph ph-check"></i>Approve</button>`
-        : `<button onclick="unapproveReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 border border-eby-gold-dark/30 text-eby-dark rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-gold/30 transition-colors"><i class="ph ph-arrow-u-up-left"></i>Unapprove</button>`;
+    const approveAction = !isApproved ? 'approve' : 'unapprove';
+    const approveLabel = !isApproved
+        ? '<i class="ph ph-check"></i>Approve'
+        : '<i class="ph ph-arrow-u-up-left"></i>Unapprove';
+    const approveCls = !isApproved
+        ? 'flex items-center gap-1.5 px-3 py-2 bg-eby-dark text-white rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-brown-light transition-colors'
+        : 'flex items-center gap-1.5 px-3 py-2 border border-eby-gold-dark/30 text-eby-dark rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-gold/30 transition-colors';
+    const safeId = escHtml(r.id);
+    const dateHtml = date ? `<span class="font-sans text-[10px] text-eby-brown-light">${escHtml(date)}</span>` : '';
     return `<div class="bg-white border border-eby-gold-dark/20 rounded-[20px] p-5">
         <div class="flex items-start justify-between gap-4 flex-wrap">
             <div class="flex-1 min-w-0">
@@ -1215,13 +1237,13 @@ function renderReviewCard(r, isApproved) {
                     <p class="font-sans font-bold text-sm text-eby-dark">${escHtml(r.name)}</p>
                     <div class="flex gap-0.5">${stars}</div>
                     <span class="badge ${isApproved ? 'badge-success' : 'badge-warn'}">${isApproved ? 'Approved' : 'Pending'}</span>
-                    ${date ? `<span class="font-sans text-[10px] text-eby-brown-light">${escHtml(date)}</span>` : ''}
+                    ${dateHtml}
                 </div>
                 <p class="font-sans text-sm text-eby-brown-light leading-relaxed">&ldquo;${escHtml(r.text)}&rdquo;</p>
             </div>
             <div class="flex items-center gap-2 flex-shrink-0">
-                ${approveBtn}
-                <button onclick="deleteReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 border border-red-200 text-red-500 rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-red-50 transition-colors"><i class="ph ph-trash"></i>Delete</button>
+                <button class="${approveCls} review-action-btn" data-action="${approveAction}" data-id="${safeId}">${approveLabel}</button>
+                <button class="flex items-center gap-1.5 px-3 py-2 border border-red-200 text-red-500 rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-red-50 transition-colors review-action-btn" data-action="delete" data-id="${safeId}"><i class="ph ph-trash"></i>Delete</button>
             </div>
         </div>
     </div>`;
