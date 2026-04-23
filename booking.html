@@ -634,7 +634,7 @@
                 slotButton.type = 'button';
                 slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
                 slotButton.textContent = timeLabel;
-                slotButton.setAttribute('aria-label', `Book appointment at ${twelveHour}:00 ${amPm}`);
+                slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel} (${twelveHour}:00 ${amPm})`);
                 slotButton.addEventListener('click', function() {
                     selectTime(timeValue, slotButton);
                 });
