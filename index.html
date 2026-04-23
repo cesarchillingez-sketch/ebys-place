@@ -1424,6 +1424,22 @@
             const marquee = document.getElementById('testimonials-marquee');
             if (!marquee) return;
 
+            // Rebuild the clone-set for the infinite loop.
+            // Clones are marked with data-marquee-clone so they can be removed before re-cloning.
+            function rebuildLoop() {
+                Array.from(marquee.querySelectorAll('[data-marquee-clone]'))
+                    .forEach(function(el) { el.remove(); });
+                Array.from(marquee.children).forEach(function(card) {
+                    const clone = card.cloneNode(true);
+                    clone.dataset.marqueeClone = '1';
+                    marquee.appendChild(clone);
+                });
+            }
+
+            // Clone the hardcoded cards immediately so the marquee loops correctly
+            // even before the async fetch completes.
+            rebuildLoop();
+
             async function loadApproved() {
                 let approved = [];
                 // Try fetching approved reviews from the shared GAS backend
@@ -1455,7 +1471,9 @@
                     } catch(e) {}
                 }
 
-                // Append approved review cards
+                if (!approved.length) return; // nothing to add; hardcoded loop already set up
+
+                // Append approved review cards (rebuildLoop will handle re-cloning)
                 approved.forEach(function(r) {
                     const ratingVal = Number(r.rating);
                     if (!ratingVal || ratingVal < 1 || ratingVal > 5) return;
@@ -1470,10 +1488,8 @@
                     marquee.appendChild(card);
                 });
 
-                // Duplicate all children (hardcoded + dynamic) for seamless infinite loop
-                Array.from(marquee.children).forEach(function(card) {
-                    marquee.appendChild(card.cloneNode(true));
-                });
+                // Rebuild clone-set so dynamic cards are included in the seamless loop
+                rebuildLoop();
             }
 
             loadApproved();
