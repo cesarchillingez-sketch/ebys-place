@@ -57,7 +57,8 @@
         .badge-danger { background: rgba(239,68,68,0.1); color: #dc2626; }
         .hour-toggle input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
         .hour-toggle { position: relative; }
-        .hour-toggle label { display: flex; align-items: center; justify-content: center; width: 50px; height: 34px; border: 1px solid rgba(194,163,120,0.3); border-radius: 10px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; color: #6B5749; transition: all 0.2s; user-select: none; }
+        .hour-toggle label { display: flex; align-items: center; justify-content: center; width: 50px; height: 34px; border: 1px solid rgba(194,163,120,0.3); border-radius: 10px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; color: #6B5749; transition: all 0.2s; user-select: none; touch-action: manipulation; }
+        @media (max-width: 639px) { .hour-toggle label { width: 44px; height: 44px; font-size: 9px; } }
         .hour-toggle input:checked + label { background: #2A1A12; border-color: #2A1A12; color: #C2A378; }
         .hour-toggle label:hover { border-color: #C2A378; color: #2A1A12; }
         .toggle-pill { width: 40px; height: 22px; background: #ddd; border-radius: 100px; position: relative; transition: background 0.2s; flex-shrink: 0; cursor: pointer; }
@@ -78,6 +79,9 @@
             #sidebar { position: fixed; left: 0; top: 0; height: 100%; transform: translateX(-100%); transition: transform 0.3s; z-index: 50; }
             #sidebar.open { transform: translateX(0); }
             #sidebar-overlay { display: block; }
+            main.flex-1 { padding: 1rem; }
+            .stat-card { padding: 16px; }
+            #product-panel { max-width: 100vw; }
         }
     </style>
 </head>
@@ -406,11 +410,11 @@
             </div>
         </div>
 
-        <!-- Badge + Stock -->
-        <div class="grid grid-cols-2 gap-4">
+        <!-- Badge + Stock Status + Stock Qty -->
+        <div class="grid grid-cols-3 gap-3">
             <div>
                 <label class="luxury-label">Badge Label</label>
-                <input type="text" id="p-badge" class="luxury-input" placeholder="e.g. Best Seller, New, Sale">
+                <input type="text" id="p-badge" class="luxury-input" placeholder="e.g. Best Seller">
             </div>
             <div>
                 <label class="luxury-label">Stock Status</label>
@@ -419,6 +423,32 @@
                     <option value="low-stock">Low Stock</option>
                     <option value="out-of-stock">Out of Stock</option>
                 </select>
+            </div>
+            <div>
+                <label class="luxury-label">Stock Qty</label>
+                <input type="number" id="p-stock-qty" class="luxury-input" placeholder="0" min="0" step="1">
+            </div>
+        </div>
+
+        <!-- Video -->
+        <div>
+            <label class="luxury-label">Product Video <span class="font-sans font-normal normal-case tracking-normal text-eby-brown-light">(optional)</span></label>
+            <div class="flex gap-3 mb-3">
+                <button type="button" onclick="switchVideoMode('url')" id="vid-mode-url" class="flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-dark bg-eby-dark text-white transition-colors">URL</button>
+                <button type="button" onclick="switchVideoMode('upload')" id="vid-mode-upload" class="flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-gold-dark/30 text-eby-dark hover:bg-eby-gold/30 transition-colors">Upload File</button>
+            </div>
+            <div id="vid-url-field">
+                <input type="text" id="p-video-url" class="luxury-input" placeholder="YouTube embed or direct .mp4 URL">
+            </div>
+            <div id="vid-upload-field" class="hidden">
+                <label class="block w-full border-2 border-dashed border-eby-gold-dark/30 rounded-[14px] p-6 text-center cursor-pointer hover:border-eby-gold-dark transition-colors">
+                    <i class="ph ph-film-slate text-3xl text-eby-gold-dark mb-2 block"></i>
+                <span class="font-sans text-xs text-eby-brown-light">Click to upload (MP4, MOV, WebM — max 5MB for direct upload; larger videos use URL)</span>
+                    <input type="file" id="p-video-file" accept="video/*" class="hidden" onchange="handleVideoUpload(this)">
+                </label>
+            </div>
+            <div id="vid-preview-wrap" class="hidden mt-3">
+                <video id="vid-preview" controls class="w-full rounded-[14px] border border-eby-gold-dark/20 max-h-44 bg-black"></video>
             </div>
         </div>
 
@@ -712,9 +742,11 @@ function renderProducts() {
                     <span class="font-sans font-bold text-eby-gold-dark whitespace-nowrap">£${Number(p.price || 0).toFixed(2)}</span>
                 </div>
                 <p class="font-sans text-xs text-eby-brown-light mb-3 line-clamp-2">${escHtml(p.description || '')}</p>
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-2 mb-4 flex-wrap">
                     <span class="badge ${stockBadge}">${stockLabel}</span>
+                    ${p.stockQty !== undefined && p.stockQty > 0 ? `<span class="font-sans text-[9px] text-eby-brown-light uppercase tracking-widest">${escHtml(String(p.stockQty))} units</span>` : ''}
                     <span class="font-sans text-[9px] text-eby-brown-light uppercase tracking-widest">${escHtml(p.category || '')}</span>
+                    ${p.videoUrl ? '<span class="badge badge-muted"><i class="ph ph-film-strip"></i> Video</span>' : ''}
                 </div>
                 <div class="flex gap-1.5 mb-4">${colors}</div>
                 <div class="flex gap-2">
@@ -744,12 +776,16 @@ function openProductPanel(id) {
     document.getElementById('p-category').value = 'Hair Attachments';
     document.getElementById('p-badge').value = '';
     document.getElementById('p-stock').value = 'in-stock';
+    document.getElementById('p-stock-qty').value = '';
     document.getElementById('p-image-url').value = '';
+    document.getElementById('p-video-url').value = '';
     document.getElementById('img-preview-wrap').classList.add('hidden');
+    document.getElementById('vid-preview-wrap').classList.add('hidden');
     document.getElementById('panel-error').classList.add('hidden');
     document.getElementById('featured-toggle').classList.remove('on');
     renderColorList();
     switchImgMode('url');
+    switchVideoMode('url');
 
     if (id) {
         // Edit mode
@@ -762,9 +798,15 @@ function openProductPanel(id) {
             document.getElementById('p-category').value = prod.category || 'Hair Attachments';
             document.getElementById('p-badge').value = prod.badge || '';
             document.getElementById('p-stock').value = prod.stock || 'in-stock';
+            document.getElementById('p-stock-qty').value = prod.stockQty !== undefined ? prod.stockQty : '';
             document.getElementById('p-image-url').value = prod.imageUrl || '';
+            document.getElementById('p-video-url').value = prod.videoUrl || '';
             if (prod.featured) document.getElementById('featured-toggle').classList.add('on');
             if (prod.imageUrl) { document.getElementById('img-preview').src = prod.imageUrl; document.getElementById('img-preview-wrap').classList.remove('hidden'); }
+            if (prod.videoUrl && !prod.videoUrl.includes('youtube') && !prod.videoUrl.includes('vimeo')) {
+                document.getElementById('vid-preview').src = prod.videoUrl;
+                document.getElementById('vid-preview-wrap').classList.remove('hidden');
+            }
             panelColors = (prod.colors || []).map(c => ({...c}));
             renderColorList();
         }
@@ -781,7 +823,42 @@ function closeProductPanel() {
     document.getElementById('product-panel-overlay').classList.add('hidden');
 }
 
-function switchImgMode(mode) {
+function switchVideoMode(mode) {
+    if (mode === 'url') {
+        document.getElementById('vid-url-field').classList.remove('hidden');
+        document.getElementById('vid-upload-field').classList.add('hidden');
+        document.getElementById('vid-mode-url').className = 'flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-dark bg-eby-dark text-white transition-colors';
+        document.getElementById('vid-mode-upload').className = 'flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-gold-dark/30 text-eby-dark hover:bg-eby-gold/30 transition-colors';
+    } else {
+        document.getElementById('vid-url-field').classList.add('hidden');
+        document.getElementById('vid-upload-field').classList.remove('hidden');
+        document.getElementById('vid-mode-upload').className = 'flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-dark bg-eby-dark text-white transition-colors';
+        document.getElementById('vid-mode-url').className = 'flex-1 py-2 text-[10px] font-sans font-bold uppercase tracking-widest rounded-[10px] border border-eby-gold-dark/30 text-eby-dark hover:bg-eby-gold/30 transition-colors';
+    }
+}
+
+function handleVideoUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const MAX_VIDEO_BASE64 = 5 * 1024 * 1024; // 5MB — larger files must use a URL
+    if (file.size > MAX_VIDEO_BASE64) {
+        const errEl = document.getElementById('panel-error');
+        errEl.textContent = 'Video is larger than 5MB. Please host it on YouTube, Vimeo, or a cloud service and paste the URL instead.';
+        errEl.classList.remove('hidden');
+        input.value = '';
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+        const dataUrl = e.target.result;
+        document.getElementById('p-video-url').value = dataUrl;
+        document.getElementById('vid-preview').src = dataUrl;
+        document.getElementById('vid-preview-wrap').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+
     if (mode === 'url') {
         document.getElementById('img-url-field').classList.remove('hidden');
         document.getElementById('img-upload-field').classList.add('hidden');
@@ -821,6 +898,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const v = urlInput.value.trim();
         if (v) { document.getElementById('img-preview').src = v; document.getElementById('img-preview-wrap').classList.remove('hidden'); }
         else { document.getElementById('img-preview-wrap').classList.add('hidden'); }
+    });
+    const vidUrlInput = document.getElementById('p-video-url');
+    if (vidUrlInput) vidUrlInput.addEventListener('input', () => {
+        const v = vidUrlInput.value.trim();
+        if (v && !v.includes('youtube') && !v.includes('vimeo')) {
+            document.getElementById('vid-preview').src = v;
+            document.getElementById('vid-preview-wrap').classList.remove('hidden');
+        } else {
+            document.getElementById('vid-preview-wrap').classList.add('hidden');
+        }
     });
 });
 
@@ -871,7 +958,9 @@ function saveProduct() {
         category: document.getElementById('p-category').value,
         badge: document.getElementById('p-badge').value.trim(),
         stock: document.getElementById('p-stock').value,
+        stockQty: parseInt(document.getElementById('p-stock-qty').value, 10) || 0,
         imageUrl: document.getElementById('p-image-url').value.trim(),
+        videoUrl: document.getElementById('p-video-url').value.trim(),
         colors: panelColors.slice(),
         featured: document.getElementById('featured-toggle').classList.contains('on'),
         updatedAt: new Date().toISOString(),
@@ -1157,7 +1246,16 @@ function clearActivity() {
 // ======================================================
 function getReviews() { return JSON.parse(localStorage.getItem(KEYS.reviews) || '[]'); }
 
-function loadReviews() {
+async function loadReviews() {
+    // Sync reviews from GAS backend (shared store)
+    try {
+        const resp = await fetch(GAS_URL + '?type=GET_REVIEWS&adminKey=' + encodeURIComponent(ADMIN_PW), { cache: 'no-store' });
+        const data = await resp.json();
+        if (data && data.success && Array.isArray(data.reviews)) {
+            localStorage.setItem(KEYS.reviews, JSON.stringify(data.reviews));
+        }
+    } catch (e) {}
+
     const reviews = getReviews();
     const pending = reviews.filter(r => !r.approved);
     const approved = reviews.filter(r => r.approved);
@@ -1256,6 +1354,8 @@ function approveReview(id) {
     reviews[idx].approved = true;
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend so all clients see the update
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'APPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 function unapproveReview(id) {
@@ -1265,6 +1365,8 @@ function unapproveReview(id) {
     reviews[idx].approved = false;
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'UNAPPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 function deleteReview(id) {
@@ -1272,6 +1374,8 @@ function deleteReview(id) {
     const reviews = getReviews().filter(r => r.id !== id);
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
+    // Sync to GAS backend
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'DELETE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
 }
 
 // ======================================================

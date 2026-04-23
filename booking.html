@@ -276,8 +276,8 @@
         <!-- Right Side: Cinematic Map Block -->
         <section class="lg:w-1/2 lg:sticky lg:top-32 h-max reveal reveal-delay-1 relative">
             
-            <!-- Support / Concierge Float Box -->
-            <div class="glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px] !rounded-[28px]">
+            <!-- Support / Concierge Float Box — visible only on desktop -->
+            <div class="hidden lg:block glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px] !rounded-[28px]">
                 <h4 class="font-display text-xl text-eby-dark mb-2">Questions?</h4>
                 <p class="text-eby-brown-light text-xs leading-relaxed mb-4">Our studio concierge is available to assist with your booking.</p>
                 <a href="tel:+447864585110" class="flex items-center gap-2 font-sans font-bold text-[10px] tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors">
@@ -285,8 +285,17 @@
                 </a>
             </div>
 
+            <!-- Mobile concierge strip (above map) -->
+            <div class="lg:hidden flex items-center gap-3 p-4 glass-card rounded-[20px] mb-5">
+                <i class="ph ph-headset text-xl text-eby-gold-dark flex-shrink-0"></i>
+                <div>
+                    <p class="font-sans font-bold text-xs text-eby-dark">Questions about your booking?</p>
+                    <a href="tel:+447864585110" class="font-sans text-[10px] tracking-widest text-eby-gold-dark">+44 7864 585110</a>
+                </div>
+            </div>
+
             <!-- Somerset UK Map with Grayscale Filter -->
-            <div class="w-full h-[500px] lg:h-[650px] rounded-[38px] overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
+            <div class="w-full h-[320px] sm:h-[400px] lg:h-[650px] rounded-[38px] overflow-hidden border border-eby-gold-dark/20 bg-eby-gold/20 shadow-lg relative z-10">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d160490.5735623048!2d-3.2384795293235305!3d51.09675270912165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486df5b9e078f8eb%3A0xc3df3c9cbfbb7b!2sSomerset%2C%20UK!5e0!3m2!1sen!2sus!4v1709664539123!5m2!1sen!2sus" 
                     width="100%" 
@@ -314,9 +323,14 @@
                             <i class="ph ph-lock text-3xl text-eby-gold-dark"></i>
                         </div>
                         <h3 class="font-display text-2xl text-eby-dark mb-3">Choose a Service First</h3>
-                        <p class="text-eby-brown-light text-sm leading-relaxed">Select a category above, then click on a specific service to unlock your calendar and secure your slot.</p>
-                        <div class="mt-6 flex justify-center">
-                            <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark flex items-center gap-2"><i class="ph ph-arrow-up text-base"></i> Pick a service above</span>
+                        <p class="text-eby-brown-light text-sm leading-relaxed mb-6">Select a category above, then choose a specific service to unlock the calendar and secure your slot.</p>
+                        <button onclick="document.querySelector('main').scrollIntoView({behavior:'smooth'})" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px] mb-3 flex items-center justify-center gap-2">
+                            <i class="ph ph-arrow-up text-base"></i> Pick a Service Above
+                        </button>
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            <button onclick="startGeneralBooking('Braids');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Braids</button>
+                            <button onclick="startGeneralBooking('Twists');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Twists</button>
+                            <button onclick="startGeneralBooking('Locs');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Locs</button>
                         </div>
                     </div>
                 </div>
@@ -509,6 +523,31 @@
     <script>
         // Setup variables & Stripe
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
+
+        // Availability is fetched from GAS on load and cached; falls back to localStorage
+        let _cachedAvailability = null;
+
+        async function fetchAvailability() {
+            try {
+                const resp = await fetch(GAS_URL + '?type=GET_AVAILABILITY', { cache: 'no-store' });
+                const data = await resp.json();
+                if (data && data.success && data.availability) {
+                    _cachedAvailability = data.availability;
+                    localStorage.setItem('ebyAdmin_availability', JSON.stringify(data.availability));
+                    return;
+                }
+            } catch (e) {}
+            // Fall back to localStorage
+            _cachedAvailability = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+        }
+
+        function getAvailabilityForDay(dayIdx) {
+            const avail = _cachedAvailability;
+            if (!avail || avail[dayIdx] === undefined) return Array.from({ length: 24 }, (_, i) => i);
+            const conf = avail[dayIdx];
+            if (conf.enabled === false) return [];
+            return conf.hours || [];
+        }
         let stripe, elements, gateCard;
         
         try {
@@ -578,7 +617,41 @@
                     selectService(serviceName, Number(servicePrice || 0));
                 });
             }
-            renderCalendar();
+
+            // Fetch admin availability from backend (so client sees live changes)
+            fetchAvailability().then(() => renderCalendar());
+
+            // Handle URL parameters: ?service=ServiceName&price=120 or ?category=braids
+            const params = new URLSearchParams(window.location.search);
+            const preService = params.get('service');
+            const prePrice = params.get('price');
+            const preCategory = params.get('category');
+
+            if (preService && prePrice) {
+                // Pre-select a specific service
+                const categoryMap = {
+                    'Knotless Braids': 'Braids', 'Box Braids': 'Braids', 'Goddess Braids': 'Braids',
+                    'Fulani Braids': 'Braids', 'Cornrows': 'Braids', 'Stitch Braids': 'Braids',
+                    'Lemonade Braids': 'Braids', 'Boho Braids': 'Braids', 'Tribal Braids': 'Braids',
+                    'Feed-In Braids': 'Braids', 'Senegalese Twists': 'Twists', 'Passion Twists': 'Twists',
+                    'Faux Locs': 'Locs', 'Butterfly Locs': 'Locs', 'Starter Locs': 'Locs',
+                    'Kids Braids': 'Kids Styles', 'Kids Cornrows': 'Kids Styles'
+                };
+                const category = categoryMap[preService] || 'Braids';
+                startGeneralBooking(category);
+                setTimeout(() => {
+                    selectService(preService, Number(prePrice));
+                    document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+            } else if (preCategory) {
+                // Pre-open a category
+                const catMap = { 'braids': 'Braids', 'twists': 'Twists', 'locs': 'Locs', 'kids': 'Kids Styles', 'addons': 'Add-Ons' };
+                const cat = catMap[preCategory.toLowerCase()] || 'Braids';
+                startGeneralBooking(cat);
+                setTimeout(() => {
+                    document.getElementById('service-list-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
         });
 
         function escapeHtml(text) {
@@ -655,11 +728,10 @@
             
             slotsWrapper.classList.remove('hidden');
             
-            // Inject slots based on admin availability config
+            // Inject slots based on admin availability config (fetched from backend)
             slotsGrid.innerHTML = '';
             const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
-            const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
-            const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+            const _hours = getAvailabilityForDay(_dayIdx);
             if (_hours.length === 0) {
                 slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
             } else {
