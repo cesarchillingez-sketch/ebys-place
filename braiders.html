@@ -189,11 +189,36 @@
                         </div>
                         <span class="font-sans text-[9px] uppercase tracking-widest text-eby-gold-dark font-medium">Coming Soon</span>
                     </div>
-                    <div class="bg-white border border-eby-gold-dark/20 border-t-0 rounded-b-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)] flex items-center justify-center" style="min-height: 300px; padding: 40px; text-align: center;">
-                        <div>
-                            <p style="font-family: inherit; font-size: 1rem; color: #6b5c4e; margin-bottom: 12px;">The braider directory is coming soon.</p>
-                            <p style="font-family: inherit; font-size: 0.875rem; color: #9b8a7a;">Check back shortly to find braiders near you.</p>
+                    <div class="bg-white border border-eby-gold-dark/20 border-t-0 rounded-b-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
+
+                        <!-- Braider cards grid (populated when braiders are onboarded) -->
+                        <div id="braider-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
+                            <!-- Braider cards are injected here. Each card must include:
+                                 class="braider-card" and data-city="City Name"
+                                 Example structure (hidden until real data is available):
+                            <div class="braider-card hidden" data-city="London">
+                                <p class="font-body text-sm text-eby-dark font-medium">Braider Name</p>
+                                <p class="font-body text-xs text-eby-brown-light">London</p>
+                            </div>
+                            -->
                         </div>
+
+                        <!-- Empty / coming-soon state (shown when no braiders exist yet) -->
+                        <div id="braider-empty-state" class="flex items-center justify-center" style="min-height: 300px; padding: 40px; text-align: center;">
+                            <div>
+                                <p style="font-family: inherit; font-size: 1rem; color: #6b5c4e; margin-bottom: 12px;">The braider directory is coming soon.</p>
+                                <p style="font-family: inherit; font-size: 0.875rem; color: #9b8a7a;">Check back shortly to find braiders near you.</p>
+                            </div>
+                        </div>
+
+                        <!-- No-results state (shown when a search query matches nothing) -->
+                        <div id="braider-no-results" class="hidden items-center justify-center" style="min-height: 300px; padding: 40px; text-align: center; display: none;">
+                            <div>
+                                <p style="font-family: inherit; font-size: 1rem; color: #6b5c4e; margin-bottom: 12px;">No braiders found in <strong id="braider-no-results-city"></strong>.</p>
+                                <p style="font-family: inherit; font-size: 0.875rem; color: #9b8a7a;">Try a different city or check back soon as more braiders join.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -247,6 +272,51 @@
     </footer>
 
     <script>
+
+        // Braider directory filter
+        function filterBraiders(query) {
+            const q = (query || '').trim().toLowerCase();
+            const cards = document.querySelectorAll('.braider-card');
+            const emptyState = document.getElementById('braider-empty-state');
+            const noResults = document.getElementById('braider-no-results');
+            const noResultsCity = document.getElementById('braider-no-results-city');
+
+            // No braiders onboarded yet — keep the coming-soon state and do nothing else
+            if (cards.length === 0) {
+                emptyState.classList.remove('hidden');
+                noResults.style.display = 'none';
+                return;
+            }
+
+            // No query — show all cards, hide states
+            if (!q) {
+                cards.forEach(function(card) { card.classList.remove('hidden'); });
+                emptyState.classList.add('hidden');
+                noResults.style.display = 'none';
+                return;
+            }
+
+            // Filter cards by city
+            let matched = 0;
+            cards.forEach(function(card) {
+                const city = (card.getAttribute('data-city') || '').toLowerCase();
+                if (city.indexOf(q) !== -1) {
+                    card.classList.remove('hidden');
+                    matched++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            emptyState.classList.add('hidden');
+
+            if (matched === 0) {
+                if (noResultsCity) noResultsCity.textContent = query.trim();
+                noResults.style.display = 'flex';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
 
         // Mobile Menu
         function toggleMobileMenu() {
