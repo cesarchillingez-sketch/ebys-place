@@ -532,8 +532,26 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
+            const serviceListItems = document.getElementById('service-list-items');
+            if (serviceListItems) {
+                serviceListItems.addEventListener('click', (event) => {
+                    const serviceButton = event.target.closest('button[data-service-name]');
+                    if (!serviceButton) return;
+                    const { serviceName, servicePrice } = serviceButton.dataset;
+                    selectService(serviceName, Number(servicePrice || 0));
+                });
+            }
             renderCalendar();
         });
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         // -------------------------
         // CALENDAR RENDERING LOGIC
@@ -623,7 +641,7 @@
         function startGeneralBooking(categoryName) {
             const servicePanel = document.getElementById('service-list-panel');
             const serviceItems = document.getElementById('service-list-items');
-            const serviceCopy = document.getElementById('service-list-copy');
+            const serviceListCopy = document.getElementById('service-list-copy');
             const services = SERVICE_CATALOG[categoryName] || [];
 
             selectedServiceName = null;
@@ -635,17 +653,20 @@
             document.getElementById('time-slots-grid').innerHTML = '';
             document.getElementById('gate-errors').textContent = '';
 
-            serviceCopy.textContent = `You selected ${categoryName}. Choose a specific service to continue.`;
-            serviceItems.innerHTML = services.map(service => `
-                <button
-                    type="button"
-                    onclick="selectService('${service.name.replace(/'/g, "\\'")}', ${service.fromPrice})"
-                    class="w-full flex items-center justify-between gap-4 text-left py-4 px-5 border border-eby-gold-dark/20 rounded-[16px] hover:border-eby-gold-dark hover:bg-eby-gold/20 transition-all"
-                >
-                    <span class="font-display text-xl text-eby-dark">${service.name}</span>
+            serviceListCopy.textContent = `You selected ${categoryName}. Choose a specific service to continue.`;
+            serviceItems.innerHTML = '';
+            services.forEach(service => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.dataset.serviceName = service.name;
+                btn.dataset.servicePrice = String(service.fromPrice);
+                btn.className = 'w-full flex items-center justify-between gap-4 text-left py-4 px-5 border border-eby-gold-dark/20 rounded-[16px] hover:border-eby-gold-dark hover:bg-eby-gold/20 transition-all';
+                btn.innerHTML = `
+                    <span class="font-display text-xl text-eby-dark">${escapeHtml(service.name)}</span>
                     <span class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-gold-dark">From £${service.fromPrice.toFixed(2)}</span>
-                </button>
-            `).join('');
+                `;
+                serviceItems.appendChild(btn);
+            });
             servicePanel.classList.remove('hidden');
             servicePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             
