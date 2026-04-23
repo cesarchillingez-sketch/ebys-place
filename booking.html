@@ -622,23 +622,30 @@
             
             slotsWrapper.classList.remove('hidden');
             
-            // Inject full 24-hour slots in hourly intervals
+            // Inject slots based on admin availability config
             slotsGrid.innerHTML = '';
-            for (let hour = 0; hour < 24; hour++) {
-                const hourText = String(hour).padStart(2, '0');
-                const timeValue = `${hourText}:00:00`;
-                const timeLabel = `${hourText}:00`;
-                const twelveHour = hour % 12 || 12;
-                const amPm = hour < 12 ? 'AM' : 'PM';
-                const slotButton = document.createElement('button');
-                slotButton.type = 'button';
-                slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
-                slotButton.textContent = timeLabel;
-                slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel} (${twelveHour}:00 ${amPm})`);
-                slotButton.addEventListener('click', function() {
-                    selectTime(timeValue, slotButton);
+            const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
+            const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+            const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+            if (_hours.length === 0) {
+                slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
+            } else {
+                _hours.forEach(function(hour) {
+                    const hourText = String(hour).padStart(2, '0');
+                    const timeValue = `${hourText}:00:00`;
+                    const timeLabel = `${hourText}:00`;
+                    const twelveHour = hour % 12 || 12;
+                    const amPm = hour < 12 ? 'AM' : 'PM';
+                    const slotButton = document.createElement('button');
+                    slotButton.type = 'button';
+                    slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
+                    slotButton.textContent = timeLabel;
+                    slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel} (${twelveHour}:00 ${amPm})`);
+                    slotButton.addEventListener('click', function() {
+                        selectTime(timeValue, slotButton);
+                    });
+                    slotsGrid.appendChild(slotButton);
                 });
-                slotsGrid.appendChild(slotButton);
             }
         }
 
@@ -780,6 +787,9 @@
 
                 // SUCCESS FLOW
                 btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
+
+                // Log booking to admin activity
+                try { var _a=JSON.parse(localStorage.getItem('ebyAdmin_activity')||'[]'); _a.unshift({type:'BOOKING_DEPOSIT',customerName:name,email:email,item:currentBookingItem,amount:20,bookingStart:bookingStartISO,timestamp:new Date().toISOString()}); if(_a.length>200)_a.length=200; localStorage.setItem('ebyAdmin_activity',JSON.stringify(_a)); } catch(e) {}
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -853,6 +863,9 @@
                 navbar.classList.remove('nav-scrolled');
             }
         });
+    </script>
+    <script>
+        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>
