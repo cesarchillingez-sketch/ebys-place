@@ -528,7 +528,7 @@
         <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal active">
             <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Inner Circle</span>
             <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">What Our Clients Say</h2>
-            <a href="https://www.google.com/search?q=Eby's+Place+Somerset+reviews" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[10px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">
+            <a id="google-review-link" href="https://www.google.com/search?q=Eby's+Place+Somerset+reviews" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[10px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">
                 View Live Reviews <i class="ph ph-arrow-up-right"></i>
             </a>
         </div>
@@ -1443,10 +1443,13 @@
             service.getDetails(
                 { placeId: GOOGLE_PLACE_ID, fields: ['reviews', 'url'] },
                 function(place, status) {
-                    if (status !== google.maps.places.PlacesServiceStatus.OK || !place || !place.reviews || !place.reviews.length) return;
+                    if (status !== google.maps.places.PlacesServiceStatus.OK || !place || !place.reviews || !place.reviews.length) {
+                        console.warn('Google Reviews: could not fetch reviews (status: ' + status + '). Showing static fallback reviews.');
+                        return;
+                    }
                     // Update "View Live Reviews" link to the actual Google Business profile URL
                     if (place.url) {
-                        var reviewLink = document.querySelector('a[href*="google.com/search?q=Eby"]');
+                        var reviewLink = document.getElementById('google-review-link');
                         if (reviewLink) reviewLink.href = place.url;
                     }
                     renderGoogleReviews(place.reviews);
@@ -1462,7 +1465,11 @@
                     : '<i class="ph ph-star" style="opacity:0.3"></i>';
             }
             var rawText = r.text || '';
-            var text = rawText.length > 220 ? rawText.substring(0, 220) + '…' : rawText;
+            var text = rawText;
+            if (rawText.length > 220) {
+                var cut = rawText.lastIndexOf(' ', 220);
+                text = rawText.substring(0, cut > 0 ? cut : 220) + '…';
+            }
             var safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             var safeName = (r.author_name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             var googleG = '<svg class="h-4 w-auto flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Google review">'
@@ -1489,8 +1496,22 @@
             track.innerHTML = cards + dupes; // duplicate for seamless infinite marquee
         }
 
-        // Kick off Google reviews fetch on page load
-        loadGoogleReviews();
+        // Lazy-load Google reviews when the testimonials section scrolls into view
+        (function() {
+            var reviewsSection = document.querySelector('#reviews-track');
+            if (!reviewsSection) { loadGoogleReviews(); return; }
+            if ('IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function(entries, obs) {
+                    if (entries[0].isIntersecting) {
+                        loadGoogleReviews();
+                        obs.disconnect();
+                    }
+                }, { rootMargin: '200px' });
+                observer.observe(reviewsSection);
+            } else {
+                loadGoogleReviews();
+            }
+        })();
     </script>
     <script>
         (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
