@@ -512,13 +512,11 @@
                     const hourText = String(hour).padStart(2, '0');
                     const timeValue = `${hourText}:00:00`;
                     const timeLabel = `${hourText}:00`;
-                    const twelveHour = hour % 12 || 12;
-                    const amPm = hour < 12 ? 'AM' : 'PM';
                     const slotButton = document.createElement('button');
                     slotButton.type = 'button';
                     slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
                     slotButton.textContent = timeLabel;
-                    slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel} (${twelveHour}:00 ${amPm})`);
+                    slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel}`);
                     slotButton.addEventListener('click', function() {
                         selectTime(timeValue, slotButton);
                     });
