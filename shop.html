@@ -250,6 +250,23 @@
                         <label for="toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-eby-gold/50 cursor-pointer transition-colors duration-300"></label>
                     </div>
                 </div>
+
+                <!-- New Product Alerts Signup -->
+                <div class="mt-10 pt-8 border-t border-eby-gold-dark/20">
+                    <i class="ph ph-bell-ringing text-eby-gold-dark text-xl mb-3 block"></i>
+                    <h4 class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark mb-2">New Drop Alerts</h4>
+                    <p class="font-body text-[11px] text-eby-brown-light leading-relaxed mb-4">Be the first to know when new products land in the collection.</p>
+                    <form id="sidebar-alert-form" onsubmit="signUpForProductAlerts(event, 'sidebar-alert-form')" class="space-y-3">
+                        <input type="email" id="sidebar-alert-email" required placeholder="Your email address" class="luxury-input w-full text-[11px]">
+                        <button type="submit" id="sidebar-alert-btn" class="w-full btn-luxury bg-eby-dark text-eby-surface py-3 rounded-[16px] font-sans font-bold uppercase tracking-widest text-[9px]">
+                            Notify Me
+                        </button>
+                    </form>
+                    <div id="sidebar-alert-success" class="hidden text-center py-4">
+                        <i class="ph ph-check-circle text-eby-gold-dark text-2xl mb-2 block"></i>
+                        <p class="font-body text-[11px] text-eby-brown-light">You're on the list. We'll be in touch first.</p>
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -355,6 +372,28 @@
         </div>
     </main>
 
+    <!-- New Product Alerts Banner -->
+    <section class="bg-eby-dark py-16 relative z-10">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <span class="inline-flex items-center gap-2 font-sans font-bold text-[9px] uppercase tracking-mega text-eby-gold-dark mb-4">
+                <i class="ph ph-bell-ringing text-sm"></i> New Drop Alerts
+            </span>
+            <h2 class="font-display text-3xl md:text-4xl text-eby-surface mb-3">First to the Collection</h2>
+            <p class="font-body text-eby-surface/60 text-sm mb-8 max-w-md mx-auto">Enter your email and we'll notify you the moment new products land — before anyone else.</p>
+            <form id="footer-alert-form" onsubmit="signUpForProductAlerts(event, 'footer-alert-form')" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" id="footer-alert-email" required placeholder="Your email address" class="flex-grow bg-eby-surface/10 border border-eby-surface/20 text-eby-surface placeholder:text-eby-surface/40 p-4 rounded-[16px] focus:outline-none focus:border-eby-gold-dark text-sm font-body">
+                <button type="submit" id="footer-alert-btn" class="btn-luxury bg-eby-gold-dark text-eby-surface px-8 py-4 rounded-[16px] font-sans font-bold uppercase tracking-widest text-[9px] whitespace-nowrap">
+                    Notify Me
+                </button>
+            </form>
+            <div id="footer-alert-success" class="hidden mt-6">
+                <i class="ph ph-check-circle text-eby-gold-dark text-3xl mb-2 block mx-auto"></i>
+                <p class="font-body text-eby-surface/70 text-sm">You're on the list — we'll reach out the moment something new drops.</p>
+            </div>
+            <p class="mt-4 font-body text-[10px] text-eby-surface/30">No spam. Unsubscribe anytime via the link in any email.</p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="pt-24 pb-12 bg-eby-surface border-t border-eby-gold-dark/10 relative z-10 mt-12">
         <div class="max-w-7xl mx-auto px-6">
@@ -445,6 +484,15 @@
                                 <input type="text" id="ship-zip" required class="luxury-input" placeholder="Postal Code">
                             </div>
                         </div>
+                    </div>
+
+                    <!-- New Product Alerts Opt-In -->
+                    <div class="flex items-start gap-3 py-2">
+                        <input type="checkbox" id="checkout-product-alerts" class="mt-0.5 w-4 h-4 rounded accent-eby-gold-dark cursor-pointer flex-shrink-0">
+                        <label for="checkout-product-alerts" class="font-body text-[11px] text-eby-brown-light cursor-pointer leading-relaxed">
+                            Notify me when new products drop — I'd like to receive product alert emails from Eby's Place.
+                            <a href="policies.html" class="underline hover:text-eby-dark transition-colors">Unsubscribe anytime.</a>
+                        </label>
                     </div>
 
                     <div class="pt-6 border-t border-eby-gold-dark/10">
@@ -702,7 +750,8 @@
                         address: address,
                         amount: ecoCartTotal, // STRICT Contract Requirement
                         stripeId: paymentMethod.id, // STRICT Contract Requirement
-                        item: ecoCart.map(i => i.name).join(' + ') // STRICT Contract Requirement
+                        item: ecoCart.map(i => i.name).join(' + '), // STRICT Contract Requirement
+                        productAlerts: document.getElementById('checkout-product-alerts').checked
                     })
                 });
 
@@ -732,6 +781,35 @@
                 btn.innerHTML = `Pay & Complete Order`;
                 btn.disabled = false;
             }
+        }
+
+        // ------------------------------------
+        // PRODUCT ALERT SIGNUP
+        // ------------------------------------
+
+        async function signUpForProductAlerts(e, formId) {
+            e.preventDefault();
+            const emailId = formId === 'sidebar-alert-form' ? 'sidebar-alert-email' : 'footer-alert-email';
+            const btnId   = formId === 'sidebar-alert-form' ? 'sidebar-alert-btn'   : 'footer-alert-btn';
+            const successId = formId === 'sidebar-alert-form' ? 'sidebar-alert-success' : 'footer-alert-success';
+
+            const email = document.getElementById(emailId).value.trim();
+            const btn = document.getElementById(btnId);
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i>';
+            btn.disabled = true;
+
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: "PRODUCT_ALERT_SIGNUP", email: email })
+                });
+            } catch (_) {
+                // Silently continue — the user sees the success state regardless of network issues
+            }
+
+            document.getElementById(formId).classList.add('hidden');
+            document.getElementById(successId).classList.remove('hidden');
         }
 
         // ------------------------------------
