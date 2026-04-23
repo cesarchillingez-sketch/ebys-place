@@ -656,9 +656,25 @@
     <footer class="pt-24 pb-12 border-t border-eby-gold-dark/20 bg-eby-surface">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal active">
-                <div class="md:w-1/2 mb-8 md:mb-0"><h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3><p class="text-eby-brown-light text-sm">Early booking access and scalp care insights.</p></div>
-                <div class="md:w-1/2 w-full flex">
-                    <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-[20px] focus:outline-none"><button class="bg-eby-dark text-white px-8 rounded-r-[20px] font-bold text-[9px] uppercase tracking-widest">Join</button>
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3>
+                    <p class="text-eby-brown-light text-sm">Early booking access, scalp care insights, and new product alerts.</p>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <form id="inner-circle-form" onsubmit="joinInnerCircle(event)" class="space-y-3">
+                        <div class="flex">
+                            <input type="email" id="newsletter-email" required placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-[20px] focus:outline-none">
+                            <button type="submit" id="inner-circle-btn" class="bg-eby-dark text-white px-8 rounded-r-[20px] font-bold text-[9px] uppercase tracking-widest whitespace-nowrap">Join</button>
+                        </div>
+                        <label class="flex items-start gap-2 cursor-pointer">
+                            <input type="checkbox" id="newsletter-product-alerts" class="mt-0.5 w-4 h-4 rounded accent-eby-gold-dark flex-shrink-0">
+                            <span class="font-body text-[11px] text-eby-brown-light leading-relaxed">Also notify me when new products drop in the shop. <a href="policies.html" class="underline hover:text-eby-dark transition-colors">Unsubscribe anytime.</a></span>
+                        </label>
+                    </form>
+                    <div id="inner-circle-success" class="hidden flex items-center gap-3 mt-2">
+                        <i class="ph ph-check-circle text-eby-gold-dark text-xl flex-shrink-0"></i>
+                        <p class="font-body text-sm text-eby-brown-light">You're in. We'll keep you in the loop.</p>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal active">
@@ -1340,6 +1356,33 @@
                 glow.style.setProperty('--y', e.clientY + 'px');
             }
         });
+
+        // ------------------------------------
+        // INNER CIRCLE / NEWSLETTER SIGNUP
+        // ------------------------------------
+
+        async function joinInnerCircle(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletter-email').value.trim();
+            const productAlerts = document.getElementById('newsletter-product-alerts').checked;
+            const btn = document.getElementById('inner-circle-btn');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i>';
+            btn.disabled = true;
+
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: "NEWSLETTER_SIGNUP", email: email, productAlerts: productAlerts })
+                });
+                document.getElementById('inner-circle-form').classList.add('hidden');
+                document.getElementById('inner-circle-success').classList.remove('hidden');
+            } catch (err) {
+                console.error('Newsletter signup failed:', err);
+                btn.innerHTML = 'Join';
+                btn.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
