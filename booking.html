@@ -389,7 +389,7 @@
                                     <span class="font-display text-lg text-eby-dark">Total Due Now</span>
                                     <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
                                 </div>
-                                <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2">
+                                <button type="submit" id="dg-btn" disabled class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
                                     Confirm & Pay <i class="ph ph-lock-key"></i>
                                 </button>
                             </div>
@@ -713,7 +713,9 @@
             
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
             document.getElementById('booking-gate-desc').innerHTML = `You selected <strong>${categoryName}</strong>. Choose a service above, then select a date and time to continue.`;
-            document.getElementById('dg-btn').innerText = `Confirm & Pay £20.00`;
+            const dgBtn = document.getElementById('dg-btn');
+            dgBtn.innerText = `Confirm & Pay £20.00`;
+            dgBtn.disabled = true;
         }
 
         function selectService(serviceName, price) {
@@ -723,6 +725,7 @@
             document.getElementById('gate-errors').textContent = '';
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
             document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${safeServiceName}</strong> (Estimated from £${formatPrice(price)}). Please select a date and time, then confirm your £20.00 deposit.`;
+            document.getElementById('dg-btn').disabled = false;
             document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
         }
 
