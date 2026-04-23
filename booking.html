@@ -314,9 +314,14 @@
                             <i class="ph ph-lock text-3xl text-eby-gold-dark"></i>
                         </div>
                         <h3 class="font-display text-2xl text-eby-dark mb-3">Choose a Service First</h3>
-                        <p class="text-eby-brown-light text-sm leading-relaxed">Select a category above, then click on a specific service to unlock your calendar and secure your slot.</p>
-                        <div class="mt-6 flex justify-center">
-                            <span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark flex items-center gap-2"><i class="ph ph-arrow-up text-base"></i> Pick a service above</span>
+                        <p class="text-eby-brown-light text-sm leading-relaxed mb-6">Select a category above, then choose a specific service to unlock the calendar and secure your slot.</p>
+                        <button onclick="document.querySelector('main').scrollIntoView({behavior:'smooth'})" class="w-full btn-luxury bg-eby-dark text-white py-4 rounded-[16px] font-bold uppercase tracking-widest text-[10px] mb-3 flex items-center justify-center gap-2">
+                            <i class="ph ph-arrow-up text-base"></i> Pick a Service Above
+                        </button>
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            <button onclick="startGeneralBooking('Braids');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Braids</button>
+                            <button onclick="startGeneralBooking('Twists');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Twists</button>
+                            <button onclick="startGeneralBooking('Locs');document.getElementById('service-list-panel').scrollIntoView({behavior:'smooth'})" class="py-2 px-3 border border-eby-gold-dark/30 rounded-[10px] font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">Locs</button>
                         </div>
                     </div>
                 </div>
@@ -579,6 +584,38 @@
                 });
             }
             renderCalendar();
+
+            // Handle URL parameters: ?service=ServiceName&price=120 or ?category=braids
+            const params = new URLSearchParams(window.location.search);
+            const preService = params.get('service');
+            const prePrice = params.get('price');
+            const preCategory = params.get('category');
+
+            if (preService && prePrice) {
+                // Pre-select a specific service
+                const categoryMap = {
+                    'Knotless Braids': 'Braids', 'Box Braids': 'Braids', 'Goddess Braids': 'Braids',
+                    'Fulani Braids': 'Braids', 'Cornrows': 'Braids', 'Stitch Braids': 'Braids',
+                    'Lemonade Braids': 'Braids', 'Boho Braids': 'Braids', 'Tribal Braids': 'Braids',
+                    'Feed-In Braids': 'Braids', 'Senegalese Twists': 'Twists', 'Passion Twists': 'Twists',
+                    'Faux Locs': 'Locs', 'Butterfly Locs': 'Locs', 'Starter Locs': 'Locs',
+                    'Kids Braids': 'Kids Styles', 'Kids Cornrows': 'Kids Styles'
+                };
+                const category = categoryMap[preService] || 'Braids';
+                startGeneralBooking(category);
+                setTimeout(() => {
+                    selectService(preService, Number(prePrice));
+                    document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+            } else if (preCategory) {
+                // Pre-open a category
+                const catMap = { 'braids': 'Braids', 'twists': 'Twists', 'locs': 'Locs', 'kids': 'Kids Styles', 'addons': 'Add-Ons' };
+                const cat = catMap[preCategory.toLowerCase()] || 'Braids';
+                startGeneralBooking(cat);
+                setTimeout(() => {
+                    document.getElementById('service-list-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150);
+            }
         });
 
         function escapeHtml(text) {
