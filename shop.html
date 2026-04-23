@@ -787,14 +787,16 @@
         // PRODUCT ALERT SIGNUP
         // ------------------------------------
 
+        const ALERT_FORM_CONFIG = {
+            'sidebar-alert-form': { emailId: 'sidebar-alert-email', btnId: 'sidebar-alert-btn', successId: 'sidebar-alert-success' },
+            'footer-alert-form':  { emailId: 'footer-alert-email',  btnId: 'footer-alert-btn',  successId: 'footer-alert-success'  }
+        };
+
         async function signUpForProductAlerts(e, formId) {
             e.preventDefault();
-            const emailId = formId === 'sidebar-alert-form' ? 'sidebar-alert-email' : 'footer-alert-email';
-            const btnId   = formId === 'sidebar-alert-form' ? 'sidebar-alert-btn'   : 'footer-alert-btn';
-            const successId = formId === 'sidebar-alert-form' ? 'sidebar-alert-success' : 'footer-alert-success';
-
-            const email = document.getElementById(emailId).value.trim();
-            const btn = document.getElementById(btnId);
+            const cfg = ALERT_FORM_CONFIG[formId];
+            const email = document.getElementById(cfg.emailId).value.trim();
+            const btn = document.getElementById(cfg.btnId);
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i>';
             btn.disabled = true;
 
@@ -804,12 +806,13 @@
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ type: "PRODUCT_ALERT_SIGNUP", email: email })
                 });
-            } catch (_) {
-                // Silently continue — the user sees the success state regardless of network issues
+                document.getElementById(formId).classList.add('hidden');
+                document.getElementById(cfg.successId).classList.remove('hidden');
+            } catch (err) {
+                console.error('Product alert signup failed:', err);
+                btn.innerHTML = 'Try Again';
+                btn.disabled = false;
             }
-
-            document.getElementById(formId).classList.add('hidden');
-            document.getElementById(successId).classList.remove('hidden');
         }
 
         // ------------------------------------

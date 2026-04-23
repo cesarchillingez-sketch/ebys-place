@@ -1375,12 +1375,13 @@
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ type: "NEWSLETTER_SIGNUP", email: email, productAlerts: productAlerts })
                 });
-            } catch (_) {
-                // Silently continue — show success regardless of network issues
+                document.getElementById('inner-circle-form').classList.add('hidden');
+                document.getElementById('inner-circle-success').classList.remove('hidden');
+            } catch (err) {
+                console.error('Newsletter signup failed:', err);
+                btn.innerHTML = 'Join';
+                btn.disabled = false;
             }
-
-            document.getElementById('inner-circle-form').classList.add('hidden');
-            document.getElementById('inner-circle-success').classList.remove('hidden');
         }
     </script>
 </body>
