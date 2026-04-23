@@ -127,6 +127,7 @@
             <button class="nav-item" id="nav-availability" onclick="showSection('availability')"><i class="ph ph-clock text-base"></i>Availability</button>
             <button class="nav-item" id="nav-analytics" onclick="showSection('analytics')"><i class="ph ph-trend-up text-base"></i>Analytics</button>
             <button class="nav-item" id="nav-activity" onclick="showSection('activity')"><i class="ph ph-activity text-base"></i>Activity</button>
+            <button class="nav-item" id="nav-reviews" onclick="showSection('reviews')"><i class="ph ph-star text-base"></i>Reviews <span id="reviews-pending-badge" class="ml-auto hidden text-[9px] font-bold bg-eby-gold-dark text-white rounded-full w-5 h-5 flex items-center justify-center"></span></button>
         </nav>
         <div class="mt-6 pt-5 border-t border-white/10 space-y-0.5">
             <a href="shop.html" target="_blank" class="nav-item"><i class="ph ph-storefront text-base"></i>View Shop</a>
@@ -309,6 +310,35 @@
                 <div class="bg-white border border-eby-gold-dark/20 rounded-[20px] p-6" id="activity-feed"></div>
             </section>
 
+
+            <!-- ===================== REVIEWS ===================== -->
+            <section id="s-reviews" class="hidden">
+                <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <p class="font-sans text-sm text-eby-brown-light">Moderate client reviews submitted from the site. Approved reviews appear in the testimonials carousel.</p>
+                    <button onclick="loadReviews()" class="flex items-center gap-2 border border-eby-gold-dark/30 rounded-[12px] px-4 py-2 text-[10px] font-sans font-bold uppercase tracking-widest text-eby-dark hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-arrows-clockwise"></i> Refresh
+                    </button>
+                </div>
+                <!-- Pending -->
+                <div class="mb-8">
+                    <h4 class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark mb-4">Pending Approval</h4>
+                    <div id="reviews-pending" class="space-y-4"></div>
+                    <div id="reviews-pending-empty" class="hidden text-center py-8 bg-white border border-eby-gold-dark/20 rounded-[20px]">
+                        <i class="ph ph-check-circle text-3xl text-eby-gold-dark/30 mb-2 block"></i>
+                        <p class="font-sans text-sm text-eby-brown-light">No reviews awaiting approval.</p>
+                    </div>
+                </div>
+                <!-- Approved -->
+                <div>
+                    <h4 class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark mb-4">Approved Reviews</h4>
+                    <div id="reviews-approved" class="space-y-4"></div>
+                    <div id="reviews-approved-empty" class="hidden text-center py-8 bg-white border border-eby-gold-dark/20 rounded-[20px]">
+                        <i class="ph ph-star text-3xl text-eby-gold-dark/30 mb-2 block"></i>
+                        <p class="font-sans text-sm text-eby-brown-light">No approved reviews yet.</p>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div><!-- end main content wrapper -->
 </div><!-- end dashboard -->
@@ -437,10 +467,11 @@ const KEYS = {
     availability: 'ebyAdmin_availability',
     products: 'ebyAdmin_products',
     orders: 'ebyAdmin_orders',
+    reviews: 'ebyAdmin_reviews',
 };
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const SECTIONS = ['overview','products','orders','bookings','availability','analytics','activity'];
+const SECTIONS = ['overview','products','orders','bookings','availability','analytics','activity','reviews'];
 const SECTION_TITLES = {
     overview: ['Overview','Dashboard Summary'],
     products: ['Products','Shop Catalogue'],
@@ -449,6 +480,7 @@ const SECTION_TITLES = {
     availability: ['Availability','Manage Time Slots'],
     analytics: ['Analytics','Visitor Intelligence'],
     activity: ['Activity Log','Real-Time Events'],
+    reviews: ['Reviews','Client Testimonials'],
 };
 
 let overviewChart = null, visitorsChart = null, pagesChart = null;
@@ -512,6 +544,7 @@ function showSection(name) {
     if (name === 'analytics') renderAnalytics();
     if (name === 'activity') renderActivity();
     if (name === 'availability') renderAvailabilityGrid();
+    if (name === 'reviews') loadReviews();
     // Close mobile sidebar
     closeSidebar();
 }
@@ -1118,6 +1151,107 @@ function clearActivity() {
     renderOverview();
 }
 
+
+// ======================================================
+// REVIEWS
+// ======================================================
+function getReviews() { return JSON.parse(localStorage.getItem(KEYS.reviews) || '[]'); }
+
+function loadReviews() {
+    const reviews = getReviews();
+    const pending = reviews.filter(r => !r.approved);
+    const approved = reviews.filter(r => r.approved);
+
+    // Update pending badge
+    const badge = document.getElementById('reviews-pending-badge');
+    if (badge) {
+        if (pending.length > 0) {
+            badge.textContent = pending.length > 9 ? '9+' : pending.length;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
+    // Render pending
+    const pendingEl = document.getElementById('reviews-pending');
+    const pendingEmpty = document.getElementById('reviews-pending-empty');
+    if (pending.length) {
+        pendingEl.innerHTML = pending.map(r => renderReviewCard(r, false)).join('');
+        pendingEmpty.classList.add('hidden');
+        pendingEl.classList.remove('hidden');
+    } else {
+        pendingEl.innerHTML = '';
+        pendingEl.classList.add('hidden');
+        pendingEmpty.classList.remove('hidden');
+    }
+
+    // Render approved
+    const approvedEl = document.getElementById('reviews-approved');
+    const approvedEmpty = document.getElementById('reviews-approved-empty');
+    if (approved.length) {
+        approvedEl.innerHTML = approved.map(r => renderReviewCard(r, true)).join('');
+        approvedEmpty.classList.add('hidden');
+        approvedEl.classList.remove('hidden');
+    } else {
+        approvedEl.innerHTML = '';
+        approvedEl.classList.add('hidden');
+        approvedEmpty.classList.remove('hidden');
+    }
+}
+
+function renderReviewCard(r, isApproved) {
+    const stars = Array.from({length: 5}, (_, i) =>
+        `<i class="${i < r.rating ? 'ph-fill' : 'ph'} ph-star text-xs ${i < r.rating ? 'text-eby-gold-dark' : 'text-eby-gold-dark/30'}"></i>`
+    ).join('');
+    const date = r.timestamp ? new Date(r.timestamp).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '';
+    const approveBtn = !isApproved
+        ? `<button onclick="approveReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 bg-eby-dark text-white rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-brown-light transition-colors"><i class="ph ph-check"></i>Approve</button>`
+        : `<button onclick="unapproveReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 border border-eby-gold-dark/30 text-eby-dark rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-eby-gold/30 transition-colors"><i class="ph ph-arrow-u-up-left"></i>Unapprove</button>`;
+    return `<div class="bg-white border border-eby-gold-dark/20 rounded-[20px] p-5">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2 flex-wrap">
+                    <p class="font-sans font-bold text-sm text-eby-dark">${escHtml(r.name)}</p>
+                    <div class="flex gap-0.5">${stars}</div>
+                    <span class="badge ${isApproved ? 'badge-success' : 'badge-warn'}">${isApproved ? 'Approved' : 'Pending'}</span>
+                    ${date ? `<span class="font-sans text-[10px] text-eby-brown-light">${escHtml(date)}</span>` : ''}
+                </div>
+                <p class="font-sans text-sm text-eby-brown-light leading-relaxed">&ldquo;${escHtml(r.text)}&rdquo;</p>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                ${approveBtn}
+                <button onclick="deleteReview('${escHtml(r.id)}')" class="flex items-center gap-1.5 px-3 py-2 border border-red-200 text-red-500 rounded-[10px] text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-red-50 transition-colors"><i class="ph ph-trash"></i>Delete</button>
+            </div>
+        </div>
+    </div>`;
+}
+
+function approveReview(id) {
+    const reviews = getReviews();
+    const idx = reviews.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    reviews[idx].approved = true;
+    localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
+    loadReviews();
+}
+
+function unapproveReview(id) {
+    const reviews = getReviews();
+    const idx = reviews.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    reviews[idx].approved = false;
+    localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
+    loadReviews();
+}
+
+function deleteReview(id) {
+    if (!confirm('Delete this review? This cannot be undone.')) return;
+    const reviews = getReviews().filter(r => r.id !== id);
+    localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
+    loadReviews();
+}
+
 // ======================================================
 // INIT
 // ======================================================
@@ -1126,6 +1260,17 @@ function initDashboard() {
     setInterval(updateClock, 30000);
     renderAvailabilityGrid();
     renderOverview();
+    // Show pending reviews badge
+    (function() {
+        try {
+            var pending = getReviews().filter(function(r) { return !r.approved; });
+            var badge = document.getElementById('reviews-pending-badge');
+            if (badge && pending.length > 0) {
+                badge.textContent = pending.length > 9 ? '9+' : pending.length;
+                badge.classList.remove('hidden');
+            }
+        } catch(e) {}
+    })();
 }
 
 window.addEventListener('DOMContentLoaded', checkAuth);
