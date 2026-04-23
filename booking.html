@@ -622,12 +622,14 @@
             
             slotsWrapper.classList.remove('hidden');
             
-            // Inject stylish mock slots without fake load time
-            slotsGrid.innerHTML = `
-                <button type="button" onclick="selectTime('09:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">09:00 AM</button>
-                <button type="button" onclick="selectTime('11:30:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">11:30 AM</button>
-                <button type="button" onclick="selectTime('14:00:00', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">02:00 PM</button>
-            `;
+            // Inject full 24-hour slots in hourly intervals
+            const hourlySlots = Array.from({ length: 24 }, (_, hour) => {
+                const hourText = String(hour).padStart(2, '0');
+                const timeValue = `${hourText}:00:00`;
+                const timeLabel = `${hourText}:00`;
+                return `<button type="button" onclick="selectTime('${timeValue}', this)" class="time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all">${timeLabel}</button>`;
+            }).join('');
+            slotsGrid.innerHTML = hourlySlots;
         }
 
         function selectTime(timeStr, btn) {
