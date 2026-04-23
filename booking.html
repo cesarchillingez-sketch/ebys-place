@@ -538,6 +538,10 @@
                     const serviceButton = event.target.closest('button[data-service-name]');
                     if (!serviceButton) return;
                     const { serviceName, servicePrice } = serviceButton.dataset;
+                    if (!serviceName || servicePrice === undefined) {
+                        document.getElementById('gate-errors').textContent = 'Selected service data is invalid. Please choose another service.';
+                        return;
+                    }
                     selectService(serviceName, Number(servicePrice || 0));
                 });
             }
@@ -649,7 +653,6 @@
             const services = SERVICE_CATALOG[categoryName] || [];
 
             selectedServiceName = null;
-            currentBookingItem = `${categoryName} Appointment`;
             selectedDateStr = null;
             selectedTimeStr = null;
             renderCalendar();
