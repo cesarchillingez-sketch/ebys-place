@@ -637,10 +637,23 @@ async function doLogin() {
     const pass   = passEl.value;
     if (!pass) { showLoginError('Please enter your password.'); return; }
 
-    // Client-side hash check (UX only – server validates on every call)
-    const storedHash = localStorage.getItem('eby_admin_pass_hash') || DEFAULT_PASS_HASH;
-    const enteredHash = await sha256(pass);
-    if (enteredHash !== storedHash) {
+    // Verify password against the server so the check is always authoritative,
+    // regardless of what may be stored in localStorage.
+    let verified = false;
+    try {
+        const res  = await fetch(GAS_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
+        });
+        const data = await res.json();
+        verified = data.success === true;
+    } catch (e) {
+        showLoginError('Network error. Please check your connection and try again.');
+        return;
+    }
+
+    if (!verified) {
         localStorage.setItem('eby_login_attempts', String(attempts + 1));
         localStorage.setItem('eby_login_time', String(Date.now()));
         showLoginError('Incorrect password. Please try again.');
@@ -648,7 +661,8 @@ async function doLogin() {
         return;
     }
 
-    // Success
+    // Success – keep the local hash in sync so change-password UX stays accurate
+    localStorage.setItem('eby_admin_pass_hash', await sha256(pass));
     localStorage.removeItem('eby_login_attempts');
     localStorage.removeItem('eby_login_time');
     sessionStorage.setItem('eby_admin_pass', pass);
@@ -694,11 +708,23 @@ async function doReset() {
     if (newPass !== confirm)           { showResetError('Passwords do not match.'); return; }
     if (newPass.length < 8)            { showResetError('Password must be at least 8 characters.'); return; }
 
-    const storedRecovHash = localStorage.getItem('eby_admin_recov_hash') || DEFAULT_RECOV_HASH;
-    const codeHash = await sha256(code);
-    if (codeHash !== storedRecovHash)  { showResetError('Invalid recovery code.'); return; }
+    // Push the new password to the server using the recovery code for auth
+    let serverUpdated = false;
+    try {
+        const res  = await fetch(GAS_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass })
+        });
+        const data = await res.json();
+        serverUpdated = data.success === true;
+        if (!serverUpdated) { showResetError(data.error || 'Server update failed. Please try again.'); return; }
+    } catch (e) {
+        showResetError('Network error. Please check your connection and try again.');
+        return;
+    }
 
-    // Update client-side hash so this browser can log in immediately
+    // Update client-side hash to match the new password
     const newHash = await sha256(newPass);
     localStorage.setItem('eby_admin_pass_hash', newHash);
 
@@ -708,9 +734,8 @@ async function doReset() {
     document.getElementById('reset-confirm').value = '';
 
     showLogin();
-    // Show a persistent note about the server-side step
     const errLoginEl = document.getElementById('login-error');
-    errLoginEl.textContent = 'Local password reset. Sign in, then go to Settings → Change Password to fully sync your new password with the server.';
+    errLoginEl.textContent = 'Password reset successfully. You can now sign in with your new password.';
     errLoginEl.classList.remove('hidden');
     errLoginEl.style.color = '#C2A378';
 }
