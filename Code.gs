@@ -352,6 +352,10 @@ function handleDeleteReview_(body) {
 // ======================================================
 
 function chargeStripe_(stripeId, amountPence, description) {
+  if (!stripeId || typeof stripeId !== 'string') {
+    throw new Error('Payment method is required.');
+  }
+
   var props = PropertiesService.getScriptProperties();
   var stripeKey = props.getProperty('STRIPE_SECRET_KEY');
   if (!stripeKey) {

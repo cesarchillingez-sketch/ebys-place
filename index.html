@@ -982,6 +982,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 // Strict Contract Payload
                 const response = await fetch(GAS_URL, {
@@ -1231,6 +1238,13 @@
 
             if (error) {
                 document.getElementById('ecommerce-gate-errors').textContent = error.message;
+                btn.innerHTML = `Pay & Complete Order`;
+                btn.disabled = false;
+                return;
+            }
+
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('ecommerce-gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
                 btn.innerHTML = `Pay & Complete Order`;
                 btn.disabled = false;
                 return;

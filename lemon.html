@@ -652,6 +652,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 // Strict Contract Payload
                 const response = await fetch(GAS_URL, {

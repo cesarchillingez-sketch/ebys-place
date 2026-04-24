@@ -729,6 +729,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('ecommerce-gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Pay & Complete Order`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 // Strict API Contract specific matching
                 const response = await fetch(GAS_URL, {
