@@ -24,14 +24,15 @@ Once you have identified the correct account and opened the project:
 1. In the Apps Script editor, click ⚙️ **Project Settings** (gear icon on the left).
 2. Scroll to **Script Properties** and click **Add script property** for each row below:
 
-| Property key       | Value / Notes                                      |
-|--------------------|----------------------------------------------------|
-| `ADMIN_PASSWORD`   | Your admin password (**keep secret – never commit to GitHub**) |
-| `ADMIN_EMAIL`      | The email address that receives password-reset links (e.g. your Yahoo address) |
-| `SITE_URL`         | Your site's root URL, e.g. `https://ebysplace.com` (used in reset-link emails) |
-| `SPREADSHEET_ID`   | Optional – your Google Sheet ID for bookings/orders. Found in the Sheet URL: `https://docs.google.com/spreadsheets/d/<ID>/edit` |
+| Property key        | Value / Notes                                      |
+|---------------------|----------------------------------------------------|
+| `ADMIN_PASSWORD`    | Your admin password (**keep secret – never commit to GitHub**) |
+| `ADMIN_EMAIL`       | The email address that receives password-reset links (e.g. your Yahoo address) |
+| `SITE_URL`          | Your site's root URL, e.g. `https://ebysplace.com` (used in reset-link emails and as the Stripe `return_url`) |
+| `STRIPE_SECRET_KEY` | Your Stripe **secret** key (starts with `sk_live_` or `sk_test_`). **Never commit to GitHub.** Found in the Stripe Dashboard → Developers → API keys. |
+| `SPREADSHEET_ID`    | Optional – your Google Sheet ID for bookings/orders. Found in the Sheet URL: `https://docs.google.com/spreadsheets/d/<ID>/edit` |
 
-> **Important:** `ADMIN_PASSWORD` lives only in Script Properties. It is **never** stored in source code or sent to the browser.
+> **Important:** `ADMIN_PASSWORD` and `STRIPE_SECRET_KEY` live only in Script Properties. They are **never** stored in source code or sent to the browser.
 
 ---
 
