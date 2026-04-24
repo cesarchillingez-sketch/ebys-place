@@ -104,6 +104,55 @@
             <button onclick="attemptLogin()" class="w-full bg-eby-dark text-white rounded-[16px] py-4 font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">
                 Access Dashboard
             </button>
+            <div class="text-center mt-5">
+                <button onclick="showForgotPassword()" class="text-[10px] font-sans text-eby-brown-light underline underline-offset-2 hover:text-eby-dark transition-colors">Forgot password?</button>
+            </div>
+        </div>
+<p class="text-center text-eby-brown-light text-[10px] mt-6 font-sans">Protected admin area. Authorised personnel only.</p>
+    </div>
+</div>
+
+<!-- ===========================
+     FORGOT PASSWORD OVERLAY
+=========================== -->
+<div id="forgot-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm">
+    <div class="w-full max-w-sm">
+        <div class="bg-white border border-eby-gold-dark/20 rounded-[28px] p-8 shadow-sm">
+            <h2 class="font-display text-2xl text-eby-dark mb-1 text-center">Reset Password</h2>
+            <p class="text-[10px] font-sans text-eby-brown-light text-center mb-6 uppercase tracking-widest">A link will be sent to your email</p>
+            <p id="forgot-msg" class="text-xs mb-4 font-sans font-medium hidden text-center"></p>
+            <button onclick="sendResetLink()" id="forgot-btn" class="w-full bg-eby-dark text-white rounded-[16px] py-4 font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">
+                Send Reset Link
+            </button>
+            <div class="text-center mt-5">
+                <button onclick="hideForgotPassword()" class="text-[10px] font-sans text-eby-brown-light underline underline-offset-2 hover:text-eby-dark transition-colors">Back to login</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===========================
+     RESET PASSWORD SCREEN
+     (shown when URL has ?resetToken=xxx)
+=========================== -->
+<div id="reset-screen" class="hidden min-h-screen flex items-center justify-center p-6 bg-eby-bg">
+    <div class="w-full max-w-sm">
+        <div class="text-center mb-10">
+            <h1 class="font-display text-4xl text-eby-dark mb-2">Eby's Place</h1>
+            <p class="font-sans text-[10px] uppercase tracking-widest text-eby-gold-dark font-bold">Set New Password</p>
+        </div>
+        <div class="bg-white border border-eby-gold-dark/20 rounded-[28px] p-8 shadow-sm">
+            <label class="luxury-label">New Password</label>
+            <input type="password" id="reset-pw" onkeydown="if(event.key==='Enter')submitPasswordReset()" placeholder="••••••••••••"
+                   class="luxury-input mb-3">
+            <label class="luxury-label">Confirm Password</label>
+            <input type="password" id="reset-pw-confirm" onkeydown="if(event.key==='Enter')submitPasswordReset()" placeholder="••••••••••••"
+                   class="luxury-input mb-4">
+            <p id="reset-err" class="text-red-500 text-xs mb-4 font-sans font-medium hidden"></p>
+            <p id="reset-ok" class="text-green-600 text-xs mb-4 font-sans font-medium hidden"></p>
+            <button onclick="submitPasswordReset()" id="reset-btn" class="w-full bg-eby-dark text-white rounded-[16px] py-4 font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">
+                Save New Password
+            </button>
         </div>
         <p class="text-center text-eby-brown-light text-[10px] mt-6 font-sans">Protected admin area. Authorised personnel only.</p>
     </div>
@@ -489,7 +538,6 @@
 // CONSTANTS & STATE
 // ======================================================
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
-const ADMIN_PW = 'ebysplace2026';
 const KEYS = {
     auth: 'ebyAdmin_auth',
     visitors: 'ebyAdmin_visitors',
@@ -499,6 +547,8 @@ const KEYS = {
     orders: 'ebyAdmin_orders',
     reviews: 'ebyAdmin_reviews',
 };
+
+function getToken() { return sessionStorage.getItem(KEYS.auth) || ''; }
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const SECTIONS = ['overview','products','orders','bookings','availability','analytics','activity','reviews'];
@@ -521,33 +571,147 @@ let panelColors = [];
 // ======================================================
 // AUTH
 // ======================================================
-function attemptLogin() {
+async function attemptLogin() {
     const pw = document.getElementById('admin-pw').value;
     const errEl = document.getElementById('login-err');
-    if (pw === ADMIN_PW) {
-        sessionStorage.setItem(KEYS.auth, '1');
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('dashboard').classList.add('flex');
-        initDashboard();
-    } else {
-        errEl.textContent = 'Incorrect password.';
+    const btn = document.querySelector('#login-screen button[onclick="attemptLogin()"]');
+    errEl.classList.add('hidden');
+    if (btn) { btn.disabled = true; btn.textContent = 'Connecting…'; }
+    try {
+        const resp = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ type: 'VERIFY_LOGIN', password: pw })
+        });
+        const data = await resp.json();
+        if (data.success && data.token) {
+            sessionStorage.setItem(KEYS.auth, data.token);
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('flex');
+            initDashboard();
+        } else {
+            errEl.textContent = data.error || 'Incorrect password.';
+            errEl.classList.remove('hidden');
+            document.getElementById('admin-pw').value = '';
+        }
+    } catch {
+        errEl.textContent = 'Could not reach server. Check your internet connection and try again.';
         errEl.classList.remove('hidden');
-        document.getElementById('admin-pw').value = '';
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Access Dashboard'; }
     }
 }
 
 function logout() {
+    fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ type: 'LOGOUT', sessionToken: getToken() }) }).catch(() => {});
     sessionStorage.removeItem(KEYS.auth);
     location.reload();
 }
 
-function checkAuth() {
-    if (sessionStorage.getItem(KEYS.auth) === '1') {
+async function checkAuth() {
+    // If a password-reset token is in the URL, show the reset screen instead
+    const params = new URLSearchParams(window.location.search);
+    const resetToken = params.get('resetToken');
+    if (resetToken) {
         document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('dashboard').classList.add('flex');
-        initDashboard();
+        document.getElementById('reset-screen').classList.remove('hidden');
+        document.getElementById('reset-screen').classList.add('flex');
+        return;
+    }
+    const token = sessionStorage.getItem(KEYS.auth);
+    if (!token) return;
+    try {
+        const resp = await fetch(GAS_URL + '?type=VERIFY_TOKEN&sessionToken=' + encodeURIComponent(token));
+        const data = await resp.json();
+        if (data.success) {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('flex');
+            initDashboard();
+            return;
+        }
+    } catch {}
+    // Token missing or expired — clear it and show login
+    sessionStorage.removeItem(KEYS.auth);
+}
+
+// ======================================================
+// FORGOT / RESET PASSWORD
+// ======================================================
+function showForgotPassword() {
+    document.getElementById('forgot-msg').classList.add('hidden');
+    document.getElementById('forgot-screen').classList.remove('hidden');
+}
+
+function hideForgotPassword() {
+    document.getElementById('forgot-screen').classList.add('hidden');
+}
+
+async function sendResetLink() {
+    const msgEl = document.getElementById('forgot-msg');
+    const btn   = document.getElementById('forgot-btn');
+    msgEl.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+        const resp = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ type: 'FORGOT_PASSWORD' })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            msgEl.className = 'text-green-600 text-xs mb-4 font-sans font-medium text-center';
+            msgEl.textContent = 'Reset link sent! Check your email.';
+        } else {
+            msgEl.className = 'text-red-500 text-xs mb-4 font-sans font-medium text-center';
+            msgEl.textContent = data.error || 'Could not send reset link.';
+        }
+    } catch {
+        msgEl.className = 'text-red-500 text-xs mb-4 font-sans font-medium text-center';
+        msgEl.textContent = 'Could not reach server. Please try again.';
+    }
+    msgEl.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Send Reset Link';
+}
+
+async function submitPasswordReset() {
+    const pw      = document.getElementById('reset-pw').value;
+    const confirm = document.getElementById('reset-pw-confirm').value;
+    const errEl   = document.getElementById('reset-err');
+    const okEl    = document.getElementById('reset-ok');
+    const btn     = document.getElementById('reset-btn');
+    errEl.classList.add('hidden');
+    okEl.classList.add('hidden');
+    if (!pw) { errEl.textContent = 'Please enter a new password.'; errEl.classList.remove('hidden'); return; }
+    if (pw !== confirm) { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
+    const resetToken = new URLSearchParams(window.location.search).get('resetToken') || '';
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+        const resp = await fetch(GAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ type: 'RESET_PASSWORD', resetToken, newPassword: pw })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            okEl.textContent = 'Password updated! Redirecting to login…';
+            okEl.classList.remove('hidden');
+            setTimeout(() => { window.location.href = 'admin.html'; }, 2000);
+        } else {
+            errEl.textContent = data.error || 'Reset failed.';
+            errEl.classList.remove('hidden');
+            btn.disabled = false;
+            btn.textContent = 'Save New Password';
+        }
+    } catch {
+        errEl.textContent = 'Could not reach server. Please try again.';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Save New Password';
     }
 }
 
@@ -715,7 +879,7 @@ function getProductList() {
 function saveProductList(list) {
     localStorage.setItem(KEYS.products, JSON.stringify(list));
     // Silent GAS sync
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_PRODUCTS', products: list }) }).catch(() => {});
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_PRODUCTS', sessionToken: getToken(), products: list }) }).catch(() => {});
 }
 
 function renderProducts() {
@@ -996,7 +1160,7 @@ function loadOrders() {
     const localOrders = [...getOrders(), ...getActivity().filter(a => a.type === 'SHOP_ORDER')];
 
     // Try GAS first
-    fetch(GAS_URL + '?type=GET_ORDERS&adminKey=' + encodeURIComponent(ADMIN_PW))
+    fetch(GAS_URL + '?type=GET_ORDERS&sessionToken=' + encodeURIComponent(getToken()))
         .then(r => r.json())
         .then(data => {
             if (data.success && Array.isArray(data.orders) && data.orders.length) {
@@ -1037,7 +1201,7 @@ async function loadBookings() {
     const localBookings = getActivity().filter(a => a.type === 'BOOKING_DEPOSIT');
 
     try {
-        const resp = await fetch(GAS_URL + '?type=GET_BOOKINGS&adminKey=' + encodeURIComponent(ADMIN_PW));
+        const resp = await fetch(GAS_URL + '?type=GET_BOOKINGS&sessionToken=' + encodeURIComponent(getToken()));
         const data = await resp.json();
         if (data.success && Array.isArray(data.bookings)) {
             renderBookingsTable(data.bookings);
@@ -1155,7 +1319,7 @@ function saveAvailability() {
     msgEl.classList.remove('hidden');
     setTimeout(() => msgEl.classList.add('hidden'), 3500);
     // Silent GAS sync
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', adminKey: ADMIN_PW, availability: avail }) }).catch(() => {});
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', sessionToken: getToken(), availability: avail }) }).catch(() => {});
 }
 
 // ======================================================
@@ -1250,7 +1414,7 @@ function getReviews() { return JSON.parse(localStorage.getItem(KEYS.reviews) || 
 async function loadReviews() {
     // Sync reviews from GAS backend (shared store)
     try {
-        const resp = await fetch(GAS_URL + '?type=GET_REVIEWS&adminKey=' + encodeURIComponent(ADMIN_PW), { cache: 'no-store' });
+        const resp = await fetch(GAS_URL + '?type=GET_REVIEWS&sessionToken=' + encodeURIComponent(getToken()), { cache: 'no-store' });
         const data = await resp.json();
         if (data && data.success && Array.isArray(data.reviews)) {
             localStorage.setItem(KEYS.reviews, JSON.stringify(data.reviews));
@@ -1356,7 +1520,7 @@ function approveReview(id) {
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
     // Sync to GAS backend so all clients see the update
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'APPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'APPROVE_REVIEW', sessionToken: getToken(), id }) }).catch(() => {});
 }
 
 function unapproveReview(id) {
@@ -1367,7 +1531,7 @@ function unapproveReview(id) {
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
     // Sync to GAS backend
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'UNAPPROVE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'UNAPPROVE_REVIEW', sessionToken: getToken(), id }) }).catch(() => {});
 }
 
 function deleteReview(id) {
@@ -1376,7 +1540,7 @@ function deleteReview(id) {
     localStorage.setItem(KEYS.reviews, JSON.stringify(reviews));
     loadReviews();
     // Sync to GAS backend
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'DELETE_REVIEW', adminKey: ADMIN_PW, id }) }).catch(() => {});
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'DELETE_REVIEW', sessionToken: getToken(), id }) }).catch(() => {});
 }
 
 // ======================================================
