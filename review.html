@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave a Review — Eby's Place</title>
+    <meta name="description" content="Share your Eby's Place experience. Your review helps others discover pain-free, luxury hair braiding in Somerset, UK.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Review Eby's Place — Share Your Experience">
+    <meta property="og:description" content="Tell us about your Eby's Place experience. Your words inspire others.">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind & Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eby-dark': '#2A1A12',
+                        'eby-brown-light': '#6B5749',
+                        'eby-gold': '#E8D5B0',
+                        'eby-gold-dark': '#C2A378',
+                        'eby-bg': '#FAF7F2',
+                        'eby-surface': '#F5EFE6',
+                    },
+                    fontFamily: {
+                        'display': ['Cormorant Garamond', 'serif'],
+                        'sans': ['Lexend', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FAF7F2; font-family: 'Lexend', sans-serif; }
+        .luxury-input { width: 100%; background: white; border: 1px solid rgba(194,163,120,0.3); padding: 14px 18px; border-radius: 16px; font-size: 14px; color: #2A1A12; outline: none; transition: border-color 0.2s; font-family: 'Lexend', sans-serif; }
+        .luxury-input:focus { border-color: #C2A378; box-shadow: 0 0 0 3px rgba(194,163,120,0.12); }
+        .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(194,163,120,0.2); border-radius: 24px; }
+    </style>
+</head>
+<body class="min-h-screen bg-eby-bg">
+
+    <!-- Minimal Nav -->
+    <nav class="bg-eby-surface/90 backdrop-blur-md border-b border-eby-gold-dark/10 py-4 px-6 flex items-center justify-between">
+        <a href="index.html" class="font-display font-semibold text-2xl uppercase text-eby-dark tracking-wide">Eby's Place</a>
+        <a href="index.html" class="font-sans text-[10px] uppercase tracking-widest font-bold text-eby-brown-light hover:text-eby-dark transition-colors flex items-center gap-2">
+            <i class="ph ph-arrow-left text-sm"></i> Back to Home
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <header class="py-20 text-center px-6 bg-eby-surface border-b border-eby-gold-dark/10">
+        <div class="max-w-xl mx-auto">
+            <i class="ph ph-star text-4xl text-eby-gold-dark mb-5 block"></i>
+            <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-3 block">Your Voice Matters</span>
+            <h1 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">Share Your Experience</h1>
+            <p class="text-eby-brown-light text-sm leading-relaxed max-w-md mx-auto">
+                Your words inspire others to discover pain-free, luxury braiding. Tell us about your Eby's Place visit.
+            </p>
+        </div>
+    </header>
+
+    <!-- Review Form -->
+    <main class="max-w-2xl mx-auto px-6 py-16">
+        <div class="glass-card p-10 shadow-xl">
+
+            <!-- Form -->
+            <div id="review-form-wrap">
+                <!-- Star Rating -->
+                <div class="mb-7">
+                    <label id="rating-label" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-3">Your Rating *</label>
+                    <div id="star-rating" class="flex gap-3" role="group" aria-labelledby="rating-label" aria-required="true" aria-describedby="review-star-error">
+                        <button type="button" data-star="1" class="star-btn text-4xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="1 star"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="2" class="star-btn text-4xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="2 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="3" class="star-btn text-4xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="3 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="4" class="star-btn text-4xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="4 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="5" class="star-btn text-4xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="5 stars"><i class="ph-fill ph-star"></i></button>
+                    </div>
+                    <p id="review-star-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please select a star rating.</p>
+                </div>
+
+                <!-- Name -->
+                <div class="mb-6">
+                    <label for="review-name" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Name *</label>
+                    <input type="text" id="review-name" placeholder="e.g. Camille M." maxlength="60" class="luxury-input">
+                    <p id="review-name-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please enter your name.</p>
+                </div>
+
+                <!-- Service (optional) -->
+                <div class="mb-6">
+                    <label for="review-service" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Service Received <span class="text-eby-brown-light font-normal normal-case tracking-normal">(optional)</span></label>
+                    <input type="text" id="review-service" placeholder="e.g. Knotless Braids" maxlength="80" class="luxury-input">
+                </div>
+
+                <!-- Review Text -->
+                <div class="mb-8">
+                    <label for="review-text" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Review *</label>
+                    <textarea id="review-text" placeholder="Tell us about your experience…" maxlength="500" rows="5" class="luxury-input resize-none"></textarea>
+                    <p id="review-text-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please share your experience (at least 10 characters).</p>
+                </div>
+
+                <!-- Submit -->
+                <button type="button" onclick="submitReview()" id="submit-review-btn" class="w-full bg-eby-dark text-white py-5 rounded-[18px] font-sans font-bold uppercase tracking-widest text-[10px] hover:bg-eby-brown-light transition-colors flex items-center justify-center gap-2">
+                    Submit My Review <i class="ph ph-paper-plane-right text-base"></i>
+                </button>
+
+                <p class="text-center text-eby-brown-light text-[10px] mt-5 font-sans">Your review will be moderated before appearing on our site.</p>
+            </div>
+
+            <!-- Success State -->
+            <div id="review-success" class="hidden text-center py-12">
+                <div class="w-20 h-20 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface shadow-inner mx-auto">
+                    <i class="ph ph-check-circle text-4xl text-eby-gold-dark"></i>
+                </div>
+                <h2 class="font-display text-3xl text-eby-dark mb-3">Thank You!</h2>
+                <p class="text-eby-brown-light text-sm leading-relaxed mb-8 max-w-sm mx-auto">
+                    Your review has been received and sent to the Eby's Place team. It will appear once approved. We truly appreciate your feedback!
+                </p>
+                <a href="index.html" class="inline-block border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[9px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">Return to Home</a>
+            </div>
+
+        </div>
+
+        <!-- Privacy note -->
+        <p class="text-center text-eby-brown-light text-[10px] mt-6 font-sans px-4">
+            By submitting, you agree that your review may be displayed on our website. We never share your personal data.
+        </p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-eby-gold-dark/10 py-10 text-center">
+        <a href="index.html" class="font-display font-semibold text-xl uppercase text-eby-dark tracking-wide mb-2 block">Eby's Place</a>
+        <p class="text-eby-brown-light text-[10px] font-sans uppercase tracking-widest">© 2026 Eby's Place. Somerset, UK.</p>
+    </footer>
+
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
+
+        let _reviewRating = 0;
+
+        // Star rating interaction
+        document.getElementById('star-rating').addEventListener('click', function(e) {
+            const btn = e.target.closest('.star-btn');
+            if (!btn) return;
+            _reviewRating = parseInt(btn.dataset.star, 10);
+            updateStars(_reviewRating);
+        });
+
+        document.getElementById('star-rating').addEventListener('mouseover', function(e) {
+            const btn = e.target.closest('.star-btn');
+            if (!btn) return;
+            updateStars(parseInt(btn.dataset.star, 10));
+        });
+
+        document.getElementById('star-rating').addEventListener('mouseleave', function() {
+            updateStars(_reviewRating);
+        });
+
+        function updateStars(n) {
+            document.querySelectorAll('.star-btn').forEach(function(b) {
+                var star = parseInt(b.dataset.star, 10);
+                b.classList.toggle('text-eby-gold-dark', star <= n);
+                b.classList.toggle('text-eby-gold-dark/30', star > n);
+            });
+        }
+
+        function submitReview() {
+            const name = (document.getElementById('review-name').value || '').trim();
+            const text = (document.getElementById('review-text').value || '').trim();
+            const service = (document.getElementById('review-service').value || '').trim();
+            const rating = _reviewRating;
+            let valid = true;
+
+            document.getElementById('review-star-error').classList.add('hidden');
+            document.getElementById('review-name-error').classList.add('hidden');
+            document.getElementById('review-text-error').classList.add('hidden');
+
+            if (rating === 0) {
+                document.getElementById('review-star-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (!name) {
+                document.getElementById('review-name-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (text.length < 10) {
+                document.getElementById('review-text-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (!valid) return;
+
+            const btn = document.getElementById('submit-review-btn');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i> Submitting…';
+            btn.disabled = true;
+
+            const review = {
+                id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+                name: name,
+                rating: rating,
+                text: text,
+                service: service,
+                timestamp: new Date().toISOString(),
+                approved: false
+            };
+
+            // Store locally for admin dashboard
+            try {
+                const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                reviews.unshift(review);
+                localStorage.setItem('ebyAdmin_reviews', JSON.stringify(reviews));
+
+                var act = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
+                act.unshift({ type: 'REVIEW_SUBMITTED', customerName: name, rating: rating, timestamp: review.timestamp });
+                if (act.length > 200) act.length = 200;
+                localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
+            } catch(e) {}
+
+            // Store in GAS backend as the shared source of truth
+            fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    type: 'SUBMIT_REVIEW',
+                    review: review
+                })
+            }).catch(function() {});
+
+            // Show success after a brief delay
+            setTimeout(function() {
+                document.getElementById('review-form-wrap').classList.add('hidden');
+                document.getElementById('review-success').classList.remove('hidden');
+            }, 600);
+        }
+    </script>
+</body>
+</html>

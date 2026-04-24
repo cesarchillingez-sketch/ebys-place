@@ -202,16 +202,20 @@
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-transparent transition-all duration-500 py-3">
-        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 -ml-2 relative z-50 cursor-pointer pointer-events-auto"><i class="ph ph-list text-2xl"></i></button>
-            <a href="#" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase transition-colors relative z-50 text-eby-dark">Eby's Place</a>
-            <div class="hidden lg:flex items-center space-x-4 xl:space-x-6 text-[10px] font-sans uppercase tracking-widest font-medium">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between relative">
+            <!-- Hamburger Menu (mobile only) -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2 relative z-50">
+                <i class="ph ph-list text-2xl text-eby-dark"></i>
+            </button>
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase transition-colors z-50 text-eby-dark hover:text-eby-gold-dark absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">Eby's Place</a>
+            <div class="hidden lg:flex flex-wrap items-center gap-x-4 xl:gap-x-6 text-[10px] font-sans uppercase tracking-widest font-medium">
                 <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
-                <a href="#booking" class="text-eby-gold-dark transition-colors">Booking</a>
+                <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
                 <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
-                <a href="tryon.html" class="hover:text-eby-gold-dark transition-colors">AI Try-On</a>
+                
+                
                 <a href="gallery.html" class="hover:text-eby-gold-dark transition-colors">Gallery</a>
                 <a href="about.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
@@ -231,18 +235,17 @@
             <button onclick="toggleMobileMenu()" class="hover:opacity-70 transition-opacity p-2 -ml-2">
                 <i class="ph ph-x text-3xl text-eby-dark"></i>
             </button>
-            <span class="font-display font-semibold text-2xl uppercase text-eby-dark">Eby's Place</span>
+            <a href="index.html" class="font-display font-semibold text-2xl uppercase text-eby-dark hover:text-eby-gold-dark transition-colors">Eby's Place</a>
             <div class="w-10"></div>
         </div>
         <div class="flex-grow flex flex-col justify-center px-10 py-10 space-y-6">
             <a href="index.html" class="mobile-link delay-1 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Home.</a>
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
-            <a href="#booking" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
+            <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
             <a href="braiders.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Find a Braider.</a>
-            <a href="tryon.html" class="mobile-link delay-6 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">AI Try-On.</a>
-            <a href="gallery.html" class="mobile-link delay-8 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Gallery.</a>
-            <a href="about.html" class="mobile-link delay-9 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
+            <a href="gallery.html" class="mobile-link delay-6 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Gallery.</a>
+            <a href="about.html" class="mobile-link delay-7 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
         <div class="px-10 pb-12 shrink-0">
             <div class="w-full h-[1px] bg-eby-gold-dark/20 mb-6"></div>
@@ -269,7 +272,7 @@
                     <h1 class="font-sans font-bold text-[10px] md:text-xs uppercase tracking-mega text-eby-gold-dark">Luxury Pain-Free Braiding in Somerset, UK</h1>
                 </div>
                 <p class="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-white mb-8 leading-[1.05] tracking-tight drop-shadow-md">Zero pain.<br>Zero trauma.<br><span class="italic text-eby-gold-dark font-normal">Just perfection.</span></p>
-                <a href="#booking" class="btn-luxury backdrop-blur-md bg-white/10 border border-white/30 text-white px-10 py-5 rounded-[16px] uppercase tracking-[0.2em] font-sans text-[10px] font-bold w-max text-center hover:bg-white hover:text-eby-dark transition-colors flex items-center gap-4 group">Book Your Pain-Free Appointment <i class="ph ph-arrow-right group-hover:translate-x-2 transition-transform"></i></a>
+                <a href="booking.html" class="btn-luxury backdrop-blur-md bg-white/10 border border-white/30 text-white px-10 py-5 rounded-[16px] uppercase tracking-[0.2em] font-sans text-[10px] font-bold w-max text-center hover:bg-white hover:text-eby-dark transition-colors flex items-center gap-4 group">Book Your Pain-Free Appointment <i class="ph ph-arrow-right group-hover:translate-x-2 transition-transform"></i></a>
             </div>
         </div>
     </section>
@@ -347,8 +350,9 @@
                     <div class="relative z-10">
                         <span class="font-sans border border-white text-white text-[8px] uppercase tracking-widest px-3 py-1 rounded-[6px] mb-4 inline-block">Popular</span>
                         <h3 class="font-display text-2xl text-white mb-2">Knotless Braids</h3>
-                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Lightweight, natural-looking braids with no knots. Zero tension on your scalp.</p>
-                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>4-6 hrs</span><span class="text-eby-gold-dark">from £120</span></div>
+                        <p class="text-xs text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-all">Lightweight, natural-looking braids with no knots. Zero tension on your scalp.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest mb-4"><span>4-6 hrs</span><span class="text-eby-gold-dark">from £120</span></div>
+                        <a href="booking.html?service=Knotless+Braids&price=120" onclick="event.stopPropagation()" class="w-full btn-luxury bg-eby-gold-dark text-white py-3 rounded-[14px] font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-white hover:text-eby-dark transition-colors">Book This Style <i class="ph ph-arrow-right"></i></a>
                     </div>
                 </div>
                 <!-- Box Braids -->
@@ -357,8 +361,9 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <h3 class="font-display text-2xl text-white mb-2">Box Braids</h3>
-                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">The classic protective style with sectioned square parts. Versatile and elegant.</p>
-                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £100</span></div>
+                        <p class="text-xs text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-all">The classic protective style with sectioned square parts. Versatile and elegant.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest mb-4"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £100</span></div>
+                        <a href="booking.html?service=Box+Braids&price=100" onclick="event.stopPropagation()" class="w-full btn-luxury bg-eby-gold-dark text-white py-3 rounded-[14px] font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-white hover:text-eby-dark transition-colors">Book This Style <i class="ph ph-arrow-right"></i></a>
                     </div>
                 </div>
                 <!-- Lemonade Braids -->
@@ -367,8 +372,9 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <h3 class="font-display text-2xl text-white mb-2">Lemonade Braids</h3>
-                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Side-swept cornrows featuring immaculate parting. Stunning and flawless.</p>
-                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>3-5 hrs</span><span class="text-eby-gold-dark">from £90</span></div>
+                        <p class="text-xs text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-all">Side-swept cornrows featuring immaculate parting. Stunning and flawless.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest mb-4"><span>3-5 hrs</span><span class="text-eby-gold-dark">from £90</span></div>
+                        <a href="booking.html?service=Lemonade+Braids&price=90" onclick="event.stopPropagation()" class="w-full btn-luxury bg-eby-gold-dark text-white py-3 rounded-[14px] font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-white hover:text-eby-dark transition-colors">Book This Style <i class="ph ph-arrow-right"></i></a>
                     </div>
                 </div>
                 <!-- Boho Braids -->
@@ -379,10 +385,18 @@
                     <div class="relative z-10">
                         <span class="font-sans bg-eby-gold-dark text-white text-[8px] uppercase font-bold px-3 py-1 rounded-[6px] mb-4 inline-block">Trending</span>
                         <h3 class="font-display text-2xl text-white mb-2">Boho Braids</h3>
-                        <p class="text-xs text-white/70 mb-6 opacity-0 group-hover:opacity-100 transition-all">Knotless braids with loose, curly ends for a free-spirited luxury look.</p>
-                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £150</span></div>
+                        <p class="text-xs text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-all">Knotless braids with loose, curly ends for a free-spirited luxury look.</p>
+                        <div class="flex justify-between items-center border-t border-white/20 pt-4 text-[10px] uppercase text-white font-bold tracking-widest mb-4"><span>5-7 hrs</span><span class="text-eby-gold-dark">from £150</span></div>
+                        <a href="booking.html?service=Boho+Braids&price=150" onclick="event.stopPropagation()" class="w-full btn-luxury bg-eby-gold-dark text-white py-3 rounded-[14px] font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 hover:bg-white hover:text-eby-dark transition-colors">Book This Style <i class="ph ph-arrow-right"></i></a>
                     </div>
                 </div>
+            </div>
+            <!-- Browse all service categories -->
+            <div class="mt-12 flex flex-wrap gap-4 justify-center reveal">
+                <a href="services.html#braids" class="inline-flex items-center gap-2 border border-eby-gold-dark/40 text-eby-dark px-6 py-3 rounded-full font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-gold/30 transition-colors">All Braids <i class="ph ph-arrow-right text-sm"></i></a>
+                <a href="services.html#twists" class="inline-flex items-center gap-2 border border-eby-gold-dark/40 text-eby-dark px-6 py-3 rounded-full font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-gold/30 transition-colors">All Twists <i class="ph ph-arrow-right text-sm"></i></a>
+                <a href="services.html#locs" class="inline-flex items-center gap-2 border border-eby-gold-dark/40 text-eby-dark px-6 py-3 rounded-full font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-gold/30 transition-colors">All Locs <i class="ph ph-arrow-right text-sm"></i></a>
+                <a href="services.html" class="inline-flex items-center gap-2 bg-eby-dark text-white px-8 py-3 rounded-full font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-brown-light transition-colors">View All Services <i class="ph ph-arrow-right text-sm"></i></a>
             </div>
         </div>
     </section>
@@ -404,7 +418,7 @@
                 </div>
                 <div class="relative h-[600px] reveal reveal-delay-1 overflow-hidden rounded-[32px]">
                     <img loading="lazy" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hair braiding appointment at Eby's Place luxury studio in Somerset" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute -inset-4 border border-eby-gold-dark/30 hidden md:block"></div>
+                    <div class="absolute -inset-4 border border-eby-gold-dark/30"></div>
                 </div>
             </div>
         </div>
@@ -517,7 +531,7 @@
             <i class="ph ph-shield-star text-4xl text-eby-gold-dark mb-6 block"></i>
             <h2 class="font-display text-3xl md:text-5xl mb-6 text-eby-dark">The Pain-Free Guarantee</h2>
             <p class="text-eby-brown-light text-lg mb-10 leading-relaxed">If your braids feel excessively tight within 48 hours, we’ll fix it—free. No arguments. No stress.</p>
-            <a href="#booking" class="btn-luxury inline-block bg-eby-dark text-white px-12 py-5 uppercase tracking-widest font-sans text-[10px] font-bold rounded-[20px]">Book With Absolute Confidence</a>
+            <a href="booking.html" class="btn-luxury inline-block bg-eby-dark text-white px-12 py-5 uppercase tracking-widest font-sans text-[10px] font-bold rounded-[20px]">Book With Absolute Confidence</a>
         </div>
     </section>
 
@@ -526,82 +540,130 @@
         <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal active">
             <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">The Inner Circle</span>
             <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">What Our Clients Say</h2>
+            <a href="https://www.google.com/search?q=Eby's+Place+Somerset+reviews" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border-b border-eby-gold-dark text-eby-gold-dark font-sans font-bold text-[10px] uppercase tracking-widest pb-1 hover:text-eby-dark hover:border-eby-dark transition-colors">
+                View Live Reviews <i class="ph ph-arrow-up-right"></i>
+            </a>
         </div>
         <div class="relative w-full flex overflow-x-hidden group">
-            <div class="flex animate-[marquee_40s_linear_infinite] py-4 whitespace-nowrap group-hover:[animation-play-state:paused]">
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+            <div id="testimonials-marquee" class="flex animate-[marquee_40s_linear_infinite] py-4 whitespace-nowrap group-hover:[animation-play-state:paused]">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"I didn’t feel pain for the first time in years. They changed how I experience braiding entirely."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Camille Magnolia</p>
                 </div>
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"For the first time ever, I slept the exact same night I got braids. My edges finally feel safe."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Sabrina Murray</p>
                 </div>
-                <div class="glass-card !rounded-[28px] w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
+                <div class="glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal">
                     <div class="flex text-eby-gold-dark mb-6 text-sm"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
                     <p class="text-eby-brown-light italic mb-6">"I actually enjoyed the entire appointment. I genuinely didn't realize how much pain I had normalized."</p>
                     <p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- Matthew</p>
                 </div>
             </div>
-            <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }</style>
+            <style>@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { #testimonials-marquee { animation: none; } }</style>
         </div>
     </section>
 
-    <!-- General Booking Gate (GAS Bespoke) -->
+    <!-- Leave a Review -->
+    <section id="leave-review" class="py-32 bg-eby-surface">
+        <div class="max-w-2xl mx-auto px-6">
+            <div class="text-center mb-12 reveal active">
+                <span class="font-sans font-semibold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Your Voice Matters</span>
+                <h2 class="font-display text-4xl md:text-5xl text-eby-dark mb-4">Share Your Experience</h2>
+                <p class="text-eby-brown-light text-sm">Your words inspire others. Tell us about your Eby's Place experience.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                    <a href="review.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-eby-gold-dark/40 text-eby-gold-dark px-6 py-3 rounded-[14px] font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-share-network text-base"></i> Shareable Review Link
+                    </a>
+                    <button type="button" onclick="copyReviewLink()" id="copy-review-btn" class="inline-flex items-center gap-2 border border-eby-gold-dark/40 text-eby-brown-light px-6 py-3 rounded-[14px] font-sans font-bold text-[10px] uppercase tracking-widest hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-copy text-base"></i> Copy Link
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Form -->
+            <div id="review-form-wrap" class="glass-card p-10 reveal active">
+                <!-- Star Rating -->
+                <div class="mb-6">
+                    <label id="rating-label" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-3">Your Rating *</label>
+                    <div id="star-rating" class="flex gap-2" role="group" aria-labelledby="rating-label" aria-required="true" aria-describedby="review-star-error">
+                        <button type="button" data-star="1" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="1 star"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="2" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="2 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="3" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="3 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="4" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="4 stars"><i class="ph-fill ph-star"></i></button>
+                        <button type="button" data-star="5" class="star-btn text-3xl text-eby-gold-dark/30 hover:text-eby-gold-dark transition-colors" aria-label="5 stars"><i class="ph-fill ph-star"></i></button>
+                    </div>
+                    <p id="review-star-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please select a star rating.</p>
+                </div>
+
+                <!-- Name -->
+                <div class="mb-5">
+                    <label for="review-name" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Name *</label>
+                    <input type="text" id="review-name" placeholder="e.g. Camille M." maxlength="60" class="luxury-input">
+                    <p id="review-name-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please enter your name.</p>
+                </div>
+
+                <!-- Review Text -->
+                <div class="mb-8">
+                    <label for="review-text" class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-gold-dark block mb-2">Your Review *</label>
+                    <textarea id="review-text" placeholder="Tell us about your experience…" maxlength="500" rows="4" class="luxury-input resize-none"></textarea>
+                    <p id="review-text-error" class="text-red-500 text-xs mt-2 font-sans font-medium hidden">Please share your experience (at least 10 characters).</p>
+                </div>
+
+                <button type="button" onclick="submitReview()" class="btn-luxury w-full bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
+                    Submit Review <i class="ph ph-paper-plane-tilt"></i>
+                </button>
+            </div>
+
+            <!-- Success State -->
+            <div id="review-success" class="hidden glass-card p-10 text-center">
+                <div class="w-16 h-16 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface shadow-inner mx-auto">
+                    <i class="ph ph-check text-2xl text-eby-gold-dark"></i>
+                </div>
+                <h3 class="font-display text-2xl text-eby-dark mb-3">Thank You</h3>
+                <p class="text-eby-brown-light text-sm">Your review has been received and will appear once approved by our team.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking CTA — directs to dedicated booking page -->
     <section id="booking" class="py-32 bg-eby-gold/30">
-        <div class="max-w-4xl mx-auto px-6">
-            <div id="booking-container" class="glass-card p-8 md:p-16 text-center border-t-4 border-t-eby-dark min-h-[500px] flex flex-col justify-center transition-all duration-700 rounded-[38px] shadow-xl">
-                
-                <!-- Verification / Payment UI -->
-                <div id="booking-gate-ui" class="reveal active text-left max-w-lg mx-auto w-full">
-                    <div class="text-center mb-8">
-                        <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-2 block">Secure Consultation</span>
-                        <h2 id="booking-gate-title" class="font-display text-3xl md:text-4xl mb-4 text-eby-dark">Initialize Reservation</h2>
-                        <p id="booking-gate-desc" class="text-eby-brown-light text-sm">Please confirm your £20.00 non-refundable deposit to officially book your bespoke appointment slot.</p>
-                    </div>
-                    
-                    <form id="deposit-gate-form" onsubmit="handleDepositGate(event)" class="space-y-5">
-                        <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
-                        <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Date</label>
-                                <input type="date" id="bk-date" required class="luxury-input !rounded-[20px]" min="2026-01-01">
-                            </div>
-                            <div>
-                                <label class="font-sans font-bold text-[8px] uppercase tracking-widest text-eby-brown-light mb-2 block">Time</label>
-                                <select id="bk-time" required class="luxury-input !rounded-[20px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23C2A378%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:calc(100%-1rem)_center]">
-                                    <option value="09:00:00">09:00 AM</option>
-                                    <option value="14:00:00">02:00 PM</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] mt-4 shadow-sm">
-                            <div id="gate-card-element" class="w-full"></div>
-                        </div>
-                        <div id="gate-errors" class="text-red-500 text-[10px] mt-2 text-center"></div>
-                        
-                        <button type="submit" id="dg-btn" class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg mt-6">
-                            Secure Slot & Pay £20 Deposit
-                        </button>
-                    </form>
+        <div class="max-w-[900px] mx-auto px-6">
+            <div class="glass-card p-12 md:p-20 border-t-4 border-t-eby-dark rounded-[38px] shadow-xl text-center reveal active">
+                <i class="ph ph-calendar-blank text-5xl text-eby-gold-dark mb-6 block"></i>
+                <span class="font-sans font-bold text-eby-gold-dark uppercase tracking-widest text-[10px] mb-4 block">Secure Consultation</span>
+                <h2 class="font-display text-3xl md:text-5xl text-eby-dark mb-6">Ready to Book?</h2>
+                <p class="text-eby-brown-light text-sm max-w-lg mx-auto mb-10 leading-relaxed">
+                    Choose your style first — then pick your date and time. Secure your slot with a £20 non-refundable deposit.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="booking.html" class="btn-luxury inline-flex items-center justify-center gap-3 bg-eby-dark text-white px-12 py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-eby-brown-light transition-colors">
+                        Book Your Appointment <i class="ph ph-arrow-right"></i>
+                    </a>
+                    <a href="services.html" class="inline-flex items-center justify-center gap-3 border border-eby-gold-dark/40 text-eby-dark px-10 py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] hover:bg-eby-gold/30 transition-colors">
+                        Browse All Services
+                    </a>
                 </div>
-
-                <!-- Bespoke Success UI -->
-                <div id="booking-success-state" class="hidden flex-col h-full flex-grow items-center justify-center p-8 text-center text-eby-dark">
-                    <div class="w-24 h-24 rounded-full border border-eby-gold-dark/30 flex items-center justify-center mb-6 bg-eby-surface shadow-inner mx-auto">
-                        <i class="ph ph-calendar-check text-4xl text-eby-gold-dark"></i>
-                    </div>
-                    <h2 class="font-display text-3xl mb-4">Reservation Confirmed</h2>
-                    <p class="font-body text-sm font-light text-eby-brown-light leading-relaxed mb-8 max-w-sm mx-auto">
-                        Your appointment has been securely captured. A confirmation and `.ics` itinerary has been dispatched to your email.
-                    </p>
+                <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-10 border-t border-eby-gold-dark/20">
+                    <a href="booking.html?category=braids" class="group flex flex-col items-center gap-2 p-4 rounded-[16px] hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-sparkle text-2xl text-eby-gold-dark"></i>
+                        <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark group-hover:text-eby-gold-dark transition-colors">Braids</span>
+                    </a>
+                    <a href="booking.html?category=twists" class="group flex flex-col items-center gap-2 p-4 rounded-[16px] hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-swatches text-2xl text-eby-gold-dark"></i>
+                        <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark group-hover:text-eby-gold-dark transition-colors">Twists</span>
+                    </a>
+                    <a href="booking.html?category=locs" class="group flex flex-col items-center gap-2 p-4 rounded-[16px] hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-leaf text-2xl text-eby-gold-dark"></i>
+                        <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark group-hover:text-eby-gold-dark transition-colors">Locs</span>
+                    </a>
+                    <a href="booking.html?category=kids" class="group flex flex-col items-center gap-2 p-4 rounded-[16px] hover:bg-eby-gold/30 transition-colors">
+                        <i class="ph ph-star text-2xl text-eby-gold-dark"></i>
+                        <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-eby-dark group-hover:text-eby-gold-dark transition-colors">Kids Styles</span>
+                    </a>
                 </div>
-
             </div>
         </div>
     </section>
@@ -610,9 +672,25 @@
     <footer class="pt-24 pb-12 border-t border-eby-gold-dark/20 bg-eby-surface">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row items-center justify-between border-b border-eby-gold-dark/10 pb-16 mb-16 reveal active">
-                <div class="md:w-1/2 mb-8 md:mb-0"><h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3><p class="text-eby-brown-light text-sm">Early booking access and scalp care insights.</p></div>
-                <div class="md:w-1/2 w-full flex">
-                    <input type="email" id="newsletter-email" placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-[20px] focus:outline-none"><button class="bg-eby-dark text-white px-8 rounded-r-[20px] font-bold text-[9px] uppercase tracking-widest">Join</button>
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h3 class="font-display text-2xl text-eby-dark mb-2">Join The Inner Circle</h3>
+                    <p class="text-eby-brown-light text-sm">Early booking access, scalp care insights, and new product alerts.</p>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <form id="inner-circle-form" onsubmit="joinInnerCircle(event)" class="space-y-3">
+                        <div class="flex">
+                            <input type="email" id="newsletter-email" required placeholder="Enter your email" class="w-full bg-eby-bg border border-eby-gold-dark/20 p-4 rounded-l-[20px] focus:outline-none">
+                            <button type="submit" id="inner-circle-btn" class="bg-eby-dark text-white px-8 rounded-r-[20px] font-bold text-[9px] uppercase tracking-widest whitespace-nowrap">Join</button>
+                        </div>
+                        <label class="flex items-start gap-2 cursor-pointer">
+                            <input type="checkbox" id="newsletter-product-alerts" class="mt-0.5 w-4 h-4 rounded accent-eby-gold-dark flex-shrink-0">
+                            <span class="font-body text-[11px] text-eby-brown-light leading-relaxed">Also notify me when new products drop in the shop. <a href="policies.html" class="underline hover:text-eby-dark transition-colors">Unsubscribe anytime.</a></span>
+                        </label>
+                    </form>
+                    <div id="inner-circle-success" class="hidden flex items-center gap-3 mt-2">
+                        <i class="ph ph-check-circle text-eby-gold-dark text-xl flex-shrink-0"></i>
+                        <p class="font-body text-sm text-eby-brown-light">You're in. We'll keep you in the loop.</p>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 reveal active">
@@ -620,7 +698,7 @@
                     <a href="index.html" class="font-display font-semibold text-3xl uppercase text-eby-dark mb-6 block">Eby's Place</a>
                     <p class="text-eby-brown-light text-sm max-w-sm">Premium African hair braiding services in Somerset, UK. Experience beauty engineered for scalp health.</p>
                 </div>
-                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Explore</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="services.html">Our Services</a></li><li><a href="shop.html">Shop</a></li><li><a href="#booking">Booking</a></li></ul></div>
+                <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Explore</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="services.html">Our Services</a></li><li><a href="shop.html">Shop</a></li><li><a href="booking.html">Booking</a></li></ul></div>
                 <div><h4 class="font-sans font-bold text-eby-gold-dark text-[9px] uppercase mb-6">Policies</h4><ul class="space-y-4 text-sm text-eby-brown-light font-medium"><li><a href="booking.html">Booking Policy</a></li><li><a href="policies.html">Returns Policy</a></li></ul></div>
             </div>
             <div class="border-t border-eby-gold-dark/10 pt-16 flex flex-col items-center">
@@ -740,10 +818,113 @@
         let ecoCart = [];
         let ecoCartTotal = 0;
 
+        // Calendar State
+        let calDate = new Date();
+        let selectedDateStr = null;
+        let selectedTimeStr = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
+            renderCalendar();
         });
+
+        // -------------------------
+        // CALENDAR RENDERING LOGIC
+        // -------------------------
+        function renderCalendar() {
+            const grid = document.getElementById('cal-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            
+            document.getElementById('cal-month-year').innerText = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(calDate);
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            for(let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+            
+            for(let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                
+                const isPast = date < today;
+                const isSunday = date.getDay() === 0;
+                const isDisabled = isPast || isSunday;
+                
+                let classes = "w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center text-sm font-medium transition-all ";
+                
+                if (isDisabled) {
+                    classes += "text-gray-300 cursor-not-allowed opacity-50";
+                } else if (selectedDateStr === dateStr) {
+                    classes += "bg-eby-gold-dark text-white shadow-md";
+                } else {
+                    classes += "text-eby-dark hover:bg-eby-gold/20 hover:text-eby-gold-dark cursor-pointer";
+                }
+                
+                grid.innerHTML += `<button type="button" ${isDisabled ? 'disabled' : `onclick="selectDate('${dateStr}')"`} class="${classes}">${i}</button>`;
+            }
+        }
+
+        function changeMonth(dir) {
+            calDate.setMonth(calDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr;
+            selectedTimeStr = null; 
+            renderCalendar(); 
+            
+            const slotsWrapper = document.getElementById('time-slots-wrapper');
+            const slotsGrid = document.getElementById('time-slots-grid');
+            
+            if(slotsWrapper && slotsGrid) {
+                slotsWrapper.classList.remove('hidden');
+                
+                // Inject slots based on admin availability config
+                slotsGrid.innerHTML = '';
+                const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
+                const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
+                const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+                if (_hours.length === 0) {
+                    slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
+                } else {
+                    _hours.forEach(function(hour) {
+                        const hourText = String(hour).padStart(2, '0');
+                        const timeValue = `${hourText}:00:00`;
+                        const timeLabel = `${hourText}:00`;
+                        const slotButton = document.createElement('button');
+                        slotButton.type = 'button';
+                        slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
+                        slotButton.textContent = timeLabel;
+                        slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel}`);
+                        slotButton.addEventListener('click', function() {
+                            selectTime(timeValue, slotButton);
+                        });
+                        slotsGrid.appendChild(slotButton);
+                    });
+                }
+            }
+        }
+
+        function selectTime(timeStr, btn) {
+            selectedTimeStr = timeStr;
+            document.querySelectorAll('.time-slot-btn').forEach(b => {
+                b.classList.remove('bg-eby-dark', 'text-white', 'border-eby-dark');
+                b.classList.add('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            });
+            btn.classList.remove('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
+            btn.classList.add('bg-eby-dark', 'text-white', 'border-eby-dark');
+        }
 
         // ------------------------------------
         // SECTION 1: BESPOKE BOOKING LOGIC
@@ -756,7 +937,7 @@
             currentBookingItem = name;
             
             document.getElementById('booking-gate-title').innerText = "Secure Your Booking.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please confirm your £20.00 non-refundable booking deposit to officially book your bespoke appointment slot.`;
+            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please select an available date and time below to officially book your slot.`;
             
             document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
         }
@@ -766,23 +947,27 @@
             const btn = document.getElementById('dg-btn');
             const name = document.getElementById('bk-name').value;
             const email = document.getElementById('bk-email').value;
-            const date = document.getElementById('bk-date').value;
-            const time = document.getElementById('bk-time').value;
 
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
-            btn.disabled = true;
-            
-            if (!stripe) {
-                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
-                btn.disabled = false;
+            if (!selectedDateStr || !selectedTimeStr) {
+                document.getElementById('gate-errors').textContent = "Please select an available date and time slot from the calendar.";
                 return;
             }
 
-            const bookingStartISO = `${date}T${time}+01:00`; 
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
+            btn.disabled = true;
+
+            const bookingStartISO = `${selectedDateStr}T${selectedTimeStr}+01:00`; 
+            const totalHours = 4; // Default 4 hours for general services
             const startDateObj = new Date(bookingStartISO);
-            const endDateObj = new Date(startDateObj.getTime() + 4 * 60 * 60 * 1000);
+            const endDateObj = new Date(startDateObj.getTime() + totalHours * 60 * 60 * 1000);
             const bookingEndISO = endDateObj.toISOString();
+
+            if (!stripe) {
+                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
 
             const {paymentMethod, error} = await stripe.createPaymentMethod({ 
                 type: 'card', 
@@ -792,22 +977,23 @@
 
             if (error) {
                 document.getElementById('gate-errors').textContent = error.message;
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.innerHTML = `Confirm & Pay £20.00`;
                 btn.disabled = false;
                 return;
             }
 
             try {
+                // Strict Contract Payload
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ 
-                        customerName: name,
-                        email: email, 
+                        customerName: name, // STRICT Contract Requirement
+                        email: email, // STRICT Contract Requirement
                         type: "BOOKING_DEPOSIT", 
-                        item: currentBookingItem, 
-                        amount: currentBookingTotal, 
-                        stripeId: paymentMethod.id,
+                        item: currentBookingItem, // STRICT Contract Requirement
+                        amount: 20, // STRICT Contract Requirement
+                        stripeId: paymentMethod.id, // STRICT Contract Requirement
                         bookingStart: bookingStartISO,
                         bookingEnd: bookingEndISO,
                         adminEmail: 'hello@ebysplace.com'
@@ -818,12 +1004,12 @@
 
                 if (!result.success) {
                     document.getElementById('gate-errors').textContent = result.error;
-                    btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                    btn.innerHTML = `Confirm & Pay £20.00`;
                     btn.disabled = false;
                     return;
                 }
 
-                btn.innerHTML = '<i class="ph ph-check"></i> Confirmed';
+                btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -834,7 +1020,7 @@
             } catch (error) {
                 console.error("Booking Error:", error);
                 document.getElementById('gate-errors').textContent = "Network Error. Please try again.";
-                btn.innerHTML = `Secure Slot & Pay £20 Deposit`;
+                btn.innerHTML = `Confirm & Pay £20.00`;
                 btn.disabled = false;
             }
         }
@@ -1141,6 +1327,33 @@
             }
         }
 
+        function initMobileNav() {
+            var desktopLinks = document.querySelectorAll('#navbar .hidden.lg\\:flex a');
+            var container = document.querySelector('#mobile-menu .flex-grow');
+            if (!desktopLinks.length || !container) return;
+            container.innerHTML = '';
+            var delays = ['delay-1','delay-2','delay-3','delay-4','delay-5','delay-6','delay-7','delay-8','delay-9'];
+            Array.prototype.forEach.call(desktopLinks, function(link, i) {
+                var href = link.getAttribute('href');
+                var isActive = link.classList.contains('text-eby-gold-dark');
+                var isHash = href && href.charAt(0) === '#';
+                var a = document.createElement('a');
+                a.setAttribute('href', href);
+                a.className = 'mobile-link ' + (delays[i] || '') + ' font-display text-4xl transition-colors block ' + (isActive ? 'text-eby-gold-dark italic' : 'text-eby-dark hover:text-eby-gold-dark');
+                a.textContent = link.textContent.trim() + '.';
+                if (isHash) {
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var t = document.querySelector(href);
+                        toggleMobileMenu();
+                        if (t) { setTimeout(function() { t.scrollIntoView({ behavior: 'smooth' }); }, 650); }
+                    });
+                }
+                container.appendChild(a);
+            });
+        }
+        initMobileNav();
+
         // Restored Luxury Portal Slider Logic
         function openServiceSlider(url, name) {
             const slider = document.getElementById('service-slider');
@@ -1205,6 +1418,213 @@
                 glow.style.setProperty('--y', e.clientY + 'px');
             }
         });
+
+
+        // ------------------------------------
+        // USER REVIEW FEATURE
+        // ------------------------------------
+
+        (function initReviewMarquee() {
+            const marquee = document.getElementById('testimonials-marquee');
+            if (!marquee) return;
+
+            // Rebuild the clone-set for the infinite loop.
+            // Clones are marked with data-marquee-clone so they can be removed before re-cloning.
+            function rebuildLoop() {
+                Array.from(marquee.querySelectorAll('[data-marquee-clone]'))
+                    .forEach(function(el) { el.remove(); });
+                Array.from(marquee.children).forEach(function(card) {
+                    const clone = card.cloneNode(true);
+                    clone.dataset.marqueeClone = '1';
+                    marquee.appendChild(clone);
+                });
+            }
+
+            // Clone the hardcoded cards immediately so the marquee loops correctly
+            // even before the async fetch completes.
+            rebuildLoop();
+
+            async function loadApproved() {
+                let approved = [];
+                // Try fetching approved reviews from the shared GAS backend
+                try {
+                    const resp = await fetch(GAS_URL + '?type=GET_APPROVED_REVIEWS', { cache: 'no-store' });
+                    const data = await resp.json();
+                    if (data && data.success && Array.isArray(data.reviews)) {
+                        approved = data.reviews;
+                        // Merge into local cache so admin panel is also up to date
+                        try {
+                            const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                            const approvedIds = new Set(approved.map(function(r) { return r.id; }));
+                            const merged = all.map(function(r) {
+                                return approvedIds.has(r.id) ? Object.assign({}, r, { approved: true }) : r;
+                            });
+                            approved.forEach(function(r) {
+                                if (!merged.find(function(m) { return m.id === r.id; })) merged.push(r);
+                            });
+                            localStorage.setItem('ebyAdmin_reviews', JSON.stringify(merged));
+                        } catch(e) {}
+                    }
+                } catch(e) {}
+
+                // Fallback: localStorage approved reviews
+                if (!approved.length) {
+                    try {
+                        const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                        approved = all.filter(function(r) { return r.approved; });
+                    } catch(e) {}
+                }
+
+                if (!approved.length) return; // nothing to add; hardcoded loop already set up
+
+                // Append approved review cards (rebuildLoop will handle re-cloning)
+                approved.forEach(function(r) {
+                    const ratingVal = Number(r.rating);
+                    if (!ratingVal || ratingVal < 1 || ratingVal > 5) return;
+                    const stars = Array.from({length: ratingVal}, function() {
+                        return '<i class="ph-fill ph-star"></i>';
+                    }).join('');
+                    const card = document.createElement('div');
+                    card.className = 'glass-card w-[400px] p-10 mx-4 flex-shrink-0 whitespace-normal';
+                    card.innerHTML = '<div class="flex text-eby-gold-dark mb-6 text-sm">' + stars + '</div>'
+                        + '<p class="text-eby-brown-light italic mb-6">“' + escReview(r.text) + '”</p>'
+                        + '<p class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">- ' + escReview(r.name) + '</p>';
+                    marquee.appendChild(card);
+                });
+
+                // Rebuild clone-set so dynamic cards are included in the seamless loop
+                rebuildLoop();
+            }
+
+            loadApproved();
+        })();
+
+        function escReview(str) {
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        var _reviewRating = 0;
+
+        (function initStarRating() {
+            const stars = document.querySelectorAll('.star-btn');
+            stars.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    _reviewRating = parseInt(this.dataset.star);
+                    updateStarDisplay(_reviewRating);
+                    document.getElementById('review-star-error').classList.add('hidden');
+                });
+                btn.addEventListener('mouseenter', function() {
+                    updateStarDisplay(parseInt(this.dataset.star));
+                });
+                btn.addEventListener('mouseleave', function() {
+                    updateStarDisplay(_reviewRating);
+                });
+            });
+        })();
+
+        function updateStarDisplay(rating) {
+            document.querySelectorAll('.star-btn').forEach(function(btn, i) {
+                if (i < rating) {
+                    btn.classList.remove('text-eby-gold-dark/30');
+                    btn.classList.add('text-eby-gold-dark');
+                } else {
+                    btn.classList.remove('text-eby-gold-dark');
+                    btn.classList.add('text-eby-gold-dark/30');
+                }
+            });
+        }
+
+        function submitReview() {
+
+            const name = (document.getElementById('review-name').value || '').trim();
+            const text = (document.getElementById('review-text').value || '').trim();
+            const rating = _reviewRating || 0;
+            let valid = true;
+
+            document.getElementById('review-star-error').classList.add('hidden');
+            document.getElementById('review-name-error').classList.add('hidden');
+            document.getElementById('review-text-error').classList.add('hidden');
+
+            if (rating === 0) {
+                document.getElementById('review-star-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (!name) {
+                document.getElementById('review-name-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (text.length < 10) {
+                document.getElementById('review-text-error').classList.remove('hidden');
+                valid = false;
+            }
+            if (!valid) return;
+
+            const review = { id: Date.now().toString(36) + Math.random().toString(36).slice(2), name: name, rating: rating, text: text, timestamp: new Date().toISOString(), approved: false };
+
+            try {
+                const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
+                reviews.unshift(review);
+                localStorage.setItem('ebyAdmin_reviews', JSON.stringify(reviews));
+
+                var act = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
+                act.unshift({ type: 'REVIEW_SUBMITTED', customerName: name, rating: rating, timestamp: new Date().toISOString() });
+                if (act.length > 200) act.length = 200;
+                localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
+            } catch(e) {}
+
+            // Store in GAS backend as the shared source of truth
+            try {
+                fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: 'SUBMIT_REVIEW', review: review })
+                });
+            } catch(e) {}
+
+            document.getElementById('review-form-wrap').classList.add('hidden');
+            document.getElementById('review-success').classList.remove('hidden');
+        }
+
+        function copyReviewLink() {
+            const url = new URL('review.html', window.location.href).toString();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(function() {
+                    var btn = document.getElementById('copy-review-btn');
+                    btn.innerHTML = '<i class="ph ph-check text-base"></i> Copied!';
+                    setTimeout(function() { btn.innerHTML = '<i class="ph ph-copy text-base"></i> Copy Link'; }, 2500);
+                });
+            }
+        }
+
+        // ------------------------------------
+        // INNER CIRCLE / NEWSLETTER SIGNUP
+        // ------------------------------------
+
+        async function joinInnerCircle(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletter-email').value.trim();
+            const productAlerts = document.getElementById('newsletter-product-alerts').checked;
+            const btn = document.getElementById('inner-circle-btn');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i>';
+            btn.disabled = true;
+
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: "NEWSLETTER_SIGNUP", email: email, productAlerts: productAlerts })
+                });
+                document.getElementById('inner-circle-form').classList.add('hidden');
+                document.getElementById('inner-circle-success').classList.remove('hidden');
+            } catch (err) {
+                console.error('Newsletter signup failed:', err);
+                btn.innerHTML = 'Join';
+                btn.disabled = false;
+            }
+        }
+    </script>
+    <script>
+        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>
