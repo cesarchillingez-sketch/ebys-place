@@ -596,9 +596,6 @@
 // ──────────────────────────────────────────────
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
 
-// SHA-256 of "EbysPlace@2025" – used for client-side login check only.
-// The real password validation happens server-side on every API call.
-const DEFAULT_PASS_HASH  = '9327d264073460735f368b8041811e3b9a52089e0b9a69bd932fb9afb494429c';
 // SHA-256 of "RESET-7391-EBYS"
 const DEFAULT_RECOV_HASH = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
 
@@ -637,26 +634,31 @@ async function doLogin() {
     const pass   = passEl.value;
     if (!pass) { showLoginError('Please enter your password.'); return; }
 
-    // Verify password against the server so the check is always authoritative,
-    // regardless of what may be stored in localStorage.
+    // Verify password against the server – always authoritative.
     let verified = false;
+    let serverError = '';
     try {
         const res  = await fetch(GAS_URL, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
         });
+        if (!res.ok) {
+            showLoginError(`Server returned an error (${res.status}). Try again or check your GAS deployment.`);
+            return;
+        }
         const data = await res.json();
-        verified = data.success === true;
+        verified    = data.success === true;
+        serverError = data.error  || '';
     } catch (e) {
-        showLoginError('Network error. Please check your connection and try again.');
+        showLoginError('Network error – check your connection and try again.');
         return;
     }
 
     if (!verified) {
         localStorage.setItem('eby_login_attempts', String(attempts + 1));
         localStorage.setItem('eby_login_time', String(Date.now()));
-        showLoginError('Incorrect password. Please try again.');
+        showLoginError(serverError || 'Incorrect password. Please try again.');
         passEl.value = '';
         return;
     }
@@ -1211,13 +1213,24 @@ async function changePassword() {
     if (newPass !== confirm)              { showCpError('Passwords do not match.'); return; }
     if (newPass.length < 8)              { showCpError('Password must be at least 8 characters.'); return; }
 
-    // Verify current password via client hash
-    const storedHash = localStorage.getItem('eby_admin_pass_hash') || DEFAULT_PASS_HASH;
-    if (await sha256(current) !== storedHash) { showCpError('Current password is incorrect.'); return; }
-
-    // Push to server
-    const res = await apiPost({ type: 'ADMIN_CHANGE_PASSWORD', adminPassword: current, newPassword: newPass });
-    if (!res.success) { showCpError(res.error || 'Server update failed. Update ADMIN_PASSWORD in Script Properties manually.'); return; }
+    // Verify current password and update via server (authoritative check)
+    let res;
+    try {
+        res = await apiPost({ type: 'ADMIN_CHANGE_PASSWORD', adminPassword: current, newPassword: newPass });
+    } catch (e) {
+        showCpError('Network error – check your connection and try again.');
+        return;
+    }
+    if (!res.success) {
+        let cpErrMsg;
+        if (res.error === 'Unauthorized') {
+            cpErrMsg = 'Current password is incorrect.';
+        } else {
+            cpErrMsg = res.error || 'Server update failed. You can set ADMIN_PASSWORD directly in Script Properties.';
+        }
+        showCpError(cpErrMsg);
+        return;
+    }
 
     // Update client-side hash and session
     localStorage.setItem('eby_admin_pass_hash', await sha256(newPass));
