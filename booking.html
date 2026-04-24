@@ -383,49 +383,53 @@
                             </div>
                         </div>
 
-                <!-- Right: Booking Widget -->
-                <div class="reveal reveal-delay-1">
-                    <div class="relative">
-                        <!-- Decorative corner accents -->
-                        <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-eby-gold-dark/30 rounded-tr-2xl pointer-events-none z-10"></div>
-                        <div class="absolute -bottom-3 -left-3 w-16 h-16 border-b-2 border-l-2 border-eby-gold-dark/30 rounded-bl-2xl pointer-events-none z-10"></div>
+                        <!-- Right Column: Client Details & Stripe -->
+                        <div class="lg:col-span-5 reveal reveal-delay-1">
+                            <div class="relative">
+                                <!-- Decorative corner accents -->
+                                <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-eby-gold-dark/30 rounded-tr-2xl pointer-events-none z-10"></div>
+                                <div class="absolute -bottom-3 -left-3 w-16 h-16 border-b-2 border-l-2 border-eby-gold-dark/30 rounded-bl-2xl pointer-events-none z-10"></div>
 
-                        <!-- Widget card -->
-                        <div class="bg-white border border-eby-gold-dark/20 rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
-                            <!-- Widget header bar -->
-                            <div class="px-6 py-4 bg-eby-dark flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_8px_rgba(194,163,120,0.8)]"></span>
-                                    <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Eby's Place &mdash; Live Booking</span>
-                        <!-- Right Column: Details & Stripe -->
-                        <div class="lg:col-span-5 flex flex-col space-y-6 bg-eby-bg/50 p-6 md:p-8 rounded-[28px] border border-eby-gold-dark/10 h-max sticky top-32">
-                            
-                            <div>
-                                <h3 class="font-display text-2xl text-eby-dark mb-4">Client Details</h3>
-                                <div class="space-y-4">
-                                    <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
-                                    <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
-                                </div>
-                            </div>
-                            
-                            <div class="pt-6 border-t border-eby-gold-dark/10">
-                                <h3 class="font-display text-2xl text-eby-dark mb-4">Deposit Details</h3>
-                                <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] shadow-sm">
-                                    <div id="gate-card-element" class="w-full"></div>
-                                </div>
-                                <div id="gate-errors" class="text-red-500 text-[10px] mt-3 font-medium"></div>
-                            </div>
-                            
-                            <div class="pt-4 flex-grow flex flex-col justify-end">
-                                <div class="flex justify-between items-center mb-4">
-                                    <span class="font-display text-lg text-eby-dark">Total Due Now</span>
-                                    <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
-                                </div>
-                                <button type="submit" id="dg-btn" disabled class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
-                                    Confirm & Pay <i class="ph ph-lock-key"></i>
-                                </button>
-                            </div>
+                                <!-- Widget card -->
+                                <div class="bg-white border border-eby-gold-dark/20 rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(42,26,18,0.08)]">
+                                    <!-- Widget header bar -->
+                                    <div class="px-6 py-4 bg-eby-dark flex items-center justify-between">
+                                        <div class="flex items-center gap-3">
+                                            <span class="w-2 h-2 rounded-full bg-eby-gold-dark shadow-[0_0_8px_rgba(194,163,120,0.8)]"></span>
+                                            <span class="font-sans font-bold text-[10px] uppercase tracking-widest text-white/80">Eby's Place &mdash; Live Booking</span>
+                                        </div>
+                                    </div>
 
+                                    <!-- Widget body -->
+                                    <div class="flex flex-col space-y-6 p-6 md:p-8">
+                                        <div>
+                                            <h3 class="font-display text-2xl text-eby-dark mb-4">Client Details</h3>
+                                            <div class="space-y-4">
+                                                <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
+                                                <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                                            </div>
+                                        </div>
+
+                                        <div class="pt-6 border-t border-eby-gold-dark/10">
+                                            <h3 class="font-display text-2xl text-eby-dark mb-4">Deposit Details</h3>
+                                            <div class="border border-eby-gold-dark/20 p-5 bg-white rounded-[20px] shadow-sm">
+                                                <div id="gate-card-element" class="w-full"></div>
+                                            </div>
+                                            <div id="gate-errors" class="text-red-500 text-[10px] mt-3 font-medium"></div>
+                                        </div>
+
+                                        <div class="pt-4 flex-grow flex flex-col justify-end">
+                                            <div class="flex justify-between items-center mb-4">
+                                                <span class="font-display text-lg text-eby-dark">Total Due Now</span>
+                                                <span class="font-display text-xl text-eby-dark font-semibold">£20.00</span>
+                                            </div>
+                                            <button type="submit" id="dg-btn" disabled class="w-full btn-luxury bg-eby-dark text-white py-5 rounded-[20px] font-bold uppercase tracking-widest text-[10px] shadow-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                                                Confirm & Pay <i class="ph ph-lock-key"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
