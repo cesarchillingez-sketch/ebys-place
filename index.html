@@ -795,19 +795,14 @@
 
     <!-- Scripts for Logic & Interactivity -->
     <script>
-        // System variables & Stripe Dual-Setup
+        // System variables & Stripe (E-Commerce Shop only)
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
         
-        let stripe, gateCard, ecoCardElement;
+        let stripe, ecoCardElement;
         
         try {
             if (typeof Stripe !== 'undefined') {
                 stripe = Stripe('pk_live_51T33uuQeDX45SyTIkeDYLGyHt2HgqrgtHDFV8arVbfUHIeArVzsOZHre36kQugiEZlti5X9cutRCrNdsz2veYk4O00NFwwNDbQ');
-                
-                // Create separate instances of Stripe elements
-                const gateElements = stripe.elements();
-                gateCard = gateElements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif' } } });
-                
                 const ecoElements = stripe.elements();
                 ecoCardElement = ecoElements.create('card', { style: { base: { fontSize: '16px', color: '#2A1A12', fontFamily: 'Lexend, sans-serif', '::placeholder': { color: '#6B5749', opacity: 0.6 } } } });
             }
@@ -818,222 +813,12 @@
         let ecoCart = [];
         let ecoCartTotal = 0;
 
-        // Calendar State
-        let calDate = new Date();
-        let selectedDateStr = null;
-        let selectedTimeStr = null;
-
         document.addEventListener('DOMContentLoaded', () => {
-            if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
-            renderCalendar();
         });
 
-        // -------------------------
-        // CALENDAR RENDERING LOGIC
-        // -------------------------
-        function renderCalendar() {
-            const grid = document.getElementById('cal-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            
-            const year = calDate.getFullYear();
-            const month = calDate.getMonth();
-            
-            document.getElementById('cal-month-year').innerText = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(calDate);
-            
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            
-            for(let i = 0; i < firstDay; i++) {
-                grid.innerHTML += `<div></div>`;
-            }
-            
-            for(let i = 1; i <= daysInMonth; i++) {
-                const date = new Date(year, month, i);
-                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                
-                const isPast = date < today;
-                const isSunday = date.getDay() === 0;
-                const isDisabled = isPast || isSunday;
-                
-                let classes = "w-10 h-10 md:w-12 md:h-12 mx-auto rounded-full flex items-center justify-center text-sm font-medium transition-all ";
-                
-                if (isDisabled) {
-                    classes += "text-gray-300 cursor-not-allowed opacity-50";
-                } else if (selectedDateStr === dateStr) {
-                    classes += "bg-eby-gold-dark text-white shadow-md";
-                } else {
-                    classes += "text-eby-dark hover:bg-eby-gold/20 hover:text-eby-gold-dark cursor-pointer";
-                }
-                
-                grid.innerHTML += `<button type="button" ${isDisabled ? 'disabled' : `onclick="selectDate('${dateStr}')"`} class="${classes}">${i}</button>`;
-            }
-        }
-
-        function changeMonth(dir) {
-            calDate.setMonth(calDate.getMonth() + dir);
-            renderCalendar();
-        }
-
-        function selectDate(dateStr) {
-            selectedDateStr = dateStr;
-            selectedTimeStr = null; 
-            renderCalendar(); 
-            
-            const slotsWrapper = document.getElementById('time-slots-wrapper');
-            const slotsGrid = document.getElementById('time-slots-grid');
-            
-            if(slotsWrapper && slotsGrid) {
-                slotsWrapper.classList.remove('hidden');
-                
-                // Inject slots based on admin availability config
-                slotsGrid.innerHTML = '';
-                const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
-                const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
-                const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
-                if (_hours.length === 0) {
-                    slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
-                } else {
-                    _hours.forEach(function(hour) {
-                        const hourText = String(hour).padStart(2, '0');
-                        const timeValue = `${hourText}:00:00`;
-                        const timeLabel = `${hourText}:00`;
-                        const slotButton = document.createElement('button');
-                        slotButton.type = 'button';
-                        slotButton.className = 'time-slot-btn py-3 px-4 rounded-[12px] border border-eby-gold-dark/30 text-xs font-sans font-medium text-eby-dark hover:border-eby-gold-dark transition-all';
-                        slotButton.textContent = timeLabel;
-                        slotButton.setAttribute('aria-label', `Book appointment at ${timeLabel}`);
-                        slotButton.addEventListener('click', function() {
-                            selectTime(timeValue, slotButton);
-                        });
-                        slotsGrid.appendChild(slotButton);
-                    });
-                }
-            }
-        }
-
-        function selectTime(timeStr, btn) {
-            selectedTimeStr = timeStr;
-            document.querySelectorAll('.time-slot-btn').forEach(b => {
-                b.classList.remove('bg-eby-dark', 'text-white', 'border-eby-dark');
-                b.classList.add('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
-            });
-            btn.classList.remove('bg-transparent', 'text-eby-dark', 'border-eby-gold-dark/30');
-            btn.classList.add('bg-eby-dark', 'text-white', 'border-eby-dark');
-        }
-
         // ------------------------------------
-        // SECTION 1: BESPOKE BOOKING LOGIC
-        // ------------------------------------
-        
-        let currentBookingItem = "Standard Appointment";
-        const currentBookingTotal = 20;
-
-        function startProductBooking(name, price) {
-            currentBookingItem = name;
-            
-            document.getElementById('booking-gate-title').innerText = "Secure Your Booking.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please select an available date and time below to officially book your slot.`;
-            
-            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function handleDepositGate(e) {
-            e.preventDefault();
-            const btn = document.getElementById('dg-btn');
-            const name = document.getElementById('bk-name').value;
-            const email = document.getElementById('bk-email').value;
-
-            if (!selectedDateStr || !selectedTimeStr) {
-                document.getElementById('gate-errors').textContent = "Please select an available date and time slot from the calendar.";
-                return;
-            }
-
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Verifying...';
-            btn.disabled = true;
-
-            const bookingStartISO = `${selectedDateStr}T${selectedTimeStr}+01:00`; 
-            const totalHours = 4; // Default 4 hours for general services
-            const startDateObj = new Date(bookingStartISO);
-            const endDateObj = new Date(startDateObj.getTime() + totalHours * 60 * 60 * 1000);
-            const bookingEndISO = endDateObj.toISOString();
-
-            if (!stripe) {
-                document.getElementById('gate-errors').textContent = "Payment gateway not ready. Please try again.";
-                btn.innerHTML = `Confirm & Pay £20.00`;
-                btn.disabled = false;
-                return;
-            }
-
-            const {paymentMethod, error} = await stripe.createPaymentMethod({ 
-                type: 'card', 
-                card: gateCard,
-                billing_details: { name: name, email: email }
-            });
-
-            if (error) {
-                document.getElementById('gate-errors').textContent = error.message;
-                btn.innerHTML = `Confirm & Pay £20.00`;
-                btn.disabled = false;
-                return;
-            }
-
-            if (!paymentMethod || !paymentMethod.id) {
-                document.getElementById('gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
-                btn.innerHTML = `Confirm & Pay £20.00`;
-                btn.disabled = false;
-                return;
-            }
-
-            try {
-                // Strict Contract Payload
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ 
-                        customerName: name, // STRICT Contract Requirement
-                        email: email, // STRICT Contract Requirement
-                        type: "BOOKING_DEPOSIT", 
-                        item: currentBookingItem, // STRICT Contract Requirement
-                        amount: 20, // STRICT Contract Requirement
-                        stripeId: paymentMethod.id, // STRICT Contract Requirement
-                        bookingStart: bookingStartISO,
-                        bookingEnd: bookingEndISO
-                    })
-                });
-
-                const result = await response.json();
-
-                if (!result.success) {
-                    document.getElementById('gate-errors').textContent = result.error;
-                    btn.innerHTML = `Confirm & Pay £20.00`;
-                    btn.disabled = false;
-                    return;
-                }
-
-                btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
-                
-                setTimeout(() => {
-                    document.getElementById('booking-gate-ui').classList.add('hidden');
-                    document.getElementById('booking-success-state').classList.remove('hidden');
-                    document.getElementById('booking-success-state').classList.add('flex');
-                }, 800);
-
-            } catch (error) {
-                console.error("Booking Error:", error);
-                document.getElementById('gate-errors').textContent = "Network Error. Please try again.";
-                btn.innerHTML = `Confirm & Pay £20.00`;
-                btn.disabled = false;
-            }
-        }
-
-
-        // ------------------------------------
-        // SECTION 2: E-COMMERCE CART LOGIC 
+        // E-COMMERCE CART LOGIC 
         // ------------------------------------
 
         function updateShopItem(cardId, colorName, imgSrc, btnEl) {
