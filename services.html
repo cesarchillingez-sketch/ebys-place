@@ -917,17 +917,7 @@
         // BOOKING GATE LOGIC
         // -------------------------
         function startProductBooking(name, price) {
-            selectedServiceName = name;
-            currentBookingItem = name;
-            
-            document.getElementById('booking-gate-title').innerText = "Secure Your Booking.";
-            document.getElementById('booking-gate-desc').innerHTML = `You are securing a slot for <strong>${name}</strong> (Estimated from £${price.toFixed(2)}). Please select a date and time, and confirm your £20.00 deposit.`;
-            
-            // Unlock the calendar / payment area
-            const overlay = document.getElementById('booking-lock-overlay');
-            if (overlay) overlay.classList.add('unlocked');
-
-            document.getElementById('booking-section').scrollIntoView({ behavior: 'smooth' });
+            window.location.href = 'booking.html?service=' + encodeURIComponent(name) + '&price=' + price;
         }
 
         async function handleDepositGate(e) {
