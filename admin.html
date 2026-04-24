@@ -644,7 +644,7 @@ async function doLogin() {
             body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
         });
         if (!res.ok) {
-            showLoginError('Server returned an error (' + res.status + '). Try again or check your GAS deployment.');
+            showLoginError(`Server returned an error (${res.status}). Try again or check your GAS deployment.`);
             return;
         }
         const data = await res.json();
@@ -1222,9 +1222,13 @@ async function changePassword() {
         return;
     }
     if (!res.success) {
-        showCpError(res.error === 'Unauthorized'
-            ? 'Current password is incorrect.'
-            : (res.error || 'Server update failed. You can set ADMIN_PASSWORD directly in Script Properties.'));
+        let cpErrMsg;
+        if (res.error === 'Unauthorized') {
+            cpErrMsg = 'Current password is incorrect.';
+        } else {
+            cpErrMsg = res.error || 'Server update failed. You can set ADMIN_PASSWORD directly in Script Properties.';
+        }
+        showCpError(cpErrMsg);
         return;
     }
 
