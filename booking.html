@@ -144,13 +144,10 @@
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 nav-transparent transition-all duration-500 py-3">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2 relative z-50 cursor-pointer pointer-events-auto">
-                <i class="ph ph-list text-3xl text-eby-dark"></i>
-            </button>
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors lg:ml-0 ml-4 relative z-50">
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors relative z-50">
                 Eby's Place
             </a>
-            <div class="hidden lg:flex items-center space-x-10 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
+            <div class="flex flex-wrap items-center gap-x-6 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
                 <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
@@ -277,7 +274,7 @@
         <section class="lg:w-1/2 lg:sticky lg:top-32 h-max reveal reveal-delay-1 relative">
             
             <!-- Support / Concierge Float Box — visible only on desktop -->
-            <div class="hidden lg:block glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px] !rounded-[28px]">
+            <div class="block glass-card p-6 md:p-8 absolute -top-8 -left-4 md:-left-8 z-20 shadow-xl border-l-4 border-l-eby-gold-dark max-w-[280px] !rounded-[28px]">
                 <h4 class="font-display text-xl text-eby-dark mb-2">Questions?</h4>
                 <p class="text-eby-brown-light text-xs leading-relaxed mb-4">Our studio concierge is available to assist with your booking.</p>
                 <a href="tel:+447864585110" class="flex items-center gap-2 font-sans font-bold text-[10px] tracking-widest text-eby-gold-dark hover:text-eby-dark transition-colors">
@@ -286,7 +283,7 @@
             </div>
 
             <!-- Mobile concierge strip (above map) -->
-            <div class="lg:hidden flex items-center gap-3 p-4 glass-card rounded-[20px] mb-5">
+            <div class="hidden flex items-center gap-3 p-4 glass-card rounded-[20px] mb-5">
                 <i class="ph ph-headset text-xl text-eby-gold-dark flex-shrink-0"></i>
                 <div>
                     <p class="font-sans font-bold text-xs text-eby-dark">Questions about your booking?</p>
