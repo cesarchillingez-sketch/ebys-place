@@ -25,6 +25,12 @@ function isAdminValid_(pass) {
   return (typeof pass === 'string') && pass === stored;
 }
 
+// ---- SHA-256 helper (returns lowercase hex string) ----
+function computeSha256Hash_(input) {
+  var bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, input, Utilities.Charset.UTF_8);
+  return bytes.map(function(b) { return (b < 0 ? b + 256 : b).toString(16).padStart(2, '0'); }).join('');
+}
+
 // ======================================================
 // GET handler
 // ======================================================
@@ -46,16 +52,18 @@ function doPost(e) {
   var type = body.type || '';
 
   // ---- Public endpoints (no auth) ----
-  if (type === 'BOOKING_DEPOSIT')  return handleBookingDeposit_(body);
-  if (type === 'DIRECT_SALE')      return handleDirectSale_(body);
-  if (type === 'TRACK_VISIT')      return handleTrackVisit_(body);
-  if (type === 'GET_AVAILABILITY') return handleGetAvailability_();
+  if (type === 'BOOKING_DEPOSIT')       return handleBookingDeposit_(body);
+  if (type === 'DIRECT_SALE')           return handleDirectSale_(body);
+  if (type === 'TRACK_VISIT')           return handleTrackVisit_(body);
+  if (type === 'GET_AVAILABILITY')      return handleGetAvailability_();
+  if (type === 'ADMIN_RESET_PASSWORD')  return adminResetPassword_(body);
 
   // ---- Admin endpoints (require adminPassword) ----
   if (!isAdminValid_(body.adminPassword || '')) {
     return jsonResponse_({ success: false, error: 'Unauthorized' });
   }
 
+  if (type === 'ADMIN_VERIFY')            return jsonResponse_({ success: true });
   if (type === 'ADMIN_GET_BOOKINGS')      return adminGetBookings_();
   if (type === 'ADMIN_GET_ORDERS')        return adminGetOrders_();
   if (type === 'ADMIN_GET_ANALYTICS')     return adminGetAnalytics_();
@@ -437,6 +445,24 @@ function adminSendEmail_(body) {
 function adminChangePassword_(body) {
   var newPass = String(body.newPassword || '');
   if (newPass.length < 8) return jsonResponse_({ success: false, error: 'Password must be at least 8 characters.' });
+  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
+  return jsonResponse_({ success: true });
+}
+
+// SHA-256 of "RESET-7391-EBYS" – the default recovery code.
+var DEFAULT_RECOV_HASH_ = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
+
+function adminResetPassword_(body) {
+  var code    = String(body.recoveryCode || '');
+  var newPass = String(body.newPassword  || '');
+  if (!code)              return jsonResponse_({ success: false, error: 'Recovery code is required.' });
+  if (newPass.length < 8) return jsonResponse_({ success: false, error: 'Password must be at least 8 characters.' });
+
+  // Compute SHA-256 of the supplied recovery code and compare to the stored hash.
+  var hex        = computeSha256Hash_(code);
+  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH') || DEFAULT_RECOV_HASH_;
+  if (hex !== storedHash) return jsonResponse_({ success: false, error: 'Invalid recovery code.' });
+
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
   return jsonResponse_({ success: true });
 }
