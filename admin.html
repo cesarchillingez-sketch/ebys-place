@@ -269,6 +269,7 @@
                         <i class="ph ph-floppy-disk"></i> Save Availability
                     </button>
                     <span id="avail-msg" class="font-sans text-[10px] uppercase tracking-widest text-green-600 font-bold hidden"><i class="ph ph-check-circle"></i> Saved — live on all booking pages</span>
+                    <span id="avail-err" class="font-sans text-[10px] uppercase tracking-widest text-red-500 font-bold hidden"><i class="ph ph-warning"></i> Save failed — check connection</span>
                 </div>
             </section>
 
@@ -1075,11 +1076,15 @@ function notConnectedMsg(type) {
 async function loadAndRenderAvailability() {
     try {
         const resp = await fetch(GAS_URL + '?type=GET_AVAILABILITY', { cache: 'no-store' });
-        const data = await resp.json();
-        if (data && data.success && data.availability) {
-            localStorage.setItem(KEYS.availability, JSON.stringify(data.availability));
+        if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.success && data.availability) {
+                localStorage.setItem(KEYS.availability, JSON.stringify(data.availability));
+            }
         }
-    } catch (e) {}
+    } catch (e) {
+        console.error('Failed to fetch availability from backend:', e);
+    }
     renderAvailabilityGrid();
 }
 
@@ -1136,6 +1141,30 @@ function toggleDayOpen(d) {
     updateDayCount(d);
 }
 
+function _showAvailMsg(success) {
+    const msgEl = document.getElementById('avail-msg');
+    const errEl = document.getElementById('avail-err');
+    if (success) {
+        errEl.classList.add('hidden');
+        msgEl.classList.remove('hidden');
+        setTimeout(() => msgEl.classList.add('hidden'), 3500);
+    } else {
+        msgEl.classList.add('hidden');
+        errEl.classList.remove('hidden');
+        setTimeout(() => errEl.classList.add('hidden'), 5000);
+    }
+}
+
+function _syncAvailabilityToGAS(avail) {
+    return fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', adminKey: ADMIN_PW, availability: avail }) })
+        .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        })
+        .then(d => _showAvailMsg(d && d.success))
+        .catch(e => { console.error('Failed to save availability to backend:', e); _showAvailMsg(false); });
+}
+
 function applyPreset(preset) {
     const avail = {};
     for (let d = 0; d <= 6; d++) {
@@ -1146,10 +1175,7 @@ function applyPreset(preset) {
     }
     localStorage.setItem(KEYS.availability, JSON.stringify(avail));
     renderAvailabilityGrid();
-    const msgEl = document.getElementById('avail-msg');
-    msgEl.classList.remove('hidden');
-    setTimeout(() => msgEl.classList.add('hidden'), 3500);
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', adminKey: ADMIN_PW, availability: avail }) }).catch(() => {});
+    _syncAvailabilityToGAS(avail);
 }
 
 function saveAvailability() {
@@ -1165,11 +1191,7 @@ function saveAvailability() {
         avail[d] = { enabled: isOpen, hours };
     }
     localStorage.setItem(KEYS.availability, JSON.stringify(avail));
-    const msgEl = document.getElementById('avail-msg');
-    msgEl.classList.remove('hidden');
-    setTimeout(() => msgEl.classList.add('hidden'), 3500);
-    // Silent GAS sync
-    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', adminKey: ADMIN_PW, availability: avail }) }).catch(() => {});
+    _syncAvailabilityToGAS(avail);
 }
 
 // ======================================================

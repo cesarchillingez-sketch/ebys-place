@@ -631,7 +631,9 @@
             // Fetch admin availability from backend (so client sees live changes)
             fetchAvailability().then(() => renderCalendar());
 
-            // Re-fetch availability every 5 minutes so in-session changes are reflected
+            // Re-fetch availability every 5 minutes so in-session changes are reflected.
+            // We only re-render the calendar when no date has been selected yet, to avoid
+            // disrupting a user who is mid-booking on a specific date.
             setInterval(() => {
                 fetchAvailability().then(() => {
                     if (!selectedDateStr) renderCalendar();
