@@ -449,7 +449,7 @@ function adminChangePassword_(body) {
   return jsonResponse_({ success: true });
 }
 
-// SHA-256 of "RESET-7391-EBYS" – the default recovery code.
+// SHA-256 hash of the default recovery code (set RECOVERY_CODE_HASH in Script Properties to override).
 var DEFAULT_RECOV_HASH_ = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
 
 function adminResetPassword_(body) {
