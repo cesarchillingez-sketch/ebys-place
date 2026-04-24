@@ -1,16 +1,28 @@
 // ======================================================
 // Eby's Place – Google Apps Script Backend  (Code.gs)
 //
-// How to deploy:
-//   1. Open script.google.com, open the project linked to this web app.
-//   2. Replace the existing Code.gs content with this file (or merge in the
-//      new auth section below if you have existing handler code).
-//   3. Go to Project Settings → Script Properties and add:
+// WHICH GOOGLE ACCOUNT:
+//   This script belongs to the account that originally created it.
+//   If you use multiple Google accounts, sign in to each one at
+//   script.google.com and look under "My Projects" to find it.
+//
+//   Current deployment ID (also hardcoded in every HTML page):
+//     AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg
+//   Full exec URL:
+//     https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec
+//
+// HOW TO DEPLOY / UPDATE:
+//   1. Open script.google.com under the owner account, open this project.
+//   2. Paste the updated Code.gs content into the editor (or use clasp push).
+//   3. Go to Project Settings → Script Properties and add (if not already set):
 //        ADMIN_PASSWORD   <your chosen admin password>
+//        SPREADSHEET_ID   <optional – your Google Sheet ID for bookings/orders>
 //   4. Deploy → Manage deployments → create a new version so the changes go live.
+//      The deployment ID does not change; no edits to the HTML files are needed.
 //
 // The ADMIN_PASSWORD Script Property is the only place the password lives.
 // It is never stored in source code or sent to the browser.
+// See README.md for the full setup guide.
 // ======================================================
 
 // ---- Session-token configuration ----
