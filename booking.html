@@ -534,8 +534,37 @@
         // Setup variables & Stripe
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
 
+        // Availability config fetched from backend; falls back to sensible defaults
+        let _availabilityConfig = null;
+
+        async function loadAvailability() {
+            try {
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'GET_AVAILABILITY' })
+                });
+                const data = await res.json();
+                if (data.success && data.availability) {
+                    _availabilityConfig = data.availability;
+                }
+            } catch (e) {
+                // Network error – will use defaults below
+            }
+        }
+
         function getAvailabilityForDay(dayIdx) {
-            return Array.from({ length: 24 }, (_, i) => i);
+            if (_availabilityConfig) {
+                const hours = _availabilityConfig[String(dayIdx)];
+                if (Array.isArray(hours)) {
+                    // Sanitise: keep only valid integer hours 0–23
+                    return hours.map(h => parseInt(h, 10)).filter(h => Number.isInteger(h) && h >= 0 && h <= 23);
+                }
+            }
+            // Default: 9–17 Mon–Sat, closed Sunday
+            if (dayIdx === 0) return [];
+            if (dayIdx === 6) return [10,11,12,13,14,15,16];
+            return [9,10,11,12,13,14,15,16,17];
         }
         let stripe, elements, gateCard;
         
@@ -592,6 +621,9 @@
         let selectedTimeStr = null;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Fetch availability from backend (non-blocking)
+            loadAvailability();
+
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             const serviceListItems = document.getElementById('service-list-items');
             if (serviceListItems) {

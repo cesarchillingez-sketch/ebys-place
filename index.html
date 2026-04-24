@@ -985,6 +985,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
+            // Visit tracking (non-blocking)
+            try { fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type:'TRACK_VISIT', page:'home', referrer: document.referrer, userAgent: navigator.userAgent }) }).catch(()=>{}); } catch(e) {}
         });
 
         // ------------------------------------

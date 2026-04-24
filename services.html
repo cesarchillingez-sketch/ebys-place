@@ -798,6 +798,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             if(gateCard && document.getElementById('gate-card-element')) gateCard.mount('#gate-card-element');
             renderCalendar();
+            // Visit tracking (non-blocking)
+            try { fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type:'TRACK_VISIT', page:'services', referrer: document.referrer, userAgent: navigator.userAgent }) }).catch(()=>{}); } catch(e) {}
         });
 
         // -------------------------
