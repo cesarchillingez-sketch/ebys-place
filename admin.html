@@ -574,7 +574,9 @@ let panelColors = [];
 async function attemptLogin() {
     const pw = document.getElementById('admin-pw').value;
     const errEl = document.getElementById('login-err');
+    const btn = document.querySelector('#login-screen button[onclick="attemptLogin()"]');
     errEl.classList.add('hidden');
+    if (btn) { btn.disabled = true; btn.textContent = 'Connecting…'; }
     try {
         const resp = await fetch(GAS_URL, {
             method: 'POST',
@@ -589,13 +591,15 @@ async function attemptLogin() {
             document.getElementById('dashboard').classList.add('flex');
             initDashboard();
         } else {
-            errEl.textContent = 'Incorrect password.';
+            errEl.textContent = data.error || 'Incorrect password.';
             errEl.classList.remove('hidden');
             document.getElementById('admin-pw').value = '';
         }
     } catch {
-        errEl.textContent = 'Could not reach server. Please try again.';
+        errEl.textContent = 'Could not reach server. Check your internet connection and try again.';
         errEl.classList.remove('hidden');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Access Dashboard'; }
     }
 }
 
