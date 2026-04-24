@@ -178,11 +178,15 @@
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-40 glass-nav py-2 transition-all">
-        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors relative z-50">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between relative">
+            <!-- Hamburger Menu (mobile only) -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden hover:opacity-70 transition-opacity p-2 -ml-2 relative z-50">
+                <i class="ph ph-list text-2xl text-eby-dark"></i>
+            </button>
+            <a href="index.html" class="font-display font-semibold text-2xl lg:text-3xl tracking-wide uppercase text-eby-dark transition-colors z-50 absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
                 Eby's Place
             </a>
-            <div class="flex flex-wrap items-center gap-x-6 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
+            <div class="hidden lg:flex flex-wrap items-center gap-x-6 text-[10px] font-sans uppercase tracking-widest font-medium text-eby-dark">
                 <a href="index.html" class="hover:text-eby-gold-dark transition-colors">Home</a>
                 <a href="shop.html" class="text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
