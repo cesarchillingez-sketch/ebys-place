@@ -631,6 +631,13 @@
             // Fetch admin availability from backend (so client sees live changes)
             fetchAvailability().then(() => renderCalendar());
 
+            // Re-fetch availability every 5 minutes so in-session changes are reflected
+            setInterval(() => {
+                fetchAvailability().then(() => {
+                    if (!selectedDateStr) renderCalendar();
+                });
+            }, 5 * 60 * 1000);
+
             // Handle URL parameters: ?service=ServiceName&price=120 or ?category=braids
             const params = new URLSearchParams(window.location.search);
             const preService = params.get('service');

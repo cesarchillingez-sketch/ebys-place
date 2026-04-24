@@ -573,7 +573,7 @@ function showSection(name) {
     if (name === 'bookings') loadBookings();
     if (name === 'analytics') renderAnalytics();
     if (name === 'activity') renderActivity();
-    if (name === 'availability') renderAvailabilityGrid();
+    if (name === 'availability') loadAndRenderAvailability();
     if (name === 'reviews') loadReviews();
     // Close mobile sidebar
     closeSidebar();
@@ -1072,6 +1072,17 @@ function notConnectedMsg(type) {
 // ======================================================
 // AVAILABILITY
 // ======================================================
+async function loadAndRenderAvailability() {
+    try {
+        const resp = await fetch(GAS_URL + '?type=GET_AVAILABILITY', { cache: 'no-store' });
+        const data = await resp.json();
+        if (data && data.success && data.availability) {
+            localStorage.setItem(KEYS.availability, JSON.stringify(data.availability));
+        }
+    } catch (e) {}
+    renderAvailabilityGrid();
+}
+
 function renderAvailabilityGrid() {
     const avail = getAvailability();
     const container = document.getElementById('availability-grid');
@@ -1135,6 +1146,10 @@ function applyPreset(preset) {
     }
     localStorage.setItem(KEYS.availability, JSON.stringify(avail));
     renderAvailabilityGrid();
+    const msgEl = document.getElementById('avail-msg');
+    msgEl.classList.remove('hidden');
+    setTimeout(() => msgEl.classList.add('hidden'), 3500);
+    fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ type:'SAVE_AVAILABILITY', adminKey: ADMIN_PW, availability: avail }) }).catch(() => {});
 }
 
 function saveAvailability() {
@@ -1384,7 +1399,7 @@ function deleteReview(id) {
 function initDashboard() {
     updateClock();
     setInterval(updateClock, 30000);
-    renderAvailabilityGrid();
+    loadAndRenderAvailability();
     renderOverview();
     // Show pending reviews badge
     (function() {
