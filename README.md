@@ -13,18 +13,7 @@ Because you use multiple Google accounts, here is how to identify the right one:
 2. Under **My Projects**, look for the project that contains `Code.gs` (the file in this repository).
 3. The account where the project appears is the one that owns the deployment.
 
-**Current deployment ID** (hardcoded in every HTML page in this repo):
-
-```
-AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg
-```
-
-Full web-app URL:
-```
-https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec
-```
-
-You can paste that URL into any browser – if you are signed into the **owner** account you will see the raw JSON response from the script. If you are signed into the wrong account the request will still work (the script is deployed to run as the owner, accessible to anyone), but only the owner account will see the project in **My Projects** on script.google.com.
+> **Note:** For security, the deployment ID is not published in this repository. You can find it in the Apps Script editor under **Deploy → Manage deployments**, or in the source of any HTML page in this repo (search for `GAS_URL`).
 
 ---
 
@@ -35,12 +24,14 @@ Once you have identified the correct account and opened the project:
 1. In the Apps Script editor, click ⚙️ **Project Settings** (gear icon on the left).
 2. Scroll to **Script Properties** and click **Add script property** for each row below:
 
-| Property key       | Value                                      |
-|--------------------|--------------------------------------------|
-| `ADMIN_PASSWORD`   | Your chosen admin password (keep it secret)|
-| `SPREADSHEET_ID`   | The ID of your Google Sheet (optional – only needed if you want bookings/orders stored in Sheets). The ID is the long string in the Sheet URL: `https://docs.google.com/spreadsheets/d/<ID>/edit` |
+| Property key       | Value / Notes                                      |
+|--------------------|----------------------------------------------------|
+| `ADMIN_PASSWORD`   | Your admin password (**keep secret – never commit to GitHub**) |
+| `ADMIN_EMAIL`      | The email address that receives password-reset links (e.g. your Yahoo address) |
+| `SITE_URL`         | Your site's root URL, e.g. `https://ebysplace.com` (used in reset-link emails) |
+| `SPREADSHEET_ID`   | Optional – your Google Sheet ID for bookings/orders. Found in the Sheet URL: `https://docs.google.com/spreadsheets/d/<ID>/edit` |
 
-> **Important:** `ADMIN_PASSWORD` is the *only* place the password lives. It is never stored in source code or sent to the browser.
+> **Important:** `ADMIN_PASSWORD` lives only in Script Properties. It is **never** stored in source code or sent to the browser.
 
 ---
 
@@ -57,9 +48,16 @@ Whenever you update `Code.gs`:
 
 ## 4 – Changing the admin password
 
+**Via Script Properties (no reset flow):**
 1. Go to the Apps Script project → ⚙️ **Project Settings → Script Properties**.
 2. Edit the value of `ADMIN_PASSWORD`.
-3. No redeployment is needed – the script reads the property on every login request.
+3. No redeployment is needed.
+
+**Via the "Forgot password?" link (security breach / forgotten password):**
+1. On the admin login page, click **Forgot password?**
+2. The script emails a one-hour reset link to the address stored in `ADMIN_EMAIL`.
+3. Click the link in the email, enter and confirm a new password.
+4. All existing login sessions are invalidated automatically.
 
 ---
 
@@ -68,3 +66,4 @@ Whenever you update `Code.gs`:
 The HTML files are served automatically by GitHub Pages from the `main` branch.  
 The workflow is defined in `.github/workflows/static.yml`.  
 No build step is required – push to `main` and the site updates within a minute or two.
+

@@ -6,22 +6,17 @@
 //   If you use multiple Google accounts, sign in to each one at
 //   script.google.com and look under "My Projects" to find it.
 //
-//   Current deployment ID (also hardcoded in every HTML page):
-//     AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg
-//   Full exec URL:
-//     https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec
-//
 // HOW TO DEPLOY / UPDATE:
 //   1. Open script.google.com under the owner account, open this project.
 //   2. Paste the updated Code.gs content into the editor (or use clasp push).
-//   3. Go to Project Settings → Script Properties and add (if not already set):
-//        ADMIN_PASSWORD   <your chosen admin password>
-//        SPREADSHEET_ID   <optional – your Google Sheet ID for bookings/orders>
+//   3. Go to Project Settings → Script Properties and confirm these are set:
+//        ADMIN_PASSWORD   your admin password
+//        ADMIN_EMAIL      the email address that receives password-reset links
+//        SPREADSHEET_ID   optional – your Google Sheet ID for bookings/orders
 //   4. Deploy → Manage deployments → create a new version so the changes go live.
 //      The deployment ID does not change; no edits to the HTML files are needed.
 //
-// The ADMIN_PASSWORD Script Property is the only place the password lives.
-// It is never stored in source code or sent to the browser.
+// ADMIN_PASSWORD is never stored in source code or sent to the browser.
 // See README.md for the full setup guide.
 // ======================================================
 
@@ -120,6 +115,12 @@ function doPost(e) {
   // Login – no existing token needed
   if (type === 'VERIFY_LOGIN') return handleVerifyLogin_(body);
 
+  // Forgot password – no existing token needed (sends reset link by email)
+  if (type === 'FORGOT_PASSWORD') return handleForgotPassword_();
+
+  // Reset password via a valid reset token
+  if (type === 'RESET_PASSWORD')  return handleResetPassword_(body);
+
   // Logout – clear only the caller's token
   if (type === 'LOGOUT') {
     clearToken_(body.sessionToken || '');
@@ -156,6 +157,63 @@ function handleVerifyLogin_(body) {
   var token = generateToken_();
   storeToken_(token);
   return jsonResponse_({ success: true, token: token });
+}
+
+// ======================================================
+// Forgot-password / reset-password handlers
+// ======================================================
+
+var RESET_TOKEN_PREFIX  = 'RESET_TOKEN_';
+var RESET_EXPIRY_MS     = 60 * 60 * 1000; // 1 hour
+
+function handleForgotPassword_() {
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var adminEmail = props.getProperty('ADMIN_EMAIL');
+    if (!adminEmail) {
+      return jsonResponse_({ success: false, error: 'Reset email not configured – add ADMIN_EMAIL to Script Properties.' });
+    }
+    var token   = generateToken_();
+    var expiry  = Date.now() + RESET_EXPIRY_MS;
+    props.setProperty(RESET_TOKEN_PREFIX + token, String(expiry));
+    var siteUrl  = props.getProperty('SITE_URL') || 'https://ebysplace.com';
+    var resetUrl = siteUrl + '/admin.html?resetToken=' + encodeURIComponent(token);
+    GmailApp.sendEmail(
+      adminEmail,
+      "Eby's Place – Admin Password Reset",
+      "A password reset was requested for the Eby's Place admin portal.\n\n" +
+      "Click the link below to set a new password. This link expires in 1 hour.\n\n" +
+      resetUrl + "\n\n" +
+      "If you did not request this, you can safely ignore this email – your password has not been changed."
+    );
+    return jsonResponse_({ success: true });
+  } catch (err) {
+    return jsonResponse_({ success: false, error: err.message });
+  }
+}
+
+function handleResetPassword_(body) {
+  try {
+    var token       = body.resetToken   || '';
+    var newPassword = body.newPassword  || '';
+    if (!token || !newPassword) {
+      return jsonResponse_({ success: false, error: 'Missing reset token or new password.' });
+    }
+    var props = PropertiesService.getScriptProperties();
+    var key   = RESET_TOKEN_PREFIX + token;
+    var expiryStr = props.getProperty(key);
+    if (!expiryStr || Date.now() > parseInt(expiryStr, 10)) {
+      if (expiryStr) props.deleteProperty(key); // clean up expired token
+      return jsonResponse_({ success: false, error: 'Reset link has expired or is invalid. Please request a new one.' });
+    }
+    // Save new password, clear the used token, and invalidate all active sessions
+    props.setProperty('ADMIN_PASSWORD', newPassword);
+    props.deleteProperty(key);
+    saveTokenMap_({}); // force re-login everywhere
+    return jsonResponse_({ success: true });
+  } catch (err) {
+    return jsonResponse_({ success: false, error: err.message });
+  }
 }
 
 // ======================================================
