@@ -212,18 +212,6 @@
                 approved: false
             };
 
-            // Store locally for admin dashboard
-            try {
-                const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
-                reviews.unshift(review);
-                localStorage.setItem('ebyAdmin_reviews', JSON.stringify(reviews));
-
-                var act = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
-                act.unshift({ type: 'REVIEW_SUBMITTED', customerName: name, rating: rating, timestamp: review.timestamp });
-                if (act.length > 200) act.length = 200;
-                localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
-            } catch(e) {}
-
             // Store in GAS backend as the shared source of truth
             fetch(GAS_URL, {
                 method: 'POST',

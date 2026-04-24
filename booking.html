@@ -534,29 +534,8 @@
         // Setup variables & Stripe
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec';
 
-        // Availability is fetched from GAS on load and cached; falls back to localStorage
-        let _cachedAvailability = null;
-
-        async function fetchAvailability() {
-            try {
-                const resp = await fetch(GAS_URL + '?type=GET_AVAILABILITY', { cache: 'no-store' });
-                const data = await resp.json();
-                if (data && data.success && data.availability) {
-                    _cachedAvailability = data.availability;
-                    localStorage.setItem('ebyAdmin_availability', JSON.stringify(data.availability));
-                    return;
-                }
-            } catch (e) {}
-            // Fall back to localStorage
-            _cachedAvailability = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
-        }
-
         function getAvailabilityForDay(dayIdx) {
-            const avail = _cachedAvailability;
-            if (!avail || avail[dayIdx] === undefined) return Array.from({ length: 24 }, (_, i) => i);
-            const conf = avail[dayIdx];
-            if (conf.enabled === false) return [];
-            return conf.hours || [];
+            return Array.from({ length: 24 }, (_, i) => i);
         }
         let stripe, elements, gateCard;
         
@@ -628,8 +607,7 @@
                 });
             }
 
-            // Fetch admin availability from backend (so client sees live changes)
-            fetchAvailability().then(() => renderCalendar());
+            renderCalendar();
 
             // Handle URL parameters: ?service=ServiceName&price=120 or ?category=braids
             const params = new URLSearchParams(window.location.search);
@@ -910,6 +888,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 // Strict Contract Payload
                 const response = await fetch(GAS_URL, {
@@ -938,9 +923,6 @@
 
                 // SUCCESS FLOW
                 btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
-
-                // Log booking to admin activity
-                try { var _a=JSON.parse(localStorage.getItem('ebyAdmin_activity')||'[]'); _a.unshift({type:'BOOKING_DEPOSIT',customerName:name,email:email,item:currentBookingItem,amount:20,bookingStart:bookingStartISO,timestamp:new Date().toISOString()}); if(_a.length>200)_a.length=200; localStorage.setItem('ebyAdmin_activity',JSON.stringify(_a)); } catch(e) {}
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -1041,9 +1023,6 @@
                 navbar.classList.remove('nav-scrolled');
             }
         });
-    </script>
-    <script>
-        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>

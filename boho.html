@@ -707,12 +707,10 @@
             
             slotsWrapper.classList.remove('hidden');
             
-            // Inject stylish mock slots without fake load time
-            // Inject slots based on admin availability config
+            // Inject slots
             slotsGrid.innerHTML = '';
             const _dayIdx = new Date(dateStr + 'T00:00:00').getDay();
-            const _avail = JSON.parse(localStorage.getItem('ebyAdmin_availability') || 'null');
-            const _hours = _avail && _avail[_dayIdx] !== undefined ? (_avail[_dayIdx].enabled !== false ? (_avail[_dayIdx].hours || []) : []) : Array.from({length:24},function(_,i){return i;});
+            const _hours = Array.from({length:24},function(_,i){return i;});
             if (_hours.length === 0) {
                 slotsGrid.innerHTML = '<p class="col-span-3 text-center text-eby-brown-light text-sm py-4">No slots available for this day. Please choose another date.</p>';
             } else {
@@ -961,6 +959,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('ecommerce-gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Pay & Complete Order`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 const response = await fetch(GAS_URL, {
                     method: 'POST',
@@ -1062,6 +1067,13 @@
                 return;
             }
 
+            if (!paymentMethod || !paymentMethod.id) {
+                document.getElementById('gate-errors').textContent = "Card processing failed. Please check your card details and try again.";
+                btn.innerHTML = `Confirm & Pay £20.00`;
+                btn.disabled = false;
+                return;
+            }
+
             try {
                 // Strict Contract Payload
                 const response = await fetch(GAS_URL, {
@@ -1090,9 +1102,6 @@
 
                 // SUCCESS FLOW
                 btn.innerHTML = '<i class="ph ph-check text-lg"></i> Confirmed';
-
-                // Log booking to admin activity
-                try { var _a=JSON.parse(localStorage.getItem('ebyAdmin_activity')||'[]'); _a.unshift({type:'BOOKING_DEPOSIT',customerName:name,email:email,item:currentBookingItem,amount:20,bookingStart:bookingStartISO,timestamp:new Date().toISOString()}); if(_a.length>200)_a.length=200; localStorage.setItem('ebyAdmin_activity',JSON.stringify(_a)); } catch(e) {}
                 
                 setTimeout(() => {
                     document.getElementById('booking-gate-ui').classList.add('hidden');
@@ -1202,9 +1211,6 @@
                 navbar.classList.remove('nav-scrolled');
             }
         });
-    </script>
-    <script>
-        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
     </script>
 </body>
 </html>
