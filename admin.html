@@ -640,7 +640,7 @@ async function doLogin() {
     try {
         const res  = await fetch(GAS_URL, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
         });
         if (!res.ok) {
@@ -715,7 +715,7 @@ async function doReset() {
     try {
         const res  = await fetch(GAS_URL, {
             method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body:    JSON.stringify({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass })
         });
         const data = await res.json();
@@ -793,7 +793,7 @@ async function apiPost(payload) {
     }
     const res = await fetch(GAS_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
     });
     return res.json();
