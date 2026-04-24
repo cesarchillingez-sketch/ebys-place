@@ -488,8 +488,7 @@
         function shopEscHtml(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
         function renderShopProducts() {
-            const saved = localStorage.getItem('ebyAdmin_products');
-            const products = saved ? JSON.parse(saved) : SHOP_DEFAULTS;
+            const products = SHOP_DEFAULTS;
             const grid = document.getElementById('shop-products-grid');
             const countEl = document.getElementById('shop-results-count');
             if (!grid) return;
@@ -764,14 +763,6 @@
 
                 btn.innerHTML = '<i class="ph ph-check"></i> Payment Confirmed';
 
-                // Log shop order to admin activity
-                try {
-                    const orders = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
-                    orders.unshift({ type: 'SHOP_ORDER', customerName: name, email: email, items: ecoCart.map(i => i.name).join(', '), amount: ecoCartTotal, timestamp: new Date().toISOString() });
-                    if (orders.length > 200) orders.length = 200;
-                    localStorage.setItem('ebyAdmin_activity', JSON.stringify(orders));
-                } catch(e) {}
-
                 setTimeout(() => {
                     document.getElementById('checkout-form-state').classList.add('hidden');
                     document.getElementById('checkout-form-state').classList.remove('flex');
@@ -976,10 +967,6 @@
                 glow.style.setProperty('--y', e.clientY + 'px');
             }
         });
-    </script>
-    <script>
-        // Visitor tracking
-        (function(){try{var v=JSON.parse(localStorage.getItem('ebyAdmin_visitors')||'[]');v.unshift({type:'PAGE_VIEW',page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem('ebyAdmin_visitors',JSON.stringify(v));fetch('https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzorBE3Zqb4PzW41rZmnrn2lT5KjbHgP-KweFDJg3yxin7aCUg/exec',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'PAGE_VIEW',page:location.pathname,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString()})}).catch(function(){});}catch(e){}})();
     </script>
 </body>
 </html>

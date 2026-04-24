@@ -1250,28 +1250,8 @@
                     const data = await resp.json();
                     if (data && data.success && Array.isArray(data.reviews)) {
                         approved = data.reviews;
-                        // Merge into local cache so admin panel is also up to date
-                        try {
-                            const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
-                            const approvedIds = new Set(approved.map(function(r) { return r.id; }));
-                            const merged = all.map(function(r) {
-                                return approvedIds.has(r.id) ? Object.assign({}, r, { approved: true }) : r;
-                            });
-                            approved.forEach(function(r) {
-                                if (!merged.find(function(m) { return m.id === r.id; })) merged.push(r);
-                            });
-                            localStorage.setItem('ebyAdmin_reviews', JSON.stringify(merged));
-                        } catch(e) {}
                     }
                 } catch(e) {}
-
-                // Fallback: localStorage approved reviews
-                if (!approved.length) {
-                    try {
-                        const all = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
-                        approved = all.filter(function(r) { return r.approved; });
-                    } catch(e) {}
-                }
 
                 if (!approved.length) return; // nothing to add; hardcoded loop already set up
 
@@ -1360,18 +1340,7 @@
             const review = { id: Date.now().toString(36) + Math.random().toString(36).slice(2), name: name, rating: rating, text: text, timestamp: new Date().toISOString(), approved: false };
 
             try {
-                const reviews = JSON.parse(localStorage.getItem('ebyAdmin_reviews') || '[]');
-                reviews.unshift(review);
-                localStorage.setItem('ebyAdmin_reviews', JSON.stringify(reviews));
-
-                var act = JSON.parse(localStorage.getItem('ebyAdmin_activity') || '[]');
-                act.unshift({ type: 'REVIEW_SUBMITTED', customerName: name, rating: rating, timestamp: new Date().toISOString() });
-                if (act.length > 200) act.length = 200;
-                localStorage.setItem('ebyAdmin_activity', JSON.stringify(act));
-            } catch(e) {}
-
-            // Store in GAS backend as the shared source of truth
-            try {
+                // Store in GAS backend as the shared source of truth
                 fetch(GAS_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1421,8 +1390,6 @@
             }
         }
     </script>
-    <script>
-        (function(){try{var v=JSON.parse(localStorage.getItem("ebyAdmin_visitors")||"[]");v.unshift({type:"PAGE_VIEW",page:location.pathname||location.href,title:document.title,referrer:document.referrer,timestamp:new Date().toISOString(),userAgent:navigator.userAgent});if(v.length>500)v.length=500;localStorage.setItem("ebyAdmin_visitors",JSON.stringify(v));}catch(e){}})();
-    </script>
+
 </body>
 </html>
