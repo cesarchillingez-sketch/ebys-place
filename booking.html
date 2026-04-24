@@ -129,6 +129,10 @@
         .cat-title { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .cat-arrow { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
 
+        /* Selected service button state */
+        .service-btn-selected { border-color: #2A1A12 !important; background-color: rgba(244, 239, 230, 0.6) !important; }
+        .service-btn-selected .font-display { color: #2A1A12; }
+
         /* Booking Lock Overlay */
         #booking-lock-overlay { position: absolute; inset: 0; background: rgba(252, 251, 248, 0.88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 38px; transition: opacity 0.5s ease, visibility 0.5s ease; }
         #booking-lock-overlay.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -210,7 +214,7 @@
         <section class="lg:w-1/2 flex flex-col reveal">
             <div class="mb-12">
                 <h3 class="font-sans text-[11px] uppercase tracking-widest font-bold text-eby-gold-dark mb-2 border-l-2 border-eby-gold-dark pl-3">Service Selection</h3>
-                <p class="text-eby-dark text-2xl font-display">Please select a category to initiate the calendar synchronization.</p>
+                <p id="service-selection-heading" class="text-eby-dark text-2xl font-display">Please select a category to initiate the calendar synchronization.</p>
             </div>
 
             <!-- Categories List -->
@@ -790,6 +794,10 @@
             document.getElementById('time-slots-grid').innerHTML = '';
             document.getElementById('gate-errors').textContent = '';
 
+            // Reset left-panel heading
+            const heading = document.getElementById('service-selection-heading');
+            if (heading) heading.textContent = 'Please select a category to initiate the calendar synchronization.';
+
             serviceListCopy.textContent = `You selected ${categoryName}. Choose a specific service to continue.`;
             serviceItems.innerHTML = '';
             services.forEach(service => {
@@ -826,6 +834,26 @@
             document.getElementById('booking-gate-title').innerText = "Secure Your Slot.";
             document.getElementById('booking-gate-desc').innerHTML = `You are securing <strong>${safeServiceName}</strong> (Estimated from £${formatPrice(price)}). Please select a date and time, then confirm your £20.00 deposit.`;
             document.getElementById('dg-btn').disabled = false;
+
+            // Visually highlight the selected service button in the list
+            document.querySelectorAll('button[data-service-name]').forEach(btn => {
+                if (btn.dataset.serviceName === serviceName) {
+                    btn.classList.add('service-btn-selected');
+                } else {
+                    btn.classList.remove('service-btn-selected');
+                }
+            });
+
+            // Update left-panel heading to confirm selection (DOM-safe, no innerHTML)
+            const heading = document.getElementById('service-selection-heading');
+            if (heading) {
+                heading.textContent = '';
+                const check = document.createElement('span');
+                check.className = 'text-eby-gold-dark';
+                check.textContent = '\u2713 ';
+                heading.appendChild(check);
+                heading.appendChild(document.createTextNode(serviceName + ' selected \u2014 pick a date & time below.'));
+            }
 
             // Unlock the calendar / payment area
             const overlay = document.getElementById('booking-lock-overlay');
