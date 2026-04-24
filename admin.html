@@ -1318,13 +1318,32 @@ function toast(msg) {
 // ──────────────────────────────────────────────
 // INIT — restore session or show login
 // ──────────────────────────────────────────────
-(function init() {
+(async function init() {
     const savedPass = sessionStorage.getItem('eby_admin_pass');
     if (savedPass) {
-        _adminPassword = savedPass;
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        loadOverview();
+        // Always verify the saved password against the server before granting access.
+        // This ensures a server-side password change or revocation takes effect immediately.
+        try {
+            const res = await fetch(GAS_URL, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: savedPass })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success === true) {
+                    _adminPassword = savedPass;
+                    document.getElementById('login-screen').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    loadOverview();
+                    return;
+                }
+            }
+        } catch (e) {
+            // Network error – fall through to login screen
+        }
+        // Verification failed: clear stale session and show login
+        sessionStorage.removeItem('eby_admin_pass');
     }
 })();
 </script>
