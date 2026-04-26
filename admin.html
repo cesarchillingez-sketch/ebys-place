@@ -599,8 +599,8 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbyMRtBwJEeSJpzkuASeHzor
 // SHA-256 of "RESET-7391-EBYS"
 const DEFAULT_RECOV_HASH = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
 
-const RATE_LIMIT_MAX = 5;       // attempts before lockout
-const RATE_LIMIT_MS  = 30000;   // 30-second lockout
+const RATE_LIMIT_MAX = 9999; // lockout disabled       // attempts before lockout
+const RATE_LIMIT_MS  = 0;    // lockout disabled   // 30-second lockout
 
 let _adminPassword = null;          // stored in sessionStorage after login
 let _currentSection = 'overview';
