@@ -621,52 +621,21 @@ async function sha256(str) {
 // LOGIN / LOGOUT
 // ──────────────────────────────────────────────
 async function doLogin() {
-    // Rate limiting
-    const attempts = parseInt(localStorage.getItem('eby_login_attempts') || '0');
-    const lastFail  = parseInt(localStorage.getItem('eby_login_time')    || '0');
-    if (attempts >= RATE_LIMIT_MAX && (Date.now() - lastFail) < RATE_LIMIT_MS) {
-        const secs = Math.ceil((RATE_LIMIT_MS - (Date.now() - lastFail)) / 1000);
-        showLoginError(`Too many attempts. Please wait ${secs}s.`);
-        return;
-    }
-
     const passEl = document.getElementById('login-pass');
-    const pass   = passEl.value;
+    const pass   = passEl.value.trim();
     if (!pass) { showLoginError('Please enter your password.'); return; }
 
-    // Verify password against the server – always authoritative.
-    let verified = false;
-    let serverError = '';
-    try {
-        const res  = await fetch(GAS_URL, {
-            method:  'POST',
-            
-            body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
-        });
-        if (!res.ok) {
-            showLoginError(`Server returned an error (${res.status}). Try again or check your GAS deployment.`);
-            return;
-        }
-        const data = await res.json();
-        verified    = data.success === true;
-        serverError = data.error  || '';
-    } catch (e) {
-        showLoginError('Network error – check your connection and try again.');
-        return;
-    }
+    // Direct local password check — no server needed for login
+    const ADMIN_HASH = '1f2e37366464250f20662c9c59d267f9c3fd84f3d31a070eb042e4f6f166f5da';
+    const inputHash  = await sha256(pass);
 
-    if (!verified) {
-        localStorage.setItem('eby_login_attempts', String(attempts + 1));
-        localStorage.setItem('eby_login_time', String(Date.now()));
-        showLoginError(serverError || 'Incorrect password. Please try again.');
+    if (inputHash !== ADMIN_HASH) {
+        showLoginError('Incorrect password. Please try again.');
         passEl.value = '';
         return;
     }
 
-    // Success – keep the local hash in sync so change-password UX stays accurate
-    localStorage.setItem('eby_admin_pass_hash', await sha256(pass));
-    localStorage.removeItem('eby_login_attempts');
-    localStorage.removeItem('eby_login_time');
+    // Success
     sessionStorage.setItem('eby_admin_pass', pass);
     _adminPassword = pass;
     document.getElementById('login-screen').classList.add('hidden');
@@ -1349,3 +1318,4 @@ function toast(msg) {
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
