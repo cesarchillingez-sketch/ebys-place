@@ -156,6 +156,41 @@
             <button class="btn btn-primary w-full justify-center" onclick="doLogin()">
                 <i class="ph ph-sign-in"></i> Sign In
             </button>
+            <p class="text-center mt-4">
+                <button type="button" class="text-xs text-eby-gold-dark underline underline-offset-2 hover:text-eby-dark transition-colors" onclick="showRecoveryPanel()">Forgot password?</button>
+            </p>
+        </div>
+
+        <!-- Recovery panel -->
+        <div id="recovery-panel" class="card hidden mt-4">
+            <h2 class="font-display text-xl text-eby-dark mb-1">Reset Password</h2>
+            <p class="text-eby-brown text-sm mb-6">Enter your recovery code and a new password.</p>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Recovery Code</label>
+                    <input id="recov-code-input" type="text" class="field" placeholder="Enter your recovery code"
+                           autocomplete="off" onkeydown="if(event.key==='Enter')doResetPassword()">
+                </div>
+                <div>
+                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">New Password</label>
+                    <input id="recov-new-pass" type="password" class="field" placeholder="Min. 8 characters"
+                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+                </div>
+                <div>
+                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Confirm New Password</label>
+                    <input id="recov-confirm-pass" type="password" class="field" placeholder="Repeat new password"
+                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+                </div>
+            </div>
+            <p id="recov-error" class="text-red-600 text-xs mt-3 mb-2 hidden"></p>
+            <p id="recov-success" class="text-green-700 text-xs mt-3 mb-2 hidden">Password reset successfully! You can now sign in.</p>
+            <div class="flex gap-3 mt-5">
+                <button class="btn btn-primary flex-1 justify-center" onclick="doResetPassword()">
+                    <i class="ph ph-lock-key"></i> Reset Password
+                </button>
+                <button class="btn btn-outline" onclick="hideRecoveryPanel()">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -618,6 +653,72 @@ function doLogout() {
     sessionStorage.removeItem('eby_admin_pass');
     _adminPassword = null;
     location.reload();
+}
+
+function showRecoveryPanel() {
+    document.getElementById('login-panel').classList.add('hidden');
+    document.getElementById('recovery-panel').classList.remove('hidden');
+    document.getElementById('recov-error').classList.add('hidden');
+    document.getElementById('recov-success').classList.add('hidden');
+    document.getElementById('recov-code-input').value = '';
+    document.getElementById('recov-new-pass').value   = '';
+    document.getElementById('recov-confirm-pass').value = '';
+    document.getElementById('recov-code-input').focus();
+}
+
+function hideRecoveryPanel() {
+    document.getElementById('recovery-panel').classList.add('hidden');
+    document.getElementById('login-panel').classList.remove('hidden');
+    document.getElementById('login-pass').focus();
+}
+
+async function doResetPassword() {
+    const code    = document.getElementById('recov-code-input').value.trim();
+    const newPass = document.getElementById('recov-new-pass').value;
+    const confirm = document.getElementById('recov-confirm-pass').value;
+    const errEl   = document.getElementById('recov-error');
+    const okEl    = document.getElementById('recov-success');
+
+    errEl.classList.add('hidden');
+    okEl.classList.add('hidden');
+
+    if (!code)                   { showRecovError('Please enter your recovery code.'); return; }
+    if (newPass.length < 8)      { showRecovError('New password must be at least 8 characters.'); return; }
+    if (newPass !== confirm)     { showRecovError('Passwords do not match.'); return; }
+
+    let res;
+    try {
+        const raw = await fetch(GAS_URL, {
+            method: 'POST',
+            body:   JSON.stringify({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass })
+        });
+        res = await raw.json();
+    } catch (e) {
+        showRecovError('Network error – check your connection and try again.');
+        return;
+    }
+
+    if (!res.success) {
+        showRecovError(res.error || 'Reset failed. Check your recovery code and try again.');
+        return;
+    }
+
+    okEl.classList.remove('hidden');
+    document.getElementById('recov-code-input').value    = '';
+    document.getElementById('recov-new-pass').value      = '';
+    document.getElementById('recov-confirm-pass').value  = '';
+    // After a short delay, return to sign-in with the new password pre-cleared
+    setTimeout(() => {
+        hideRecoveryPanel();
+        document.getElementById('login-pass').value = '';
+        document.getElementById('login-pass').focus();
+    }, 2000);
+}
+
+function showRecovError(msg) {
+    const el = document.getElementById('recov-error');
+    el.textContent = msg;
+    el.classList.remove('hidden');
 }
 
 function showLoginError(msg) {
