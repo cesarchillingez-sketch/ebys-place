@@ -8,8 +8,13 @@
 //        STRIPE_SECRET_KEY   your Stripe secret key
 //        SITE_URL            your site URL (e.g. https://ebysplace.com)
 //        SPREADSHEET_ID      your Google Sheet ID for bookings/orders
-//        ADMIN_PASSWORD      admin dashboard password (default: EbysPlace@2025)
+//        ADMIN_PASSWORD      admin dashboard password (default: EbysAdmin@2025)
 //   4. Deploy → Manage deployments → create a new version so the changes go live.
+//
+// PASSWORD RESET:
+//   If you are locked out, use the "Forgot password?" link on the admin login page
+//   and enter the recovery code:  RESET-7391-EBYS
+//   Alternatively, delete the ADMIN_PASSWORD Script Property so the default is used.
 // ======================================================
 
 // ---- Response helper ----
@@ -21,7 +26,7 @@ function jsonResponse_(obj) {
 
 // ---- Admin auth helper ----
 function isAdminValid_(pass) {
-  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || 'EbysPlace@2025';
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || 'EbysAdmin@2025';
   return (typeof pass === 'string') && pass === stored;
 }
 
