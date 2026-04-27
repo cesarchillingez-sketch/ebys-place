@@ -625,13 +625,20 @@ async function doLogin() {
     const pass   = passEl.value.trim();
     if (!pass) { showLoginError('Please enter your password.'); return; }
 
-    // Direct local password check — no server needed for login
-    // Use the hash stored after a password reset (localStorage), falling back to the default.
-    const DEFAULT_ADMIN_HASH = '9327d264073460735f368b8041811e3b9a52089e0b9a69bd932fb9afb494429c'; // SHA-256 of EbysPlace@2025
-    const ADMIN_HASH = localStorage.getItem('eby_admin_pass_hash') || DEFAULT_ADMIN_HASH;
-    const inputHash  = await sha256(pass);
+    // Verify against server — server is the single source of truth for the password
+    let res;
+    try {
+        res = await fetch(GAS_URL, {
+            method: 'POST',
+            body:   JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
+        });
+        res = await res.json();
+    } catch (e) {
+        showLoginError('Network error – check your connection and try again.');
+        return;
+    }
 
-    if (inputHash !== ADMIN_HASH) {
+    if (!res.success) {
         showLoginError('Incorrect password. Please try again.');
         passEl.value = '';
         return;
@@ -696,10 +703,6 @@ async function doReset() {
         showResetError('Network error. Please check your connection and try again.');
         return;
     }
-
-    // Update client-side hash to match the new password
-    const newHash = await sha256(newPass);
-    localStorage.setItem('eby_admin_pass_hash', newHash);
 
     // Clear fields
     document.getElementById('reset-code').value    = '';
@@ -1203,8 +1206,7 @@ async function changePassword() {
         return;
     }
 
-    // Update client-side hash and session
-    localStorage.setItem('eby_admin_pass_hash', await sha256(newPass));
+    // Update session
     sessionStorage.setItem('eby_admin_pass', newPass);
     _adminPassword = newPass;
 
