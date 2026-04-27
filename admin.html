@@ -153,36 +153,9 @@
                        autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
             </div>
             <p id="login-error" class="text-red-600 text-xs mb-4 hidden"></p>
-            <button class="btn btn-primary w-full justify-center mb-4" onclick="doLogin()">
+            <button class="btn btn-primary w-full justify-center" onclick="doLogin()">
                 <i class="ph ph-sign-in"></i> Sign In
             </button>
-            <button class="text-xs text-eby-brown underline underline-offset-2 hover:text-eby-gold-dark transition-colors" onclick="showReset()">
-                Forgot password? Use recovery code
-            </button>
-        </div>
-
-        <!-- Reset panel (hidden by default) -->
-        <div id="reset-panel" class="card hidden">
-            <h2 class="font-display text-2xl text-eby-dark mb-1">Reset Password</h2>
-            <p class="text-eby-brown text-sm mb-6">Enter your recovery code, then choose a new password.</p>
-
-            <div class="mb-3">
-                <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Recovery Code</label>
-                <input id="reset-code" type="text" class="field" placeholder="RESET-XXXX-XXXX" autocomplete="off">
-            </div>
-            <div class="mb-3">
-                <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">New Password</label>
-                <input id="reset-new" type="password" class="field" placeholder="Min. 8 characters" autocomplete="new-password">
-            </div>
-            <div class="mb-4">
-                <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Confirm Password</label>
-                <input id="reset-confirm" type="password" class="field" placeholder="Repeat new password" autocomplete="new-password">
-            </div>
-            <p id="reset-error" class="text-red-600 text-xs mb-4 hidden"></p>
-            <button class="btn btn-primary w-full justify-center mb-3" onclick="doReset()">
-                <i class="ph ph-key"></i> Reset Password
-            </button>
-            <button class="text-xs text-eby-brown underline underline-offset-2" onclick="showLogin()">Back to login</button>
         </div>
     </div>
 </div>
@@ -596,9 +569,6 @@
 // ──────────────────────────────────────────────
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbz-Un1Hu4_IuwwxfU4RnliUOsuHO_bHycdF3wD0e1KpLrK7lDuUosbpaL0kF9FTeTPs/exec';
 
-// SHA-256 of "RESET-7391-EBYS"
-const DEFAULT_RECOV_HASH = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
-
 const RATE_LIMIT_MAX = 9999; // lockout disabled       // attempts before lockout
 const RATE_LIMIT_MS  = 0;    // lockout disabled   // 30-second lockout
 
@@ -608,14 +578,6 @@ let _availData = {};                // local copy of availability config
 let _editingProductId = null;       // null = adding new, else = editing
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-// ──────────────────────────────────────────────
-// CRYPTO HELPERS
-// ──────────────────────────────────────────────
-async function sha256(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
 
 // ──────────────────────────────────────────────
 // LOGIN / LOGOUT
@@ -660,63 +622,6 @@ function doLogout() {
 
 function showLoginError(msg) {
     const el = document.getElementById('login-error');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-}
-
-// ──────────────────────────────────────────────
-// PASSWORD RESET
-// ──────────────────────────────────────────────
-function showReset() {
-    document.getElementById('login-panel').classList.add('hidden');
-    document.getElementById('reset-panel').classList.remove('hidden');
-}
-function showLogin() {
-    document.getElementById('reset-panel').classList.add('hidden');
-    document.getElementById('login-panel').classList.remove('hidden');
-    document.getElementById('reset-error').classList.add('hidden');
-}
-
-async function doReset() {
-    const code    = document.getElementById('reset-code').value.trim();
-    const newPass = document.getElementById('reset-new').value;
-    const confirm = document.getElementById('reset-confirm').value;
-    const errEl   = document.getElementById('reset-error');
-
-    errEl.classList.add('hidden');
-    if (!code || !newPass || !confirm) { showResetError('All fields are required.'); return; }
-    if (newPass !== confirm)           { showResetError('Passwords do not match.'); return; }
-    if (newPass.length < 8)            { showResetError('Password must be at least 8 characters.'); return; }
-
-    // Push the new password to the server using the recovery code for auth
-    let serverUpdated = false;
-    try {
-        const res  = await fetch(GAS_URL, {
-            method:  'POST',
-            
-            body:    JSON.stringify({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass })
-        });
-        const data = await res.json();
-        serverUpdated = data.success === true;
-        if (!serverUpdated) { showResetError(data.error || 'Server update failed. Please try again.'); return; }
-    } catch (e) {
-        showResetError('Network error. Please check your connection and try again.');
-        return;
-    }
-
-    // Clear fields
-    document.getElementById('reset-code').value    = '';
-    document.getElementById('reset-new').value     = '';
-    document.getElementById('reset-confirm').value = '';
-
-    showLogin();
-    const errLoginEl = document.getElementById('login-error');
-    errLoginEl.textContent = 'Password reset successfully. You can now sign in with your new password.';
-    errLoginEl.classList.remove('hidden');
-    errLoginEl.style.color = '#C2A378';
-}
-function showResetError(msg) {
-    const el = document.getElementById('reset-error');
     el.textContent = msg;
     el.classList.remove('hidden');
 }
