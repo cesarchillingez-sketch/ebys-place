@@ -626,7 +626,9 @@ async function doLogin() {
     if (!pass) { showLoginError('Please enter your password.'); return; }
 
     // Direct local password check — no server needed for login
-    const ADMIN_HASH = '1f2e37366464250f20662c9c59d267f9c3fd84f3d31a070eb042e4f6f166f5da';
+    // Use the hash stored after a password reset (localStorage), falling back to the default.
+    const DEFAULT_ADMIN_HASH = '9327d264073460735f368b8041811e3b9a52089e0b9a69bd932fb9afb494429c'; // SHA-256 of EbysPlace@2025
+    const ADMIN_HASH = localStorage.getItem('eby_admin_pass_hash') || DEFAULT_ADMIN_HASH;
     const inputHash  = await sha256(pass);
 
     if (inputHash !== ADMIN_HASH) {
