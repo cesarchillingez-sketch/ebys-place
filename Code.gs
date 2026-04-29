@@ -9,7 +9,7 @@
 //        STRIPE_SECRET_KEY     your Stripe secret key
 //        SITE_URL              your live site URL (e.g. https://ebysplace.com)
 //        ADMIN_PASSWORD        your chosen admin password
-//        RECOVERY_CODE_HASH    SHA-256 hex of your recovery code (use sha256Online.com)
+//        RECOVERY_CODE_HASH    SHA-256 hex of your recovery code (use emn178.github.io/online-tools/sha256.html)
 //        ADMIN_NAME            (optional) display name shown in the dashboard
 //        ADMIN_EMAIL           (optional) notification email
 //   4. Deploy → Manage deployments → New version so changes go live.
@@ -42,7 +42,25 @@ function checkAdmin_(pass) {
     Logger.log('WARNING: ADMIN_PASSWORD is not set in Script Properties. Admin access is disabled.');
     return false;
   }
-  return (typeof pass === 'string') && pass === stored;
+  return (typeof pass === 'string') && pass === stored.trim();
+}
+
+// ======================================================
+// Recovery-code hash generator
+// Run this function once from the Apps Script editor:
+//   1. Set YOUR_RECOVERY_CODE below to your chosen phrase.
+//   2. Click Run → generateRecoveryCodeHash.
+//   3. Open View → Logs, copy the printed hash.
+//   4. Paste it into Script Properties as RECOVERY_CODE_HASH.
+//   5. Delete or blank out YOUR_RECOVERY_CODE here before saving.
+// ======================================================
+function generateRecoveryCodeHash() {
+  var code = 'YOUR_RECOVERY_CODE'; // ← replace with your chosen recovery phrase
+  if (code === 'YOUR_RECOVERY_CODE' || code === '') {
+    Logger.log('ERROR: Replace YOUR_RECOVERY_CODE with your actual recovery phrase first.');
+    return;
+  }
+  Logger.log('RECOVERY_CODE_HASH = ' + sha256_(code));
 }
 
 // ======================================================
@@ -494,7 +512,7 @@ function adminUpdateProfile_(body) {
 // Password recovery (public endpoint)
 // RECOVERY_CODE_HASH must be set in Script Properties.
 // To generate: take your chosen recovery code, compute its
-// SHA-256 hex (e.g. at sha256.online), paste as the property.
+// SHA-256 hex (e.g. at emn178.github.io/online-tools/sha256.html), paste as the property.
 // ======================================================
 function adminResetPassword_(body) {
   var code    = String(body.recoveryCode || '');
@@ -502,8 +520,9 @@ function adminResetPassword_(body) {
   if (!code)              return jsonErr_('Recovery code is required.');
   if (newPass.length < 8) return jsonErr_('Password must be at least 8 characters.');
 
-  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH');
-  if (!storedHash) return jsonErr_('Invalid recovery code.');
+  // SHA-256 of the default recovery phrase (override by setting RECOVERY_CODE_HASH in Script Properties).
+  var DEFAULT_RECOV_HASH_ = '268d68bfaad1fb0eeee0b7fccd8c92817fae5f84889dcf89a5a412299aceb584';
+  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH') || DEFAULT_RECOV_HASH_;
 
   if (sha256_(code) !== storedHash) return jsonErr_('Invalid recovery code.');
 
