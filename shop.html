@@ -398,15 +398,16 @@
                 <form id="ecommerce-checkout-form" onsubmit="handleDirectCheckout(event)" class="space-y-6">
                     
                     <div>
-                        <div class="flex items-center gap-3 mb-4"><i class="ph ph-truck text-eby-gold-dark text-lg"></i><span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">Shipping Details</span></div>
+                        <div class="flex items-center gap-3 mb-4"><i class="ph ph-truck text-eby-gold-dark text-lg"></i><span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">Delivery Address</span></div>
                         <div class="space-y-3">
                             <input type="text" id="ship-name" required class="luxury-input" placeholder="Full Name">
+                            <input type="tel" id="ship-phone" required class="luxury-input" placeholder="Contact Phone Number">
+                            <input type="text" id="ship-address" required class="luxury-input" placeholder="House Number & Street Name">
+                            <input type="text" id="ship-city" required class="luxury-input" placeholder="Town / City">
+                            <input type="text" id="ship-county" class="luxury-input" placeholder="County (optional)">
+                            <input type="text" id="ship-zip" required class="luxury-input" placeholder="Postcode">
                             <input type="email" id="ship-email" required class="luxury-input" placeholder="Email Address">
-                            <input type="text" id="ship-address" required class="luxury-input" placeholder="Street Address">
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="text" id="ship-city" required class="luxury-input" placeholder="City">
-                                <input type="text" id="ship-zip" required class="luxury-input" placeholder="Postal Code">
-                            </div>
+                            <textarea id="ship-note" rows="2" class="luxury-input resize-none" placeholder="Additional delivery note or instruction (optional)"></textarea>
                         </div>
                     </div>
 
@@ -709,7 +710,13 @@
             const btn = document.getElementById('eco-submit-btn');
             const email = document.getElementById('ship-email').value;
             const name = document.getElementById('ship-name').value;
+            const phone = document.getElementById('ship-phone').value;
             const address = document.getElementById('ship-address').value;
+            const city = document.getElementById('ship-city').value;
+            const county = document.getElementById('ship-county').value;
+            const zip = document.getElementById('ship-zip').value;
+            const note = document.getElementById('ship-note').value;
+            const fullAddress = [address, city, county, zip].filter(Boolean).join(', ');
             
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing...';
             btn.disabled = true;
@@ -746,7 +753,10 @@
                         type: "DIRECT_SALE",
                         customerName: name, // STRICT Contract Requirement
                         email: email,       // STRICT Contract Requirement
-                        address: address,
+                        address: fullAddress,
+                        phone: phone,
+                        county: county,
+                        deliveryNote: note,
                         amount: ecoCartTotal, // STRICT Contract Requirement
                         stripeId: paymentMethod.id, // STRICT Contract Requirement
                         item: ecoCart.map(i => i.name).join(' + '), // STRICT Contract Requirement
