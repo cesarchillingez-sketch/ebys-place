@@ -9,7 +9,7 @@
 //        STRIPE_SECRET_KEY     your Stripe secret key
 //        SITE_URL              your live site URL (e.g. https://ebysplace.com)
 //        ADMIN_PASSWORD        your chosen admin password
-//        RECOVERY_CODE_HASH    SHA-256 hex of your recovery code (use sha256Online.com)
+//        RECOVERY_CODE_HASH    SHA-256 hex of your recovery code (use emn178.github.io/online-tools/sha256.html)
 //        ADMIN_NAME            (optional) display name shown in the dashboard
 //        ADMIN_EMAIL           (optional) notification email
 //   4. Deploy → Manage deployments → New version so changes go live.
@@ -494,7 +494,7 @@ function adminUpdateProfile_(body) {
 // Password recovery (public endpoint)
 // RECOVERY_CODE_HASH must be set in Script Properties.
 // To generate: take your chosen recovery code, compute its
-// SHA-256 hex (e.g. at sha256.online), paste as the property.
+// SHA-256 hex (e.g. at emn178.github.io/online-tools/sha256.html), paste as the property.
 // ======================================================
 function adminResetPassword_(body) {
   var code    = String(body.recoveryCode || '');
