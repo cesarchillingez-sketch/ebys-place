@@ -481,8 +481,8 @@ function adminUpdateProfile_(body) {
   var props = PropertiesService.getScriptProperties();
   var name  = String(body.name  || '').trim().slice(0, 100);
   var email = String(body.email || '').trim().slice(0, 200);
-  if (name)  props.setProperty('ADMIN_NAME',  name);
-  if (email) props.setProperty('ADMIN_EMAIL', email);
+  props.setProperty('ADMIN_NAME',  name);
+  props.setProperty('ADMIN_EMAIL', email);
   return jsonResponse_({ success: true });
 }
 

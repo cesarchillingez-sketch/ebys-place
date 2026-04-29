@@ -1294,7 +1294,7 @@ function updateProfileAvatar(name) {
     const initialsEl = document.getElementById('profile-initials');
     const iconEl     = document.getElementById('profile-icon');
     if (name) {
-        const initials = name.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const initials = name.trim().split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
         initialsEl.textContent = initials;
         initialsEl.classList.remove('hidden');
         iconEl.classList.add('hidden');
