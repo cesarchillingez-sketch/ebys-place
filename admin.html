@@ -74,9 +74,11 @@
         /* ── Form inputs ── */
         .field { width: 100%; background: #FCFBF8; border: 1px solid rgba(194,163,120,.35); padding: 11px 16px; border-radius: 12px; font-family: 'Lexend', sans-serif; font-size: 13px; color: #2A1A12; outline: none; transition: border .2s; }
         .field:focus { border-color: #2A1A12; background: #fff; }
-        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 12px; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; border: none; outline: none; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 12px; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; border: none; outline: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         .btn-primary { background: #2A1A12; color: #fff; }
         .btn-primary:hover { background: #3a2618; }
+        .btn-primary:active { background: #1a0e09; transform: scale(0.97); }
+        .btn:disabled, .btn[disabled] { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
         .btn-gold { background: #C2A378; color: #fff; }
         .btn-gold:hover { background: #b5916a; }
         .btn-outline { background: transparent; border: 1px solid rgba(194,163,120,.5); color: #6B5749; }
@@ -102,7 +104,7 @@
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* ── Login ── */
-        #login-screen { position: fixed; inset: 0; background: #FCFBF8; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+        #login-screen { position: fixed; inset: 0; background: #FCFBF8; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
 
         /* ── Modal ── */
         .modal-bg { position: fixed; inset: 0; background: rgba(42,26,18,.5); backdrop-filter: blur(4px); z-index: 150; display: flex; align-items: center; justify-content: center; padding: 16px; }
@@ -112,6 +114,7 @@
         .section { display: none; animation: fadeIn .25s ease; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ── Responsive table wrapper ── */
         .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; border: 1px solid rgba(194,163,120,.2); }
@@ -153,7 +156,7 @@
                        autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
             </div>
             <p id="login-error" class="text-red-600 text-xs mb-4 hidden"></p>
-            <button class="btn btn-primary w-full justify-center" onclick="doLogin()">
+            <button id="login-btn" type="button" class="btn btn-primary w-full justify-center" onclick="doLogin()">
                 <i class="ph ph-sign-in"></i> Sign In
             </button>
             <p class="text-center mt-4">
@@ -638,10 +641,17 @@ const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','
 // ──────────────────────────────────────────────
 // LOGIN / LOGOUT
 // ──────────────────────────────────────────────
+const BTN_SIGN_IN_HTML    = '<i class="ph ph-sign-in"></i> Sign In';
+const BTN_SIGNING_IN_HTML = '<i class="ph ph-circle-notch" style="animation:spin .8s linear infinite"></i> Signing in\u2026';
+
 async function doLogin() {
     const passEl = document.getElementById('login-pass');
     const pass   = passEl.value.trim();
     if (!pass) { showLoginError('Please enter your password.'); return; }
+
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true;
+    btn.innerHTML = BTN_SIGNING_IN_HTML;
 
     // Verify against server — server is the single source of truth for the password
     let res;
@@ -652,11 +662,15 @@ async function doLogin() {
         });
         res = await res.json();
     } catch (e) {
+        btn.disabled = false;
+        btn.innerHTML = BTN_SIGN_IN_HTML;
         showLoginError('Network error – check your connection and try again.');
         return;
     }
 
     if (!res.success) {
+        btn.disabled = false;
+        btn.innerHTML = BTN_SIGN_IN_HTML;
         showLoginError('Incorrect password. Please try again.');
         passEl.value = '';
         return;
