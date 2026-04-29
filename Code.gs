@@ -46,6 +46,24 @@ function checkAdmin_(pass) {
 }
 
 // ======================================================
+// Recovery-code hash generator
+// Run this function once from the Apps Script editor:
+//   1. Set YOUR_RECOVERY_CODE below to your chosen phrase.
+//   2. Click Run → generateRecoveryCodeHash.
+//   3. Open View → Logs, copy the printed hash.
+//   4. Paste it into Script Properties as RECOVERY_CODE_HASH.
+//   5. Delete or blank out YOUR_RECOVERY_CODE here before saving.
+// ======================================================
+function generateRecoveryCodeHash() {
+  var code = 'YOUR_RECOVERY_CODE'; // ← replace with your chosen recovery phrase
+  if (code === 'YOUR_RECOVERY_CODE' || code === '') {
+    Logger.log('ERROR: Replace YOUR_RECOVERY_CODE with your actual recovery phrase first.');
+    return;
+  }
+  Logger.log('RECOVERY_CODE_HASH = ' + sha256_(code));
+}
+
+// ======================================================
 // SHA-256 helper – returns lowercase hex string
 // ======================================================
 function sha256_(input) {
