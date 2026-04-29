@@ -185,14 +185,18 @@ function handleBookingDeposit_(body) {
     var description = 'Eby\'s Place booking deposit – ' + safeItem;
     var piId = chargeStripe_(body.stripeId, amountPounds * 100, description);
 
-    var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Service','Amount','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
+    var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Phone','Service','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
     if (sheet) {
       sheet.appendRow([
         new Date(),
         body.customerName,
         body.email,
+        body.phone || '',
         body.item || '',
         amountPounds,
+        body.address || '',
+        body.county || '',
+        body.deliveryNote || '',
         body.stripeId,
         piId,
         body.bookingStart || '',
@@ -210,9 +214,13 @@ function handleBookingDeposit_(body) {
           'New Booking Received',
           '<b>Client:</b> ' + escapeHtmlGs_(body.customerName) + '<br>' +
           '<b>Email:</b> ' + escapeHtmlGs_(body.email) + '<br>' +
+          '<b>Phone:</b> ' + escapeHtmlGs_(body.phone || 'Not provided') + '<br>' +
           '<b>Service:</b> ' + escapeHtmlGs_(safeItem) + '<br>' +
           '<b>Date/Time:</b> ' + escapeHtmlGs_(body.bookingStart || 'TBC') + '<br>' +
           '<b>Deposit:</b> £' + amountPounds + '<br>' +
+          '<b>Delivery Address:</b> ' + escapeHtmlGs_(body.address || 'Not provided') + '<br>' +
+          (body.county ? '<b>County:</b> ' + escapeHtmlGs_(body.county) + '<br>' : '') +
+          (body.deliveryNote ? '<b>Delivery Note:</b> ' + escapeHtmlGs_(body.deliveryNote) + '<br>' : '') +
           '<b>Payment ID:</b> ' + escapeHtmlGs_(piId)
         )
       });
@@ -244,15 +252,18 @@ function handleDirectSale_(body) {
     var description = 'Eby\'s Place shop order – ' + safeItem;
     var piId = chargeStripe_(body.stripeId, Math.round(amountPounds * 100), description);
 
-    var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Item','Amount','Address','StripeId','PaymentIntentId','Status']);
+    var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Phone','Item','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','Status']);
     if (sheet) {
       sheet.appendRow([
         new Date(),
         body.customerName,
         body.email,
+        body.phone || '',
         body.item    || '',
         amountPounds,
         body.address || '',
+        body.county  || '',
+        body.deliveryNote || '',
         body.stripeId,
         piId,
         'Processing'
@@ -268,9 +279,12 @@ function handleDirectSale_(body) {
           'New Shop Order',
           '<b>Customer:</b> ' + escapeHtmlGs_(body.customerName) + '<br>' +
           '<b>Email:</b> ' + escapeHtmlGs_(body.email) + '<br>' +
+          '<b>Phone:</b> ' + escapeHtmlGs_(body.phone || 'Not provided') + '<br>' +
           '<b>Item:</b> ' + escapeHtmlGs_(safeItem) + '<br>' +
           '<b>Amount:</b> £' + amountPounds + '<br>' +
-          '<b>Address:</b> ' + escapeHtmlGs_(body.address || 'Not provided') + '<br>' +
+          '<b>Delivery Address:</b> ' + escapeHtmlGs_(body.address || 'Not provided') + '<br>' +
+          (body.county ? '<b>County:</b> ' + escapeHtmlGs_(body.county) + '<br>' : '') +
+          (body.deliveryNote ? '<b>Delivery Note:</b> ' + escapeHtmlGs_(body.deliveryNote) + '<br>' : '') +
           '<b>Payment ID:</b> ' + escapeHtmlGs_(piId)
         )
       });
@@ -336,13 +350,13 @@ function handleGetAvailability_() {
 // Admin data readers
 // ======================================================
 function adminGetBookings_() {
-  var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Service','Amount','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
+  var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Phone','Service','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
   if (!sheet) return jsonResponse_({ success: true, data: [] });
   return jsonResponse_({ success: true, data: sheetToObjects_(sheet).reverse() });
 }
 
 function adminGetOrders_() {
-  var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Item','Amount','Address','StripeId','PaymentIntentId','Status']);
+  var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Phone','Item','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','Status']);
   if (!sheet) return jsonResponse_({ success: true, data: [] });
   return jsonResponse_({ success: true, data: sheetToObjects_(sheet).reverse() });
 }

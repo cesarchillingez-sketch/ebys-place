@@ -213,7 +213,7 @@
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
                 <a href="booking.html" class="text-eby-gold-dark transition-colors">Booking</a>
-                <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
+                <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Braiders Near Me</a>
                 
                 
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Gallery</a>
@@ -243,7 +243,7 @@
             <a href="shop.html" class="mobile-link delay-2 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Shop.</a>
             <a href="services.html" class="mobile-link delay-3 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Services.</a>
             <a href="booking.html" class="mobile-link delay-4 font-display text-4xl text-eby-gold-dark italic block">Booking.</a>
-            <a href="braiders.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Find a Braider.</a>
+            <a href="braiders.html" class="mobile-link delay-5 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Braiders Near Me.</a>
             <a href="services.html" class="mobile-link delay-6 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">Gallery.</a>
             <a href="about us.html" class="mobile-link delay-7 font-display text-4xl text-eby-dark hover:text-eby-gold-dark transition-colors block">About Us.</a>
         </div>
@@ -368,7 +368,7 @@
                 </div>
                 <!-- Lemonade Braids -->
                 <div onclick="openServiceSlider('lemon.html', 'Lemon Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-2 overflow-hidden !rounded-[32px]">
-                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" alt="Boho braids with curly ends at Eby's Place" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696915/1774693278817_rptgp0.png" alt="Lemonade braids side-swept cornrows at Eby's Place, Somerset" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/20 to-transparent"></div>
                     <div class="relative z-10">
                         <h3 class="font-display text-2xl text-white mb-2">Lemonade Braids</h3>
@@ -379,7 +379,7 @@
                 </div>
                 <!-- Boho Braids -->
                 <div onclick="openServiceSlider('boho.html', 'Boho Braids')" class="group cursor-pointer glass-card relative h-[500px] flex flex-col justify-end p-8 reveal reveal-delay-3 overflow-hidden !rounded-[32px]">
-                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" alt="Lemonade braids side-swept cornrows at Eby's Place" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <img loading="lazy" src="https://res.cloudinary.com/dfbweqelf/image/upload/v1774696249/1774692951485_ssb3ci.png" alt="Boho braids with knotless curly ends at Eby's Place, Somerset" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-eby-dark via-eby-dark/40 to-transparent"></div>
 
                     <div class="relative z-10">
@@ -914,15 +914,16 @@
                 <form id="ecommerce-checkout-form" onsubmit="handleDirectCheckout(event)" class="space-y-6">
                     
                     <div>
-                        <div class="flex items-center gap-3 mb-4"><i class="ph ph-truck text-eby-gold-dark text-lg"></i><span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">Shipping Details</span></div>
+                        <div class="flex items-center gap-3 mb-4"><i class="ph ph-truck text-eby-gold-dark text-lg"></i><span class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-dark">Delivery Address</span></div>
                         <div class="space-y-3">
                             <input type="text" id="ship-name" required class="luxury-input" placeholder="Full Name">
+                            <input type="tel" id="ship-phone" required class="luxury-input" placeholder="Contact Phone Number">
+                            <input type="text" id="ship-address" required class="luxury-input" placeholder="House Number & Street Name">
+                            <input type="text" id="ship-city" required class="luxury-input" placeholder="Town / City">
+                            <input type="text" id="ship-county" class="luxury-input" placeholder="County (optional)">
+                            <input type="text" id="ship-zip" required class="luxury-input" placeholder="Postcode">
                             <input type="email" id="ship-email" required class="luxury-input" placeholder="Email Address">
-                            <input type="text" id="ship-address" required class="luxury-input" placeholder="Street Address">
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="text" id="ship-city" required class="luxury-input" placeholder="City">
-                                <input type="text" id="ship-zip" required class="luxury-input" placeholder="Postal Code">
-                            </div>
+                            <textarea id="ship-note" rows="2" class="luxury-input resize-none" placeholder="Additional delivery note or instruction (optional)"></textarea>
                         </div>
                     </div>
 
@@ -1179,7 +1180,13 @@
             const btn = document.getElementById('eco-submit-btn');
             const email = document.getElementById('ship-email').value;
             const name = document.getElementById('ship-name').value;
+            const phone = document.getElementById('ship-phone').value;
             const address = document.getElementById('ship-address').value;
+            const city = document.getElementById('ship-city').value;
+            const county = document.getElementById('ship-county').value;
+            const zip = document.getElementById('ship-zip').value;
+            const note = document.getElementById('ship-note').value;
+            const fullAddress = [address, city, county, zip].filter(Boolean).join(', ');
             
             btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processing...';
             btn.disabled = true;
@@ -1215,7 +1222,10 @@
                         type: "DIRECT_SALE",
                         customerName: name,
                         email: email,
-                        address: address,
+                        address: fullAddress,
+                        phone: phone,
+                        county: county,
+                        deliveryNote: note,
                         amount: ecoCartTotal,
                         stripeId: paymentMethod.id,
                         item: ecoCart.map(i => i.name).join(' + ')

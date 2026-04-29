@@ -161,7 +161,7 @@
                 <a href="shop.html" class="hover:text-eby-gold-dark transition-colors">Shop</a>
                 <a href="services.html" class="hover:text-eby-gold-dark transition-colors">Services</a>
                 <a href="booking.html" class="text-eby-gold-dark">Booking</a>
-                <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Find a Braider</a>
+                <a href="braiders.html" class="hover:text-eby-gold-dark transition-colors">Braiders Near Me</a>
                 <a href="about us.html" class="hover:text-eby-gold-dark transition-colors">About Us</a>
             </div>
             <div class="flex items-center space-x-6 text-eby-dark relative z-50">
@@ -413,6 +413,19 @@
                                             <div class="space-y-4">
                                                 <input type="text" id="bk-name" placeholder="Full Name" required class="luxury-input !rounded-[20px]">
                                                 <input type="email" id="bk-email" placeholder="Email Address" required class="luxury-input !rounded-[20px]">
+                                            </div>
+                                        </div>
+
+                                        <div class="border-t border-eby-gold-dark/10 pt-6">
+                                            <h3 class="font-display text-xl text-eby-dark mb-1">Delivery Address</h3>
+                                            <p class="text-eby-brown-light text-xs mb-4 leading-relaxed">We'll use this address to send any preparation materials ahead of your appointment.</p>
+                                            <div class="space-y-3">
+                                                <input type="tel" id="bk-phone" placeholder="Contact Phone Number" required class="luxury-input !rounded-[20px]">
+                                                <input type="text" id="bk-address" placeholder="House Number &amp; Street Name" required class="luxury-input !rounded-[20px]">
+                                                <input type="text" id="bk-city" placeholder="Town / City" required class="luxury-input !rounded-[20px]">
+                                                <input type="text" id="bk-county" placeholder="County (optional)" class="luxury-input !rounded-[20px]">
+                                                <input type="text" id="bk-postcode" placeholder="Postcode" required class="luxury-input !rounded-[20px]">
+                                                <textarea id="bk-delivery-note" rows="2" placeholder="Additional delivery note or instruction (optional)" class="luxury-input !rounded-[20px] resize-none"></textarea>
                                             </div>
                                         </div>
 
@@ -883,6 +896,13 @@
 
             const name = document.getElementById('bk-name').value;
             const email = document.getElementById('bk-email').value;
+            const phone = document.getElementById('bk-phone').value;
+            const address = document.getElementById('bk-address').value;
+            const city = document.getElementById('bk-city').value;
+            const county = document.getElementById('bk-county').value;
+            const postcode = document.getElementById('bk-postcode').value;
+            const deliveryNote = document.getElementById('bk-delivery-note').value;
+            const fullAddress = [address, city, county, postcode].filter(Boolean).join(', ');
 
             // Strict Validation for Custom Calendar
             if (!selectedDateStr || !selectedTimeStr) {
@@ -940,7 +960,11 @@
                         amount: 20, // STRICT Contract Requirement
                         stripeId: paymentMethod.id, // STRICT Contract Requirement
                         bookingStart: bookingStartISO,
-                        bookingEnd: bookingEndISO
+                        bookingEnd: bookingEndISO,
+                        phone: phone,
+                        address: fullAddress,
+                        county: county,
+                        deliveryNote: deliveryNote
                     })
                 });
 
