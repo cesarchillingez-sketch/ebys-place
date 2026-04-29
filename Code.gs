@@ -3,39 +3,64 @@
 //
 // HOW TO DEPLOY / UPDATE:
 //   1. Open script.google.com under the owner account, open this project.
-//   2. Paste the updated Code.gs content into the editor (or use clasp push).
-//   3. Go to Project Settings → Script Properties and confirm these are set:
-//        STRIPE_SECRET_KEY   your Stripe secret key
-//        SITE_URL            your site URL (e.g. https://ebysplace.com)
-//        SPREADSHEET_ID      your Google Sheet ID for bookings/orders
-//        ADMIN_PASSWORD      admin dashboard password (default: EbysPlace@2025)
-//   4. Deploy → Manage deployments → create a new version so the changes go live.
+//   2. Paste this file content into the editor (or use clasp push).
+//   3. Go to Project Settings → Script Properties and set ALL of these:
+//        SPREADSHEET_ID        your Google Sheet ID
+//        STRIPE_SECRET_KEY     your Stripe secret key
+//        SITE_URL              your live site URL (e.g. https://ebysplace.com)
+//        ADMIN_PASSWORD        your chosen admin password
+//        RECOVERY_CODE_HASH    SHA-256 hex of your recovery code (use sha256Online.com)
+//        ADMIN_NAME            (optional) display name shown in the dashboard
+//        ADMIN_EMAIL           (optional) notification email
+//   4. Deploy → Manage deployments → New version so changes go live.
 // ======================================================
 
-// ---- Response helper ----
-function jsonResponse_(obj) {
+// ======================================================
+// Response helpers
+// ======================================================
+function jsonOk_(obj) {
+  var out = obj || {};
+  out.success = true;
   return ContentService
-    .createTextOutput(JSON.stringify(obj))
+    .createTextOutput(JSON.stringify(out))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ---- Admin auth helper ----
-function isAdminValid_(pass) {
-  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || 'EbysPlace@2025';
+function jsonErr_(msg) {
+  return ContentService
+    .createTextOutput(JSON.stringify({ success: false, error: msg }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ======================================================
+// Auth helper – returns true only when the provided
+// password matches the value in Script Properties.
+// ======================================================
+function checkAdmin_(pass) {
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD');
+  if (!stored) return false; // password not configured
   return (typeof pass === 'string') && pass === stored;
 }
 
-// ---- SHA-256 helper (returns lowercase hex string) ----
-function computeSha256Hash_(input) {
-  var bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, input, Utilities.Charset.UTF_8);
-  return bytes.map(function(b) { return (b < 0 ? b + 256 : b).toString(16).padStart(2, '0'); }).join('');
+// ======================================================
+// SHA-256 helper – returns lowercase hex string
+// ======================================================
+function sha256_(input) {
+  var bytes = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.SHA_256,
+    input,
+    Utilities.Charset.UTF_8
+  );
+  return bytes.map(function(b) {
+    return (b < 0 ? b + 256 : b).toString(16).padStart(2, '0');
+  }).join('');
 }
 
 // ======================================================
 // GET handler
 // ======================================================
 function doGet(e) {
-  return jsonResponse_({ success: false, error: 'Not found' });
+  return jsonErr_('Not found');
 }
 
 // ======================================================
@@ -46,85 +71,88 @@ function doPost(e) {
   try {
     body = JSON.parse(e.postData.contents);
   } catch (err) {
-    return jsonResponse_({ success: false, error: 'Invalid JSON' });
+    return jsonErr_('Invalid JSON');
   }
 
   var type = body.type || '';
 
-  // ---- Public endpoints (no auth) ----
-  if (type === 'BOOKING_DEPOSIT')       return handleBookingDeposit_(body);
-  if (type === 'DIRECT_SALE')           return handleDirectSale_(body);
-  if (type === 'TRACK_VISIT')           return handleTrackVisit_(body);
-  if (type === 'GET_AVAILABILITY')      return handleGetAvailability_();
-  if (type === 'ADMIN_RESET_PASSWORD')  return adminResetPassword_(body);
-
-  // ---- Admin endpoints (require adminPassword) ----
-  if (!isAdminValid_(body.adminPassword || '')) {
-    return jsonResponse_({ success: false, error: 'Unauthorized' });
+  // ---- Public endpoints (no auth required) ----
+  switch (type) {
+    case 'BOOKING_DEPOSIT':      return handleBookingDeposit_(body);
+    case 'DIRECT_SALE':          return handleDirectSale_(body);
+    case 'TRACK_VISIT':          return handleTrackVisit_(body);
+    case 'GET_AVAILABILITY':     return handleGetAvailability_();
+    case 'ADMIN_RESET_PASSWORD': return adminResetPassword_(body);
   }
 
-  if (type === 'ADMIN_VERIFY')            return jsonResponse_({ success: true });
-  if (type === 'ADMIN_GET_BOOKINGS')      return adminGetBookings_();
-  if (type === 'ADMIN_GET_ORDERS')        return adminGetOrders_();
-  if (type === 'ADMIN_GET_ANALYTICS')     return adminGetAnalytics_();
-  if (type === 'ADMIN_GET_INVENTORY')     return adminGetInventory_();
-  if (type === 'ADMIN_GET_AVAILABILITY')  return adminGetAvailability_();
-  if (type === 'ADMIN_SET_AVAILABILITY')  return adminSetAvailability_(body);
-  if (type === 'ADMIN_UPDATE_INVENTORY')  return adminUpdateInventory_(body);
-  if (type === 'ADMIN_SEND_EMAIL')        return adminSendEmail_(body);
-  if (type === 'ADMIN_CHANGE_PASSWORD')   return adminChangePassword_(body);
-  if (type === 'ADMIN_GET_PROFILE')       return adminGetProfile_();
-  if (type === 'ADMIN_UPDATE_PROFILE')    return adminUpdateProfile_(body);
+  // ---- Admin endpoints (require adminPassword) ----
+  if (!checkAdmin_(body.adminPassword || '')) {
+    return jsonErr_('Unauthorized');
+  }
 
-  return jsonResponse_({ success: false, error: 'Unknown type: ' + type });
+  switch (type) {
+    case 'ADMIN_VERIFY':           return jsonOk_();
+    case 'ADMIN_GET_BOOKINGS':     return adminGetBookings_();
+    case 'ADMIN_GET_ORDERS':       return adminGetOrders_();
+    case 'ADMIN_GET_ANALYTICS':    return adminGetAnalytics_();
+    case 'ADMIN_GET_INVENTORY':    return adminGetInventory_();
+    case 'ADMIN_GET_AVAILABILITY': return adminGetAvailability_();
+    case 'ADMIN_SET_AVAILABILITY': return adminSetAvailability_(body);
+    case 'ADMIN_UPDATE_INVENTORY': return adminUpdateInventory_(body);
+    case 'ADMIN_SEND_EMAIL':       return adminSendEmail_(body);
+    case 'ADMIN_CHANGE_PASSWORD':  return adminChangePassword_(body);
+    case 'ADMIN_GET_PROFILE':      return adminGetProfile_();
+    case 'ADMIN_UPDATE_PROFILE':   return adminUpdateProfile_(body);
+  }
+
+  return jsonErr_('Unknown type: ' + type);
 }
 
 // ======================================================
 // Sheet helpers
 // ======================================================
+
+function ss_() {
+  var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+  if (!id) return null;
+  return SpreadsheetApp.openById(id);
+}
+
 function getSheet_(name) {
-  var SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || '';
-  if (!SPREADSHEET_ID) return null;
-  return SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(name);
+  var spreadsheet = ss_();
+  if (!spreadsheet) return null;
+  return spreadsheet.getSheetByName(name);
 }
 
 function getOrCreateSheet_(name, headers) {
-  var SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || '';
-  if (!SPREADSHEET_ID) return null;
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  var sheet = ss.getSheetByName(name);
+  var spreadsheet = ss_();
+  if (!spreadsheet) return null;
+  var sheet = spreadsheet.getSheetByName(name);
   if (!sheet) {
-    sheet = ss.insertSheet(name);
+    sheet = spreadsheet.insertSheet(name);
     if (headers && headers.length) sheet.appendRow(headers);
   }
   return sheet;
 }
 
-function sheetToObjects_(sheet) {
+function sheetRows_(sheet) {
   var data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
   var headers = data[0];
-  var rows = [];
-  for (var i = 1; i < data.length; i++) {
+  return data.slice(1).map(function(row) {
     var obj = {};
     for (var j = 0; j < headers.length; j++) {
-      var val = data[i][j];
+      var val = row[j];
       obj[String(headers[j])] = val instanceof Date ? val.toISOString() : val;
     }
-    rows.push(obj);
-  }
-  return rows;
+    return obj;
+  });
 }
 
 // ======================================================
-// Payment handlers (BOOKING_DEPOSIT & DIRECT_SALE)
-// No session token required – called from public-facing pages.
-//
-// Set STRIPE_SECRET_KEY in Script Properties to enable
-// server-side Stripe PaymentIntent creation.  The key is
-// never stored in source code.
+// Stripe payment helper
+// Set STRIPE_SECRET_KEY in Script Properties — never in source code.
 // ======================================================
-
 function chargeStripe_(stripeId, amountPence, description) {
   if (!stripeId || typeof stripeId !== 'string') {
     throw new Error('Payment method is required.');
@@ -141,194 +169,158 @@ function chargeStripe_(stripeId, amountPence, description) {
     throw new Error('SITE_URL is not configured in Script Properties.');
   }
 
-  // Sanitize description: strip control characters and limit length
-  var safeDescription = String(description).replace(/[\x00-\x1F\x7F]/g, '').slice(0, 255);
+  var safeDesc = String(description).replace(/[\x00-\x1F\x7F]/g, '').slice(0, 255);
 
   var response = UrlFetchApp.fetch('https://api.stripe.com/v1/payment_intents', {
     method: 'post',
     headers: { 'Authorization': 'Bearer ' + stripeKey },
     payload: {
-      amount: String(amountPence),
-      currency: 'gbp',
+      amount:         String(amountPence),
+      currency:       'gbp',
       payment_method: stripeId,
-      description: safeDescription,
-      confirm: 'true',
-      return_url: siteUrl
+      description:    safeDesc,
+      confirm:        'true',
+      return_url:     siteUrl
     },
     muteHttpExceptions: true
   });
 
-  var data = JSON.parse(response.getContentText());
+  var result = JSON.parse(response.getContentText());
 
-  if (data.error) {
-    throw new Error(data.error.message);
+  if (result.error) {
+    throw new Error(result.error.message);
   }
-  if (data.status === 'requires_action' || data.status === 'requires_confirmation') {
+  if (result.status === 'requires_action' || result.status === 'requires_confirmation') {
     throw new Error('Your card requires additional authentication. Please use a different card or contact your bank.');
   }
-  if (data.status !== 'succeeded') {
-    throw new Error('Payment was not completed (status: ' + data.status + '). Please try again.');
+  if (result.status !== 'succeeded') {
+    throw new Error('Payment was not completed (status: ' + result.status + '). Please try again.');
   }
 
-  return data.id; // PaymentIntent ID
+  return result.id; // PaymentIntent ID
 }
+
+// ======================================================
+// Public handlers
+// ======================================================
 
 function handleBookingDeposit_(body) {
   try {
-    if (!body.stripeId) {
-      return jsonResponse_({ success: false, error: 'Payment method is required.' });
-    }
-    if (!body.customerName || !body.email) {
-      return jsonResponse_({ success: false, error: 'Name and email are required.' });
-    }
+    if (!body.stripeId)                    return jsonErr_('Payment method is required.');
+    if (!body.customerName || !body.email) return jsonErr_('Name and email are required.');
 
     var amountPounds = body.amount || 20;
     var safeItem = String(body.item || 'Appointment').replace(/[\x00-\x1F\x7F]/g, '').slice(0, 100);
-    var description = 'Eby\'s Place booking deposit – ' + safeItem;
-    var piId = chargeStripe_(body.stripeId, amountPounds * 100, description);
+    var piId = chargeStripe_(body.stripeId, amountPounds * 100, 'Eby\'s Place booking deposit – ' + safeItem);
 
     var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Phone','Service','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
     if (sheet) {
       sheet.appendRow([
-        new Date(),
-        body.customerName,
-        body.email,
-        body.phone || '',
-        body.item || '',
-        amountPounds,
-        body.address || '',
-        body.county || '',
-        body.deliveryNote || '',
-        body.stripeId,
-        piId,
-        body.bookingStart || '',
-        body.bookingEnd   || '',
-        'Confirmed'
+        new Date(), body.customerName, body.email, body.phone || '',
+        body.item || '', amountPounds, body.address || '', body.county || '',
+        body.deliveryNote || '', body.stripeId, piId,
+        body.bookingStart || '', body.bookingEnd || '', 'Confirmed'
       ]);
     }
 
-    // Email notification to admin
     try {
       MailApp.sendEmail({
         to: 'ebysplace.uk@gmail.com',
         subject: 'New Booking – ' + safeItem,
         htmlBody: buildEmailHtml_(
           'New Booking Received',
-          '<b>Client:</b> ' + escapeHtmlGs_(body.customerName) + '<br>' +
-          '<b>Email:</b> ' + escapeHtmlGs_(body.email) + '<br>' +
-          '<b>Phone:</b> ' + escapeHtmlGs_(body.phone || 'Not provided') + '<br>' +
-          '<b>Service:</b> ' + escapeHtmlGs_(safeItem) + '<br>' +
-          '<b>Date/Time:</b> ' + escapeHtmlGs_(body.bookingStart || 'TBC') + '<br>' +
-          '<b>Deposit:</b> £' + amountPounds + '<br>' +
-          '<b>Delivery Address:</b> ' + escapeHtmlGs_(body.address || 'Not provided') + '<br>' +
-          (body.county ? '<b>County:</b> ' + escapeHtmlGs_(body.county) + '<br>' : '') +
-          (body.deliveryNote ? '<b>Delivery Note:</b> ' + escapeHtmlGs_(body.deliveryNote) + '<br>' : '') +
-          '<b>Payment ID:</b> ' + escapeHtmlGs_(piId)
+          '<b>Client:</b> '    + esc_(body.customerName) + '<br>' +
+          '<b>Email:</b> '     + esc_(body.email)        + '<br>' +
+          '<b>Phone:</b> '     + esc_(body.phone || 'Not provided') + '<br>' +
+          '<b>Service:</b> '   + esc_(safeItem)          + '<br>' +
+          '<b>Date/Time:</b> ' + esc_(body.bookingStart || 'TBC') + '<br>' +
+          '<b>Deposit:</b> £'  + amountPounds            + '<br>' +
+          '<b>Address:</b> '   + esc_(body.address || 'Not provided') + '<br>' +
+          (body.county       ? '<b>County:</b> '       + esc_(body.county)       + '<br>' : '') +
+          (body.deliveryNote ? '<b>Delivery Note:</b> ' + esc_(body.deliveryNote) + '<br>' : '') +
+          '<b>Payment ID:</b> ' + esc_(piId)
         )
       });
     } catch (mailErr) {
       Logger.log('Booking email failed: ' + mailErr.message);
     }
 
-    return jsonResponse_({ success: true, paymentIntentId: piId });
+    return jsonOk_({ paymentIntentId: piId });
   } catch (err) {
-    return jsonResponse_({ success: false, error: err.message });
+    return jsonErr_(err.message);
   }
 }
 
 function handleDirectSale_(body) {
   try {
-    if (!body.stripeId) {
-      return jsonResponse_({ success: false, error: 'Payment method is required.' });
-    }
-    if (!body.customerName || !body.email) {
-      return jsonResponse_({ success: false, error: 'Name and email are required.' });
-    }
+    if (!body.stripeId)                    return jsonErr_('Payment method is required.');
+    if (!body.customerName || !body.email) return jsonErr_('Name and email are required.');
 
     var amountPounds = body.amount || 0;
-    if (amountPounds <= 0) {
-      return jsonResponse_({ success: false, error: 'Invalid order amount.' });
-    }
+    if (amountPounds <= 0) return jsonErr_('Invalid order amount.');
 
     var safeItem = String(body.item || 'Shop Order').replace(/[\x00-\x1F\x7F]/g, '').slice(0, 100);
-    var description = 'Eby\'s Place shop order – ' + safeItem;
-    var piId = chargeStripe_(body.stripeId, Math.round(amountPounds * 100), description);
+    var piId = chargeStripe_(body.stripeId, Math.round(amountPounds * 100), 'Eby\'s Place shop order – ' + safeItem);
 
     var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Phone','Item','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','Status']);
     if (sheet) {
       sheet.appendRow([
-        new Date(),
-        body.customerName,
-        body.email,
-        body.phone || '',
-        body.item    || '',
-        amountPounds,
-        body.address || '',
-        body.county  || '',
-        body.deliveryNote || '',
-        body.stripeId,
-        piId,
-        'Processing'
+        new Date(), body.customerName, body.email, body.phone || '',
+        body.item || '', amountPounds, body.address || '', body.county || '',
+        body.deliveryNote || '', body.stripeId, piId, 'Processing'
       ]);
     }
 
-    // Email notification to admin
     try {
       MailApp.sendEmail({
         to: 'ebysplace.uk@gmail.com',
         subject: 'New Shop Order – ' + safeItem,
         htmlBody: buildEmailHtml_(
           'New Shop Order',
-          '<b>Customer:</b> ' + escapeHtmlGs_(body.customerName) + '<br>' +
-          '<b>Email:</b> ' + escapeHtmlGs_(body.email) + '<br>' +
-          '<b>Phone:</b> ' + escapeHtmlGs_(body.phone || 'Not provided') + '<br>' +
-          '<b>Item:</b> ' + escapeHtmlGs_(safeItem) + '<br>' +
-          '<b>Amount:</b> £' + amountPounds + '<br>' +
-          '<b>Delivery Address:</b> ' + escapeHtmlGs_(body.address || 'Not provided') + '<br>' +
-          (body.county ? '<b>County:</b> ' + escapeHtmlGs_(body.county) + '<br>' : '') +
-          (body.deliveryNote ? '<b>Delivery Note:</b> ' + escapeHtmlGs_(body.deliveryNote) + '<br>' : '') +
-          '<b>Payment ID:</b> ' + escapeHtmlGs_(piId)
+          '<b>Customer:</b> ' + esc_(body.customerName) + '<br>' +
+          '<b>Email:</b> '    + esc_(body.email)        + '<br>' +
+          '<b>Phone:</b> '    + esc_(body.phone || 'Not provided') + '<br>' +
+          '<b>Item:</b> '     + esc_(safeItem)          + '<br>' +
+          '<b>Amount:</b> £'  + amountPounds            + '<br>' +
+          '<b>Address:</b> '  + esc_(body.address || 'Not provided') + '<br>' +
+          (body.county       ? '<b>County:</b> '        + esc_(body.county)       + '<br>' : '') +
+          (body.deliveryNote ? '<b>Delivery Note:</b> ' + esc_(body.deliveryNote) + '<br>' : '') +
+          '<b>Payment ID:</b> ' + esc_(piId)
         )
       });
     } catch (mailErr) {
       Logger.log('Order email failed: ' + mailErr.message);
     }
 
-    return jsonResponse_({ success: true, paymentIntentId: piId });
+    return jsonOk_({ paymentIntentId: piId });
   } catch (err) {
-    return jsonResponse_({ success: false, error: err.message });
+    return jsonErr_(err.message);
   }
 }
 
-// ======================================================
-// Visit tracking (public – no auth)
-// ======================================================
 function handleTrackVisit_(body) {
   try {
     var sheet = getOrCreateSheet_('Visits', ['Timestamp','Page','Referrer','UserAgent']);
     if (sheet) {
       sheet.appendRow([
         new Date(),
-        String(body.page     || '').slice(0, 100),
-        String(body.referrer || '').slice(0, 200),
+        String(body.page      || '').slice(0, 100),
+        String(body.referrer  || '').slice(0, 200),
         String(body.userAgent || '').slice(0, 200)
       ]);
     }
   } catch (e) {
     Logger.log('Track visit error: ' + e.message);
   }
-  return jsonResponse_({ success: true });
+  return jsonOk_();
 }
 
-// ======================================================
-// Public availability fetch (used by booking.html)
-// ======================================================
 function handleGetAvailability_() {
   var sheet = getSheet_('Availability');
   if (!sheet) {
-    // Default: 9–17 Mon–Sat, closed Sunday
-    return jsonResponse_({ success: true, availability: {
-      '0': [], '1': [9,10,11,12,13,14,15,16,17],
+    return jsonOk_({ availability: {
+      '0': [],
+      '1': [9,10,11,12,13,14,15,16,17],
       '2': [9,10,11,12,13,14,15,16,17],
       '3': [9,10,11,12,13,14,15,16,17],
       '4': [9,10,11,12,13,14,15,16,17],
@@ -336,96 +328,103 @@ function handleGetAvailability_() {
       '6': [10,11,12,13,14,15,16]
     }});
   }
-  var data = sheet.getDataRange().getValues();
+  var rows = sheet.getDataRange().getValues();
   var avail = {};
-  for (var i = 1; i < data.length; i++) {
-    var dayIdx = String(data[i][0]);
-    var hoursStr = String(data[i][1] || '');
+  for (var i = 1; i < rows.length; i++) {
+    var dayIdx   = String(rows[i][0]);
+    var hoursStr = String(rows[i][1] || '');
     avail[dayIdx] = hoursStr
       ? hoursStr.split(',').map(function(h) { return parseInt(h.trim(), 10); }).filter(function(h) { return !isNaN(h); })
       : [];
   }
-  return jsonResponse_({ success: true, availability: avail });
+  return jsonOk_({ availability: avail });
 }
 
 // ======================================================
-// Admin data readers
+// Admin readers
 // ======================================================
+
 function adminGetBookings_() {
   var sheet = getOrCreateSheet_('Bookings', ['Timestamp','Name','Email','Phone','Service','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','BookingStart','BookingEnd','Status']);
-  if (!sheet) return jsonResponse_({ success: true, data: [] });
-  return jsonResponse_({ success: true, data: sheetToObjects_(sheet).reverse() });
+  if (!sheet) return jsonOk_({ data: [] });
+  return jsonOk_({ data: sheetRows_(sheet).reverse() });
 }
 
 function adminGetOrders_() {
   var sheet = getOrCreateSheet_('Orders', ['Timestamp','Name','Email','Phone','Item','Amount','Address','County','DeliveryNote','StripeId','PaymentIntentId','Status']);
-  if (!sheet) return jsonResponse_({ success: true, data: [] });
-  return jsonResponse_({ success: true, data: sheetToObjects_(sheet).reverse() });
+  if (!sheet) return jsonOk_({ data: [] });
+  return jsonOk_({ data: sheetRows_(sheet).reverse() });
 }
 
 function adminGetAnalytics_() {
   var sheet = getSheet_('Visits');
-  if (!sheet) return jsonResponse_({ success: true, data: [], summary: { total: 0, byPage: {} } });
-  var rows = sheetToObjects_(sheet);
+  if (!sheet) return jsonOk_({ data: [], summary: { total: 0, byPage: {} } });
+  var rows   = sheetRows_(sheet);
   var byPage = {};
   rows.forEach(function(r) {
     var p = r['Page'] || 'unknown';
     byPage[p] = (byPage[p] || 0) + 1;
   });
-  return jsonResponse_({ success: true, data: rows.slice(-200).reverse(), summary: { total: rows.length, byPage: byPage } });
+  return jsonOk_({ data: rows.slice(-200).reverse(), summary: { total: rows.length, byPage: byPage } });
 }
 
 function adminGetInventory_() {
   var sheet = getOrCreateSheet_('Inventory', ['ProductId','Name','Description','Price','Stock','Category','ImageUrl','Active']);
-  if (!sheet) return jsonResponse_({ success: true, data: [] });
-  return jsonResponse_({ success: true, data: sheetToObjects_(sheet) });
+  if (!sheet) return jsonOk_({ data: [] });
+  return jsonOk_({ data: sheetRows_(sheet) });
 }
 
 function adminGetAvailability_() {
   var sheet = getOrCreateSheet_('Availability', ['DayIndex','Hours','Notes']);
-  if (!sheet) return jsonResponse_({ success: true, data: {} });
-  var data = sheet.getDataRange().getValues();
+  if (!sheet) return jsonOk_({ data: {} });
+  var rows  = sheet.getDataRange().getValues();
   var avail = { '0':[],'1':[],'2':[],'3':[],'4':[],'5':[],'6':[] };
-  for (var i = 1; i < data.length; i++) {
-    var dayIdx = String(data[i][0]);
-    var hoursStr = String(data[i][1] || '');
+  for (var i = 1; i < rows.length; i++) {
+    var dayIdx   = String(rows[i][0]);
+    var hoursStr = String(rows[i][1] || '');
     avail[dayIdx] = hoursStr
       ? hoursStr.split(',').map(function(h) { return parseInt(h.trim(), 10); }).filter(function(h) { return !isNaN(h); })
       : [];
   }
-  return jsonResponse_({ success: true, data: avail });
+  return jsonOk_({ data: avail });
 }
 
 // ======================================================
-// Admin data writers
+// Admin writers
 // ======================================================
+
 function adminSetAvailability_(body) {
   var sheet = getOrCreateSheet_('Availability', ['DayIndex','Hours','Notes']);
-  if (!sheet) return jsonResponse_({ success: false, error: 'Spreadsheet not configured.' });
-  var avail = body.availability || {};
+  if (!sheet) return jsonErr_('Spreadsheet not configured.');
+  var avail   = body.availability || {};
   var lastRow = sheet.getLastRow();
   if (lastRow > 1) sheet.deleteRows(2, lastRow - 1);
   for (var d = 0; d <= 6; d++) {
     var hours = avail[String(d)] || avail[d] || [];
     sheet.appendRow([d, hours.join(','), '']);
   }
-  return jsonResponse_({ success: true });
+  return jsonOk_();
 }
 
 function adminUpdateInventory_(body) {
   var sheet = getOrCreateSheet_('Inventory', ['ProductId','Name','Description','Price','Stock','Category','ImageUrl','Active']);
-  if (!sheet) return jsonResponse_({ success: false, error: 'Spreadsheet not configured.' });
+  if (!sheet) return jsonErr_('Spreadsheet not configured.');
 
   var action = body.action || '';
+
   if (action === 'add') {
     var id = Utilities.getUuid();
-    sheet.appendRow([id, body.name||'', body.description||'', body.price||0, body.stock||0, body.category||'', body.imageUrl||'', body.active!==false?'TRUE':'FALSE']);
-    return jsonResponse_({ success: true, productId: id });
+    sheet.appendRow([
+      id, body.name || '', body.description || '', body.price || 0,
+      body.stock || 0, body.category || '', body.imageUrl || '',
+      body.active !== false ? 'TRUE' : 'FALSE'
+    ]);
+    return jsonOk_({ productId: id });
   }
 
-  var data = sheet.getDataRange().getValues();
-  for (var i = 1; i < data.length; i++) {
-    if (String(data[i][0]) === String(body.productId)) {
+  var rows = sheet.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === String(body.productId)) {
       if (action === 'update') {
         if (body.name        !== undefined) sheet.getRange(i+1,2).setValue(body.name);
         if (body.description !== undefined) sheet.getRange(i+1,3).setValue(body.description);
@@ -433,45 +432,41 @@ function adminUpdateInventory_(body) {
         if (body.stock       !== undefined) sheet.getRange(i+1,5).setValue(body.stock);
         if (body.category    !== undefined) sheet.getRange(i+1,6).setValue(body.category);
         if (body.imageUrl    !== undefined) sheet.getRange(i+1,7).setValue(body.imageUrl);
-        if (body.active      !== undefined) sheet.getRange(i+1,8).setValue(body.active?'TRUE':'FALSE');
-        return jsonResponse_({ success: true });
+        if (body.active      !== undefined) sheet.getRange(i+1,8).setValue(body.active ? 'TRUE' : 'FALSE');
+        return jsonOk_();
       }
       if (action === 'delete') {
         sheet.deleteRow(i+1);
-        return jsonResponse_({ success: true });
+        return jsonOk_();
       }
     }
   }
-  return jsonResponse_({ success: false, error: action === 'add' ? 'Add failed.' : 'Product not found.' });
+  return jsonErr_('Product not found.');
 }
 
 function adminSendEmail_(body) {
   var to      = String(body.to      || 'ebysplace.uk@gmail.com').slice(0, 200);
-  var subject = String(body.subject || 'Message from Eby\'s Place Admin').slice(0, 200);
+  var subject = String(body.subject || 'Message from Eby\'s Place').slice(0, 200);
   var message = String(body.message || '');
-  if (!message) return jsonResponse_({ success: false, error: 'Message is required.' });
+  if (!message) return jsonErr_('Message is required.');
   try {
     MailApp.sendEmail({ to: to, subject: subject, htmlBody: buildEmailHtml_(subject, message.replace(/\n/g, '<br>')) });
-    return jsonResponse_({ success: true });
+    return jsonOk_();
   } catch (err) {
-    return jsonResponse_({ success: false, error: err.message });
+    return jsonErr_(err.message);
   }
 }
 
 function adminChangePassword_(body) {
   var newPass = String(body.newPassword || '');
-  if (newPass.length < 8) return jsonResponse_({ success: false, error: 'Password must be at least 8 characters.' });
+  if (newPass.length < 8) return jsonErr_('Password must be at least 8 characters.');
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
-  return jsonResponse_({ success: true });
+  return jsonOk_();
 }
 
-// ======================================================
-// Admin profile (display name + notification email)
-// ======================================================
 function adminGetProfile_() {
   var props = PropertiesService.getScriptProperties();
-  return jsonResponse_({
-    success: true,
+  return jsonOk_({
     name:  props.getProperty('ADMIN_NAME')  || '',
     email: props.getProperty('ADMIN_EMAIL') || ''
   });
@@ -479,16 +474,17 @@ function adminGetProfile_() {
 
 function adminUpdateProfile_(body) {
   var props = PropertiesService.getScriptProperties();
-  var name  = String(body.name  || '').trim().slice(0, 100);
-  var email = String(body.email || '').trim().slice(0, 200);
-  props.setProperty('ADMIN_NAME',  name);
-  props.setProperty('ADMIN_EMAIL', email);
-  return jsonResponse_({ success: true });
+  props.setProperty('ADMIN_NAME',  String(body.name  || '').trim().slice(0, 100));
+  props.setProperty('ADMIN_EMAIL', String(body.email || '').trim().slice(0, 200));
+  return jsonOk_();
 }
 
-// SHA-256 hash of the default recovery code (set RECOVERY_CODE_HASH in Script Properties to override).
-var DEFAULT_RECOV_HASH_ = '8d8bb5f5659031afb506d3f3287d2d3bc8f99cb03e3c3cf8952c84d2efce0279';
-
+// ======================================================
+// Password recovery (public endpoint)
+// RECOVERY_CODE_HASH must be set in Script Properties.
+// To generate: take your chosen recovery code, compute its
+// SHA-256 hex (e.g. at sha256.online), paste as the property.
+// ======================================================
 function adminResetPassword_(body) {
   var code    = String(body.recoveryCode || '');
   var newPass = String(body.newPassword  || '');
