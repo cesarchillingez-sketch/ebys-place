@@ -520,8 +520,9 @@ function adminResetPassword_(body) {
   if (!code)              return jsonErr_('Recovery code is required.');
   if (newPass.length < 8) return jsonErr_('Password must be at least 8 characters.');
 
-  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH');
-  if (!storedHash) return jsonErr_('Invalid recovery code.');
+  // SHA-256 of the default recovery phrase (override by setting RECOVERY_CODE_HASH in Script Properties).
+  var DEFAULT_RECOV_HASH_ = '268d68bfaad1fb0eeee0b7fccd8c92817fae5f84889dcf89a5a412299aceb584';
+  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH') || DEFAULT_RECOV_HASH_;
 
   if (sha256_(code) !== storedHash) return jsonErr_('Invalid recovery code.');
 
