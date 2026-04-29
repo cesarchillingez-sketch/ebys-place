@@ -38,7 +38,10 @@ function jsonErr_(msg) {
 // ======================================================
 function checkAdmin_(pass) {
   var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD');
-  if (!stored) return false; // password not configured
+  if (!stored) {
+    Logger.log('WARNING: ADMIN_PASSWORD is not set in Script Properties. Admin access is disabled.');
+    return false;
+  }
   return (typeof pass === 'string') && pass === stored;
 }
 
@@ -114,19 +117,27 @@ function doPost(e) {
 
 function ss_() {
   var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
-  if (!id) return null;
+  if (!id) throw new Error('SPREADSHEET_ID is not set in Script Properties.');
   return SpreadsheetApp.openById(id);
 }
 
 function getSheet_(name) {
-  var spreadsheet = ss_();
-  if (!spreadsheet) return null;
-  return spreadsheet.getSheetByName(name);
+  try {
+    return ss_().getSheetByName(name);
+  } catch (e) {
+    Logger.log('getSheet_ error: ' + e.message);
+    return null;
+  }
 }
 
 function getOrCreateSheet_(name, headers) {
-  var spreadsheet = ss_();
-  if (!spreadsheet) return null;
+  var spreadsheet;
+  try {
+    spreadsheet = ss_();
+  } catch (e) {
+    Logger.log('getOrCreateSheet_ error: ' + e.message);
+    return null;
+  }
   var sheet = spreadsheet.getSheetByName(name);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(name);
@@ -488,20 +499,20 @@ function adminUpdateProfile_(body) {
 function adminResetPassword_(body) {
   var code    = String(body.recoveryCode || '');
   var newPass = String(body.newPassword  || '');
-  if (!code)              return jsonResponse_({ success: false, error: 'Recovery code is required.' });
-  if (newPass.length < 8) return jsonResponse_({ success: false, error: 'Password must be at least 8 characters.' });
+  if (!code)              return jsonErr_('Recovery code is required.');
+  if (newPass.length < 8) return jsonErr_('Password must be at least 8 characters.');
 
-  // Compute SHA-256 of the supplied recovery code and compare to the stored hash.
-  var hex        = computeSha256Hash_(code);
-  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH') || DEFAULT_RECOV_HASH_;
-  if (hex !== storedHash) return jsonResponse_({ success: false, error: 'Invalid recovery code.' });
+  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH');
+  if (!storedHash) return jsonErr_('Invalid recovery code.');
+
+  if (sha256_(code) !== storedHash) return jsonErr_('Invalid recovery code.');
 
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
-  return jsonResponse_({ success: true });
+  return jsonOk_();
 }
 
 // ======================================================
-// Email template helper
+// Email helpers
 // ======================================================
 function buildEmailHtml_(title, bodyHtml) {
   return '<!DOCTYPE html><html><body style="margin:0;padding:0;background:#FCFBF8;font-family:Georgia,serif;">' +
@@ -513,11 +524,11 @@ function buildEmailHtml_(title, bodyHtml) {
     '<h2 style="margin:0 0 20px;color:#2A1A12;font-size:20px;">' + title + '</h2>' +
     '<div style="color:#6B5749;line-height:1.8;font-size:15px;">' + bodyHtml + '</div></td></tr>' +
     '<tr><td style="padding:24px 40px;background:#F4EFE6;border-top:1px solid #E5DDD3;">' +
-    '<p style="margin:0;color:#C2A378;font-size:12px;text-align:center;">Sent from Eby\'s Place Admin Dashboard</p></td></tr>' +
+    '<p style="margin:0;color:#C2A378;font-size:12px;text-align:center;">© Eby\'s Place</p></td></tr>' +
     '</table></td></tr></table></body></html>';
 }
 
-function escapeHtmlGs_(str) {
+function esc_(str) {
   return String(str || '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');

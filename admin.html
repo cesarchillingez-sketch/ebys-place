@@ -18,12 +18,11 @@
             theme: {
                 extend: {
                     colors: {
-                        'eby-bg':    '#FCFBF8',
-                        'eby-dark':  '#2A1A12',
-                        'eby-brown': '#6B5749',
-                        'eby-gold':  '#F4EFE6',
-                        'eby-gold-dark': '#C2A378',
-                        'eby-surface': '#FFFFFF',
+                        'eby-bg':       '#FCFBF8',
+                        'eby-dark':     '#2A1A12',
+                        'eby-brown':    '#6B5749',
+                        'eby-gold':     '#F4EFE6',
+                        'eby-gold-dark':'#C2A378',
                     },
                     fontFamily: {
                         body:    ['Lexend', 'sans-serif'],
@@ -34,51 +33,52 @@
             }
         }
     </script>
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 
     <style>
-        *  { box-sizing: border-box; }
+        * { box-sizing: border-box; }
         body { font-family: 'Lexend', sans-serif; background: #FCFBF8; color: #2A1A12; -webkit-font-smoothing: antialiased; }
 
-        /* ── Scrollbar ── */
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #F4EFE6; }
         ::-webkit-scrollbar-thumb { background: #C2A378; border-radius: 4px; }
 
-        /* ── Sidebar ── */
-        #sidebar { width: 240px; min-height: 100dvh; background: #2A1A12; transition: transform .3s ease; }
+        /* Sidebar */
+        #sidebar { width: 240px; background: #2A1A12; min-height: 100dvh; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.6); transition: all .2s; }
         .nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
         .nav-item.active { background: rgba(194,163,120,.2); color: #C2A378; }
         .nav-item i { font-size: 20px; flex-shrink: 0; }
 
-        /* ── Cards ── */
+        /* Cards */
         .card { background: #fff; border: 1px solid rgba(194,163,120,.2); border-radius: 20px; padding: 24px; }
         .stat-card { background: #fff; border: 1px solid rgba(194,163,120,.2); border-radius: 18px; padding: 20px; }
 
-        /* ── Table ── */
+        /* Table */
         .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .data-table th { background: #F4EFE6; color: #6B5749; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; padding: 10px 14px; text-align: left; }
         .data-table td { padding: 12px 14px; border-bottom: 1px solid #F4EFE6; vertical-align: top; }
         .data-table tr:last-child td { border-bottom: none; }
         .data-table tr:hover td { background: #FDFCF9; }
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; border: 1px solid rgba(194,163,120,.2); }
 
-        /* ── Status badges ── */
+        /* Badges */
         .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-        .badge-green  { background: #ECFDF5; color: #065F46; }
-        .badge-amber  { background: #FFFBEB; color: #92400E; }
-        .badge-red    { background: #FEF2F2; color: #991B1B; }
-        .badge-grey   { background: #F3F4F6; color: #4B5563; }
+        .badge-green { background: #ECFDF5; color: #065F46; }
+        .badge-amber { background: #FFFBEB; color: #92400E; }
+        .badge-red   { background: #FEF2F2; color: #991B1B; }
+        .badge-grey  { background: #F3F4F6; color: #4B5563; }
 
-        /* ── Form inputs ── */
+        /* Buttons & Fields */
         .field { width: 100%; background: #FCFBF8; border: 1px solid rgba(194,163,120,.35); padding: 11px 16px; border-radius: 12px; font-family: 'Lexend', sans-serif; font-size: 13px; color: #2A1A12; outline: none; transition: border .2s; }
         .field:focus { border-color: #2A1A12; background: #fff; }
         .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 12px; font-family: 'Lexend', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; border: none; outline: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
         .btn-primary { background: #2A1A12; color: #fff; }
         .btn-primary:hover { background: #3a2618; }
-        .btn-primary:active { background: #1a0e09; transform: scale(0.97); }
-        .btn:disabled, .btn[disabled] { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+        .btn-primary:active { transform: scale(.97); }
         .btn-gold { background: #C2A378; color: #fff; }
         .btn-gold:hover { background: #b5916a; }
         .btn-outline { background: transparent; border: 1px solid rgba(194,163,120,.5); color: #6B5749; }
@@ -86,50 +86,46 @@
         .btn-danger { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
         .btn-danger:hover { background: #FEE2E2; }
         .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 9px; }
+        .btn:disabled { opacity: .6; cursor: not-allowed; pointer-events: none; }
 
-        /* ── Availability grid ── */
+        /* Hour toggle */
         .hour-btn { padding: 6px 4px; border-radius: 8px; font-size: 11px; font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all .15s; text-align: center; }
         .hour-btn.on  { background: #2A1A12; color: #fff; border-color: #2A1A12; }
         .hour-btn.off { background: #F4EFE6; color: #6B5749; border-color: #E5DDD3; }
         .hour-btn.off:hover { border-color: #C2A378; }
 
-        /* ── Mobile bottom nav ── */
+        /* Mobile nav */
         #mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #2A1A12; display: flex; border-top: 1px solid rgba(255,255,255,.08); padding-bottom: env(safe-area-inset-bottom); }
-        .mob-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px 8px; cursor: pointer; color: rgba(255,255,255,.5); font-size: 10px; font-weight: 500; gap: 3px; transition: color .2s; }
-        .mob-nav-item i { font-size: 22px; }
-        .mob-nav-item.active { color: #C2A378; }
+        .mob-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px 8px; cursor: pointer; color: rgba(255,255,255,.5); font-size: 10px; font-weight: 500; gap: 3px; transition: color .2s; }
+        .mob-item i { font-size: 22px; }
+        .mob-item.active { color: #C2A378; }
 
-        /* ── Toast ── */
+        /* Toast */
         #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(30px); background: #2A1A12; color: #fff; padding: 12px 22px; border-radius: 12px; font-size: 13px; font-weight: 500; opacity: 0; transition: all .3s; z-index: 200; pointer-events: none; white-space: nowrap; }
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* ── Login ── */
+        /* Login */
         #login-screen { position: fixed; inset: 0; background: #FCFBF8; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
 
-        /* ── Modal ── */
+        /* Modal */
         .modal-bg { position: fixed; inset: 0; background: rgba(42,26,18,.5); backdrop-filter: blur(4px); z-index: 150; display: flex; align-items: center; justify-content: center; padding: 16px; }
         .modal { background: #fff; border-radius: 22px; padding: 28px; width: 100%; max-width: 480px; }
 
-        /* ── Transitions ── */
+        /* Sections */
         .section { display: none; animation: fadeIn .25s ease; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin   { to { transform: rotate(360deg); } }
 
-        /* ── Responsive table wrapper ── */
-        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; border: 1px solid rgba(194,163,120,.2); }
-
-        /* ── Chart bar ── */
+        /* Bar chart */
         .bar-wrap { display: flex; flex-direction: column; gap: 6px; }
-        .bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+        .bar-row   { display: flex; align-items: center; gap: 10px; font-size: 12px; }
         .bar-label { width: 80px; flex-shrink: 0; color: #6B5749; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .bar-track { flex: 1; background: #F4EFE6; border-radius: 99px; height: 10px; overflow: hidden; }
         .bar-fill  { height: 100%; background: #C2A378; border-radius: 99px; transition: width .6s ease; }
         .bar-count { width: 30px; text-align: right; color: #2A1A12; font-weight: 600; }
 
-        @media (min-width: 1024px) {
-            #toast { bottom: 32px; }
-        }
+        @media (min-width: 1024px) { #toast { bottom: 32px; } }
     </style>
 </head>
 <body>
@@ -139,17 +135,15 @@
 ===================================================== -->
 <div id="login-screen">
     <div style="width:100%;max-width:400px;">
-        <!-- Logo -->
         <div class="text-center mb-10">
             <p class="font-display text-4xl text-eby-dark mb-1">Eby's Place</p>
             <p class="text-xs font-sans font-semibold uppercase tracking-widest text-eby-gold-dark">Admin Dashboard</p>
         </div>
 
-        <!-- Login card -->
+        <!-- Password panel -->
         <div id="login-panel" class="card">
             <h2 class="font-display text-2xl text-eby-dark mb-1">Welcome back</h2>
             <p class="text-eby-brown text-sm mb-6">Enter your admin password to continue.</p>
-
             <div class="mb-4">
                 <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Password</label>
                 <input id="login-pass" type="password" class="field" placeholder="••••••••••••"
@@ -160,39 +154,39 @@
                 <i class="ph ph-sign-in"></i> Sign In
             </button>
             <p class="text-center mt-4">
-                <button type="button" class="text-xs text-eby-gold-dark underline underline-offset-2 hover:text-eby-dark transition-colors" onclick="showRecoveryPanel()">Forgot password?</button>
+                <button type="button" class="text-xs text-eby-gold-dark underline underline-offset-2 hover:text-eby-dark transition-colors"
+                        onclick="showRecovery()">Forgot password?</button>
             </p>
         </div>
 
         <!-- Recovery panel -->
         <div id="recovery-panel" class="card hidden mt-4">
             <h2 class="font-display text-xl text-eby-dark mb-1">Reset Password</h2>
-            <p class="text-eby-brown text-sm mb-6">Enter your recovery code and a new password.</p>
-
+            <p class="text-eby-brown text-sm mb-5">Enter your recovery code and choose a new password.</p>
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Recovery Code</label>
-                    <input id="recov-code-input" type="text" class="field" placeholder="Enter your recovery code"
-                           autocomplete="off" onkeydown="if(event.key==='Enter')doResetPassword()">
+                    <input id="rc-code" type="text" class="field" placeholder="Your recovery code"
+                           autocomplete="off" onkeydown="if(event.key==='Enter')doReset()">
                 </div>
                 <div>
                     <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">New Password</label>
-                    <input id="recov-new-pass" type="password" class="field" placeholder="Min. 8 characters"
-                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+                    <input id="rc-new" type="password" class="field" placeholder="Min. 8 characters"
+                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doReset()">
                 </div>
                 <div>
-                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Confirm New Password</label>
-                    <input id="recov-confirm-pass" type="password" class="field" placeholder="Repeat new password"
-                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doResetPassword()">
+                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Confirm Password</label>
+                    <input id="rc-confirm" type="password" class="field" placeholder="Repeat new password"
+                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doReset()">
                 </div>
             </div>
-            <p id="recov-error" class="text-red-600 text-xs mt-3 mb-2 hidden"></p>
-            <p id="recov-success" class="text-green-700 text-xs mt-3 mb-2 hidden">Password reset successfully! You can now sign in.</p>
+            <p id="rc-error"   class="text-red-600 text-xs mt-3 hidden"></p>
+            <p id="rc-success" class="text-green-700 text-xs mt-3 hidden">Password reset! You can now sign in.</p>
             <div class="flex gap-3 mt-5">
-                <button class="btn btn-primary flex-1 justify-center" onclick="doResetPassword()">
+                <button class="btn btn-primary flex-1 justify-center" onclick="doReset()">
                     <i class="ph ph-lock-key"></i> Reset Password
                 </button>
-                <button class="btn btn-outline" onclick="hideRecoveryPanel()">Cancel</button>
+                <button class="btn btn-outline" onclick="hideRecovery()">Cancel</button>
             </div>
         </div>
     </div>
@@ -203,43 +197,24 @@
 ===================================================== -->
 <div id="dashboard" class="hidden">
 
-    <!-- Desktop layout: sidebar + content -->
     <div class="lg:flex min-h-screen">
 
-        <!-- ── SIDEBAR (desktop only) ── -->
+        <!-- SIDEBAR (desktop) -->
         <aside id="sidebar" class="hidden lg:flex lg:flex-col flex-shrink-0 fixed top-0 left-0 h-full overflow-y-auto z-40">
             <div class="p-6 border-b border-white/10">
                 <p class="font-display text-xl text-white">Eby's Place</p>
                 <p class="text-[10px] font-sans uppercase tracking-widest text-eby-gold-dark mt-1">Admin</p>
             </div>
-
             <nav class="flex-1 p-3 space-y-1 mt-2">
-                <div class="nav-item active" data-section="overview" onclick="showSection('overview')">
-                    <i class="ph ph-squares-four"></i> Overview
-                </div>
-                <div class="nav-item" data-section="bookings" onclick="showSection('bookings')">
-                    <i class="ph ph-calendar-check"></i> Bookings
-                </div>
-                <div class="nav-item" data-section="orders" onclick="showSection('orders')">
-                    <i class="ph ph-shopping-bag"></i> Shop Orders
-                </div>
-                <div class="nav-item" data-section="inventory" onclick="showSection('inventory')">
-                    <i class="ph ph-package"></i> Inventory
-                </div>
-                <div class="nav-item" data-section="availability" onclick="showSection('availability')">
-                    <i class="ph ph-clock"></i> Availability
-                </div>
-                <div class="nav-item" data-section="analytics" onclick="showSection('analytics')">
-                    <i class="ph ph-chart-bar"></i> Analytics
-                </div>
-                <div class="nav-item" data-section="email" onclick="showSection('email')">
-                    <i class="ph ph-envelope"></i> Email
-                </div>
-                <div class="nav-item" data-section="settings" onclick="showSection('settings')">
-                    <i class="ph ph-gear"></i> Settings
-                </div>
+                <div class="nav-item active" data-section="overview"      onclick="nav('overview')">     <i class="ph ph-squares-four"></i>   Overview    </div>
+                <div class="nav-item"        data-section="bookings"      onclick="nav('bookings')">     <i class="ph ph-calendar-check"></i> Bookings    </div>
+                <div class="nav-item"        data-section="orders"        onclick="nav('orders')">       <i class="ph ph-shopping-bag"></i>   Shop Orders </div>
+                <div class="nav-item"        data-section="inventory"     onclick="nav('inventory')">    <i class="ph ph-package"></i>        Inventory   </div>
+                <div class="nav-item"        data-section="availability"  onclick="nav('availability')"> <i class="ph ph-clock"></i>          Availability</div>
+                <div class="nav-item"        data-section="analytics"     onclick="nav('analytics')">    <i class="ph ph-chart-bar"></i>      Analytics   </div>
+                <div class="nav-item"        data-section="email"         onclick="nav('email')">        <i class="ph ph-envelope"></i>       Email       </div>
+                <div class="nav-item"        data-section="settings"      onclick="nav('settings')">     <i class="ph ph-gear"></i>           Settings    </div>
             </nav>
-
             <div class="p-4 border-t border-white/10">
                 <button class="nav-item w-full text-red-400 hover:text-red-300 hover:bg-red-900/20" onclick="doLogout()">
                     <i class="ph ph-sign-out"></i> Sign Out
@@ -247,19 +222,19 @@
             </div>
         </aside>
 
-        <!-- ── CONTENT AREA ── -->
+        <!-- CONTENT -->
         <main class="flex-1 lg:ml-[240px] pb-24 lg:pb-8">
 
             <!-- Top bar -->
             <div class="sticky top-0 z-30 bg-eby-bg/90 backdrop-blur border-b border-eby-gold-dark/10 px-4 lg:px-8 h-16 flex items-center justify-between">
-                <div>
-                    <p id="section-title" class="font-display text-lg text-eby-dark">Overview</p>
-                </div>
+                <p id="section-title" class="font-display text-lg text-eby-dark">Overview</p>
                 <div class="flex items-center gap-3">
                     <button onclick="refreshCurrent()" class="btn btn-outline btn-sm hidden lg:flex">
                         <i class="ph ph-arrows-clockwise"></i> Refresh
                     </button>
-                    <button id="profile-avatar" class="w-8 h-8 rounded-full bg-eby-gold flex items-center justify-center hover:ring-2 hover:ring-eby-gold-dark transition-all" onclick="showSection('settings')" title="Admin Profile">
+                    <button id="profile-avatar"
+                            class="w-8 h-8 rounded-full bg-eby-gold flex items-center justify-center hover:ring-2 hover:ring-eby-gold-dark transition-all"
+                            onclick="nav('settings')" title="Profile">
                         <span id="profile-initials" class="text-eby-dark text-xs font-bold font-sans hidden"></span>
                         <i id="profile-icon" class="ph ph-user text-eby-dark text-sm"></i>
                     </button>
@@ -268,176 +243,115 @@
 
             <div class="p-4 lg:p-8">
 
-                <!-- ==================== OVERVIEW ==================== -->
+                <!-- ========== OVERVIEW ========== -->
                 <div id="section-overview" class="section active">
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 mb-6">
-                        <div class="stat-card">
-                            <p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Total Bookings</p>
-                            <p id="stat-bookings" class="text-3xl font-display text-eby-dark">—</p>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Shop Orders</p>
-                            <p id="stat-orders" class="text-3xl font-display text-eby-dark">—</p>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Total Revenue</p>
-                            <p id="stat-revenue" class="text-3xl font-display text-eby-dark">—</p>
-                        </div>
-                        <div class="stat-card">
-                            <p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Page Views</p>
-                            <p id="stat-visits" class="text-3xl font-display text-eby-dark">—</p>
-                        </div>
+                        <div class="stat-card"><p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Total Bookings</p><p id="stat-bookings" class="text-3xl font-display text-eby-dark">—</p></div>
+                        <div class="stat-card"><p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Shop Orders</p>   <p id="stat-orders"   class="text-3xl font-display text-eby-dark">—</p></div>
+                        <div class="stat-card"><p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Total Revenue</p>  <p id="stat-revenue"  class="text-3xl font-display text-eby-dark">—</p></div>
+                        <div class="stat-card"><p class="text-xs font-sans uppercase tracking-wider text-eby-brown mb-2">Page Views</p>     <p id="stat-visits"   class="text-3xl font-display text-eby-dark">—</p></div>
                     </div>
-
                     <div class="grid lg:grid-cols-2 gap-5">
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Recent Bookings</h3>
-                            <div id="recent-bookings-list" class="space-y-3 text-sm text-eby-brown">Loading…</div>
+                            <div id="recent-bookings" class="space-y-3 text-sm text-eby-brown">Loading…</div>
                         </div>
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Recent Orders</h3>
-                            <div id="recent-orders-list" class="space-y-3 text-sm text-eby-brown">Loading…</div>
+                            <div id="recent-orders" class="space-y-3 text-sm text-eby-brown">Loading…</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ==================== BOOKINGS ==================== -->
+                <!-- ========== BOOKINGS ========== -->
                 <div id="section-bookings" class="section">
                     <div class="flex items-center justify-between mb-5">
                         <p class="text-sm text-eby-brown">All appointment bookings, newest first.</p>
-                        <button class="btn btn-outline btn-sm" onclick="loadBookings()">
-                            <i class="ph ph-arrows-clockwise"></i> Refresh
-                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="loadBookings()"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
                     </div>
                     <div class="table-wrap">
                         <table class="data-table">
-                            <thead><tr>
-                                <th>Date/Time</th>
-                                <th>Client</th>
-                                <th>Service</th>
-                                <th>Slot</th>
-                                <th>Deposit</th>
-                                <th>Status</th>
-                            </tr></thead>
+                            <thead><tr><th>Date</th><th>Client</th><th>Service</th><th>Slot</th><th>Deposit</th><th>Status</th></tr></thead>
                             <tbody id="bookings-tbody"><tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- ==================== ORDERS ==================== -->
+                <!-- ========== ORDERS ========== -->
                 <div id="section-orders" class="section">
                     <div class="flex items-center justify-between mb-5">
                         <p class="text-sm text-eby-brown">All shop orders, newest first.</p>
-                        <button class="btn btn-outline btn-sm" onclick="loadOrders()">
-                            <i class="ph ph-arrows-clockwise"></i> Refresh
-                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="loadOrders()"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
                     </div>
                     <div class="table-wrap">
                         <table class="data-table">
-                            <thead><tr>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Item</th>
-                                <th>Amount</th>
-                                <th>Address</th>
-                                <th>Status</th>
-                            </tr></thead>
+                            <thead><tr><th>Date</th><th>Customer</th><th>Item</th><th>Amount</th><th>Address</th><th>Status</th></tr></thead>
                             <tbody id="orders-tbody"><tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- ==================== INVENTORY ==================== -->
+                <!-- ========== INVENTORY ========== -->
                 <div id="section-inventory" class="section">
                     <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-5">
-                        <p class="text-sm text-eby-brown">Manage shop products and stock levels.</p>
+                        <p class="text-sm text-eby-brown">Manage shop products and stock.</p>
                         <div class="flex gap-2">
-                            <button class="btn btn-outline btn-sm" onclick="loadInventory()">
-                                <i class="ph ph-arrows-clockwise"></i> Refresh
-                            </button>
-                            <button class="btn btn-gold btn-sm" onclick="openAddProduct()">
-                                <i class="ph ph-plus"></i> Add Product
-                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="loadInventory()"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
+                            <button class="btn btn-gold btn-sm"    onclick="openAddProduct()"><i class="ph ph-plus"></i> Add Product</button>
                         </div>
                     </div>
                     <div class="table-wrap">
                         <table class="data-table">
-                            <thead><tr>
-                                <th>Product</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr></thead>
+                            <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
                             <tbody id="inventory-tbody"><tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- ==================== AVAILABILITY ==================== -->
+                <!-- ========== AVAILABILITY ========== -->
                 <div id="section-availability" class="section">
-                    <p class="text-sm text-eby-brown mb-5">Click hours to toggle them on/off. Save when done. Changes affect the live booking calendar immediately.</p>
+                    <p class="text-sm text-eby-brown mb-5">Toggle hours on/off then save. Changes go live on the booking page immediately.</p>
                     <div class="card mb-5">
-                        <div id="avail-grid" class="space-y-5">
-                            <!-- Rendered by JS -->
-                        </div>
+                        <div id="avail-grid" class="space-y-5"></div>
                     </div>
                     <div class="flex gap-3">
-                        <button class="btn btn-primary" onclick="saveAvailability()">
-                            <i class="ph ph-floppy-disk"></i> Save Changes
-                        </button>
-                        <button class="btn btn-outline" onclick="loadAvailabilityAdmin()">
-                            <i class="ph ph-arrows-clockwise"></i> Reset
-                        </button>
+                        <button class="btn btn-primary" onclick="saveAvailability()"><i class="ph ph-floppy-disk"></i> Save Changes</button>
+                        <button class="btn btn-outline" onclick="loadAvailabilityAdmin()"><i class="ph ph-arrows-clockwise"></i> Reset</button>
                     </div>
                 </div>
 
-                <!-- ==================== ANALYTICS ==================== -->
+                <!-- ========== ANALYTICS ========== -->
                 <div id="section-analytics" class="section">
                     <div class="flex items-center justify-between mb-5">
                         <p class="text-sm text-eby-brown">Page visits tracked from your website.</p>
-                        <button class="btn btn-outline btn-sm" onclick="loadAnalytics()">
-                            <i class="ph ph-arrows-clockwise"></i> Refresh
-                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="loadAnalytics()"><i class="ph ph-arrows-clockwise"></i> Refresh</button>
                     </div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-                        <!-- Page breakdown -->
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Visits by Page</h3>
                             <div id="analytics-chart" class="bar-wrap">Loading…</div>
                         </div>
-
-                        <!-- Summary -->
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Summary</h3>
                             <div id="analytics-summary" class="space-y-3 text-sm text-eby-brown">Loading…</div>
                         </div>
                     </div>
-
-                    <!-- Recent visits table -->
                     <div class="card">
                         <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Recent Visits</h3>
                         <div class="table-wrap">
                             <table class="data-table">
-                                <thead><tr>
-                                    <th>Time</th>
-                                    <th>Page</th>
-                                    <th>Referrer</th>
-                                    <th>Browser/Device</th>
-                                </tr></thead>
+                                <thead><tr><th>Time</th><th>Page</th><th>Referrer</th><th>Browser</th></tr></thead>
                                 <tbody id="analytics-tbody"><tr><td colspan="4" class="text-center text-eby-brown py-8">Loading…</td></tr></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- ==================== EMAIL ==================== -->
+                <!-- ========== EMAIL ========== -->
                 <div id="section-email" class="section">
                     <div class="grid lg:grid-cols-2 gap-5">
                         <div class="card">
-                            <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Send Email Notification</h3>
+                            <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Send Email</h3>
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">To</label>
@@ -456,23 +370,22 @@
                                 </button>
                             </div>
                         </div>
-
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-4">Quick Templates</h3>
                             <div class="space-y-3">
-                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="useTemplate('reminder')">
+                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="loadTemplate('reminder')">
                                     <p class="font-semibold text-eby-dark mb-1">Appointment Reminder</p>
                                     <p class="text-eby-brown text-xs">Remind a client about their upcoming appointment.</p>
                                 </button>
-                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="useTemplate('confirm')">
+                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="loadTemplate('confirm')">
                                     <p class="font-semibold text-eby-dark mb-1">Booking Confirmation</p>
                                     <p class="text-eby-brown text-xs">Send a custom confirmation message.</p>
                                 </button>
-                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="useTemplate('promo')">
+                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="loadTemplate('promo')">
                                     <p class="font-semibold text-eby-dark mb-1">Promotional Offer</p>
                                     <p class="text-eby-brown text-xs">Share a new offer or discount.</p>
                                 </button>
-                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="useTemplate('closure')">
+                                <button class="w-full text-left p-4 rounded-xl border border-eby-gold-dark/20 hover:border-eby-gold-dark transition-colors text-sm" onclick="loadTemplate('closure')">
                                     <p class="font-semibold text-eby-dark mb-1">Closure Notice</p>
                                     <p class="text-eby-brown text-xs">Notify clients of studio closure dates.</p>
                                 </button>
@@ -481,13 +394,13 @@
                     </div>
                 </div>
 
-                <!-- ==================== SETTINGS ==================== -->
+                <!-- ========== SETTINGS ========== -->
                 <div id="section-settings" class="section">
                     <div class="grid lg:grid-cols-2 gap-5">
 
-                        <!-- Admin Profile (full-width) -->
+                        <!-- Profile -->
                         <div class="card lg:col-span-2">
-                            <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Admin Profile</h3>
+                            <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Profile</h3>
                             <div class="grid sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Display Name</label>
@@ -495,7 +408,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Notification Email</label>
-                                    <input id="prof-email" type="email" class="field" placeholder="e.g. you@example.com" autocomplete="email">
+                                    <input id="prof-email" type="email" class="field" placeholder="you@example.com" autocomplete="email">
                                 </div>
                             </div>
                             <p id="prof-msg" class="text-xs mt-3 hidden"></p>
@@ -530,63 +443,47 @@
                         <!-- Info -->
                         <div class="space-y-4">
                             <div class="card">
-                                <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-3">Recovery Code</h3>
-                                <p class="text-sm text-eby-brown leading-relaxed mb-3">Your recovery code lets you reset your password if you ever forget it. Keep it private.</p>
-                                <div class="flex items-center gap-2">
-                                    <code id="recov-code-display" class="bg-eby-gold px-3 py-1.5 rounded text-eby-dark font-semibold tracking-wider text-sm blur-sm select-none transition-all duration-300">RESET-7391-EBYS</code>
-                                    <button onclick="toggleRecovCode()" id="recov-toggle-btn" class="btn btn-outline btn-sm"><i class="ph ph-eye"></i> Reveal</button>
-                                </div>
-                            </div>
-                            <div class="card">
                                 <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-3">Google Apps Script Setup</h3>
-                                <p class="text-sm text-eby-brown leading-relaxed mb-3">For all data features to work, ensure your Apps Script has these Script Properties set:</p>
+                                <p class="text-sm text-eby-brown leading-relaxed mb-3">All features require these Script Properties set in your Apps Script project:</p>
                                 <ul class="text-xs text-eby-brown space-y-1.5">
                                     <li><code class="bg-eby-gold px-1.5 rounded">SPREADSHEET_ID</code> — your Google Sheet ID</li>
                                     <li><code class="bg-eby-gold px-1.5 rounded">STRIPE_SECRET_KEY</code> — your Stripe secret key</li>
                                     <li><code class="bg-eby-gold px-1.5 rounded">SITE_URL</code> — your live site URL</li>
-                                    <li><code class="bg-eby-gold px-1.5 rounded">ADMIN_PASSWORD</code> — set to <code class="bg-eby-gold px-1.5 rounded">EbysPlace@2025</code> initially</li>
+                                    <li><code class="bg-eby-gold px-1.5 rounded">ADMIN_PASSWORD</code> — your chosen password</li>
+                                    <li><code class="bg-eby-gold px-1.5 rounded">RECOVERY_CODE_HASH</code> — SHA-256 hex of your recovery code</li>
                                 </ul>
                                 <p class="text-xs text-eby-brown mt-3">After any Code.gs change, redeploy as a new version.</p>
                             </div>
                             <div class="card">
                                 <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-2">Session</h3>
-                                <p class="text-sm text-eby-brown mb-4">You are currently signed in. Your session lasts until you close the browser tab.</p>
+                                <p class="text-sm text-eby-brown mb-4">You are currently signed in.</p>
                                 <button class="btn btn-danger btn-sm" onclick="doLogout()">
                                     <i class="ph ph-sign-out"></i> Sign Out
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
             </div><!-- /p-4 -->
         </main>
-    </div><!-- /lg:flex -->
+    </div>
 
-    <!-- ── MOBILE BOTTOM NAV ── -->
+    <!-- MOBILE BOTTOM NAV -->
     <nav id="mobile-nav" class="lg:hidden">
-        <div class="mob-nav-item active" data-section="overview" onclick="showSection('overview')">
-            <i class="ph ph-squares-four"></i> Overview
-        </div>
-        <div class="mob-nav-item" data-section="bookings" onclick="showSection('bookings')">
-            <i class="ph ph-calendar-check"></i> Bookings
-        </div>
-        <div class="mob-nav-item" data-section="orders" onclick="showSection('orders')">
-            <i class="ph ph-shopping-bag"></i> Orders
-        </div>
-        <div class="mob-nav-item" data-section="availability" onclick="showSection('availability')">
-            <i class="ph ph-clock"></i> Hours
-        </div>
-        <div class="mob-nav-item" data-section="analytics" onclick="showSection('analytics')">
-            <i class="ph ph-chart-bar"></i> Stats
-        </div>
+        <div class="mob-item active" data-section="overview"     onclick="nav('overview')">     <i class="ph ph-squares-four"></i>   <span>Overview</span>  </div>
+        <div class="mob-item"        data-section="bookings"     onclick="nav('bookings')">     <i class="ph ph-calendar-check"></i> <span>Bookings</span>  </div>
+        <div class="mob-item"        data-section="orders"       onclick="nav('orders')">       <i class="ph ph-shopping-bag"></i>   <span>Orders</span>    </div>
+        <div class="mob-item"        data-section="availability" onclick="nav('availability')"> <i class="ph ph-clock"></i>          <span>Hours</span>     </div>
+        <div class="mob-item"        data-section="analytics"    onclick="nav('analytics')">    <i class="ph ph-chart-bar"></i>      <span>Stats</span>     </div>
     </nav>
 
 </div><!-- /dashboard -->
 
-<!-- ==================== MODALS ==================== -->
-
-<!-- Add / Edit Product Modal -->
+<!-- =====================================================
+     PRODUCT MODAL
+===================================================== -->
 <div id="product-modal" class="modal-bg hidden" onclick="if(event.target===this)closeProductModal()">
     <div class="modal">
         <div class="flex items-center justify-between mb-5">
@@ -594,14 +491,14 @@
             <button onclick="closeProductModal()" class="text-eby-brown hover:text-eby-dark"><i class="ph ph-x text-xl"></i></button>
         </div>
         <div class="space-y-3">
-            <input id="pm-name"  type="text"    class="field" placeholder="Product name *">
-            <input id="pm-cat"   type="text"    class="field" placeholder="Category (e.g. Extensions, Aftercare)">
+            <input id="pm-name"  type="text"   class="field" placeholder="Product name *">
+            <input id="pm-cat"   type="text"   class="field" placeholder="Category (e.g. Extensions, Aftercare)">
             <div class="grid grid-cols-2 gap-3">
-                <input id="pm-price" type="number"  class="field" placeholder="Price (£) *" min="0" step="0.01">
-                <input id="pm-stock" type="number"  class="field" placeholder="Stock qty *"  min="0" step="1">
+                <input id="pm-price" type="number" class="field" placeholder="Price (£) *" min="0" step="0.01">
+                <input id="pm-stock" type="number" class="field" placeholder="Stock qty *"  min="0" step="1">
             </div>
             <textarea id="pm-desc" class="field" rows="2" placeholder="Short description"></textarea>
-            <input id="pm-img"   type="url"    class="field" placeholder="Image URL (optional)">
+            <input id="pm-img" type="url" class="field" placeholder="Image URL (optional)">
             <label class="flex items-center gap-3 text-sm text-eby-brown cursor-pointer">
                 <input id="pm-active" type="checkbox" checked class="w-4 h-4 accent-eby-dark"> Active (visible in shop)
             </label>
@@ -623,62 +520,71 @@
      JAVASCRIPT
 ===================================================== -->
 <script>
-// ──────────────────────────────────────────────
-// CONFIG
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
+// CONFIG — update GAS_URL after each new deployment
+// ─────────────────────────────────────────────────────
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbz-Un1Hu4_IuwwxfU4RnliUOsuHO_bHycdF3wD0e1KpLrK7lDuUosbpaL0kF9FTeTPs/exec';
 
-const RATE_LIMIT_MAX = 9999; // lockout disabled       // attempts before lockout
-const RATE_LIMIT_MS  = 0;    // lockout disabled   // 30-second lockout
-
-let _adminPassword = null;          // stored in sessionStorage after login
-let _currentSection = 'overview';
-let _availData = {};                // local copy of availability config
-let _editingProductId = null;       // null = adding new, else = editing
+// ─────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────
+let _pass        = null;   // admin password held in memory after login
+let _section     = 'overview';
+let _availData   = {};
+let _editingProd = null;   // null = adding new product
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-// ──────────────────────────────────────────────
-// LOGIN / LOGOUT
-// ──────────────────────────────────────────────
-const BTN_SIGN_IN_HTML    = '<i class="ph ph-sign-in"></i> Sign In';
-const BTN_SIGNING_IN_HTML = '<i class="ph ph-circle-notch" style="animation:spin .8s linear infinite"></i> Signing in\u2026';
+const SECTION_TITLES = {
+    overview:'Overview', bookings:'Bookings', orders:'Shop Orders',
+    inventory:'Inventory', availability:'Availability',
+    analytics:'Analytics', email:'Email', settings:'Settings'
+};
 
+// ─────────────────────────────────────────────────────
+// API HELPER
+// ─────────────────────────────────────────────────────
+async function api(payload) {
+    if (_pass && !payload.adminPassword && (payload.type || '').startsWith('ADMIN_')) {
+        payload.adminPassword = _pass;
+    }
+    const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) });
+    return res.json();
+}
+
+// ─────────────────────────────────────────────────────
+// LOGIN / LOGOUT
+// ─────────────────────────────────────────────────────
 async function doLogin() {
     const passEl = document.getElementById('login-pass');
     const pass   = passEl.value.trim();
-    if (!pass) { showLoginError('Please enter your password.'); return; }
+    if (!pass) { loginErr('Please enter your password.'); return; }
 
     const btn = document.getElementById('login-btn');
     btn.disabled = true;
-    btn.innerHTML = BTN_SIGNING_IN_HTML;
+    btn.innerHTML = '<i class="ph ph-circle-notch" style="animation:spin .8s linear infinite"></i> Signing in…';
 
-    // Verify against server — server is the single source of truth for the password
     let res;
     try {
-        res = await fetch(GAS_URL, {
-            method: 'POST',
-            body:   JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: pass })
-        });
-        res = await res.json();
+        res = await api({ type: 'ADMIN_VERIFY', adminPassword: pass });
     } catch (e) {
         btn.disabled = false;
-        btn.innerHTML = BTN_SIGN_IN_HTML;
-        showLoginError('Network error – check your connection and try again.');
+        btn.innerHTML = '<i class="ph ph-sign-in"></i> Sign In';
+        loginErr('Network error – check your connection and try again.');
         return;
     }
 
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ph ph-sign-in"></i> Sign In';
+
     if (!res.success) {
-        btn.disabled = false;
-        btn.innerHTML = BTN_SIGN_IN_HTML;
-        showLoginError('Incorrect password. Please try again.');
+        loginErr('Incorrect password. Please try again.');
         passEl.value = '';
         return;
     }
 
-    // Success
     sessionStorage.setItem('eby_admin_pass', pass);
-    _adminPassword = pass;
+    _pass = pass;
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     loadOverview();
@@ -687,170 +593,117 @@ async function doLogin() {
 
 function doLogout() {
     sessionStorage.removeItem('eby_admin_pass');
-    _adminPassword = null;
+    _pass = null;
     location.reload();
 }
 
-function showRecoveryPanel() {
-    document.getElementById('login-panel').classList.add('hidden');
-    document.getElementById('recovery-panel').classList.remove('hidden');
-    document.getElementById('recov-error').classList.add('hidden');
-    document.getElementById('recov-success').classList.add('hidden');
-    document.getElementById('recov-code-input').value = '';
-    document.getElementById('recov-new-pass').value   = '';
-    document.getElementById('recov-confirm-pass').value = '';
-    document.getElementById('recov-code-input').focus();
-}
-
-function hideRecoveryPanel() {
-    document.getElementById('recovery-panel').classList.add('hidden');
-    document.getElementById('login-panel').classList.remove('hidden');
-    document.getElementById('login-pass').focus();
-}
-
-async function doResetPassword() {
-    const code    = document.getElementById('recov-code-input').value.trim();
-    const newPass = document.getElementById('recov-new-pass').value;
-    const confirm = document.getElementById('recov-confirm-pass').value;
-    const errEl   = document.getElementById('recov-error');
-    const okEl    = document.getElementById('recov-success');
-
-    errEl.classList.add('hidden');
-    okEl.classList.add('hidden');
-
-    if (!code)                   { showRecovError('Please enter your recovery code.'); return; }
-    if (newPass.length < 8)      { showRecovError('New password must be at least 8 characters.'); return; }
-    if (newPass !== confirm)     { showRecovError('Passwords do not match.'); return; }
-
-    let res;
-    try {
-        const raw = await fetch(GAS_URL, {
-            method: 'POST',
-            body:   JSON.stringify({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass })
-        });
-        res = await raw.json();
-    } catch (e) {
-        showRecovError('Network error – check your connection and try again.');
-        return;
-    }
-
-    if (!res.success) {
-        showRecovError(res.error || 'Reset failed. Check your recovery code and try again.');
-        return;
-    }
-
-    okEl.classList.remove('hidden');
-    document.getElementById('recov-code-input').value    = '';
-    document.getElementById('recov-new-pass').value      = '';
-    document.getElementById('recov-confirm-pass').value  = '';
-    // After a short delay, return to sign-in with the new password pre-cleared
-    setTimeout(() => {
-        hideRecoveryPanel();
-        document.getElementById('login-pass').value = '';
-        document.getElementById('login-pass').focus();
-    }, 2000);
-}
-
-function showRecovError(msg) {
-    const el = document.getElementById('recov-error');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-}
-
-function showLoginError(msg) {
+function loginErr(msg) {
     const el = document.getElementById('login-error');
     el.textContent = msg;
     el.classList.remove('hidden');
 }
 
-// ──────────────────────────────────────────────
+function showRecovery() {
+    document.getElementById('login-panel').classList.add('hidden');
+    document.getElementById('recovery-panel').classList.remove('hidden');
+    ['rc-code','rc-new','rc-confirm'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('rc-error').classList.add('hidden');
+    document.getElementById('rc-success').classList.add('hidden');
+    document.getElementById('rc-code').focus();
+}
+
+function hideRecovery() {
+    document.getElementById('recovery-panel').classList.add('hidden');
+    document.getElementById('login-panel').classList.remove('hidden');
+    document.getElementById('login-pass').focus();
+}
+
+async function doReset() {
+    const code    = document.getElementById('rc-code').value.trim();
+    const newPass = document.getElementById('rc-new').value;
+    const confirm = document.getElementById('rc-confirm').value;
+    const errEl   = document.getElementById('rc-error');
+    const okEl    = document.getElementById('rc-success');
+    errEl.classList.add('hidden');
+    okEl.classList.add('hidden');
+
+    if (!code)              { rcErr('Please enter your recovery code.'); return; }
+    if (newPass.length < 8) { rcErr('New password must be at least 8 characters.'); return; }
+    if (newPass !== confirm) { rcErr('Passwords do not match.'); return; }
+
+    let res;
+    try {
+        res = await api({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass });
+    } catch (e) {
+        rcErr('Network error – check your connection and try again.');
+        return;
+    }
+
+    if (!res.success) { rcErr(res.error || 'Reset failed. Check your recovery code.'); return; }
+
+    okEl.classList.remove('hidden');
+    ['rc-code','rc-new','rc-confirm'].forEach(id => document.getElementById(id).value = '');
+    setTimeout(() => { hideRecovery(); document.getElementById('login-pass').focus(); }, 2000);
+}
+
+function rcErr(msg) {
+    const el = document.getElementById('rc-error');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+
+// ─────────────────────────────────────────────────────
 // NAVIGATION
-// ──────────────────────────────────────────────
-const SECTION_TITLES = {
-    overview:'Overview', bookings:'Bookings', orders:'Shop Orders',
-    inventory:'Inventory', availability:'Time Availability',
-    analytics:'Analytics', email:'Email Notifications', settings:'Settings'
-};
-
-function showSection(name) {
-    _currentSection = name;
+// ─────────────────────────────────────────────────────
+function nav(name) {
+    _section = name;
     document.getElementById('section-title').textContent = SECTION_TITLES[name] || name;
-
-    // Hide all sections
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('section-' + name).classList.add('active');
-
-    // Update sidebar nav
-    document.querySelectorAll('#sidebar .nav-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.section === name);
-    });
-    // Update mobile nav
-    document.querySelectorAll('#mobile-nav .mob-nav-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.section === name);
-    });
-
-    // Scroll to top on mobile
+    document.querySelectorAll('#sidebar .nav-item').forEach(el =>
+        el.classList.toggle('active', el.dataset.section === name));
+    document.querySelectorAll('#mobile-nav .mob-item').forEach(el =>
+        el.classList.toggle('active', el.dataset.section === name));
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Load data for section
     const loaders = { overview: loadOverview, bookings: loadBookings, orders: loadOrders,
         inventory: loadInventory, availability: loadAvailabilityAdmin, analytics: loadAnalytics };
     if (loaders[name]) loaders[name]();
 }
 
-function refreshCurrent() { showSection(_currentSection); }
+function refreshCurrent() { nav(_section); }
 
-// ──────────────────────────────────────────────
-// API HELPER
-// ──────────────────────────────────────────────
-async function apiPost(payload) {
-    if (_adminPassword && !payload.adminPassword && payload.type && payload.type.startsWith('ADMIN_')) {
-        payload.adminPassword = _adminPassword;
-    }
-    const res = await fetch(GAS_URL, {
-        method: 'POST',
-        
-        body: JSON.stringify(payload)
-    });
-    return res.json();
-}
-
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // OVERVIEW
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadOverview() {
-    const [bookRes, ordRes, visRes] = await Promise.allSettled([
-        apiPost({ type: 'ADMIN_GET_BOOKINGS' }),
-        apiPost({ type: 'ADMIN_GET_ORDERS' }),
-        apiPost({ type: 'ADMIN_GET_ANALYTICS' })
+    const [bk, or, an] = await Promise.allSettled([
+        api({ type: 'ADMIN_GET_BOOKINGS' }),
+        api({ type: 'ADMIN_GET_ORDERS' }),
+        api({ type: 'ADMIN_GET_ANALYTICS' })
     ]);
-
-    // Stats
-    const bookings = bookRes.status === 'fulfilled' && bookRes.value.success ? bookRes.value.data : [];
-    const orders   = ordRes.status  === 'fulfilled' && ordRes.value.success  ? ordRes.value.data  : [];
-    const visits   = visRes.status  === 'fulfilled' && visRes.value.success  ? visRes.value.summary : { total: 0 };
+    const bookings = bk.status === 'fulfilled' && bk.value.success ? bk.value.data : [];
+    const orders   = or.status === 'fulfilled' && or.value.success ? or.value.data : [];
+    const visits   = an.status === 'fulfilled' && an.value.success ? an.value.summary : { total: 0 };
 
     document.getElementById('stat-bookings').textContent = bookings.length;
     document.getElementById('stat-orders').textContent   = orders.length;
-
     const revenue = [...bookings, ...orders].reduce((s, r) => s + parseFloat(r['Amount'] || 0), 0);
     document.getElementById('stat-revenue').textContent  = '£' + revenue.toFixed(0);
     document.getElementById('stat-visits').textContent   = visits.total || 0;
 
-    // Recent lists
-    renderRecentList('recent-bookings-list', bookings.slice(0,5), 'booking');
-    renderRecentList('recent-orders-list',   orders.slice(0,5),   'order');
+    renderRecentList('recent-bookings', bookings.slice(0,5), 'booking');
+    renderRecentList('recent-orders',   orders.slice(0,5),   'order');
 }
 
 function renderRecentList(id, items, type) {
     const el = document.getElementById(id);
     if (!items.length) { el.innerHTML = '<p class="text-eby-brown text-sm text-center py-4">No data yet.</p>'; return; }
     el.innerHTML = items.map(item => {
-        const name  = esc(type === 'booking' ? item['Name'] : item['Name']);
-        const label = esc(type === 'booking' ? item['Service'] : item['Item']);
-        const amt   = '£' + parseFloat(item['Amount'] || 0).toFixed(2);
-        const time  = fmtDate(type === 'booking' ? item['Timestamp'] : item['Timestamp']);
-        const status = item['Status'] || 'Confirmed';
+        const name   = esc(type === 'booking' ? item['Name'] : item['Name']);
+        const label  = esc(type === 'booking' ? item['Service'] : item['Item']);
+        const amt    = '£' + parseFloat(item['Amount'] || 0).toFixed(2);
+        const time   = fmtDate(item['Timestamp']);
+        const status = item['Status'] || (type === 'booking' ? 'Confirmed' : 'Processing');
         return `<div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
                 <p class="text-eby-dark font-medium text-sm truncate">${name}</p>
@@ -858,121 +711,100 @@ function renderRecentList(id, items, type) {
             </div>
             <div class="text-right flex-shrink-0">
                 <p class="text-eby-dark text-sm font-semibold">${amt}</p>
-                <span class="badge ${statusClass(status)}">${esc(status)}</span>
+                <span class="badge ${badgeClass(status)}">${esc(status)}</span>
             </div>
         </div>`;
     }).join('<hr class="border-eby-gold my-2">');
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // BOOKINGS
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadBookings() {
-    const tbody = document.getElementById('bookings-tbody');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr>';
-    const res = await apiPost({ type: 'ADMIN_GET_BOOKINGS' });
-    if (!res.success) { tbody.innerHTML = `<tr><td colspan="6" class="text-center text-red-500 py-10">Error: ${esc(res.error)}</td></tr>`; return; }
-    if (!res.data.length) { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">No bookings yet.</td></tr>'; return; }
-    tbody.innerHTML = res.data.map(b => `<tr>
+    const tb = document.getElementById('bookings-tbody');
+    tb.innerHTML = loadingRow(6);
+    const res = await api({ type: 'ADMIN_GET_BOOKINGS' });
+    if (!res.success) { tb.innerHTML = errRow(6, res.error); return; }
+    if (!res.data.length) { tb.innerHTML = emptyRow(6, 'No bookings yet.'); return; }
+    tb.innerHTML = res.data.map(b => `<tr>
         <td class="whitespace-nowrap">${fmtDate(b['Timestamp'])}</td>
-        <td>
-            <p class="font-medium text-eby-dark">${esc(b['Name'])}</p>
-            <p class="text-eby-brown text-xs">${esc(b['Email'])}</p>
-        </td>
+        <td><p class="font-medium text-eby-dark">${esc(b['Name'])}</p><p class="text-eby-brown text-xs">${esc(b['Email'])}</p></td>
         <td>${esc(b['Service'])}</td>
         <td class="whitespace-nowrap text-xs">${esc(b['BookingStart'] || '—')}</td>
         <td class="whitespace-nowrap">£${parseFloat(b['Amount']||0).toFixed(2)}</td>
-        <td><span class="badge ${statusClass(b['Status'] || 'Confirmed')}">${esc(b['Status'] || 'Confirmed')}</span></td>
+        <td><span class="badge ${badgeClass(b['Status']||'Confirmed')}">${esc(b['Status']||'Confirmed')}</span></td>
     </tr>`).join('');
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // ORDERS
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadOrders() {
-    const tbody = document.getElementById('orders-tbody');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr>';
-    const res = await apiPost({ type: 'ADMIN_GET_ORDERS' });
-    if (!res.success) { tbody.innerHTML = `<tr><td colspan="6" class="text-center text-red-500 py-10">Error: ${esc(res.error)}</td></tr>`; return; }
-    if (!res.data.length) { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">No orders yet.</td></tr>'; return; }
-    tbody.innerHTML = res.data.map(o => `<tr>
+    const tb = document.getElementById('orders-tbody');
+    tb.innerHTML = loadingRow(6);
+    const res = await api({ type: 'ADMIN_GET_ORDERS' });
+    if (!res.success) { tb.innerHTML = errRow(6, res.error); return; }
+    if (!res.data.length) { tb.innerHTML = emptyRow(6, 'No orders yet.'); return; }
+    tb.innerHTML = res.data.map(o => `<tr>
         <td class="whitespace-nowrap">${fmtDate(o['Timestamp'])}</td>
-        <td>
-            <p class="font-medium text-eby-dark">${esc(o['Name'])}</p>
-            <p class="text-eby-brown text-xs">${esc(o['Email'])}</p>
-        </td>
+        <td><p class="font-medium text-eby-dark">${esc(o['Name'])}</p><p class="text-eby-brown text-xs">${esc(o['Email'])}</p></td>
         <td>${esc(o['Item'])}</td>
         <td class="whitespace-nowrap">£${parseFloat(o['Amount']||0).toFixed(2)}</td>
-        <td class="text-xs max-w-[120px] truncate" title="${esc(o['Address'])}">${esc(o['Address'] || '—')}</td>
-        <td><span class="badge ${statusClass(o['Status'] || 'Processing')}">${esc(o['Status'] || 'Processing')}</span></td>
+        <td class="text-xs max-w-[120px] truncate" title="${esc(o['Address'])}">${esc(o['Address']||'—')}</td>
+        <td><span class="badge ${badgeClass(o['Status']||'Processing')}">${esc(o['Status']||'Processing')}</span></td>
     </tr>`).join('');
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // INVENTORY
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadInventory() {
-    const tbody = document.getElementById('inventory-tbody');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">Loading…</td></tr>';
-    const res = await apiPost({ type: 'ADMIN_GET_INVENTORY' });
-    if (!res.success) { tbody.innerHTML = `<tr><td colspan="6" class="text-center text-red-500 py-10">Error: ${esc(res.error)}</td></tr>`; return; }
-    if (!res.data.length) { tbody.innerHTML = '<tr><td colspan="6" class="text-center text-eby-brown py-10">No products yet. Add your first product above.</td></tr>'; return; }
-    tbody.innerHTML = res.data.map(p => {
+    const tb = document.getElementById('inventory-tbody');
+    tb.innerHTML = loadingRow(6);
+    const res = await api({ type: 'ADMIN_GET_INVENTORY' });
+    if (!res.success) { tb.innerHTML = errRow(6, res.error); return; }
+    if (!res.data.length) { tb.innerHTML = emptyRow(6, 'No products yet. Add your first above.'); return; }
+
+    tb.innerHTML = res.data.map(p => {
         const active = String(p['Active']).toUpperCase() !== 'FALSE';
         const stock  = parseInt(p['Stock'] || 0);
         return `<tr>
-            <td>
-                <p class="font-medium text-eby-dark">${esc(p['Name'])}</p>
-                <p class="text-eby-brown text-xs line-clamp-1">${esc(p['Description'] || '')}</p>
-            </td>
-            <td class="text-eby-brown">${esc(p['Category'] || '—')}</td>
+            <td><p class="font-medium text-eby-dark">${esc(p['Name'])}</p><p class="text-eby-brown text-xs line-clamp-1">${esc(p['Description']||'')}</p></td>
+            <td class="text-eby-brown">${esc(p['Category']||'—')}</td>
             <td class="whitespace-nowrap">£${parseFloat(p['Price']||0).toFixed(2)}</td>
-            <td>
-                <span class="badge ${stock <= 0 ? 'badge-red' : stock <= 5 ? 'badge-amber' : 'badge-green'}">${stock}</span>
-            </td>
-            <td><span class="badge ${active ? 'badge-green' : 'badge-grey'}">${active ? 'Active' : 'Hidden'}</span></td>
+            <td><span class="badge ${stock<=0?'badge-red':stock<=5?'badge-amber':'badge-green'}">${stock}</span></td>
+            <td><span class="badge ${active?'badge-green':'badge-grey'}">${active?'Active':'Hidden'}</span></td>
             <td>
                 <div class="flex gap-2">
-                    <button class="btn btn-outline btn-sm edit-product-btn"
-                        data-id="${esc(p['ProductId'])}"
-                        data-name="${esc(p['Name'])}"
-                        data-cat="${esc(p['Category'] || '')}"
-                        data-price="${esc(p['Price'] || '0')}"
-                        data-stock="${esc(p['Stock'] || '0')}"
-                        data-desc="${esc(p['Description'] || '')}"
-                        data-img="${esc(p['ImageUrl'] || '')}"
-                        data-active="${active ? 'true' : 'false'}">
-                        <i class="ph ph-pencil"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm delete-product-btn"
-                        data-id="${esc(p['ProductId'])}"
-                        data-name="${esc(p['Name'])}">
-                        <i class="ph ph-trash"></i>
-                    </button>
+                    <button class="btn btn-outline btn-sm edit-btn"
+                        data-id="${esc(p['ProductId'])}" data-name="${esc(p['Name'])}" data-cat="${esc(p['Category']||'')}"
+                        data-price="${esc(p['Price']||'0')}" data-stock="${esc(p['Stock']||'0')}"
+                        data-desc="${esc(p['Description']||'')}" data-img="${esc(p['ImageUrl']||'')}"
+                        data-active="${active}"><i class="ph ph-pencil"></i></button>
+                    <button class="btn btn-danger btn-sm del-btn"
+                        data-id="${esc(p['ProductId'])}" data-name="${esc(p['Name'])}"><i class="ph ph-trash"></i></button>
                 </div>
             </td>
         </tr>`;
     }).join('');
 
-    // Attach handlers via delegation to avoid inline-event XSS
-    document.getElementById('inventory-tbody').addEventListener('click', handleInventoryClick, { once: true });
+    tb.addEventListener('click', onInventoryClick, { once: true });
 }
 
-function handleInventoryClick(e) {
-    const editBtn   = e.target.closest('.edit-product-btn');
-    const deleteBtn = e.target.closest('.delete-product-btn');
-    if (editBtn) {
-        const d = editBtn.dataset;
-        openEditProduct({ id: d.id, name: d.name, cat: d.cat, price: d.price, stock: d.stock, desc: d.desc, img: d.img, active: d.active });
-    } else if (deleteBtn) {
-        deleteProduct(deleteBtn.dataset.id, deleteBtn.dataset.name);
+function onInventoryClick(e) {
+    const edit = e.target.closest('.edit-btn');
+    const del  = e.target.closest('.del-btn');
+    if (edit) {
+        const d = edit.dataset;
+        openEditProduct({ id:d.id, name:d.name, cat:d.cat, price:d.price, stock:d.stock, desc:d.desc, img:d.img, active:d.active });
+    } else if (del) {
+        deleteProduct(del.dataset.id, del.dataset.name);
     }
-    // Re-attach for next render cycle
-    document.getElementById('inventory-tbody').addEventListener('click', handleInventoryClick, { once: true });
+    document.getElementById('inventory-tbody').addEventListener('click', onInventoryClick, { once: true });
 }
 
 function openAddProduct() {
-    _editingProductId = null;
+    _editingProd = null;
     document.getElementById('product-modal-title').textContent = 'Add Product';
     ['pm-name','pm-cat','pm-desc','pm-img'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pm-price').value = '';
@@ -983,16 +815,15 @@ function openAddProduct() {
 }
 
 function openEditProduct(p) {
-    // p may come from dataset (strings) or raw object — normalise either way
-    _editingProductId = p['id'] || p['ProductId'] || '';
+    _editingProd = p.id || p['ProductId'] || '';
     document.getElementById('product-modal-title').textContent = 'Edit Product';
-    document.getElementById('pm-name').value  = p['name']  || p['Name']        || '';
-    document.getElementById('pm-cat').value   = p['cat']   || p['Category']    || '';
-    document.getElementById('pm-price').value = p['price'] || p['Price']       || '';
-    document.getElementById('pm-stock').value = p['stock'] || p['Stock']       || '';
-    document.getElementById('pm-desc').value  = p['desc']  || p['Description'] || '';
-    document.getElementById('pm-img').value   = p['img']   || p['ImageUrl']    || '';
-    const activeVal = p['active'] !== undefined ? p['active'] : (p['Active'] !== undefined ? p['Active'] : 'true');
+    document.getElementById('pm-name').value  = p.name  || p['Name']        || '';
+    document.getElementById('pm-cat').value   = p.cat   || p['Category']    || '';
+    document.getElementById('pm-price').value = p.price || p['Price']       || '';
+    document.getElementById('pm-stock').value = p.stock || p['Stock']       || '';
+    document.getElementById('pm-desc').value  = p.desc  || p['Description'] || '';
+    document.getElementById('pm-img').value   = p.img   || p['ImageUrl']    || '';
+    const activeVal = p.active !== undefined ? p.active : (p['Active'] !== undefined ? p['Active'] : 'true');
     document.getElementById('pm-active').checked = String(activeVal).toLowerCase() !== 'false';
     document.getElementById('pm-error').classList.add('hidden');
     document.getElementById('product-modal').classList.remove('hidden');
@@ -1000,7 +831,7 @@ function openEditProduct(p) {
 
 function closeProductModal() {
     document.getElementById('product-modal').classList.add('hidden');
-    _editingProductId = null;
+    _editingProd = null;
 }
 
 async function saveProduct() {
@@ -1010,14 +841,14 @@ async function saveProduct() {
     const pmErr = document.getElementById('pm-error');
     pmErr.classList.add('hidden');
 
-    if (!name)           { pmErr.textContent = 'Product name is required.'; pmErr.classList.remove('hidden'); return; }
-    if (isNaN(price))    { pmErr.textContent = 'Valid price is required.';  pmErr.classList.remove('hidden'); return; }
-    if (isNaN(stock))    { pmErr.textContent = 'Valid stock is required.';  pmErr.classList.remove('hidden'); return; }
+    if (!name)        { pmErr.textContent = 'Product name is required.'; pmErr.classList.remove('hidden'); return; }
+    if (isNaN(price)) { pmErr.textContent = 'Valid price is required.';  pmErr.classList.remove('hidden'); return; }
+    if (isNaN(stock)) { pmErr.textContent = 'Valid stock is required.';  pmErr.classList.remove('hidden'); return; }
 
     const payload = {
-        type:        'ADMIN_UPDATE_INVENTORY',
-        action:      _editingProductId ? 'update' : 'add',
-        productId:   _editingProductId || undefined,
+        type: 'ADMIN_UPDATE_INVENTORY',
+        action: _editingProd ? 'update' : 'add',
+        productId: _editingProd || undefined,
         name,
         category:    document.getElementById('pm-cat').value.trim(),
         price,
@@ -1026,27 +857,26 @@ async function saveProduct() {
         imageUrl:    document.getElementById('pm-img').value.trim(),
         active:      document.getElementById('pm-active').checked
     };
-    const res = await apiPost(payload);
+    const res = await api(payload);
     if (!res.success) { pmErr.textContent = res.error || 'Save failed.'; pmErr.classList.remove('hidden'); return; }
-    toast(_editingProductId ? 'Product updated.' : 'Product added.');
+    toast(_editingProd ? 'Product updated.' : 'Product added.');
     closeProductModal();
     loadInventory();
 }
 
 async function deleteProduct(id, name) {
     if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-    const res = await apiPost({ type: 'ADMIN_UPDATE_INVENTORY', action: 'delete', productId: id });
+    const res = await api({ type: 'ADMIN_UPDATE_INVENTORY', action: 'delete', productId: id });
     if (res.success) { toast('Product deleted.'); loadInventory(); }
     else toast('Error: ' + (res.error || 'Delete failed.'));
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // AVAILABILITY
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadAvailabilityAdmin() {
-    const res = await apiPost({ type: 'ADMIN_GET_AVAILABILITY' });
+    const res = await api({ type: 'ADMIN_GET_AVAILABILITY' });
     _availData = (res.success && res.data) ? res.data : {};
-    // Defaults for any missing day
     for (let d = 0; d <= 6; d++) {
         if (!_availData[String(d)]) {
             _availData[String(d)] = d === 0 ? [] : d === 6 ? [10,11,12,13,14,15,16] : [9,10,11,12,13,14,15,16,17];
@@ -1056,36 +886,31 @@ async function loadAvailabilityAdmin() {
 }
 
 function renderAvailGrid() {
-    const container = document.getElementById('avail-grid');
-    container.innerHTML = '';
+    const c = document.getElementById('avail-grid');
+    c.innerHTML = '';
     for (let d = 0; d <= 6; d++) {
         const hours = (_availData[String(d)] || []).map(Number);
         const row = document.createElement('div');
-        row.className = 'avail-row';
         row.innerHTML = `
             <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                 <span class="w-24 font-sans font-semibold text-xs uppercase tracking-wider text-eby-brown flex-shrink-0">${DAY_NAMES[d]}</span>
-                <div class="flex flex-wrap gap-1.5" id="day-hours-${d}">
-                    ${buildHourButtons(d, hours)}
-                </div>
+                <div class="flex flex-wrap gap-1.5">${buildHourBtns(d, hours)}</div>
             </div>`;
+        c.appendChild(row);
         if (d < 6) {
-            const sep = document.createElement('hr');
-            sep.className = 'border-eby-gold mt-4';
-            container.appendChild(row);
-            container.appendChild(sep);
-        } else {
-            container.appendChild(row);
+            const hr = document.createElement('hr');
+            hr.className = 'border-eby-gold';
+            c.appendChild(hr);
         }
     }
 }
 
-function buildHourButtons(d, onHours) {
+function buildHourBtns(d, onHours) {
     let html = '';
     for (let h = 0; h < 24; h++) {
         const on  = onHours.includes(h);
         const lbl = h === 0 ? '12am' : h < 12 ? h+'am' : h === 12 ? '12pm' : (h-12)+'pm';
-        html += `<button type="button" class="hour-btn ${on ? 'on' : 'off'}" onclick="toggleHour(${d},${h},this)" title="${h}:00">${lbl}</button>`;
+        html += `<button type="button" class="hour-btn ${on?'on':'off'}" onclick="toggleHour(${d},${h},this)">${lbl}</button>`;
     }
     return html;
 }
@@ -1095,33 +920,33 @@ function toggleHour(d, h, btn) {
     const hours = _availData[key] || [];
     const idx   = hours.indexOf(h);
     if (idx === -1) { hours.push(h); hours.sort((a,b)=>a-b); }
-    else            { hours.splice(idx, 1); }
+    else            { hours.splice(idx,1); }
     _availData[key] = hours;
     btn.classList.toggle('on',  hours.includes(h));
     btn.classList.toggle('off', !hours.includes(h));
 }
 
 async function saveAvailability() {
-    const res = await apiPost({ type: 'ADMIN_SET_AVAILABILITY', availability: _availData });
+    const res = await api({ type: 'ADMIN_SET_AVAILABILITY', availability: _availData });
     if (res.success) toast('Availability saved! Changes are live on the booking page.');
     else toast('Error: ' + (res.error || 'Save failed.'));
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // ANALYTICS
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function loadAnalytics() {
-    const tbody  = document.getElementById('analytics-tbody');
-    const chart  = document.getElementById('analytics-chart');
-    const sumDiv = document.getElementById('analytics-summary');
-    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-eby-brown py-8">Loading…</td></tr>';
-    chart.innerHTML = 'Loading…';
-    sumDiv.innerHTML = 'Loading…';
+    const tb   = document.getElementById('analytics-tbody');
+    const ch   = document.getElementById('analytics-chart');
+    const sumD = document.getElementById('analytics-summary');
+    tb.innerHTML  = loadingRow(4);
+    ch.innerHTML  = 'Loading…';
+    sumD.innerHTML = 'Loading…';
 
-    const res = await apiPost({ type: 'ADMIN_GET_ANALYTICS' });
+    const res = await api({ type: 'ADMIN_GET_ANALYTICS' });
     if (!res.success) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red-500 py-8">Error: ${esc(res.error)}</td></tr>`;
-        chart.innerHTML = '<p class="text-red-500 text-sm">Error loading data.</p>';
+        tb.innerHTML = errRow(4, res.error);
+        ch.innerHTML = '<p class="text-red-500 text-sm">Error loading data.</p>';
         return;
     }
 
@@ -1130,12 +955,11 @@ async function loadAnalytics() {
     const total  = summary.total  || 0;
     const maxVal = Math.max(1, ...Object.values(byPage));
 
-    // Bar chart
     if (!Object.keys(byPage).length) {
-        chart.innerHTML = '<p class="text-eby-brown text-sm">No visits tracked yet. Visits are recorded when users load your website pages.</p>';
+        ch.innerHTML = '<p class="text-eby-brown text-sm">No visits tracked yet.</p>';
     } else {
         const sorted = Object.entries(byPage).sort((a,b) => b[1]-a[1]);
-        chart.innerHTML = sorted.map(([page, count]) => `
+        ch.innerHTML = sorted.map(([page, count]) => `
             <div class="bar-row">
                 <span class="bar-label" title="${esc(page)}">${esc(page)}</span>
                 <div class="bar-track"><div class="bar-fill" style="width:${Math.round(count/maxVal*100)}%"></div></div>
@@ -1143,81 +967,69 @@ async function loadAnalytics() {
             </div>`).join('');
     }
 
-    // Summary
     const todayVisits = data.filter(v => {
         if (!v['Timestamp']) return false;
-        const d = new Date(v['Timestamp']);
-        const now = new Date();
-        return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        const d = new Date(v['Timestamp']), now = new Date();
+        return d.getDate()===now.getDate() && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
     }).length;
-    sumDiv.innerHTML = `
-        <div class="flex justify-between items-center py-2 border-b border-eby-gold">
-            <span>Total page views</span><span class="font-semibold text-eby-dark">${total}</span>
-        </div>
-        <div class="flex justify-between items-center py-2 border-b border-eby-gold">
-            <span>Views today</span><span class="font-semibold text-eby-dark">${todayVisits}</span>
-        </div>
-        <div class="flex justify-between items-center py-2 border-b border-eby-gold">
-            <span>Pages tracked</span><span class="font-semibold text-eby-dark">${Object.keys(byPage).length}</span>
-        </div>
-        <p class="text-xs text-eby-brown mt-3">Visits are tracked on: Home, Shop, Services, and Booking pages. For precise geolocation and device analytics, integrate Google Analytics.</p>`;
 
-    // Table
-    if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-eby-brown py-8">No visits recorded yet.</td></tr>';
-        return;
-    }
-    tbody.innerHTML = data.slice(0, 100).map(v => `<tr>
+    sumD.innerHTML = `
+        <div class="flex justify-between items-center py-2 border-b border-eby-gold"><span>Total page views</span><span class="font-semibold text-eby-dark">${total}</span></div>
+        <div class="flex justify-between items-center py-2 border-b border-eby-gold"><span>Views today</span><span class="font-semibold text-eby-dark">${todayVisits}</span></div>
+        <div class="flex justify-between items-center py-2 border-b border-eby-gold"><span>Pages tracked</span><span class="font-semibold text-eby-dark">${Object.keys(byPage).length}</span></div>`;
+
+    if (!data.length) { tb.innerHTML = emptyRow(4, 'No visits recorded yet.'); return; }
+    tb.innerHTML = data.slice(0,100).map(v => `<tr>
         <td class="whitespace-nowrap text-xs">${fmtDateFull(v['Timestamp'])}</td>
-        <td><span class="badge badge-grey">${esc(v['Page'] || '—')}</span></td>
-        <td class="text-xs max-w-[120px] truncate text-eby-brown" title="${esc(v['Referrer'])}">${esc(v['Referrer'] || 'Direct')}</td>
-        <td class="text-xs max-w-[140px] truncate text-eby-brown" title="${esc(v['UserAgent'])}">${parseBrowser(v['UserAgent'] || '')}</td>
+        <td><span class="badge badge-grey">${esc(v['Page']||'—')}</span></td>
+        <td class="text-xs max-w-[120px] truncate text-eby-brown" title="${esc(v['Referrer'])}">${esc(v['Referrer']||'Direct')}</td>
+        <td class="text-xs max-w-[140px] truncate text-eby-brown">${parseBrowser(v['UserAgent']||'')}</td>
     </tr>`).join('');
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // EMAIL
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
+const EMAIL_TEMPLATES = {
+    reminder: {
+        subject: "Your Eby's Place Appointment – Friendly Reminder",
+        message:  "Hi there,\n\nThis is a friendly reminder about your upcoming appointment at Eby's Place.\n\nPlease arrive 5 minutes early and reach out if you need to reschedule.\n\nWarm regards,\nEby's Place"
+    },
+    confirm: {
+        subject: "Booking Confirmed – Eby's Place",
+        message:  "Hi there,\n\nYour booking at Eby's Place is confirmed! We're so excited to style you.\n\nIf you have any questions, don't hesitate to get in touch.\n\nSee you soon!\nEby's Place"
+    },
+    promo: {
+        subject: "Exclusive Offer from Eby's Place 🌟",
+        message:  "Hi there,\n\nWe have an exciting offer just for you! [Add your offer details here.]\n\nBook now at ebysplace.com\n\nWith love,\nEby's Place"
+    },
+    closure: {
+        subject: "Studio Closure Notice – Eby's Place",
+        message:  "Hi there,\n\nPlease note that Eby's Place will be closed on [date(s)] for [reason].\n\nFor bookings outside these dates, please visit ebysplace.com.\n\nThank you,\nEby's Place"
+    }
+};
+
+function loadTemplate(key) {
+    const t = EMAIL_TEMPLATES[key];
+    if (!t) return;
+    document.getElementById('email-subject').value = t.subject;
+    document.getElementById('email-message').value = t.message;
+    toast('Template loaded. Edit as needed, then send.');
+}
+
 async function sendEmail() {
     const to      = document.getElementById('email-to').value.trim();
     const subject = document.getElementById('email-subject').value.trim();
     const message = document.getElementById('email-message').value.trim();
     if (!to || !subject || !message) { toast('Please fill in all fields.'); return; }
-    const res = await apiPost({ type: 'ADMIN_SEND_EMAIL', to, subject, message });
+    const res = await api({ type: 'ADMIN_SEND_EMAIL', to, subject, message });
     if (res.success) { toast('Email sent!'); document.getElementById('email-message').value = ''; }
     else toast('Error: ' + (res.error || 'Send failed.'));
 }
 
-const EMAIL_TEMPLATES = {
-    reminder: {
-        subject: 'Your Eby\'s Place Appointment – Friendly Reminder',
-        message:  'Hi there,\n\nThis is a friendly reminder about your upcoming appointment at Eby\'s Place.\n\nPlease arrive 5 minutes early and reach out if you need to reschedule.\n\nWarm regards,\nEby\'s Place'
-    },
-    confirm: {
-        subject: 'Booking Confirmed – Eby\'s Place',
-        message:  'Hi there,\n\nYour booking at Eby\'s Place is confirmed! We\'re so excited to style you.\n\nIf you have any questions before your appointment, don\'t hesitate to get in touch.\n\nSee you soon!\nEby\'s Place'
-    },
-    promo: {
-        subject: 'Exclusive Offer from Eby\'s Place 🌟',
-        message:  'Hi there,\n\nWe have an exciting offer just for you! [Add your offer details here.]\n\nBook now at ebysplace.com\n\nWith love,\nEby\'s Place'
-    },
-    closure: {
-        subject: 'Studio Closure Notice – Eby\'s Place',
-        message:  'Hi there,\n\nPlease note that Eby\'s Place will be closed on [date(s)] for [reason]. We apologise for any inconvenience.\n\nFor bookings outside these dates, please visit ebysplace.com.\n\nThank you for your understanding,\nEby\'s Place'
-    }
-};
-
-function useTemplate(key) {
-    const t = EMAIL_TEMPLATES[key];
-    if (!t) return;
-    document.getElementById('email-subject').value = t.subject;
-    document.getElementById('email-message').value = t.message;
-    toast('Template loaded. Edit as needed, then click Send Email.');
-}
-
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // SETTINGS — CHANGE PASSWORD
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 async function changePassword() {
     const current = document.getElementById('cp-current').value;
     const newPass  = document.getElementById('cp-new').value;
@@ -1225,121 +1037,93 @@ async function changePassword() {
     const errEl    = document.getElementById('cp-error');
     errEl.classList.add('hidden');
 
-    if (!current || !newPass || !confirm) { showCpError('All fields are required.'); return; }
-    if (newPass !== confirm)              { showCpError('Passwords do not match.'); return; }
-    if (newPass.length < 8)              { showCpError('Password must be at least 8 characters.'); return; }
+    if (!current || !newPass || !confirm) { cpErr('All fields are required.'); return; }
+    if (newPass !== confirm)              { cpErr('Passwords do not match.'); return; }
+    if (newPass.length < 8)              { cpErr('Password must be at least 8 characters.'); return; }
 
-    // Verify current password and update via server (authoritative check)
     let res;
     try {
-        res = await apiPost({ type: 'ADMIN_CHANGE_PASSWORD', adminPassword: current, newPassword: newPass });
+        res = await api({ type: 'ADMIN_CHANGE_PASSWORD', adminPassword: current, newPassword: newPass });
     } catch (e) {
-        showCpError('Network error – check your connection and try again.');
+        cpErr('Network error – check your connection and try again.');
         return;
     }
+
     if (!res.success) {
-        let cpErrMsg;
-        if (res.error === 'Unauthorized') {
-            cpErrMsg = 'Current password is incorrect.';
-        } else {
-            cpErrMsg = res.error || 'Server update failed. You can set ADMIN_PASSWORD directly in Script Properties.';
-        }
-        showCpError(cpErrMsg);
+        cpErr(res.error === 'Unauthorized' ? 'Current password is incorrect.' : (res.error || 'Update failed.'));
         return;
     }
 
-    // Update session
     sessionStorage.setItem('eby_admin_pass', newPass);
-    _adminPassword = newPass;
-
-    document.getElementById('cp-current').value = '';
-    document.getElementById('cp-new').value     = '';
-    document.getElementById('cp-confirm').value = '';
+    _pass = newPass;
+    ['cp-current','cp-new','cp-confirm'].forEach(id => document.getElementById(id).value = '');
     toast('Password changed successfully!');
 }
-function showCpError(msg) {
+
+function cpErr(msg) {
     const el = document.getElementById('cp-error');
     el.textContent = msg;
     el.classList.remove('hidden');
 }
 
-// ──────────────────────────────────────────────
-// SETTINGS — ADMIN PROFILE
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
+// SETTINGS — PROFILE
+// ─────────────────────────────────────────────────────
 async function loadProfile() {
     try {
-        const res = await apiPost({ type: 'ADMIN_GET_PROFILE' });
+        const res = await api({ type: 'ADMIN_GET_PROFILE' });
         if (res.success) {
             document.getElementById('prof-name').value  = res.name  || '';
             document.getElementById('prof-email').value = res.email || '';
-            updateProfileAvatar(res.name || '');
+            updateAvatar(res.name || '');
         }
-    } catch (e) { /* silent – non-critical */ }
+    } catch (e) { /* non-critical */ }
 }
 
 async function saveProfile() {
     const name  = document.getElementById('prof-name').value.trim();
     const email = document.getElementById('prof-email').value.trim();
-    const msgEl = document.getElementById('prof-msg');
-    msgEl.classList.add('hidden');
+    const msg   = document.getElementById('prof-msg');
+    msg.classList.add('hidden');
 
     if (!name && !email) {
-        msgEl.textContent = 'Please enter a name or email to save.';
-        msgEl.className   = 'text-xs mt-3 text-red-600';
-        msgEl.classList.remove('hidden');
+        msg.textContent = 'Please enter a name or email.';
+        msg.className   = 'text-xs mt-3 text-red-600';
+        msg.classList.remove('hidden');
         return;
     }
 
-    const res = await apiPost({ type: 'ADMIN_UPDATE_PROFILE', name, email });
+    const res = await api({ type: 'ADMIN_UPDATE_PROFILE', name, email });
     if (res.success) {
-        updateProfileAvatar(name);
-        msgEl.textContent = 'Profile saved.';
-        msgEl.className   = 'text-xs mt-3 text-green-700';
-        msgEl.classList.remove('hidden');
-        setTimeout(() => msgEl.classList.add('hidden'), 3000);
+        updateAvatar(name);
+        msg.textContent = 'Profile saved.';
+        msg.className   = 'text-xs mt-3 text-green-700';
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 3000);
     } else {
-        msgEl.textContent = res.error || 'Save failed.';
-        msgEl.className   = 'text-xs mt-3 text-red-600';
-        msgEl.classList.remove('hidden');
+        msg.textContent = res.error || 'Save failed.';
+        msg.className   = 'text-xs mt-3 text-red-600';
+        msg.classList.remove('hidden');
     }
 }
 
-function updateProfileAvatar(name) {
-    const initialsEl = document.getElementById('profile-initials');
-    const iconEl     = document.getElementById('profile-icon');
+function updateAvatar(name) {
+    const initEl = document.getElementById('profile-initials');
+    const iconEl = document.getElementById('profile-icon');
     if (name) {
-        const initials = name.trim().split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
-        initialsEl.textContent = initials;
-        initialsEl.classList.remove('hidden');
+        const initials = name.trim().split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0,2).toUpperCase();
+        initEl.textContent = initials;
+        initEl.classList.remove('hidden');
         iconEl.classList.add('hidden');
     } else {
-        initialsEl.classList.add('hidden');
+        initEl.classList.add('hidden');
         iconEl.classList.remove('hidden');
     }
 }
 
-// ──────────────────────────────────────────────
-// RECOVERY CODE REVEAL TOGGLE
-// ──────────────────────────────────────────────
-let _recovVisible = false;
-let _recovHideTimer;
-function toggleRecovCode() {
-    const codeEl = document.getElementById('recov-code-display');
-    const btn    = document.getElementById('recov-toggle-btn');
-    _recovVisible = !_recovVisible;
-    if (_recovVisible) {
-        codeEl.classList.remove('blur-sm', 'select-none');
-        btn.innerHTML = '<i class="ph ph-eye-slash"></i> Hide';
-        clearTimeout(_recovHideTimer);
-        _recovHideTimer = setTimeout(() => { _recovVisible = false; codeEl.classList.add('blur-sm','select-none'); btn.innerHTML = '<i class="ph ph-eye"></i> Reveal'; }, 15000);
-    } else {
-        codeEl.classList.add('blur-sm', 'select-none');
-        btn.innerHTML = '<i class="ph ph-eye"></i> Reveal';
-        clearTimeout(_recovHideTimer);
-    }
-}
-
-
+// ─────────────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────────────
 function esc(str) {
     return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
@@ -1350,6 +1134,7 @@ function fmtDate(ts) {
     if (isNaN(d)) return String(ts).slice(0,16);
     return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 }
+
 function fmtDateFull(ts) {
     if (!ts) return '—';
     const d = new Date(ts);
@@ -1358,23 +1143,27 @@ function fmtDateFull(ts) {
            d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
 }
 
-function statusClass(status) {
+function badgeClass(status) {
     const s = String(status).toLowerCase();
-    if (s === 'confirmed' || s === 'completed' || s === 'delivered') return 'badge-green';
-    if (s === 'processing' || s === 'pending')                        return 'badge-amber';
-    if (s === 'cancelled'  || s === 'failed')                         return 'badge-red';
+    if (['confirmed','completed','delivered'].includes(s)) return 'badge-green';
+    if (['processing','pending'].includes(s))              return 'badge-amber';
+    if (['cancelled','failed'].includes(s))                return 'badge-red';
     return 'badge-grey';
 }
 
 function parseBrowser(ua) {
     if (!ua) return '—';
-    if (/iPhone|iPad/i.test(ua))  return 'iOS / Safari';
-    if (/Android/i.test(ua))      return 'Android';
-    if (/Chrome/i.test(ua))       return 'Chrome';
-    if (/Firefox/i.test(ua))      return 'Firefox';
-    if (/Safari/i.test(ua))       return 'Safari';
-    return ua.slice(0, 30);
+    if (/iPhone|iPad/i.test(ua)) return 'iOS / Safari';
+    if (/Android/i.test(ua))     return 'Android';
+    if (/Chrome/i.test(ua))      return 'Chrome';
+    if (/Firefox/i.test(ua))     return 'Firefox';
+    if (/Safari/i.test(ua))      return 'Safari';
+    return ua.slice(0,30);
 }
+
+function loadingRow(cols) { return `<tr><td colspan="${cols}" class="text-center text-eby-brown py-10">Loading…</td></tr>`; }
+function emptyRow(cols, msg) { return `<tr><td colspan="${cols}" class="text-center text-eby-brown py-10">${esc(msg)}</td></tr>`; }
+function errRow(cols, err)   { return `<tr><td colspan="${cols}" class="text-center text-red-500 py-10">Error: ${esc(err)}</td></tr>`; }
 
 let _toastTimer;
 function toast(msg) {
@@ -1385,39 +1174,26 @@ function toast(msg) {
     _toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 // INIT — restore session or show login
-// ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────
 (async function init() {
-    const savedPass = sessionStorage.getItem('eby_admin_pass');
-    if (savedPass) {
-        // Always verify the saved password against the server before granting access.
-        // This ensures a server-side password change or revocation takes effect immediately.
+    const saved = sessionStorage.getItem('eby_admin_pass');
+    if (saved) {
         try {
-            const res = await fetch(GAS_URL, {
-                method:  'POST',
-                
-                body:    JSON.stringify({ type: 'ADMIN_VERIFY', adminPassword: savedPass })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success === true) {
-                    _adminPassword = savedPass;
-                    document.getElementById('login-screen').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    loadOverview();
-                    loadProfile();
-                    return;
-                }
+            const res = await api({ type: 'ADMIN_VERIFY', adminPassword: saved });
+            if (res.success) {
+                _pass = saved;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                loadOverview();
+                loadProfile();
+                return;
             }
-        } catch (e) {
-            // Network error – fall through to login screen
-        }
-        // Verification failed: clear stale session and show login
+        } catch (e) { /* fall through */ }
         sessionStorage.removeItem('eby_admin_pass');
     }
 })();
 </script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
