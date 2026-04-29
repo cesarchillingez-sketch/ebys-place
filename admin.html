@@ -552,8 +552,9 @@
 // ─────────────────────────────────────────────────────
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbz-Un1Hu4_IuwwxfU4RnliUOsuHO_bHycdF3wD0e1KpLrK7lDuUosbpaL0kF9FTeTPs/exec';
 
-// Cloudinary — set CLOUDINARY_UPLOAD_PRESET to an unsigned preset you create
-// in your Cloudinary dashboard (Settings → Upload → Upload presets)
+// Cloudinary unsigned upload — the cloud name and preset are intentionally public
+// (they are restricted to unsigned uploads only via the Cloudinary dashboard preset settings).
+// Create an unsigned preset named 'ebys_admin' under Settings → Upload → Upload presets.
 const CLOUDINARY_CLOUD_NAME   = 'dfbweqelf';
 const CLOUDINARY_UPLOAD_PRESET = 'ebys_admin';
 
@@ -887,9 +888,10 @@ async function saveProduct() {
     if (!name)        { pmErr.textContent = 'Product name is required.'; pmErr.classList.remove('hidden'); return; }
     if (isNaN(price)) { pmErr.textContent = 'Valid price is required.';  pmErr.classList.remove('hidden'); return; }
 
-    // stock: 0 when Out of Stock, otherwise use entered qty (default 1 if blank)
+    // stock: 0 when Out of Stock, otherwise use entered qty (require a valid positive number)
     const stockRaw = document.getElementById('pm-stock').value;
-    const stock = _stockInStock ? Math.max(0, parseInt(stockRaw) || 1) : 0;
+    const stockParsed = parseInt(stockRaw, 10);
+    const stock = _stockInStock ? (isNaN(stockParsed) || stockParsed < 0 ? 0 : stockParsed) : 0;
 
     const payload = {
         type: 'ADMIN_UPDATE_INVENTORY',
@@ -930,7 +932,8 @@ function toggleStockStatus() {
     const stockEl = document.getElementById('pm-stock');
     if (_stockInStock) {
         stockEl.disabled = false;
-        if (parseInt(stockEl.value) <= 0) stockEl.value = '1';
+        const cur = parseInt(stockEl.value, 10);
+        if (!stockEl.value || isNaN(cur) || cur <= 0) stockEl.value = '1';
     } else {
         stockEl.value = '0';
         stockEl.disabled = true;
@@ -956,6 +959,17 @@ function updateStockToggleUI() {
 // ─────────────────────────────────────────────────────
 // GALLERY IMAGE UPLOAD
 // ─────────────────────────────────────────────────────
+function _uploadAreaHTML() {
+    return '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i><p class="text-xs text-eby-brown">Click to upload image</p>';
+}
+
+function _uploadAreaUploading() {
+    return '<i class="ph ph-circle-notch text-2xl text-eby-gold-dark mb-1 block" style="animation:spin .8s linear infinite"></i><p class="text-xs text-eby-brown">Uploading…</p>';
+}
+
+function _uploadAreaDone() {
+    return '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i><p class="text-xs text-eby-brown">Click to upload another</p>';
+}
 function showProductImagePreview(src) {
     document.getElementById('pm-img-preview-img').src = src;
     document.getElementById('pm-img-preview').classList.remove('hidden');
@@ -967,8 +981,7 @@ function clearProductImage() {
     document.getElementById('pm-img-preview').classList.add('hidden');
     document.getElementById('pm-img-preview-img').src = '';
     document.getElementById('pm-img-upload-area').classList.remove('hidden');
-    document.getElementById('pm-img-upload-area').innerHTML =
-        '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i><p class="text-xs text-eby-brown">Click to upload image</p>';
+    document.getElementById('pm-img-upload-area').innerHTML = _uploadAreaHTML();
     const fileEl = document.getElementById('pm-img-file');
     if (fileEl) fileEl.value = '';
 }
@@ -994,9 +1007,7 @@ async function handleProductImageFile(input) {
 
     // Upload to Cloudinary
     const uploadArea = document.getElementById('pm-img-upload-area');
-    uploadArea.innerHTML =
-        '<i class="ph ph-circle-notch text-2xl text-eby-gold-dark mb-1 block" style="animation:spin .8s linear infinite"></i>' +
-        '<p class="text-xs text-eby-brown">Uploading…</p>';
+    uploadArea.innerHTML = _uploadAreaUploading();
 
     const formData = new FormData();
     formData.append('file', file);
@@ -1010,15 +1021,15 @@ async function handleProductImageFile(input) {
             showProductImagePreview(data.secure_url);
             toast('Image uploaded.');
         } else {
-            toast('Upload failed – image preview only, paste a URL to save.');
+            console.error('Cloudinary upload error:', data);
+            toast('Upload failed – paste a URL to save the image.');
         }
-    } catch {
+    } catch (err) {
+        console.error('Cloudinary upload exception:', err);
         toast('Upload error – paste an image URL instead.');
     }
 
-    uploadArea.innerHTML =
-        '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i>' +
-        '<p class="text-xs text-eby-brown">Click to upload another</p>';
+    uploadArea.innerHTML = _uploadAreaDone();
 }
 
 // ─────────────────────────────────────────────────────
