@@ -73,6 +73,8 @@ function doPost(e) {
   if (type === 'ADMIN_UPDATE_INVENTORY')  return adminUpdateInventory_(body);
   if (type === 'ADMIN_SEND_EMAIL')        return adminSendEmail_(body);
   if (type === 'ADMIN_CHANGE_PASSWORD')   return adminChangePassword_(body);
+  if (type === 'ADMIN_GET_PROFILE')       return adminGetProfile_();
+  if (type === 'ADMIN_UPDATE_PROFILE')    return adminUpdateProfile_(body);
 
   return jsonResponse_({ success: false, error: 'Unknown type: ' + type });
 }
@@ -460,6 +462,27 @@ function adminChangePassword_(body) {
   var newPass = String(body.newPassword || '');
   if (newPass.length < 8) return jsonResponse_({ success: false, error: 'Password must be at least 8 characters.' });
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
+  return jsonResponse_({ success: true });
+}
+
+// ======================================================
+// Admin profile (display name + notification email)
+// ======================================================
+function adminGetProfile_() {
+  var props = PropertiesService.getScriptProperties();
+  return jsonResponse_({
+    success: true,
+    name:  props.getProperty('ADMIN_NAME')  || '',
+    email: props.getProperty('ADMIN_EMAIL') || ''
+  });
+}
+
+function adminUpdateProfile_(body) {
+  var props = PropertiesService.getScriptProperties();
+  var name  = String(body.name  || '').trim().slice(0, 100);
+  var email = String(body.email || '').trim().slice(0, 200);
+  if (name)  props.setProperty('ADMIN_NAME',  name);
+  if (email) props.setProperty('ADMIN_EMAIL', email);
   return jsonResponse_({ success: true });
 }
 
