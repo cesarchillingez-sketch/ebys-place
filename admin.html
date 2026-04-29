@@ -126,6 +126,11 @@
         .bar-count { width: 30px; text-align: right; color: #2A1A12; font-weight: 600; }
 
         @media (min-width: 1024px) { #toast { bottom: 32px; } }
+
+        /* Product modal image upload */
+        .modal { overflow-y: auto; max-height: 90dvh; }
+        #pm-stock-toggle.instock  { background: #ECFDF5; color: #065F46; }
+        #pm-stock-toggle.outstock { background: #FEF2F2; color: #991B1B; }
     </style>
 </head>
 <body>
@@ -495,10 +500,32 @@
             <input id="pm-cat"   type="text"   class="field" placeholder="Category (e.g. Extensions, Aftercare)">
             <div class="grid grid-cols-2 gap-3">
                 <input id="pm-price" type="number" class="field" placeholder="Price (£) *" min="0" step="0.01">
-                <input id="pm-stock" type="number" class="field" placeholder="Stock qty *"  min="0" step="1">
+                <input id="pm-stock" type="number" class="field" placeholder="Stock qty" min="0" step="1">
+            </div>
+            <!-- In Stock / Out of Stock toggle -->
+            <div class="flex items-center justify-between px-3 py-2.5 bg-[#FCFBF8] border border-[rgba(194,163,120,.35)] rounded-[12px]">
+                <span class="text-sm text-eby-brown">Availability</span>
+                <button type="button" id="pm-stock-toggle" onclick="toggleStockStatus()" class="flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-[8px] transition-all">
+                    <span id="pm-stock-dot" class="w-2 h-2 rounded-full flex-shrink-0"></span>
+                    <span id="pm-stock-label"></span>
+                </button>
             </div>
             <textarea id="pm-desc" class="field" rows="2" placeholder="Short description"></textarea>
-            <input id="pm-img" type="url" class="field" placeholder="Image URL (optional)">
+            <!-- Gallery image upload -->
+            <div>
+                <div id="pm-img-preview" class="hidden mb-2 relative">
+                    <img id="pm-img-preview-img" src="" alt="Preview" class="w-full h-32 object-cover rounded-[12px] border border-[rgba(194,163,120,.35)]">
+                    <button type="button" onclick="clearProductImage()" class="absolute top-2 right-2 bg-white/90 rounded-full w-6 h-6 flex items-center justify-center text-eby-brown hover:text-red-600 shadow-sm transition-colors">
+                        <i class="ph ph-x text-xs"></i>
+                    </button>
+                </div>
+                <div id="pm-img-upload-area" class="border-2 border-dashed border-[rgba(194,163,120,.5)] rounded-[12px] p-4 text-center cursor-pointer hover:border-eby-dark transition-colors" onclick="document.getElementById('pm-img-file').click()">
+                    <i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i>
+                    <p class="text-xs text-eby-brown">Click to upload image</p>
+                </div>
+                <input id="pm-img-file" type="file" accept="image/*" class="hidden" onchange="handleProductImageFile(this)">
+                <input id="pm-img" type="url" class="field mt-2" placeholder="Or paste image URL" oninput="onProductImgUrlInput(this.value)">
+            </div>
             <label class="flex items-center gap-3 text-sm text-eby-brown cursor-pointer">
                 <input id="pm-active" type="checkbox" checked class="w-4 h-4 accent-eby-dark"> Active (visible in shop)
             </label>
@@ -525,6 +552,12 @@
 // ─────────────────────────────────────────────────────
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbz-Un1Hu4_IuwwxfU4RnliUOsuHO_bHycdF3wD0e1KpLrK7lDuUosbpaL0kF9FTeTPs/exec';
 
+// Cloudinary unsigned upload — the cloud name and preset are intentionally public
+// (they are restricted to unsigned uploads only via the Cloudinary dashboard preset settings).
+// Create an unsigned preset named 'ebys_admin' under Settings → Upload → Upload presets.
+const CLOUDINARY_CLOUD_NAME   = 'dfbweqelf';
+const CLOUDINARY_UPLOAD_PRESET = 'ebys_admin';
+
 // ─────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────
@@ -532,6 +565,7 @@ let _pass        = null;   // admin password held in memory after login
 let _section     = 'overview';
 let _availData   = {};
 let _editingProd = null;   // null = adding new product
+let _stockInStock = true;  // product modal in-stock toggle state
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -809,8 +843,11 @@ function openAddProduct() {
     ['pm-name','pm-cat','pm-desc','pm-img'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('pm-price').value = '';
     document.getElementById('pm-stock').value = '';
+    document.getElementById('pm-stock').disabled = false;
     document.getElementById('pm-active').checked = true;
     document.getElementById('pm-error').classList.add('hidden');
+    clearProductImage();
+    initStockToggle(true);
     document.getElementById('product-modal').classList.remove('hidden');
 }
 
@@ -820,12 +857,20 @@ function openEditProduct(p) {
     document.getElementById('pm-name').value  = p.name  || p['Name']        || '';
     document.getElementById('pm-cat').value   = p.cat   || p['Category']    || '';
     document.getElementById('pm-price').value = p.price || p['Price']       || '';
-    document.getElementById('pm-stock').value = p.stock || p['Stock']       || '';
+    const stockVal = parseInt(p.stock || p['Stock'] || 0);
+    document.getElementById('pm-stock').value = stockVal;
+    document.getElementById('pm-stock').disabled = false;
     document.getElementById('pm-desc').value  = p.desc  || p['Description'] || '';
-    document.getElementById('pm-img').value   = p.img   || p['ImageUrl']    || '';
+    const imgUrl = p.img || p['ImageUrl'] || '';
+    document.getElementById('pm-img').value = imgUrl;
     const activeVal = p.active !== undefined ? p.active : (p['Active'] !== undefined ? p['Active'] : 'true');
     document.getElementById('pm-active').checked = String(activeVal).toLowerCase() !== 'false';
     document.getElementById('pm-error').classList.add('hidden');
+    // restore image preview
+    clearProductImage();
+    if (imgUrl) showProductImagePreview(imgUrl);
+    // restore stock toggle
+    initStockToggle(stockVal > 0);
     document.getElementById('product-modal').classList.remove('hidden');
 }
 
@@ -837,13 +882,16 @@ function closeProductModal() {
 async function saveProduct() {
     const name  = document.getElementById('pm-name').value.trim();
     const price = parseFloat(document.getElementById('pm-price').value);
-    const stock = parseInt(document.getElementById('pm-stock').value);
     const pmErr = document.getElementById('pm-error');
     pmErr.classList.add('hidden');
 
     if (!name)        { pmErr.textContent = 'Product name is required.'; pmErr.classList.remove('hidden'); return; }
     if (isNaN(price)) { pmErr.textContent = 'Valid price is required.';  pmErr.classList.remove('hidden'); return; }
-    if (isNaN(stock)) { pmErr.textContent = 'Valid stock is required.';  pmErr.classList.remove('hidden'); return; }
+
+    // stock: 0 when Out of Stock, otherwise use entered qty (require a valid positive number)
+    const stockRaw = document.getElementById('pm-stock').value;
+    const stockParsed = parseInt(stockRaw, 10);
+    const stock = _stockInStock ? (isNaN(stockParsed) || stockParsed < 0 ? 0 : stockParsed) : 0;
 
     const payload = {
         type: 'ADMIN_UPDATE_INVENTORY',
@@ -869,6 +917,119 @@ async function deleteProduct(id, name) {
     const res = await api({ type: 'ADMIN_UPDATE_INVENTORY', action: 'delete', productId: id });
     if (res.success) { toast('Product deleted.'); loadInventory(); }
     else toast('Error: ' + (res.error || 'Delete failed.'));
+}
+
+// ─────────────────────────────────────────────────────
+// STOCK TOGGLE
+// ─────────────────────────────────────────────────────
+function initStockToggle(inStock) {
+    _stockInStock = !!inStock;
+    updateStockToggleUI();
+}
+
+function toggleStockStatus() {
+    _stockInStock = !_stockInStock;
+    const stockEl = document.getElementById('pm-stock');
+    if (_stockInStock) {
+        stockEl.disabled = false;
+        const cur = parseInt(stockEl.value, 10);
+        if (!stockEl.value || isNaN(cur) || cur <= 0) stockEl.value = '1';
+    } else {
+        stockEl.value = '0';
+        stockEl.disabled = true;
+    }
+    updateStockToggleUI();
+}
+
+function updateStockToggleUI() {
+    const btn   = document.getElementById('pm-stock-toggle');
+    const dot   = document.getElementById('pm-stock-dot');
+    const label = document.getElementById('pm-stock-label');
+    if (_stockInStock) {
+        btn.className   = 'flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-[8px] transition-all instock';
+        dot.className   = 'w-2 h-2 rounded-full flex-shrink-0 bg-[#065F46]';
+        label.textContent = 'In Stock';
+    } else {
+        btn.className   = 'flex items-center gap-2 text-sm font-semibold px-3 py-1.5 rounded-[8px] transition-all outstock';
+        dot.className   = 'w-2 h-2 rounded-full flex-shrink-0 bg-[#991B1B]';
+        label.textContent = 'Out of Stock';
+    }
+}
+
+// ─────────────────────────────────────────────────────
+// GALLERY IMAGE UPLOAD
+// ─────────────────────────────────────────────────────
+function _uploadAreaHTML() {
+    return '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i><p class="text-xs text-eby-brown">Click to upload image</p>';
+}
+
+function _uploadAreaUploading() {
+    return '<i class="ph ph-circle-notch text-2xl text-eby-gold-dark mb-1 block" style="animation:spin .8s linear infinite"></i><p class="text-xs text-eby-brown">Uploading…</p>';
+}
+
+function _uploadAreaDone() {
+    return '<i class="ph ph-image-square text-2xl text-eby-gold-dark mb-1 block"></i><p class="text-xs text-eby-brown">Click to upload another</p>';
+}
+function showProductImagePreview(src) {
+    document.getElementById('pm-img-preview-img').src = src;
+    document.getElementById('pm-img-preview').classList.remove('hidden');
+    document.getElementById('pm-img-upload-area').classList.add('hidden');
+}
+
+function clearProductImage() {
+    document.getElementById('pm-img').value = '';
+    document.getElementById('pm-img-preview').classList.add('hidden');
+    document.getElementById('pm-img-preview-img').src = '';
+    document.getElementById('pm-img-upload-area').classList.remove('hidden');
+    document.getElementById('pm-img-upload-area').innerHTML = _uploadAreaHTML();
+    const fileEl = document.getElementById('pm-img-file');
+    if (fileEl) fileEl.value = '';
+}
+
+function onProductImgUrlInput(val) {
+    const trimmed = val.trim();
+    if (trimmed) {
+        showProductImagePreview(trimmed);
+    } else {
+        document.getElementById('pm-img-preview').classList.add('hidden');
+        document.getElementById('pm-img-upload-area').classList.remove('hidden');
+    }
+}
+
+async function handleProductImageFile(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+
+    // Show local preview immediately
+    const reader = new FileReader();
+    reader.onload = e => showProductImagePreview(e.target.result);
+    reader.readAsDataURL(file);
+
+    // Upload to Cloudinary
+    const uploadArea = document.getElementById('pm-img-upload-area');
+    uploadArea.innerHTML = _uploadAreaUploading();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+        const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.secure_url) {
+            document.getElementById('pm-img').value = data.secure_url;
+            showProductImagePreview(data.secure_url);
+            toast('Image uploaded.');
+        } else {
+            console.error('Cloudinary upload error:', data);
+            toast('Upload failed – paste a URL to save the image.');
+        }
+    } catch (err) {
+        console.error('Cloudinary upload exception:', err);
+        toast('Upload error – paste an image URL instead.');
+    }
+
+    uploadArea.innerHTML = _uploadAreaDone();
 }
 
 // ─────────────────────────────────────────────────────
