@@ -577,8 +577,8 @@ async function doLogin() {
     btn.disabled = false;
     btn.innerHTML = '<i class="ph ph-sign-in"></i> Sign In';
 
-    if (!res.success) {
-        loginErr('Incorrect password. Please try again.');
+    if (!res || !res.success) {
+        loginErr(res && res.error ? res.error : 'Incorrect password. Please try again.');
         passEl.value = '';
         return;
     }
@@ -1182,7 +1182,7 @@ function toast(msg) {
     if (saved) {
         try {
             const res = await api({ type: 'ADMIN_VERIFY', adminPassword: saved });
-            if (res.success) {
+            if (res && res.success) {
                 _pass = saved;
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');

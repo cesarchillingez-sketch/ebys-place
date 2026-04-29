@@ -42,7 +42,7 @@ function checkAdmin_(pass) {
     Logger.log('WARNING: ADMIN_PASSWORD is not set in Script Properties. Admin access is disabled.');
     return false;
   }
-  return (typeof pass === 'string') && pass === stored;
+  return (typeof pass === 'string') && pass === stored.trim();
 }
 
 // ======================================================
