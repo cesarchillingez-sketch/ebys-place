@@ -256,9 +256,10 @@
                     <button onclick="refreshCurrent()" class="btn btn-outline btn-sm hidden lg:flex">
                         <i class="ph ph-arrows-clockwise"></i> Refresh
                     </button>
-                    <div class="w-8 h-8 rounded-full bg-eby-gold flex items-center justify-center">
-                        <i class="ph ph-user text-eby-dark text-sm"></i>
-                    </div>
+                    <button id="profile-avatar" class="w-8 h-8 rounded-full bg-eby-gold flex items-center justify-center hover:ring-2 hover:ring-eby-gold-dark transition-all" onclick="showSection('settings')" title="Admin Profile">
+                        <span id="profile-initials" class="text-eby-dark text-xs font-bold font-sans hidden"></span>
+                        <i id="profile-icon" class="ph ph-user text-eby-dark text-sm"></i>
+                    </button>
                 </div>
             </div>
 
@@ -480,6 +481,26 @@
                 <!-- ==================== SETTINGS ==================== -->
                 <div id="section-settings" class="section">
                     <div class="grid lg:grid-cols-2 gap-5">
+
+                        <!-- Admin Profile (full-width) -->
+                        <div class="card lg:col-span-2">
+                            <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Admin Profile</h3>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Display Name</label>
+                                    <input id="prof-name" type="text" class="field" placeholder="e.g. Eby" autocomplete="name">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Notification Email</label>
+                                    <input id="prof-email" type="email" class="field" placeholder="e.g. you@example.com" autocomplete="email">
+                                </div>
+                            </div>
+                            <p id="prof-msg" class="text-xs mt-3 hidden"></p>
+                            <button class="btn btn-primary mt-4" onclick="saveProfile()">
+                                <i class="ph ph-floppy-disk"></i> Save Profile
+                            </button>
+                        </div>
+
                         <!-- Change password -->
                         <div class="card">
                             <h3 class="font-sans font-semibold text-sm uppercase tracking-wider text-eby-dark mb-5">Change Password</h3>
@@ -647,6 +668,7 @@ async function doLogin() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     loadOverview();
+    loadProfile();
 }
 
 function doLogout() {
@@ -1228,6 +1250,61 @@ function showCpError(msg) {
 }
 
 // ──────────────────────────────────────────────
+// SETTINGS — ADMIN PROFILE
+// ──────────────────────────────────────────────
+async function loadProfile() {
+    try {
+        const res = await apiPost({ type: 'ADMIN_GET_PROFILE' });
+        if (res.success) {
+            document.getElementById('prof-name').value  = res.name  || '';
+            document.getElementById('prof-email').value = res.email || '';
+            updateProfileAvatar(res.name || '');
+        }
+    } catch (e) { /* silent – non-critical */ }
+}
+
+async function saveProfile() {
+    const name  = document.getElementById('prof-name').value.trim();
+    const email = document.getElementById('prof-email').value.trim();
+    const msgEl = document.getElementById('prof-msg');
+    msgEl.classList.add('hidden');
+
+    if (!name && !email) {
+        msgEl.textContent = 'Please enter a name or email to save.';
+        msgEl.className   = 'text-xs mt-3 text-red-600';
+        msgEl.classList.remove('hidden');
+        return;
+    }
+
+    const res = await apiPost({ type: 'ADMIN_UPDATE_PROFILE', name, email });
+    if (res.success) {
+        updateProfileAvatar(name);
+        msgEl.textContent = 'Profile saved.';
+        msgEl.className   = 'text-xs mt-3 text-green-700';
+        msgEl.classList.remove('hidden');
+        setTimeout(() => msgEl.classList.add('hidden'), 3000);
+    } else {
+        msgEl.textContent = res.error || 'Save failed.';
+        msgEl.className   = 'text-xs mt-3 text-red-600';
+        msgEl.classList.remove('hidden');
+    }
+}
+
+function updateProfileAvatar(name) {
+    const initialsEl = document.getElementById('profile-initials');
+    const iconEl     = document.getElementById('profile-icon');
+    if (name) {
+        const initials = name.trim().split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        initialsEl.textContent = initials;
+        initialsEl.classList.remove('hidden');
+        iconEl.classList.add('hidden');
+    } else {
+        initialsEl.classList.add('hidden');
+        iconEl.classList.remove('hidden');
+    }
+}
+
+// ──────────────────────────────────────────────
 // RECOVERY CODE REVEAL TOGGLE
 // ──────────────────────────────────────────────
 let _recovVisible = false;
@@ -1315,6 +1392,7 @@ function toast(msg) {
                     document.getElementById('login-screen').classList.add('hidden');
                     document.getElementById('dashboard').classList.remove('hidden');
                     loadOverview();
+                    loadProfile();
                     return;
                 }
             }
