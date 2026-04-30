@@ -309,6 +309,18 @@
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Braider search — filters visible braider cards by city name.
+        // When the directory is populated each card should have a data-city attribute.
+        function filterBraiders(query) {
+            const q = (query || '').trim().toLowerCase();
+            const cards = document.querySelectorAll('[data-city]');
+            if (!cards.length) return; // directory not yet populated
+            cards.forEach(function(card) {
+                const city = (card.getAttribute('data-city') || '').toLowerCase();
+                card.style.display = (!q || city.includes(q)) ? '' : 'none';
+            });
+        }
     </script>
 </body>
 </html>

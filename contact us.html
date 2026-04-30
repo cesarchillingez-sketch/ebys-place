@@ -362,35 +362,37 @@
                     <h2 class="font-display text-3xl md:text-4xl text-eby-dark mb-4">Initiate a Consultation.</h2>
                     <p class="font-body text-eby-brown-light text-sm mb-10">We would love to hear from you. Please provide your details below.</p>
                     
-                    <form onsubmit="event.preventDefault(); this.querySelector('button').innerHTML = '<i class=\'ph ph-spinner animate-spin text-lg\'></i> Sending...'; setTimeout(() => this.innerHTML = '<div class=\'text-center py-10\'><i class=\'ph ph-check-circle text-5xl text-eby-gold-dark mb-4\'></i><h3 class=\'font-display text-2xl text-eby-dark mb-2\'>Message Sent</h3><p class=\'text-eby-brown-light text-sm\'>Our concierge will be in touch within 24 hours.</p></div>', 1500);" class="space-y-6">
+                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
                         
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">First Name</label>
-                                <input type="text" required class="luxury-input" placeholder="Jane">
+                                <input id="contact-first" type="text" required class="luxury-input" placeholder="Jane">
                             </div>
                             <div>
                                 <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">Last Name</label>
-                                <input type="text" required class="luxury-input" placeholder="Doe">
+                                <input id="contact-last" type="text" required class="luxury-input" placeholder="Doe">
                             </div>
                         </div>
 
                         <div>
                             <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">Email Address</label>
-                            <input type="email" required class="luxury-input" placeholder="jane@example.com">
+                            <input id="contact-email" type="email" required class="luxury-input" placeholder="jane@example.com">
                         </div>
 
                         <div>
                             <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">Phone Number (Optional)</label>
-                            <input type="tel" class="luxury-input" placeholder="+44 7000 000000">
+                            <input id="contact-phone" type="tel" class="luxury-input" placeholder="+44 7000 000000">
                         </div>
 
                         <div>
                             <label class="font-sans font-bold text-[9px] uppercase tracking-widest text-eby-brown-light mb-2 block">Your Message</label>
-                            <textarea required rows="4" class="luxury-input resize-none" placeholder="How can we assist you today?"></textarea>
+                            <textarea id="contact-message" required rows="4" class="luxury-input resize-none" placeholder="How can we assist you today?"></textarea>
                         </div>
 
-                        <button type="submit" class="btn-luxury w-full bg-eby-dark text-eby-surface py-5 font-sans font-bold text-[10px] uppercase tracking-[0.2em] mt-4 flex justify-center items-center gap-2 hover:bg-eby-brown-light">
+                        <p id="contact-error" class="hidden text-red-500 text-xs font-sans">Something went wrong. Please try again or email us directly at <a href="mailto:info@ebysplace.com" class="underline">info@ebysplace.com</a>.</p>
+
+                        <button type="submit" id="contact-submit-btn" class="btn-luxury w-full bg-eby-dark text-eby-surface py-5 font-sans font-bold text-[10px] uppercase tracking-[0.2em] mt-4 flex justify-center items-center gap-2 hover:bg-eby-brown-light">
                             Send Message <i class="ph ph-paper-plane-right text-lg"></i>
                         </button>
                     </form>
@@ -492,6 +494,49 @@
 
     <!-- Scripts for Logic & Interactivity -->
     <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbz8F6OGeBkpY1-ji1X9U_JPV8ez0flxfXsNC8M93O91rGQmjF9WDoR8xA8F9BJoIyMT/exec';
+
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('contact-submit-btn');
+            const errEl = document.getElementById('contact-error');
+            const firstName = document.getElementById('contact-first').value.trim();
+            const lastName  = document.getElementById('contact-last').value.trim();
+            const email     = document.getElementById('contact-email').value.trim();
+            const phone     = document.getElementById('contact-phone').value.trim();
+            const message   = document.getElementById('contact-message').value.trim();
+
+            errEl.classList.add('hidden');
+            btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Sending...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        type: 'CONTACT_ENQUIRY',
+                        name: firstName + ' ' + lastName,
+                        email: email,
+                        phone: phone,
+                        message: message
+                    })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Unknown error');
+                document.getElementById('contact-form').innerHTML =
+                    '<div class="text-center py-10">' +
+                    '<i class="ph ph-check-circle text-5xl text-eby-gold-dark mb-4 block"></i>' +
+                    '<h3 class="font-display text-2xl text-eby-dark mb-2">Message Sent</h3>' +
+                    '<p class="text-eby-brown-light text-sm">Our concierge will be in touch within 24 hours.</p>' +
+                    '</div>';
+            } catch (err) {
+                errEl.classList.remove('hidden');
+                btn.innerHTML = 'Send Message <i class="ph ph-paper-plane-right text-lg"></i>';
+                btn.disabled = false;
+            }
+        }
+
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {

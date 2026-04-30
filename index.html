@@ -1146,35 +1146,6 @@
             toggleCart();
         }
 
-        function updateShopItem(cardId, colorName, imgSrc, btnEl) {
-            const card = document.getElementById(cardId);
-            
-            // Note: Image swapping logic has been removed as requested.
-            // The main product image will remain static.
-
-            // Update Swatches UI (Interactive Rings)
-            const swatches = card.querySelectorAll('button[class*="rounded-full"]');
-            swatches.forEach(s => {
-                s.classList.remove('outline-eby-gold-dark');
-                s.classList.add('outline-transparent');
-            });
-            btnEl.classList.remove('outline-transparent');
-            btnEl.classList.add('outline-eby-gold-dark');
-
-            // Update Description Text
-            const descId = cardId.replace('shop-', 'desc-');
-            const descEl = document.getElementById(descId);
-            descEl.innerText = `Selected: ${colorName}`;
-
-            // Update Add to Bag Button (Passes the color to the cart payload)
-            const btnId = cardId.replace('shop-', 'btn-');
-            const addBtn = document.getElementById(btnId);
-            const baseName = addBtn.getAttribute('data-base-name');
-            const price = parseFloat(addBtn.getAttribute('data-price'));
-            
-            addBtn.setAttribute('onclick', `addToBag(this, '${baseName} - ${colorName}', ${price}, '${imgSrc}')`);
-        }
-
         async function handleDirectCheckout(e) {
             e.preventDefault();
             const btn = document.getElementById('eco-submit-btn');
