@@ -35,13 +35,13 @@ function jsonErr_(msg) {
 // ======================================================
 // Auth helper – returns true only when the provided
 // password matches the value in Script Properties.
+// Falls back to DEFAULT_ADMIN_PASSWORD if ADMIN_PASSWORD
+// has not been set in Script Properties yet.
 // ======================================================
+var DEFAULT_ADMIN_PASSWORD = 'ebysplace2024';
+
 function checkAdmin_(pass) {
-  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD');
-  if (!stored) {
-    Logger.log('WARNING: ADMIN_PASSWORD is not set in Script Properties. Admin access is disabled.');
-    return false;
-  }
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || DEFAULT_ADMIN_PASSWORD;
   return (typeof pass === 'string') && pass === stored.trim();
 }
 
