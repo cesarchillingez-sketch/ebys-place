@@ -542,8 +542,9 @@
             });
         }
 
+        let ecoCardMounted = false;
+
         document.addEventListener('DOMContentLoaded', () => {
-            if(ecoCardElement && document.getElementById('ecommerce-card-element')) ecoCardElement.mount('#ecommerce-card-element');
             renderShopProducts();
             // Visit tracking (non-blocking)
             try { fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type:'TRACK_VISIT', page:'shop', referrer: document.referrer, userAgent: navigator.userAgent }) }).catch(()=>{}); } catch(e) {}
@@ -676,6 +677,10 @@
             document.getElementById('checkout-form-state').classList.remove('hidden');
             document.getElementById('checkout-form-state').classList.add('flex');
             document.getElementById('cart-title').innerText = "Checkout";
+            if (ecoCardElement && !ecoCardMounted) {
+                ecoCardElement.mount('#ecommerce-card-element');
+                ecoCardMounted = true;
+            }
         }
 
         function backToCart() {
