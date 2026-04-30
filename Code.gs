@@ -46,38 +46,6 @@ function checkAdmin_(pass) {
 }
 
 // ======================================================
-// Recovery-code hash generator
-// Run this function once from the Apps Script editor:
-//   1. Set YOUR_RECOVERY_CODE below to your chosen phrase.
-//   2. Click Run → generateRecoveryCodeHash.
-//   3. Open View → Logs, copy the printed hash.
-//   4. Paste it into Script Properties as RECOVERY_CODE_HASH.
-//   5. Delete or blank out YOUR_RECOVERY_CODE here before saving.
-// ======================================================
-function generateRecoveryCodeHash() {
-  var code = 'YOUR_RECOVERY_CODE'; // ← replace with your chosen recovery phrase
-  if (code === 'YOUR_RECOVERY_CODE' || code === '') {
-    Logger.log('ERROR: Replace YOUR_RECOVERY_CODE with your actual recovery phrase first.');
-    return;
-  }
-  Logger.log('RECOVERY_CODE_HASH = ' + sha256_(code));
-}
-
-// ======================================================
-// SHA-256 helper – returns lowercase hex string
-// ======================================================
-function sha256_(input) {
-  var bytes = Utilities.computeDigest(
-    Utilities.DigestAlgorithm.SHA_256,
-    input,
-    Utilities.Charset.UTF_8
-  );
-  return bytes.map(function(b) {
-    return (b < 0 ? b + 256 : b).toString(16).padStart(2, '0');
-  }).join('');
-}
-
-// ======================================================
 // GET handler
 // ======================================================
 function doGet(e) {
@@ -103,7 +71,6 @@ function doPost(e) {
     case 'DIRECT_SALE':          return handleDirectSale_(body);
     case 'TRACK_VISIT':          return handleTrackVisit_(body);
     case 'GET_AVAILABILITY':     return handleGetAvailability_();
-    case 'ADMIN_RESET_PASSWORD': return adminResetPassword_(body);
   }
 
   // ---- Admin endpoints (require adminPassword) ----
@@ -505,28 +472,6 @@ function adminUpdateProfile_(body) {
   var props = PropertiesService.getScriptProperties();
   props.setProperty('ADMIN_NAME',  String(body.name  || '').trim().slice(0, 100));
   props.setProperty('ADMIN_EMAIL', String(body.email || '').trim().slice(0, 200));
-  return jsonOk_();
-}
-
-// ======================================================
-// Password recovery (public endpoint)
-// RECOVERY_CODE_HASH must be set in Script Properties.
-// To generate: take your chosen recovery code, compute its
-// SHA-256 hex (e.g. at emn178.github.io/online-tools/sha256.html), paste as the property.
-// ======================================================
-function adminResetPassword_(body) {
-  var code    = String(body.recoveryCode || '');
-  var newPass = String(body.newPassword  || '');
-  if (!code)              return jsonErr_('Recovery code is required.');
-  if (newPass.length < 8) return jsonErr_('Password must be at least 8 characters.');
-
-  // SHA-256 of the default recovery phrase (override by setting RECOVERY_CODE_HASH in Script Properties).
-  var DEFAULT_RECOV_HASH_ = '268d68bfaad1fb0eeee0b7fccd8c92817fae5f84889dcf89a5a412299aceb584';
-  var storedHash = PropertiesService.getScriptProperties().getProperty('RECOVERY_CODE_HASH') || DEFAULT_RECOV_HASH_;
-
-  if (sha256_(code) !== storedHash) return jsonErr_('Invalid recovery code.');
-
-  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', newPass);
   return jsonOk_();
 }
 

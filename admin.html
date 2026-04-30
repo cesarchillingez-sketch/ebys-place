@@ -158,41 +158,6 @@
             <button id="login-btn" type="button" class="btn btn-primary w-full justify-center" onclick="doLogin()">
                 <i class="ph ph-sign-in"></i> Sign In
             </button>
-            <p class="text-center mt-4">
-                <button type="button" class="text-xs text-eby-gold-dark underline underline-offset-2 hover:text-eby-dark transition-colors"
-                        onclick="showRecovery()">Forgot password?</button>
-            </p>
-        </div>
-
-        <!-- Recovery panel -->
-        <div id="recovery-panel" class="card hidden mt-4">
-            <h2 class="font-display text-xl text-eby-dark mb-1">Reset Password</h2>
-            <p class="text-eby-brown text-sm mb-5">Enter your recovery code and choose a new password.</p>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Recovery Code</label>
-                    <input id="rc-code" type="text" class="field" placeholder="Your recovery code"
-                           autocomplete="off" onkeydown="if(event.key==='Enter')doReset()">
-                </div>
-                <div>
-                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">New Password</label>
-                    <input id="rc-new" type="password" class="field" placeholder="Min. 8 characters"
-                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doReset()">
-                </div>
-                <div>
-                    <label class="block text-xs font-sans font-semibold uppercase tracking-wider text-eby-brown mb-2">Confirm Password</label>
-                    <input id="rc-confirm" type="password" class="field" placeholder="Repeat new password"
-                           autocomplete="new-password" onkeydown="if(event.key==='Enter')doReset()">
-                </div>
-            </div>
-            <p id="rc-error"   class="text-red-600 text-xs mt-3 hidden"></p>
-            <p id="rc-success" class="text-green-700 text-xs mt-3 hidden">Password reset! You can now sign in.</p>
-            <div class="flex gap-3 mt-5">
-                <button class="btn btn-primary flex-1 justify-center" onclick="doReset()">
-                    <i class="ph ph-lock-key"></i> Reset Password
-                </button>
-                <button class="btn btn-outline" onclick="hideRecovery()">Cancel</button>
-            </div>
         </div>
     </div>
 </div>
@@ -639,55 +604,6 @@ function doLogout() {
 
 function loginErr(msg) {
     const el = document.getElementById('login-error');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-}
-
-function showRecovery() {
-    document.getElementById('login-panel').classList.add('hidden');
-    document.getElementById('recovery-panel').classList.remove('hidden');
-    ['rc-code','rc-new','rc-confirm'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('rc-error').classList.add('hidden');
-    document.getElementById('rc-success').classList.add('hidden');
-    document.getElementById('rc-code').focus();
-}
-
-function hideRecovery() {
-    document.getElementById('recovery-panel').classList.add('hidden');
-    document.getElementById('login-panel').classList.remove('hidden');
-    document.getElementById('login-pass').focus();
-}
-
-async function doReset() {
-    const code    = document.getElementById('rc-code').value.trim();
-    const newPass = document.getElementById('rc-new').value;
-    const confirm = document.getElementById('rc-confirm').value;
-    const errEl   = document.getElementById('rc-error');
-    const okEl    = document.getElementById('rc-success');
-    errEl.classList.add('hidden');
-    okEl.classList.add('hidden');
-
-    if (!code)              { rcErr('Please enter your recovery code.'); return; }
-    if (newPass.length < 8) { rcErr('New password must be at least 8 characters.'); return; }
-    if (newPass !== confirm) { rcErr('Passwords do not match.'); return; }
-
-    let res;
-    try {
-        res = await api({ type: 'ADMIN_RESET_PASSWORD', recoveryCode: code, newPassword: newPass });
-    } catch (e) {
-        rcErr('Network error – check your connection and try again.');
-        return;
-    }
-
-    if (!res.success) { rcErr(res.error || 'Reset failed. Check your recovery code.'); return; }
-
-    okEl.classList.remove('hidden');
-    ['rc-code','rc-new','rc-confirm'].forEach(id => document.getElementById(id).value = '');
-    setTimeout(() => { hideRecovery(); document.getElementById('login-pass').focus(); }, 2000);
-}
-
-function rcErr(msg) {
-    const el = document.getElementById('rc-error');
     el.textContent = msg;
     el.classList.remove('hidden');
 }
