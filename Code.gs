@@ -35,13 +35,12 @@ function jsonErr_(msg) {
 // ======================================================
 // Auth helper – returns true only when the provided
 // password matches the value in Script Properties.
-// Falls back to DEFAULT_ADMIN_PASSWORD if ADMIN_PASSWORD
-// has not been set in Script Properties yet.
+// ADMIN_PASSWORD must be set in Script Properties before
+// admin endpoints will accept any requests.
 // ======================================================
-var DEFAULT_ADMIN_PASSWORD = 'ebysplace2024';
-
 function checkAdmin_(pass) {
-  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || DEFAULT_ADMIN_PASSWORD;
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD');
+  if (!stored) return false; // Fail-safe: no password configured → deny all
   return (typeof pass === 'string') && pass === stored.trim();
 }
 
@@ -71,6 +70,8 @@ function doPost(e) {
     case 'DIRECT_SALE':          return handleDirectSale_(body);
     case 'TRACK_VISIT':          return handleTrackVisit_(body);
     case 'GET_AVAILABILITY':     return handleGetAvailability_();
+    case 'SUBMIT_REVIEW':        return handleSubmitReview_(body);
+    case 'CONTACT_ENQUIRY':      return handleContactEnquiry_(body);
   }
 
   // ---- Admin endpoints (require adminPassword) ----
@@ -205,7 +206,7 @@ function handleBookingDeposit_(body) {
     if (!body.stripeId)                    return jsonErr_('Payment method is required.');
     if (!body.customerName || !body.email) return jsonErr_('Name and email are required.');
 
-    var amountPounds = body.amount || 20;
+    var amountPounds = Math.max(5, Math.min(500, Number(body.amount) || 20));
     var safeItem = String(body.item || 'Appointment').replace(/[\x00-\x1F\x7F]/g, '').slice(0, 100);
     var piId = chargeStripe_(body.stripeId, amountPounds * 100, 'Eby\'s Place booking deposit – ' + safeItem);
 
@@ -334,6 +335,81 @@ function handleGetAvailability_() {
       : [];
   }
   return jsonOk_({ availability: avail });
+}
+
+function handleSubmitReview_(body) {
+  try {
+    var review = body.review || {};
+    if (!review.name || !review.text) return jsonErr_('Name and review text are required.');
+    var sheet = getOrCreateSheet_('Reviews', ['Timestamp','Id','Name','Rating','Service','Text','Approved']);
+    if (sheet) {
+      sheet.appendRow([
+        new Date(),
+        String(review.id      || ''),
+        String(review.name    || '').slice(0, 100),
+        Number(review.rating) || 0,
+        String(review.service || '').slice(0, 100),
+        String(review.text    || '').slice(0, 2000),
+        'FALSE'
+      ]);
+    }
+    try {
+      var notifyEmail = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAIL') || 'ebysplace.uk@gmail.com';
+      MailApp.sendEmail({
+        to: notifyEmail,
+        subject: 'New Review Submitted – ' + esc_(review.name),
+        htmlBody: buildEmailHtml_(
+          'New Review',
+          '<b>From:</b> '    + esc_(review.name)    + '<br>' +
+          '<b>Rating:</b> '  + (review.rating || 0) + '/5<br>' +
+          '<b>Service:</b> ' + esc_(review.service || 'Not specified') + '<br>' +
+          '<b>Review:</b> '  + esc_(review.text)    + '<br>' +
+          '<i>Pending approval in admin dashboard.</i>'
+        )
+      });
+    } catch (mailErr) {
+      Logger.log('Review email failed: ' + mailErr.message);
+    }
+    return jsonOk_();
+  } catch (err) {
+    return jsonErr_(err.message);
+  }
+}
+
+function handleContactEnquiry_(body) {
+  try {
+    if (!body.name || !body.email) return jsonErr_('Name and email are required.');
+    if (!body.message)             return jsonErr_('Message is required.');
+    var sheet = getOrCreateSheet_('Enquiries', ['Timestamp','Name','Email','Phone','Message']);
+    if (sheet) {
+      sheet.appendRow([
+        new Date(),
+        String(body.name    || '').slice(0, 100),
+        String(body.email   || '').slice(0, 200),
+        String(body.phone   || '').slice(0, 50),
+        String(body.message || '').slice(0, 2000)
+      ]);
+    }
+    try {
+      var notifyEmail = PropertiesService.getScriptProperties().getProperty('ADMIN_EMAIL') || 'ebysplace.uk@gmail.com';
+      MailApp.sendEmail({
+        to: notifyEmail,
+        subject: 'New Enquiry – ' + esc_(body.name),
+        htmlBody: buildEmailHtml_(
+          'New Contact Enquiry',
+          '<b>Name:</b> '    + esc_(body.name)                  + '<br>' +
+          '<b>Email:</b> '   + esc_(body.email)                 + '<br>' +
+          '<b>Phone:</b> '   + esc_(body.phone || 'Not provided') + '<br>' +
+          '<b>Message:</b><br>' + esc_(body.message).replace(/\n/g, '<br>')
+        )
+      });
+    } catch (mailErr) {
+      Logger.log('Enquiry email failed: ' + mailErr.message);
+    }
+    return jsonOk_();
+  } catch (err) {
+    return jsonErr_(err.message);
+  }
 }
 
 // ======================================================
